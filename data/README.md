@@ -16,4 +16,4 @@ When adding a file, also add a one-line entry below so the team knows what is he
 
 ## Files
 
-(none yet — added as work progresses)
+- `value-chain-mapping-analysis-v3-jul2025.doc` — Value chain mapping and analysis report, Version 3 (July 2025), with Emma's edits. **WORKING DRAFT — not the final copy. Jerome will replace this with the final version. Solomon: use this now.**
