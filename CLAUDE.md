@@ -20,12 +20,12 @@ The goal is to produce a high-level diagnostic report covering all 9 NDP IV prio
 
 Split across two Terms of Reference documents in this repo:
 
-**Document 1:** `MTIC-Diagnostic Study on Iron & Steel, Copper.docx`
+**Document 1:** `tor/MTIC-Diagnostic Study on Iron & Steel, Copper.docx`
 - Iron & Steel
 - Copper & Allied Metals
 - Automotives
 
-**Document 2:** `MTIC-Diagnostic Study on Textiles, Garments.docx`
+**Document 2:** `tor/MTIC-Diagnostic Study on Textiles, Garments.docx`
 - Textiles & Garments
 - Pharmaceuticals
 - Petrochemicals & Fertilizers
@@ -41,9 +41,20 @@ Split across two Terms of Reference documents in this repo:
 4. Commit completed work to this repo. Open a pull request for Hillary to review.
 5. Track all tasks on the GitHub Projects board: https://github.com/orgs/MTIC-Uganda/projects/1
 
+## Repository Structure
+
+```
+tor/                    Source ToR documents — read only, do not modify
+data/                   Supporting data Jerome provides — add files here as needed; update data/README.md
+report/
+  structure.md          Chapter outline — DRAFT, pending Commissioner approval
+  chapters/             One .md file per chapter, numbered 01-14
+setup/                  Solomon onboarding guides
+```
+
 ## Report Structure
 
-The first task is to produce a proposed report structure (chapter titles and what each covers). This must be approved by the Commissioner before any chapter work begins. Once approved, commit the structure as `report/structure.md` and work through it chapter by chapter.
+A draft report structure is already at `report/structure.md` with 14 chapters. Review it with Claude, refine if needed, then share with Jerome for Commissioner approval. Once approved, work through `report/chapters/` one file at a time. Each chapter file already has the skeleton and DATA NEEDED markers to guide you.
 
 ## Workflow Rules
 

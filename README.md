@@ -42,12 +42,14 @@ Produce a high-level industrial diagnostic report covering all 9 NDP IV priority
 ## Repository Structure
 
 ```
-/
-  README.md                                          this file
-  MTIC-Diagnostic Study on Iron & Steel, Copper.docx     ToR for 3 value chains
-  MTIC-Diagnostic Study on Textiles, Garments.docx       ToR for 6 value chains
-  report/                                            final report chapters (added as work progresses)
-  data/                                              supporting data and sources Jerome provides
+tor/                    Source ToR documents (read only)
+data/                   Supporting data Jerome provides as work progresses
+report/
+  structure.md          Chapter outline (Commissioner approval required before chapters begin)
+  chapters/             01 to 14 — one .md file per chapter
+setup/                  Solomon onboarding: MY_BRAIN setup + Monday starter prompt
+README.md               This file
+CLAUDE.md               Claude Code project instructions
 ```
 
 ## Timeline
