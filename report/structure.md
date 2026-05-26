@@ -1,8 +1,19 @@
-# Report Structure — Industrial Development Diagnostic Study
+# Report Structures — Industrial Development Diagnostic Study
 
 **Status: DRAFT — pending Commissioner approval**
 
-This structure must be approved by the Commissioner before chapter work begins. Solomon uses this as the working outline. Jerome submits it for approval.
+The study produces two separate reports, each corresponding to its own Terms of Reference. The structures are in separate files below. Jerome submits both to the Commissioner for approval.
+
+| Report | Value Chains | Structure File | Chapters |
+|---|---|---|---|
+| Report 1 | Iron & Steel, Copper & Allied Metals, Automotive | [structure-1.md](structure-1.md) | 8 chapters |
+| Report 2 | Textiles & Garments, Pharmaceuticals, Petrochemicals & Fertilizers, Sugar & Confectionery, Plastics & Packaging, Cement & Building Materials | [structure-2.md](structure-2.md) | 11 chapters |
+
+The shared chapter template (value chain map, current state, binding constraints, market assessment, prioritized products, priority action matrix) is identical across both reports and is documented in each structure file.
+
+---
+
+> **Note:** The original combined 14-chapter structure below is superseded by the two separate structures above. It is retained here for reference only.
 
 ---
 
@@ -15,7 +26,14 @@ High-level synthesis of findings across all 9 value chains. Key prioritized prod
 Uganda's industrialization ambition: Vision 2040, Tenfold Growth Strategy, NIP 2020, NDP IV, MTIC Strategic Plan. The Uganda-UNIDO Programme for Country Partnership (PCP) and its 5 priority areas. Why these 9 value chains were selected. Current baseline: manufacturing at 16% of GDP, 30% capacity utilization. NDP IV targets and Tenfold targets.
 
 ### Chapter 3: Methodology and Analytical Framework
-How the diagnostic was conducted: desk review, data compilation, key informant interviews, field visits, prioritization scoring, validation workshops. The prioritization framework and criteria applied consistently across all 9 chains. Data sources and limitations.
+How the diagnostic was conducted: desk review, data compilation and analysis, key informant interviews (public sector, private sector, associations, financiers, academia), targeted field visits to representative firms and clusters, prioritization scoring, and validation through TWG and stakeholder workshops. Data sources and limitations.
+
+This report is preceded by an Inception Report that documented the study design, diagnostic framework, data plan, and stakeholder consultation plan, submitted to the TWG prior to the diagnostic phase.
+
+Findings were validated through a structured stakeholder workshop with TWG members, private sector actors, and development partners before finalization.
+
+**Prioritization Framework**
+A transparent scoring framework was applied consistently across all 9 value chains to identify the 3–4 products or sub-sectors Uganda should prioritize in each chain. Products were scored against five criteria: (1) accessible market size — domestic, regional, and export; (2) Uganda's comparative advantage — availability of inputs, existing productive base; (3) feasibility — capital requirements, technology readiness, lead time; (4) job creation and income potential; and (5) import substitution impact. The scoring and weightings are documented in the Inception Report.
 
 ---
 
@@ -30,7 +48,7 @@ Tree diagram from primary inputs to all possible end products. Sub-sectors and k
 Production volumes, number of firms, employment, capacity utilization, export and import values. Key players (public and private).
 
 **c. Binding Constraints**
-Analysis across: inputs and raw materials, technology and productivity, energy, water, logistics, finance and investment, skills, standards and quality, policy and regulatory environment.
+Analysis across: inputs and raw materials, technology and productivity, energy, water, logistics, waste and effluent management, finance and investment environment, skills and workforce capabilities, standards and quality compliance, policy and regulatory environment.
 
 **d. Market Assessment**
 Domestic market size. Regional market (East Africa, COMESA). Export competitiveness. Which markets Uganda can realistically access and which it cannot.
@@ -49,7 +67,7 @@ Quick wins (0-12 months), policy reforms (1-3 years), investment needs (3-5 year
 ### Chapter 5: Copper & Allied Metals Value Chain
 *(follows value chain chapter template above)*
 
-### Chapter 6: Automotives Value Chain
+### Chapter 6: Automotive Value Chain
 *(follows value chain chapter template above)*
 
 ### Chapter 7: Textiles & Garments Value Chain
@@ -75,8 +93,13 @@ Quick wins (0-12 months), policy reforms (1-3 years), investment needs (3-5 year
 ### Chapter 13: Cross-Cutting Priority Actions and Policy Recommendations
 Themes that cut across multiple value chains: industrial parks and free zones, energy tariffs for manufacturing, standards and quality infrastructure, skills and TVET alignment, investment promotion and financing instruments. Consolidated recommendations for MTIC and development partners.
 
+**Alignment to PCP Priority Areas**
+Recommendations are mapped explicitly to the six priority areas of the Uganda-UNIDO Programme for Country Partnership (PCP): (1) strengthening industrial policy implementation and institutional coordination; (2) mobilizing large-scale public and private investments for agro- and mineral-based industrialization; (3) supporting sustainable industrial parks and free zones; (4) strengthening national standards, quality infrastructure, and accreditation systems; (5) advancing green industry, circular economy, and Industry 4.0 solutions; and (6) supporting productive use of renewable energy and energy efficiency. This mapping ensures the report's outputs are directly usable as technical inputs into PCP formulation and partner engagement.
+
 ### Chapter 14: Investment Portfolio and Implementation Roadmap
 Portfolio of priority investment opportunities across all 9 chains. For each: investment size, implementation modality (public, PPP, private-led), indicative CAPEX/OPEX assumptions, risk and mitigation, financing options. Implementation sequencing: what to do in year 1, years 2-3, years 4-5.
+
+For each priority investment, a standalone project profile is produced — a one-to-two page investor-facing summary covering the business case, financing structure, and implementation modality, packaged to a standard that can be presented directly to financiers, investors, and development partners.
 
 ---
 
