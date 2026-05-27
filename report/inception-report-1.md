@@ -37,7 +37,7 @@ The diagnostic report will be structured as follows:
 | 4 | Iron & Steel Value Chain |
 | 5 | Copper & Allied Metals Value Chain |
 | 6 | Automotive Value Chain |
-| 7 | Cross-Cutting Policy Recommendations |
+| 7 | Cross-Cutting Priority Actions and Policy Recommendations |
 | 8 | Investment Portfolio and Implementation Roadmap |
 
 ### 2.2 Scope Confirmation

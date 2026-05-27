@@ -26,7 +26,25 @@ This document fulfils Task 1 of the Terms of Reference for Report 2. It sets out
 
 ## 2. Study Design and Workplan
 
-### 2.1 Scope Confirmation
+### 2.1 Report Structure
+
+The diagnostic report will be structured as follows:
+
+| Chapter | Title |
+|---|---|
+| 1 | Executive Summary *(written last)* |
+| 2 | Background and Policy Context |
+| 3 | Methodology and Analytical Framework |
+| 4 | Textiles & Garments Value Chain |
+| 5 | Pharmaceuticals Value Chain |
+| 6 | Petrochemicals & Fertilizers Value Chain |
+| 7 | Sugar & Confectionery Value Chain |
+| 8 | Plastics & Packaging Value Chain |
+| 9 | Cement & Building Materials Value Chain |
+| 10 | Cross-Cutting Priority Actions and Policy Recommendations |
+| 11 | Investment Portfolio and Implementation Roadmap |
+
+### 2.2 Scope Confirmation
 
 This study covers the full value chains of the six chains listed above as defined in the ToR. For each chain the study will deliver:
 
@@ -39,7 +57,7 @@ This study covers the full value chains of the six chains listed above as define
 
 The study also delivers two cross-cutting chapters: consolidated policy recommendations and an investment portfolio and implementation roadmap.
 
-### 2.2 Workplan and Timeline
+### 2.3 Workplan and Timeline
 
 | Task | Responsible | Target Date | Status |
 |---|---|---|---|
@@ -56,7 +74,7 @@ The study also delivers two cross-cutting chapters: consolidated policy recommen
 | Chapter 1: Executive Summary | Solomon | 8 June 2026 | Written last |
 | Final report submitted to Jerome | Solomon | 8 June 2026 | Deadline |
 
-### 2.3 Gantt Chart
+### 2.4 Gantt Chart
 
 ```
 Task                              May 29  May 31  Jun 1   Jun 2   Jun 3   Jun 4   Jun 5   Jun 6   Jun 7   Jun 8
