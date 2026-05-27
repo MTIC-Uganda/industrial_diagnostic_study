@@ -55,33 +55,34 @@ The study also delivers two cross-cutting chapters: consolidated policy recommen
 
 ### 2.3 Workplan and Timeline
 
-| Task | Responsible | Target Date | Status |
-|---|---|---|---|
-| Inception Report submitted for TWG review | Solomon | 29 May 2026 | In progress |
-| TWG approval of Inception Report | Jerome / TWG | 31 May 2026 | Pending |
-| Chapter 4: Iron & Steel — draft complete | Solomon | 27 May 2026 | **Done** |
-| Chapter 5: Copper & Allied Metals — draft | Solomon | 1 June 2026 | Pending data |
-| Chapter 6: Automotive — draft | Solomon | 3 June 2026 | Pending data |
-| Chapter 7: Cross-cutting recommendations | Solomon | 5 June 2026 | Pending |
-| Chapter 8: Investment portfolio and roadmap | Solomon | 6 June 2026 | Pending |
-| Chapter 1: Executive Summary | Solomon | 7 June 2026 | Written last |
-| Final report submitted to Jerome | Solomon | 8 June 2026 | Deadline |
+| Task | Target Date |
+|---|---|
+| Inception Report submitted for TWG review | 29 May 2026 |
+| TWG approval of Inception Report | 31 May 2026 |
+| Chapter 4: Iron & Steel — draft complete | 27 May 2026 |
+| Chapter 5: Copper & Allied Metals — draft | 1 June 2026 |
+| Chapter 6: Automotive — draft | 3 June 2026 |
+| Chapter 7: Cross-cutting recommendations | 5 June 2026 |
+| Chapter 8: Investment portfolio and roadmap | 6 June 2026 |
+| Chapter 1: Executive Summary | 7 June 2026 |
+| Final report submitted to MTIC | 8 June 2026 |
 
 ### 2.4 Gantt Chart
 
 ```
-Task                              May 27  May 29  May 31  Jun 1   Jun 3   Jun 5   Jun 6   Jun 7   Jun 8
-Inception Report draft             ████
-TWG approval                              ░░░░░░░░
-Ch4 Iron & Steel                  ████
-Ch5 Copper & Allied Metals                        ░░░░░░░░████
-Ch6 Automotive                                            ░░░░░░░░████
-Ch7 Cross-cutting                                                         ████████
-Ch8 Investment roadmap                                                             ████████
-Ch1 Executive Summary                                                                      ████
-Final submission                                                                                   ██
+Task                              May 29  May 31  Jun 1   Jun 2   Jun 3   Jun 4   Jun 5   Jun 6   Jun 7   Jun 8
+Inception Report draft            ████
+TWG approval                      ████████
+Ch2 Background and Policy Context         ████████
+Ch3 Methodology and Framework                     ████████
+Ch4 Iron & Steel                                          ████████
+Ch5 Copper & Allied Metals                                        ████████
+Ch6 Automotive                                                            ████████
+Ch7 Cross-cutting                                                                 ████████
+Ch8 Investment roadmap                                                                    ████████
+Ch1 Executive Summary                                                                             ████
+Final submission                                                                                          ██
 ```
-*(░░ = pending data from Jerome; ██ = in progress or complete)*
 
 ---
 
@@ -115,7 +116,7 @@ Analysis across ten dimensions applied consistently to each chain:
 Three-level market assessment: (1) domestic Uganda market; (2) regional East African and COMESA market; (3) global export markets. For each level: market size, growth trajectory, Uganda's current share, competitive landscape, and realistic market access potential.
 
 ### Part E: Prioritized Products
-Application of the prioritization scoring framework (see Section 5) to identify 3–4 products or sub-sectors per chain that Uganda should concentrate on. Explicit deprioritization of products Uganda should not pursue at this stage, with rationale.
+Application of the prioritization scoring framework to identify 3–4 products or sub-sectors per chain that Uganda should concentrate on. Explicit deprioritization of products Uganda should not pursue at this stage, with rationale.
 
 ### Part F: Priority Action Matrix
 Actions organized by timeframe: quick wins (0–12 months), policy and institutional reforms (1–3 years), investment interventions (3–5 years). Each action specifies the responsible party and indicative investment or cost.
@@ -126,13 +127,11 @@ Actions organized by timeframe: quick wins (0–12 months), policy and instituti
 
 ### 4.1 Primary Data Sources
 
-| Value Chain | Primary Sources | Status |
-|---|---|---|
-| Iron & Steel | NPA/UDC *Report on the Mapping and Value Chain Analysis for Uganda's Iron and Steel Industry* (June 2025); KIIs with 40 steel firms, 5 mining players, 9 MDAs | **Available** — `data/value-chain-mapping-analysis-v3-jul2025.docx` |
-| Copper & Allied Metals | KIIs with copper wire/cable manufacturers; UNMC on Kilembe mine; MEMD on copper reserves and licenses | **Pending** — Jerome to provide |
-| Automotives | KIIs with Kiira Motors Corporation (KMC); bus body fabricators; spare parts manufacturers; MWT on vehicle import data | **Pending** — Jerome to provide |
-
-**Note on the Iron & Steel data source:** The NPA/UDC value chain mapping report (`data/value-chain-mapping-analysis-v3-jul2025.docx`) is described as a working draft (v3, July 2025). Chapter 4 has been drafted from this source. Figures will be validated against the final published version when Jerome provides it. Any material differences will be flagged and updated before the chapter is finalized.
+| Value Chain | Primary Sources |
+|---|---|
+| Iron & Steel | NPA/UDC *Report on the Mapping and Value Chain Analysis for Uganda's Iron and Steel Industry* (June 2025); KIIs with 40 steel firms, 5 mining players, 9 MDAs |
+| Copper & Allied Metals | KIIs with copper wire/cable manufacturers; UNMC on Kilembe mine; MEMD on copper reserves and licenses |
+| Automotives | KIIs with Kiira Motors Corporation (KMC); bus body fabricators; spare parts manufacturers; MWT on vehicle import data |
 
 ### 4.2 Secondary Data Sources
 
@@ -156,23 +155,21 @@ Actions organized by timeframe: quick wins (0–12 months), policy and instituti
 | Automotive assembly and body fabrication capacity data | Automotives | KIIs with KMC and private assemblers; URA vehicle import HS codes |
 | Regional copper and automotive market sizing | Both | UN Comtrade; ITC Trade Map; African Development Bank sector reports |
 
-All data gaps are flagged with `DATA NEEDED` markers in the relevant chapter drafts. Jerome will be notified at daily check-ins of any gaps that require his intervention to resolve.
-
 ---
 
 ## 5. Stakeholder Consultation Plan
 
 ### 5.1 Key Informant Interviews (KIIs)
 
-| Stakeholder category | Institutions / firms | Chain(s) | Status |
-|---|---|---|---|
-| **Public sector** | MTIC, UIA, URA, UBOS, UNBS, UEPB, MEMD, Uganda National Mining Company (UNMC), Kiira Motors Corporation (KMC), MWT | All | Planned |
-| **Private sector — Iron & Steel** | 40 steel firms (per NPA/UDC 2025 report), SINO Minerals, Tembo Steel, Abyssinia Iron & Steel, Roofings Ltd, Steel & Tube, Uganda Baati | Iron & Steel | Completed (via NPA/UDC report) |
-| **Private sector — Copper** | Copper wire and cable manufacturers; scrap copper processors; construction materials importers | Copper & Allied Metals | Planned |
-| **Private sector — Automotive** | Kiira Motors Corporation; bus body fabricators; spare parts manufacturers and importers | Automotives | Planned |
-| **Industry associations** | Uganda Manufacturers Association (UMA), Uganda Development Corporation (UDC) | All | Planned |
-| **Financiers** | Uganda Development Bank (UDB), East African Development Bank (EADB), commercial banks | All | Planned |
-| **Research / academia** | Makerere University (engineering, materials science), Uganda Industrial Research Institute (UIRI) | All | Planned |
+| Stakeholder category | Institutions / firms | Chain(s) |
+|---|---|---|
+| **Public sector** | MTIC, UIA, URA, UBOS, UNBS, UEPB, MEMD, Uganda National Mining Company (UNMC), Kiira Motors Corporation (KMC), MWT | All |
+| **Private sector — Iron & Steel** | 40 steel firms (per NPA/UDC 2025 report), SINO Minerals, Tembo Steel, Abyssinia Iron & Steel, Roofings Ltd, Steel & Tube, Uganda Baati | Iron & Steel |
+| **Private sector — Copper** | Copper wire and cable manufacturers; scrap copper processors; construction materials importers | Copper & Allied Metals |
+| **Private sector — Automotive** | Kiira Motors Corporation; bus body fabricators; spare parts manufacturers and importers | Automotives |
+| **Industry associations** | Uganda Manufacturers Association (UMA), Uganda Development Corporation (UDC) | All |
+| **Financiers** | Uganda Development Bank (UDB), East African Development Bank (EADB), commercial banks | All |
+| **Research / academia** | Makerere University (engineering, materials science), Uganda Industrial Research Institute (UIRI) | All |
 
 ### 5.2 Validation Workshop
 
@@ -185,14 +182,6 @@ A structured stakeholder validation workshop will be held before the report is f
 
 **Proposed timing:** Week of 2–6 June 2026 (after chapter drafts are complete, before final submission).
 **Proposed participants:** TWG members, private sector representatives from each chain, MTIC, UIA, UNBS, UDB, and relevant development partners.
-**Jerome to confirm:** date, venue, and final participant list.
-
-### 5.3 TWG Reporting Arrangements
-
-- This Inception Report is submitted to Jerome for onward transmission to the TWG.
-- Jerome will communicate TWG approval or revision requests to Solomon.
-- Chapter drafts will not be finalized until TWG has approved this Inception Report.
-- A mid-point progress update will be shared with Jerome at each daily 8pm check-in.
 
 ---
 
@@ -209,8 +198,6 @@ Products and sub-sectors within each chain are scored against five criteria to i
 | 3 | Feasibility | Capital requirements, technology readiness, lead time to commercial scale, management capability | 20% |
 | 4 | Job creation and income potential | Direct and indirect employment, wage levels, upstream and downstream linkage effects | 15% |
 | 5 | Import substitution impact | Value of current imports that domestic production could displace; current account benefit | 15% |
-
-> **Note:** These weights are **proposed** and subject to TWG confirmation. Jerome should table them at the TWG approval session. If the TWG revises any weights, the scoring for all three chains will be recalculated accordingly before chapters are finalized.
 
 ### 6.2 Scoring Scale
 
@@ -238,16 +225,3 @@ The prioritization framework operationalizes the core analytical principle of th
 
 The output of this study is a focused prioritization, not a catalogue. Every chain analysis must conclude with a clear statement of what Uganda should do and what it should not do at this stage.
 
----
-
-## 7. Next Steps
-
-| Action | By whom | By when |
-|---|---|---|
-| TWG reviews and approves this Inception Report | Jerome / TWG | 31 May 2026 |
-| Jerome provides data for Copper & Allied Metals chapter | Jerome | ASAP |
-| Jerome provides data for Automotive chapter | Jerome | ASAP |
-| Jerome confirms prioritization weights with TWG | Jerome | At TWG session |
-| Jerome confirms validation workshop date and participants | Jerome | By 1 June 2026 |
-| Solomon drafts Chapter 5 (Copper) upon data receipt | Solomon | By 1 June 2026 |
-| Solomon drafts Chapter 6 (Automotive) upon data receipt | Solomon | By 3 June 2026 |
