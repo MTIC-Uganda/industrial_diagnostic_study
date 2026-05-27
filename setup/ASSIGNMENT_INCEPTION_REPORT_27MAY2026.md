@@ -4,6 +4,8 @@
 **To: Solomon Ariho**
 **Priority: IMMEDIATE — complete before continuing chapter work**
 
+> **Action required:** Read this document, merge this PR to confirm you have received the assignment, then start work on the inception reports.
+
 ---
 
 ## What Has Come Up
@@ -65,11 +67,10 @@ The ToR requirements for Task 1 apply to both. Each Inception Report must addres
 
 ## What Happens After You Submit
 
-1. You open a PR for each Inception Report (one PR per report — do not batch both into one PR)
-2. Hillary reviews each for technical quality and completeness
-3. Jerome reviews each for alignment with MTIC expectations
-4. Jerome submits both to the TWG for formal approval
-5. Once the TWG approves both, chapter work resumes with a solid approved foundation
+1. You open **one PR** containing both inception reports (branch: `deliver/inception-reports`)
+2. **You review and merge this PR yourself** — inception reports are your deliverable to confirm before submitting upstream
+3. Jerome takes the merged inception reports and submits them to the TWG for formal approval
+4. Once the TWG approves both, chapter work resumes with a solid approved foundation
 
 ---
 
