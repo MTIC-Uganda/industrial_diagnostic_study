@@ -1,4 +1,4 @@
-# Inception Report 1: Iron & Steel, Copper & Allied Metals, and Automotive Value Chains
+# Inception Report: Iron & Steel, Copper & Allied Metals, and Automotive Value Chains
 
 **Client:** Ministry of Trade, Industry and Cooperatives (MTIC), Uganda
 **Programme:** Uganda-UNIDO Programme for Country Partnership (PCP) for Inclusive and Sustainable Industrial Development (ISID)
@@ -11,13 +11,13 @@
 
 ## 1. Introduction
 
-This Inception Report covers the first of two diagnostic studies commissioned by MTIC under the Uganda-UNIDO Programme for Country Partnership (PCP). It covers three priority value chains designated under NDP IV:
+This Inception Report covers three priority value chains designated under NDP IV:
 
 1. Iron & Steel
 2. Copper & Allied Metals
 3. Automotives
 
-This document fulfils Task 1 of the Terms of Reference. It sets out the study design, diagnostic framework, data plan, stakeholder consultation plan, and prioritization methodology that will govern the production of the diagnostic report (Report 1). The TWG is requested to review and approve this Inception Report before final chapter submissions are accepted.
+This document fulfils Task 1 of the Terms of Reference. It sets out the study design, diagnostic framework, data plan, stakeholder consultation plan, and prioritization methodology that will govern the production of the diagnostic report. The TWG is requested to review and approve this Inception Report before final chapter submissions are accepted.
 
 ---
 
@@ -40,8 +40,8 @@ The study also delivers two cross-cutting chapters: consolidated policy recommen
 
 | Task | Responsible | Target Date | Status |
 |---|---|---|---|
-| Inception Report 1 submitted for TWG review | Solomon | 29 May 2026 | In progress |
-| TWG approval of Inception Report 1 | Jerome / TWG | 31 May 2026 | Pending |
+| Inception Report submitted for TWG review | Solomon | 29 May 2026 | In progress |
+| TWG approval of Inception Report | Jerome / TWG | 31 May 2026 | Pending |
 | Chapter 4: Iron & Steel — draft complete | Solomon | 27 May 2026 | **Done** |
 | Chapter 5: Copper & Allied Metals — draft | Solomon | 1 June 2026 | Pending data |
 | Chapter 6: Automotive — draft | Solomon | 3 June 2026 | Pending data |
@@ -54,7 +54,7 @@ The study also delivers two cross-cutting chapters: consolidated policy recommen
 
 ```
 Task                              May 27  May 29  May 31  Jun 1   Jun 3   Jun 5   Jun 6   Jun 7   Jun 8
-Inception Report 1 draft          ████
+Inception Report draft             ████
 TWG approval                              ░░░░░░░░
 Ch4 Iron & Steel                  ████
 Ch5 Copper & Allied Metals                        ░░░░░░░░████
@@ -70,7 +70,7 @@ Final submission                                                                
 
 ## 3. Diagnostic Framework and Assessment Templates
 
-Each value chain chapter in Report 1 follows a consistent six-part analytical framework applied uniformly across all three chains to ensure comparability of findings.
+Each value chain chapter follows a consistent six-part analytical framework applied uniformly across all three chains to ensure comparability of findings.
 
 ### Part A: Value Chain Map
 Full mapping from primary inputs through all intermediate processing stages to final end products. The map identifies: (a) where Uganda currently participates in the chain; (b) where value is lost through export of unprocessed inputs or import of intermediates; (c) where import substitution and export opportunities exist.
@@ -159,7 +159,7 @@ All data gaps are flagged with `DATA NEEDED` markers in the relevant chapter dra
 
 ### 5.2 Validation Workshop
 
-A structured stakeholder validation workshop will be held before Report 1 is finalized. The workshop will:
+A structured stakeholder validation workshop will be held before the report is finalized. The workshop will:
 
 - Present draft prioritization findings for each of the three value chains
 - Test the priority product selections and action matrices against stakeholder knowledge
@@ -183,7 +183,7 @@ A structured stakeholder validation workshop will be held before Report 1 is fin
 
 ### 6.1 Scoring Framework
 
-Products and sub-sectors within each chain are scored against five criteria to identify the 3–4 that Uganda should prioritize. The framework is applied consistently across all three Report 1 chains.
+Products and sub-sectors within each chain are scored against five criteria to identify the 3–4 that Uganda should prioritize. The framework is applied consistently across all three chains.
 
 | # | Criterion | Description | Proposed Weight |
 |---|---|---|---|
