@@ -17,13 +17,30 @@ This Inception Report covers three priority value chains designated under NDP IV
 2. Copper & Allied Metals
 3. Automotives
 
-This document fulfils Task 1 of the Terms of Reference. It sets out the study design, diagnostic framework, data plan, stakeholder consultation plan, and prioritization methodology that will govern the production of the diagnostic report. The TWG is requested to review and approve this Inception Report before final chapter submissions are accepted.
+Together, these chains represent Uganda's most significant opportunity for mineral-based industrialization — anchored in the country's iron ore and copper resource endowments and the strategic push toward domestic vehicle manufacturing through Kiira Motors Corporation.
+
+This document sets out the study design and workplan, the diagnostic framework and assessment templates to be applied to each chain, the data plan, the stakeholder consultation approach, and the prioritization methodology.
 
 ---
 
 ## 2. Study Design and Workplan
 
-### 2.1 Scope Confirmation
+### 2.1 Report Structure
+
+The diagnostic report will be structured as follows:
+
+| Chapter | Title |
+|---|---|
+| 1 | Executive Summary *(written last)* |
+| 2 | Background and Policy Context |
+| 3 | Methodology and Analytical Framework |
+| 4 | Iron & Steel Value Chain |
+| 5 | Copper & Allied Metals Value Chain |
+| 6 | Automotive Value Chain |
+| 7 | Cross-Cutting Policy Recommendations |
+| 8 | Investment Portfolio and Implementation Roadmap |
+
+### 2.2 Scope Confirmation
 
 This study covers the full value chains of Iron & Steel, Copper & Allied Metals, and Automotives as defined in the ToR. For each chain the study will deliver:
 
@@ -36,7 +53,7 @@ This study covers the full value chains of Iron & Steel, Copper & Allied Metals,
 
 The study also delivers two cross-cutting chapters: consolidated policy recommendations and an investment portfolio and implementation roadmap.
 
-### 2.2 Workplan and Timeline
+### 2.3 Workplan and Timeline
 
 | Task | Responsible | Target Date | Status |
 |---|---|---|---|
@@ -50,7 +67,7 @@ The study also delivers two cross-cutting chapters: consolidated policy recommen
 | Chapter 1: Executive Summary | Solomon | 7 June 2026 | Written last |
 | Final report submitted to Jerome | Solomon | 8 June 2026 | Deadline |
 
-### 2.3 Gantt Chart
+### 2.4 Gantt Chart
 
 ```
 Task                              May 27  May 29  May 31  Jun 1   Jun 3   Jun 5   Jun 6   Jun 7   Jun 8
