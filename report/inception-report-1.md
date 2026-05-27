@@ -225,3 +225,16 @@ The prioritization framework operationalizes the core analytical principle of th
 
 The output of this study is a focused prioritization, not a catalogue. Every chain analysis must conclude with a clear statement of what Uganda should do and what it should not do at this stage.
 
+---
+
+## 7. Request for TWG Approval
+
+This Inception Report is submitted to the Technical Working Group for review and approval. The TWG is requested to:
+
+1. Confirm the study scope, diagnostic framework, and assessment templates set out in Section 3
+2. Confirm or revise the prioritization criteria and weights set out in Section 6
+3. Approve the workplan and timeline in Section 2, including the 8 June 2026 final submission deadline
+4. Provide any additional guidance before chapter drafting commences
+
+Upon TWG approval, chapter drafting will proceed in accordance with the workplan. The TWG will be kept informed of progress and any material data gaps as they arise.
+
