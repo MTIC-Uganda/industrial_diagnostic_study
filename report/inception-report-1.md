@@ -59,9 +59,11 @@ The study also delivers two cross-cutting chapters: consolidated policy recommen
 |---|---|
 | Inception Report submitted for TWG review | 29 May 2026 |
 | TWG approval of Inception Report | 31 May 2026 |
-| Chapter 4: Iron & Steel — draft complete | 27 May 2026 |
-| Chapter 5: Copper & Allied Metals — draft | 1 June 2026 |
-| Chapter 6: Automotive — draft | 3 June 2026 |
+| Chapter 2: Background and Policy Context | 31 May 2026 |
+| Chapter 3: Methodology and Analytical Framework | 1 June 2026 |
+| Chapter 4: Iron & Steel — draft | 2 June 2026 |
+| Chapter 5: Copper & Allied Metals — draft | 3 June 2026 |
+| Chapter 6: Automotive — draft | 4 June 2026 |
 | Chapter 7: Cross-cutting recommendations | 5 June 2026 |
 | Chapter 8: Investment portfolio and roadmap | 6 June 2026 |
 | Chapter 1: Executive Summary | 7 June 2026 |
@@ -71,7 +73,7 @@ The study also delivers two cross-cutting chapters: consolidated policy recommen
 
 ```
 Task                              May 29  May 31  Jun 1   Jun 2   Jun 3   Jun 4   Jun 5   Jun 6   Jun 7   Jun 8
-Inception Report draft            ████
+Inception Report draft            ████████
 TWG approval                      ████████
 Ch2 Background and Policy Context         ████████
 Ch3 Methodology and Framework                     ████████
@@ -80,8 +82,8 @@ Ch5 Copper & Allied Metals                                        ████�
 Ch6 Automotive                                                            ████████
 Ch7 Cross-cutting                                                                 ████████
 Ch8 Investment roadmap                                                                    ████████
-Ch1 Executive Summary                                                                             ████
-Final submission                                                                                          ██
+Ch1 Executive Summary                                                                             ████████
+Final submission                                                                                          ████████
 ```
 
 ---

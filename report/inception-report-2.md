@@ -72,7 +72,7 @@ The study also delivers two cross-cutting chapters: consolidated policy recommen
 | Chapter 6: Petrochemicals & Fertilizers — draft | 4 June 2026 |
 | Chapter 7: Sugar & Confectionery — draft | 5 June 2026 |
 | Chapter 8: Plastics & Packaging — draft | 6 June 2026 |
-| Chapter 9: Cement & Building Materials — draft | 7 June 2026 |
+| Chapter 9: Cement & Building Materials — draft | 6 June 2026 |
 | Chapter 10: Cross-cutting recommendations | 7 June 2026 |
 | Chapter 11: Investment portfolio and roadmap | 7 June 2026 |
 | Chapter 1: Executive Summary | 8 June 2026 |
@@ -82,7 +82,7 @@ The study also delivers two cross-cutting chapters: consolidated policy recommen
 
 ```
 Task                              May 29  May 31  Jun 1   Jun 2   Jun 3   Jun 4   Jun 5   Jun 6   Jun 7   Jun 8
-Inception Report draft            ████
+Inception Report draft            ████████
 TWG approval                      ████████
 Ch2 Background and Policy Context         ████████
 Ch3 Methodology and Framework                     ████████
@@ -91,10 +91,11 @@ Ch5 Pharmaceuticals                                               ████�
 Ch6 Petrochemicals & Fertilizers                                          ████████
 Ch7 Sugar & Confectionery                                                         ████████
 Ch8 Plastics & Packaging                                                                  ████████
-Ch9 Cement & Building Materials                                                                   ████████
-Ch10-11 Cross-cutting & Roadmap                                                                   ████████
-Ch1 Executive Summary                                                                                     ████
-Final submission                                                                                          ██
+Ch9 Cement & Building Materials                                                           ████████
+Ch10 Cross-cutting                                                                                ████████
+Ch11 Investment Roadmap                                                                           ████████
+Ch1 Executive Summary                                                                                     ████████
+Final submission                                                                                          ████████
 ```
 
 ---
