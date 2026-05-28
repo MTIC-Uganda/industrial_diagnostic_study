@@ -1,4 +1,4 @@
-# Inception Report 2: Textiles & Garments, Pharmaceuticals, Petrochemicals & Fertilizers, Sugar & Confectionery, Plastics & Packaging, and Cement & Building Materials Value Chains
+# Inception Report: Textiles & Garments, Pharmaceuticals, Petrochemicals & Fertilizers, Sugar & Confectionery, Plastics & Packaging, and Cement & Building Materials Value Chains
 
 **Client:** Ministry of Trade, Industry and Cooperatives (MTIC), Uganda
 **Programme:** Uganda-UNIDO Programme for Country Partnership (PCP) for Inclusive and Sustainable Industrial Development (ISID)
@@ -11,7 +11,7 @@
 
 ## 1. Introduction
 
-This Inception Report covers the second of two diagnostic studies commissioned by MTIC under the Uganda-UNIDO Programme for Country Partnership (PCP). It covers six priority value chains designated under NDP IV:
+This Inception Report covers six priority value chains designated under NDP IV:
 
 1. Textiles & Garments
 2. Pharmaceuticals
@@ -20,7 +20,9 @@ This Inception Report covers the second of two diagnostic studies commissioned b
 5. Plastics & Packaging
 6. Cement & Building Materials
 
-This document fulfils Task 1 of the Terms of Reference for Report 2. It sets out the study design, diagnostic framework, data plan, stakeholder consultation plan, and prioritization methodology that will govern the production of the diagnostic report (Report 2). The TWG is requested to review and approve this Inception Report before final chapter submissions are accepted.
+Together, these chains represent Uganda's most significant opportunity for agro-industrial transformation and manufacturing import substitution — anchored in the country's cotton and agricultural commodity base, its proven capacity in sugar and cement production, and the emerging potential of domestic pharmaceutical manufacturing and petrochemical development linked to Uganda's oil and gas resources.
+
+This document sets out the study design and workplan, the diagnostic framework and assessment templates to be applied to each chain, the data plan, the stakeholder consultation approach, and the prioritization methodology.
 
 ---
 
@@ -59,44 +61,47 @@ The study also delivers two cross-cutting chapters: consolidated policy recommen
 
 ### 2.3 Workplan and Timeline
 
-| Task | Responsible | Target Date | Status |
-|---|---|---|---|
-| Inception Report 2 submitted for TWG review | Solomon | 29 May 2026 | In progress |
-| TWG approval of Inception Report 2 | Jerome / TWG | 31 May 2026 | Pending |
-| Chapter 4: Textiles & Garments — draft | Solomon | 1 June 2026 | Pending data |
-| Chapter 5: Pharmaceuticals — draft | Solomon | 2 June 2026 | Pending data |
-| Chapter 6: Petrochemicals & Fertilizers — draft | Solomon | 3 June 2026 | Pending data |
-| Chapter 7: Sugar & Confectionery — draft | Solomon | 4 June 2026 | Pending data |
-| Chapter 8: Plastics & Packaging — draft | Solomon | 5 June 2026 | Pending data |
-| Chapter 9: Cement & Building Materials — draft | Solomon | 6 June 2026 | Pending data |
-| Chapter 10: Cross-cutting recommendations | Solomon | 7 June 2026 | Pending |
-| Chapter 11: Investment portfolio and roadmap | Solomon | 7 June 2026 | Pending |
-| Chapter 1: Executive Summary | Solomon | 8 June 2026 | Written last |
-| Final report submitted to Jerome | Solomon | 8 June 2026 | Deadline |
+| Task | Target Date |
+|---|---|
+| Inception Report submitted for TWG review | 29 May 2026 |
+| TWG approval of Inception Report | 31 May 2026 |
+| Chapter 2: Background and Policy Context | 31 May 2026 |
+| Chapter 3: Methodology and Analytical Framework | 1 June 2026 |
+| Chapter 4: Textiles & Garments — draft | 2 June 2026 |
+| Chapter 5: Pharmaceuticals — draft | 3 June 2026 |
+| Chapter 6: Petrochemicals & Fertilizers — draft | 4 June 2026 |
+| Chapter 7: Sugar & Confectionery — draft | 5 June 2026 |
+| Chapter 8: Plastics & Packaging — draft | 6 June 2026 |
+| Chapter 9: Cement & Building Materials — draft | 7 June 2026 |
+| Chapter 10: Cross-cutting recommendations | 7 June 2026 |
+| Chapter 11: Investment portfolio and roadmap | 7 June 2026 |
+| Chapter 1: Executive Summary | 8 June 2026 |
+| Final report submitted to MTIC | 8 June 2026 |
 
 ### 2.4 Gantt Chart
 
 ```
 Task                              May 29  May 31  Jun 1   Jun 2   Jun 3   Jun 4   Jun 5   Jun 6   Jun 7   Jun 8
-Inception Report 2 draft          ████
-TWG approval                              ░░░░░░░░
-Ch4 Textiles & Garments                           ████
-Ch5 Pharmaceuticals                                       ████
-Ch6 Petrochemicals & Fertilizers                                  ████
-Ch7 Sugar & Confectionery                                                 ████
-Ch8 Plastics & Packaging                                                          ████
-Ch9 Cement & Building Materials                                                           ████
-Ch10 Cross-cutting / Ch11 Roadmap                                                                 ████████
-Ch1 Executive Summary                                                                                       ██
-Final submission                                                                                                ██
+Inception Report draft            ████
+TWG approval                      ████████
+Ch2 Background and Policy Context         ████████
+Ch3 Methodology and Framework                     ████████
+Ch4 Textiles & Garments                                   ████████
+Ch5 Pharmaceuticals                                               ████████
+Ch6 Petrochemicals & Fertilizers                                          ████████
+Ch7 Sugar & Confectionery                                                         ████████
+Ch8 Plastics & Packaging                                                                  ████████
+Ch9 Cement & Building Materials                                                                   ████████
+Ch10-11 Cross-cutting & Roadmap                                                                   ████████
+Ch1 Executive Summary                                                                                     ████
+Final submission                                                                                          ██
 ```
-*(░░ = pending TWG approval; ██ = in progress)*
 
 ---
 
 ## 3. Diagnostic Framework and Assessment Templates
 
-Each value chain chapter in Report 2 follows a consistent six-part analytical framework applied uniformly across all six chains to ensure comparability of findings.
+Each value chain chapter follows a consistent six-part analytical framework applied uniformly across all six chains to ensure comparability of findings.
 
 ### Part A: Value Chain Map
 Full mapping from primary inputs through all intermediate processing stages to final end products. The map identifies: (a) where Uganda currently participates in the chain; (b) where value is lost through export of unprocessed agricultural commodities or import of processed intermediates; (c) where import substitution and export opportunities exist.
@@ -124,7 +129,7 @@ Analysis across ten dimensions applied consistently to each chain:
 Three-level market assessment: (1) domestic Uganda market; (2) regional East African and COMESA market; (3) global export markets. For each level: market size, growth trajectory, Uganda's current share, competitive landscape, and realistic market access potential.
 
 ### Part E: Prioritized Products
-Application of the prioritization scoring framework (see Section 5) to identify 3–4 products or sub-sectors per chain. Explicit deprioritization of products Uganda should not pursue at this stage, with rationale.
+Application of the prioritization scoring framework to identify 3–4 products or sub-sectors per chain. Explicit deprioritization of products Uganda should not pursue at this stage, with rationale.
 
 ### Part F: Priority Action Matrix
 Actions organized by timeframe: quick wins (0–12 months), policy and institutional reforms (1–3 years), investment interventions (3–5 years). Each action specifies the responsible party and indicative investment or cost.
@@ -135,14 +140,14 @@ Actions organized by timeframe: quick wins (0–12 months), policy and instituti
 
 ### 4.1 Primary Data Sources
 
-| Value Chain | Primary Sources | Status |
-|---|---|---|
-| Textiles & Garments | KIIs with textile mills, garment manufacturers, cotton ginneries; Cotton Development Organisation (CDO) data; URA trade data by HS code | Pending — Jerome to provide |
-| Pharmaceuticals | KIIs with pharmaceutical manufacturers; National Drug Authority (NDA) data; URA pharmaceutical import data | Pending — Jerome to provide |
-| Petrochemicals & Fertilizers | KIIs with fertilizer blenders; Ministry of Energy data on oil and gas feedstocks; URA chemical import data | Pending — Jerome to provide |
-| Sugar & Confectionery | KIIs with sugar manufacturers (Kakira, SCOUL, others); Uganda Sugar Board data; URA sugar trade data | Pending — Jerome to provide |
-| Plastics & Packaging | KIIs with plastics manufacturers and recyclers; URA plastic import data; NEMA data on plastic waste | Pending — Jerome to provide |
-| Cement & Building Materials | KIIs with cement plants; Uganda Cement Industry Association data; URA cement trade data; limestone reserve data from MEMD | Pending — Jerome to provide |
+| Value Chain | Primary Sources |
+|---|---|
+| Textiles & Garments | KIIs with textile mills, garment manufacturers, cotton ginneries; Cotton Development Organisation (CDO) data; URA trade data by HS code |
+| Pharmaceuticals | KIIs with pharmaceutical manufacturers; National Drug Authority (NDA) data; URA pharmaceutical import data |
+| Petrochemicals & Fertilizers | KIIs with fertilizer blenders; Ministry of Energy data on oil and gas feedstocks; URA chemical import data |
+| Sugar & Confectionery | KIIs with sugar manufacturers (Kakira, SCOUL, others); Uganda Sugar Board data; URA sugar trade data |
+| Plastics & Packaging | KIIs with plastics manufacturers and recyclers; URA plastic import data; NEMA data on plastic waste |
+| Cement & Building Materials | KIIs with cement plants; Uganda Cement Industry Association data; URA cement trade data; limestone reserve data from MEMD |
 
 ### 4.2 Secondary Data Sources
 
@@ -170,10 +175,6 @@ Actions organized by timeframe: quick wins (0–12 months), policy and instituti
 | Plastics recycling capacity and waste volumes | Plastics & Packaging | NEMA; KIIs with recyclers |
 | Limestone reserve quality and location data | Cement & Building Materials | MEMD geological survey data |
 
-All data gaps are flagged with `DATA NEEDED` markers in the relevant chapter drafts. Jerome will be notified at daily check-ins of any gaps requiring his intervention.
-
-**Critical note:** All six Report 2 chains are currently data-pending. Chapter drafting cannot begin until Jerome provides primary data. This is flagged as the primary risk to the 8 June deadline. Jerome is requested to prioritize data provision for at least two chains by 29 May 2026 so chapter work can begin immediately after TWG approval.
-
 ---
 
 ## 5. Stakeholder Consultation Plan
@@ -195,7 +196,7 @@ All data gaps are flagged with `DATA NEEDED` markers in the relevant chapter dra
 
 ### 5.2 Validation Workshop
 
-A structured stakeholder validation workshop will be held before Report 2 is finalized. The workshop will:
+A structured stakeholder validation workshop will be held before the report is finalized. The workshop will:
 
 - Present draft prioritization findings for each of the six value chains
 - Test the priority product selections and action matrices against stakeholder knowledge
@@ -204,14 +205,6 @@ A structured stakeholder validation workshop will be held before Report 2 is fin
 
 **Proposed timing:** Week of 2–6 June 2026 (after chapter drafts are complete, before final submission). This may be combined with the Report 1 validation workshop if Jerome and the TWG prefer a single joint session.
 **Proposed participants:** TWG members, private sector representatives from each of the six chains, MTIC, UIA, UNBS, NDA, UDB, and relevant development partners.
-**Jerome to confirm:** date, venue, whether joint or separate from Report 1 workshop, and final participant list.
-
-### 5.3 TWG Reporting Arrangements
-
-- This Inception Report is submitted to Jerome for onward transmission to the TWG.
-- Jerome will communicate TWG approval or revision requests to Solomon.
-- Chapter drafts will not be finalized until TWG has approved this Inception Report.
-- A mid-point progress update will be shared with Jerome at each daily 8pm check-in.
 
 ---
 
@@ -219,7 +212,7 @@ A structured stakeholder validation workshop will be held before Report 2 is fin
 
 ### 6.1 Scoring Framework
 
-Products and sub-sectors within each chain are scored against five criteria to identify the 3–4 that Uganda should prioritize. The framework is applied consistently across all six Report 2 chains.
+Products and sub-sectors within each chain are scored against five criteria to identify the 3–4 that Uganda should prioritize. The framework is applied consistently across all six chains.
 
 | # | Criterion | Description | Proposed Weight |
 |---|---|---|---|
@@ -228,8 +221,6 @@ Products and sub-sectors within each chain are scored against five criteria to i
 | 3 | Feasibility | Capital requirements, technology readiness, lead time to commercial scale, management capability | 20% |
 | 4 | Job creation and income potential | Direct and indirect employment, wage levels, upstream and downstream linkage effects | 15% |
 | 5 | Import substitution impact | Value of current imports that domestic production could displace; current account benefit | 15% |
-
-> **Note:** These weights are **proposed** and subject to TWG confirmation. Jerome should table them at the TWG approval session. If the TWG revises any weights, the scoring for all six chains will be recalculated accordingly before chapters are finalized.
 
 ### 6.2 Scoring Scale
 
@@ -255,17 +246,17 @@ The prioritization framework operationalizes the core analytical principle of th
 
 > *"Successful countries are known for three or four products. The economies are built around those few. Uganda must not try to do everything."*
 
-With six value chains in scope, the discipline of focused prioritization is especially important for Report 2. The risk of recommending too many products across too many chains is high; the output must be a clear, defensible set of priorities — not a catalogue.
+With six value chains in scope, the discipline of focused prioritization is especially important. The risk of recommending too many products across too many chains is high; the output must be a clear, defensible set of priorities — not a catalogue.
 
 ---
 
-## 7. Next Steps
+## 7. Request for TWG Approval
 
-| Action | By whom | By when |
-|---|---|---|
-| TWG reviews and approves this Inception Report | Jerome / TWG | 31 May 2026 |
-| Jerome provides data for at least 2 Report 2 chains | Jerome | 29 May 2026 |
-| Jerome provides data for remaining Report 2 chains | Jerome | By 2 June 2026 |
-| Jerome confirms prioritization weights with TWG | Jerome | At TWG session |
-| Jerome confirms validation workshop date and format (joint or separate) | Jerome | By 1 June 2026 |
-| Solomon begins chapter drafting upon data receipt | Solomon | Immediately on receipt |
+This Inception Report is submitted to the Technical Working Group for review and approval. The TWG is requested to:
+
+1. Confirm the study scope, diagnostic framework, and assessment templates set out in Section 3
+2. Confirm or revise the prioritization criteria and weights set out in Section 6
+3. Approve the workplan and timeline in Section 2, including the 8 June 2026 final submission deadline
+4. Provide any additional guidance before chapter drafting commences
+
+Upon TWG approval, chapter drafting will proceed in accordance with the workplan. The TWG will be kept informed of progress and any material data gaps as they arise.
