@@ -192,7 +192,7 @@ Actions organized by timeframe: quick wins (0–12 months), policy and instituti
 | **Private sector — Plastics** | Crown Beverages, plastics manufacturers in Namanve, recycling firms | Plastics & Packaging |
 | **Private sector — Cement** | Hima Cement, Tororo Cement, National Cement Company | Cement & Building Materials |
 | **Industry associations** | Uganda Manufacturers Association (UMA), Uganda Pharmaceutical Manufacturers Association | All |
-| **Financiers** | Uganda Development Bank (UDB), EADB, commercial banks | All |
+| **Financial Institutions** | Uganda Development Bank (UDB), Uganda Development Corporation (UDC), East African Development Bank (EADB), commercial banks | All |
 | **Research / academia** | Makerere University (pharmacy, chemistry, engineering), UIRI | All |
 
 ### 5.2 Validation Workshop
@@ -215,7 +215,7 @@ A structured stakeholder validation workshop will be held before the report is f
 
 Products and sub-sectors within each chain are scored against five criteria to identify the 3–4 that Uganda should prioritize. The framework is applied consistently across all six chains.
 
-| # | Criterion | Description | Proposed Weight |
+| # | Criterion | Description | Weight |
 |---|---|---|---|
 | 1 | Accessible market size | Size and growth rate of the domestic, regional, and export market Uganda can realistically access | 25% |
 | 2 | Uganda's comparative advantage | Availability of raw material inputs, existing productive base, geographic proximity to key markets | 25% |
@@ -243,7 +243,7 @@ Products scoring above **3.5** (out of 5) are designated priority products. Prod
 
 ### 6.4 Analytical Principle
 
-The prioritization framework operationalizes the core analytical principle of this study, as stated by Jerome Nuwabaasa:
+The prioritization framework operationalizes the core analytical principle of this study:
 
 > *"Successful countries are known for three or four products. The economies are built around those few. Uganda must not try to do everything."*
 
