@@ -6,3 +6,6 @@ __pycache__/
 cookies.json
 .env
 data_sources/trademap/cookies.json
+
+# TradeMap persistent browser profile (contains session)
+data_sources/trademap/browser_profile/

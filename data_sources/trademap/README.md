@@ -1,38 +1,69 @@
-# ITC TradeMap — Data Source Setup
+# ITC TradeMap — Automated Data Source
 
-## Overview
-
-This folder contains the setup for automated trade data extraction from
-[ITC TradeMap](https://www.trademap.org) using session cookie replay.
+Pulls live trade statistics from [ITC TradeMap](https://www.trademap.org)
+into clean CSVs for use in the value-chain chapters.
 
 ## How it works
 
-1. Solomon logs into trademap.org in Chrome
-2. A cURL request is captured from Chrome DevTools (see below)
-3. The Python client (`scripts/trademap_client.py`) replays that request
-   with different HS codes, countries, and year ranges
-4. Results are saved as CSVs in `data/trademap/`
+A **persistent Playwright browser profile** holds your logged-in TradeMap
+session on disk (like a real Chrome profile). Scripts reuse it to navigate
+TradeMap, drive the product / trade-flow dropdowns, and scrape the
+time-series tables. This approach is used because TradeMap aggressively
+bot-detects direct API/cURL access (redirect loops); a real browser profile
+behaves like a human session and is stable for weeks.
+
+## One-time setup
+
+1. Put your credentials in `.env` at the repo root (gitignored):
+   ```
+   TRADEMAP_EMAIL=your@email.com
+   TRADEMAP_PASSWORD=yourpassword
+   ```
+2. Log in once — a browser window opens; solve the CAPTCHA if shown:
+   ```
+   python scripts/trademap_login.py
+   ```
+   The session is saved to `data_sources/trademap/browser_profile/` (gitignored).
+
+## Fetching data
+
+```bash
+# One HS code, exports
+python scripts/trademap_fetch.py --hs 7403 --flow exports
+
+# One HS code, imports
+python scripts/trademap_fetch.py --hs 7208 --flow imports
+
+# All HS codes for a whole value chain
+python scripts/trademap_fetch.py --chapter copper --flow exports
+python scripts/trademap_fetch.py --chapter iron-steel --flow imports
+```
+
+Value-chain keys: `iron-steel`, `copper`, `automotive`, `textiles`,
+`pharma`, `petrochem`, `sugar`, `plastics`, `cement`.
+
+Output CSVs land in `data/trademap/`, named
+`UGA_<hs>_<flow>_<date>.csv`, with one row per partner country and one
+column per year (last 5 years), e.g.:
+
+```
+Exporters, Imported value in 2020, ... 2024
+World,     135,322, ... 219,496
+China,     25,765,  ... 103,222
+Japan,     86,087,  ... 88,468
+```
+
+## When the session expires (after a few weeks)
+
+Re-run `python scripts/trademap_login.py` and solve the CAPTCHA once.
+That's the only manual step, and only occasionally.
 
 ## Files
 
 | File | Purpose |
 |---|---|
-| `sample_request.sh` | Reference cURL (cookies redacted — do not commit real cookies) |
-| `hs_codes.md` | HS codes used per value chain |
-| `cookies.json` | Your live session cookies — **NEVER commit this file** |
-
-## How to refresh cookies (when session expires)
-
-1. Log into trademap.org in Chrome
-2. Open DevTools (F12) → Application tab → Cookies → trademap.org
-3. Export cookies using the EditThisCookie Chrome extension, or
-4. Re-run the sample query, copy as cURL, and extract the cookie header
-5. Update `data_sources/trademap/cookies.json` locally
-
-## Running the client
-
-```bash
-python scripts/trademap_client.py --hs 7403 --country UGA --years 2021-2025
-```
-
-Output CSV will be saved to `data/trademap/UGA_7403_2021_2025.csv`
+| `scripts/trademap_login.py` | One-time login → saves persistent profile |
+| `scripts/trademap_fetch.py` | Fetches data (the workhorse) |
+| `hs_codes.md` | HS codes mapped to each of the 9 value chains |
+| `.env` | Credentials — **gitignored, never committed** |
+| `browser_profile/` | Saved session — **gitignored, never committed** |
