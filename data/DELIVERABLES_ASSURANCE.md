@@ -117,16 +117,23 @@ Potentially 20–40 profiles across both reports. Confirm scope: profiles for th
 
 ---
 
-## F. Decisions needed from Solomon / Jerome before writing
+## F. Decisions — SETTLED by Solomon (2026-06-01) and applied
 
-1. **Methodology framing (C2)** — describe as desk-based diagnostic for
-   validation, OR run KIIs/workshop first? *(most important)*
-2. **Update the two structures' Ch2 baseline (C1)** — approve 15.2% GDP figure.
-3. **Refresh workplan dates (D1)** — agree a realistic new schedule.
-4. **Investment figures (D3)** — confirm they will be labelled indicative.
-5. **Project-profile scope (D4)** — priority products only?
+All five resolved and edited into both structures and both inception reports:
 
-Once these five are settled, every promise in both inception reports and
-structures can be delivered to a dependable, decision-grade standard on current
-data. **No content blockers remain — these are integrity and sequencing calls,
-and they are exactly the calls that keep the report trustworthy.**
+1. **Methodology framing (C2)** ✅ — Reports are stated as **desk-based**, with
+   findings to be **validated through KIIs + a stakeholder workshop after
+   submission**. No past-tense fieldwork claims. (structures Ch3; inception §3 + §5.2)
+2. **Baseline (C1)** ✅ — Corrected to **15.2% of GDP (2024, World Bank)**;
+   capacity utilization to be cited from latest UBOS. (both structures Ch2)
+3. **Workplan (D1)** ✅ — New realistic schedule: Report 1 desk report by
+   5 June, Report 2 by 9 June, validation after each. (both inception §2.3/2.4)
+4. **Investment figures (D3)** ✅ — All CAPEX/OPEX explicitly **labelled
+   indicative**, sourced or flagged as assumptions. (structures Ch8/Ch11)
+5. **Project profiles (D4)** ✅ — Scoped to **priority products only**
+   (3–4 per chain). (structures Ch8/Ch11)
+
+**Status: cleared to write.** Every promise in both inception reports and
+structures can now be delivered to a dependable, decision-grade standard on
+current data, with an honest methodology that the planned workshops will
+validate.
