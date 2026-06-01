@@ -18,7 +18,7 @@ Core national policy and planning documents. Referenced across all value chain c
 - `tenfold-growth-strategy.pdf` — Uganda Tenfold Growth Strategy. Sets the ATMs framework (Agro-industrialisation, Tourism, Mineral Value Addition, STI) and 12–15% annual manufacturing growth target.
 
 ## iron-steel/
-- `iron-steel-value-chain-mapping-analysis-oct2025.doc` — Value chain mapping and analysis for iron & steel, October 2025. **⚠️ NOTE TO JEROME: this appears to be a more recent version than `value-chain-mapping-analysis-v3-jul2025.doc` in the data root. Please confirm if this replaces it.**
+- `iron-steel-value-chain-mapping-analysis-oct2025.doc` — Value chain mapping and analysis for iron & steel, October 2025. **Primary data source for the Iron & Steel chapter.** Replaces the earlier July 2025 draft.
 - `iron-steel-feasibility-study-uganda.pdf` — Feasibility study for establishing the iron and steel industry in Uganda.
 - `iron-steel-taxation-policy-review-nov2025.docx` — Draft technical report on taxation policy review for the iron and steel sector (billets, wire rods, hot rolled coils), November 2025.
 
@@ -95,5 +95,3 @@ Cross-cutting reference for iron & steel, copper, and other mineral-based chains
 
 ---
 
-## Root files
-- `value-chain-mapping-analysis-v3-jul2025.doc` — Value chain mapping and analysis report, Version 3 (July 2025), with Emma's edits. **WORKING DRAFT** — may be superseded by `iron-steel/iron-steel-value-chain-mapping-analysis-oct2025.doc`. Jerome to confirm.
