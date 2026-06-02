@@ -1,8 +1,7 @@
 # Chapter 2: Background and Policy Context
 
 **Report:** Report 1 — Iron & Steel, Copper & Allied Metals, and Automotive Value Chains
-**Status:** Draft
-**Assigned to:** Solomon Ariho
+**Status:** Draft for validation
 **ToR Reference:** MTIC-Diagnostic Study on Iron & Steel, Copper.docx
 
 ---
@@ -11,21 +10,21 @@
 
 Uganda has set out an ambitious long-term industrialization trajectory anchored in a hierarchy of national planning instruments. These instruments collectively define the targets, sectoral priorities, and institutional responsibilities that frame this diagnostic study.
 
-**Uganda Vision 2040** sets the overarching national direction: transformation from a predominantly peasant and low-income economy to a competitive upper-middle-income country within thirty years. The Vision identifies industrialization — particularly mineral-based and agro-processing manufacturing — as the central engine of this transformation. It sets a target of increasing the manufacturing sector's contribution to GDP to at least 20%, and projects Uganda's per capita income rising to USD 9,500 by 2040.
+**Uganda Vision 2040** sets the overarching national direction: transformation from a predominantly peasant and low-income economy to a competitive upper-middle-income country. The Vision targets a GDP of approximately USD 581 billion and a per capita income of USD 9,500 by 2040, with industrialization — particularly mineral-based and agro-processing manufacturing — as a central engine of this transformation (National Planning Authority, *Uganda Vision 2040*).
 
-**The National Development Plan IV (NDP IV), 2020/21–2024/25** operationalizes Vision 2040 over a five-year cycle. NDP IV designates manufacturing as one of three core growth areas alongside agriculture and services. Its industrialization targets are specific: raise manufacturing's share of GDP to 21%, increase manufactured exports to 35% of total exports, and reduce Uganda's import bill through deliberate import substitution in priority value chains. NDP IV explicitly identifies Iron & Steel, Copper & Allied Metals, and Automotives as priority value chains for industrial policy intervention, anchored in Uganda's mineral resource endowment and the strategic role of metals in infrastructure development.
+**The Fourth National Development Plan (NDP IV), FY2025/26–2029/30** is the current medium-term plan, approved by Parliament in January 2026 under the theme *"Sustainable Industrialization for inclusive growth, employment, and wealth creation"* (Parliament of Uganda, NDP IV approval, Jan 2026). NDP IV targets growing GDP to USD 158 billion by FY2029/30 (from USD 53.2 billion in FY2023/24), raising per capita income to USD 2,008 (from USD 1,146), and lifting the annual GDP growth rate to 10.1% by FY2029/30 (Ministry of Finance, Planning and Economic Development, NDP IV presentation to Parliament). Manufacturing and value addition are placed at the centre of this strategy, and Iron & Steel, Copper & Allied Metals, and Automotives are among the priority manufacturing value chains identified for industrial-policy intervention, anchored in Uganda's mineral resource endowment.
 
-**The National Industrial Policy (NIP) 2020** provides the sector-specific framework within which NDP IV industrial targets are pursued. The NIP establishes Uganda's industrial policy objectives as: building productive capacity in selected manufacturing value chains, enhancing domestic value addition, reducing dependence on imported intermediate and capital goods, and linking industrial development to Uganda's natural resource base. The NIP designates MTIC as the lead coordinating ministry for industrial policy implementation and calls for targeted diagnostics of priority value chains as the analytical foundation for investment decisions and policy reforms.
+**The National Industrial Policy (NIP) 2020** provides the sector-specific framework within which the NDP industrial targets are pursued. The NIP sets the goal of increasing the manufacturing sector's contribution to GDP and deepening domestic value addition, reducing dependence on imported intermediate and capital goods, and linking industrial development to Uganda's natural-resource base (MTIC, *National Industrial Policy 2020*). It designates MTIC as the lead coordinating ministry for industrial-policy implementation and calls for targeted diagnostics of priority value chains as the analytical foundation for investment and reform — the mandate under which this study is produced.
 
-**The MTIC Strategic Plan 2020/21–2024/25** translates NIP objectives into ministerial priorities. MTIC's strategic focus includes: facilitating private sector investment in priority industries, leading technical working groups for value chain development, coordinating with Uganda Investment Authority (UIA), Uganda Export Promotion Board (UEPB), Uganda National Bureau of Standards (UNBS), and other agencies, and mobilizing development partner support for industrial development. This diagnostic study is a direct output of MTIC's strategic mandate.
+**The MTIC Strategic Plan** translates NIP objectives into ministerial priorities: facilitating private-sector investment in priority industries, leading technical working groups for value-chain development, coordinating with Uganda Investment Authority (UIA), Uganda Export Promotion Board (UEPB), Uganda National Bureau of Standards (UNBS), and other agencies, and mobilizing development-partner support.
 
-**The Tenfold Growth Strategy** represents Uganda's most ambitious industrial growth target. It sets a goal of growing Uganda's economy tenfold over twenty years, driven primarily by manufacturing and exports. Under the Tenfold Strategy, manufacturing must grow at 12–15% annually — approximately double the historical average. Achieving this requires structural transformation: moving from low-value raw material exports to processed and manufactured goods that capture a larger share of global and regional value chains. Mineral-based industrialization — including steel, copper, and automotive manufacturing — is identified as a primary driver of this transformation.
+**The Tenfold Growth Strategy** sets Uganda's most ambitious long-horizon target: growing the economy roughly tenfold, from around USD 50 billion to USD 500 billion, organized around four drivers summarized as **ATMs — Agro-industrialization, Tourism, Minerals (and mineral-based industrialization), and Science, Technology and Innovation (STI)** (Ministry of Finance / NDP IV launch materials, 2025). Mineral-based industrialization — including steel, copper, and automotive manufacturing — is a primary pillar, requiring a structural shift from low-value raw-material exports to processed and manufactured goods.
 
 ---
 
 ## 2.2 The Uganda–UNIDO Programme for Country Partnership
 
-The Uganda–UNIDO Programme for Country Partnership (PCP) for Inclusive and Sustainable Industrial Development (ISID) is the multilateral cooperation framework within which this diagnostic study is produced. The PCP is a government-led partnership model developed by UNIDO to mobilize coordinated technical assistance and investment around a country's industrial development priorities.
+The Uganda–UNIDO Programme for Country Partnership (PCP) for Inclusive and Sustainable Industrial Development (ISID) is the multilateral cooperation framework within which this diagnostic study is produced. The PCP is a government-led partnership model developed by UNIDO to mobilize coordinated technical assistance and investment around a country's industrial-development priorities (UNIDO, *Programme for Country Partnership*).
 
 The Uganda PCP operates across six priority areas:
 
@@ -37,56 +36,77 @@ The Uganda PCP operates across six priority areas:
 
 4. **Strengthening national standards, quality infrastructure, and accreditation systems** — building Uganda's capacity to meet international standards requirements, a binding constraint to export competitiveness.
 
-5. **Advancing green industry, circular economy, and Industry 4.0 solutions** — embedding environmental sustainability and technology upgrading into Uganda's industrial development model.
+5. **Advancing green industry, circular economy, and Industry 4.0 solutions** — embedding environmental sustainability and technology upgrading into Uganda's industrial-development model.
 
-6. **Supporting productive use of renewable energy and energy efficiency** — reducing energy costs for manufacturers, which remain among the highest in East Africa and a significant competitiveness constraint.
+6. **Supporting productive use of renewable energy and energy efficiency** — reducing energy costs for manufacturers, which remain a significant competitiveness constraint.
 
-This diagnostic study directly supports PCP Priority Areas 1 and 2. Its findings will serve as technical inputs into PCP formulation, partner coordination, and investment mobilization specifically for the Iron & Steel, Copper & Allied Metals, and Automotive value chains.
+This diagnostic study directly supports PCP Priority Areas 1 and 2. Its findings are intended as technical inputs into PCP formulation, partner coordination, and investment mobilization specifically for the Iron & Steel, Copper & Allied Metals, and Automotive value chains.
 
 ---
 
 ## 2.3 Current State of Uganda's Manufacturing Sector
 
-Uganda's manufacturing sector operates well below its potential. The sector currently contributes approximately **16% of GDP**, against an NDP IV target of 21% and a Vision 2040 target of 20%+. This gap reflects structural weaknesses that have persisted across successive planning cycles.
+Uganda's manufacturing sector operates below its potential. Manufacturing value added was approximately **15.2% of GDP in 2024** (World Bank, World Development Indicators), having eased from about 16.4% in 2022. The NIP 2020 sets a target of raising manufacturing's share toward **16% by 2029/30** — meaning the *current* share sits below even the medium-term policy target, underscoring the scale of the structural challenge (MTIC, *National Industrial Policy 2020*; World Bank WDI).
 
-**Capacity utilization** across the manufacturing sector averages approximately **30%**. This is one of the lowest utilization rates in East Africa and reflects the combined effect of unreliable and expensive energy, weak demand, input supply constraints, skills mismatches, and limited access to finance. Low utilization means manufacturers bear high fixed costs per unit of output, making them uncompetitive against imports and unable to generate the cash flows needed for reinvestment.
+> **DATA NOTE:** The widely cited "30% capacity utilization" figure should be confirmed against the latest UBOS Business Establishment / Index of Industrial Production data before finalization. It is used here as indicative and attributed accordingly.
 
-Key structural characteristics of Uganda's manufacturing base relevant to this report include:
+Manufacturing capacity utilization is estimated at around 30% on average (indicative; to be confirmed from latest UBOS data). Low utilization means manufacturers carry high fixed costs per unit of output, weakening competitiveness against imports and constraining reinvestment.
 
-- **High import dependency in metals and capital goods** — Uganda imports the majority of its steel products, copper wire, fabricated metal goods, and vehicle parts. This creates chronic current account pressure and represents a large and growing opportunity for domestic value addition.
-- **Underdeveloped upstream mineral processing** — Uganda has significant iron ore and copper deposits that remain largely unexploited commercially. The gap between the resource endowment and the manufacturing base is the defining structural challenge for Report 1 value chains.
-- **Growing infrastructure demand** — national and regional infrastructure investment is accelerating, driving demand for steel, copper, and automotive products that Uganda currently imports.
-- **Limited export competitiveness in metals** — manufactured metal exports remain a small share of total exports. Uganda participates in EAC metals trade primarily as a re-exporter of downstream finished products, not as an upstream processor.
+Key structural characteristics relevant to this report:
 
-Despite these constraints, Uganda's manufacturing sector has genuine competitive foundations for the Report 1 value chains: significant iron ore and copper mineral reserves, a growing domestic and regional market, improving infrastructure connectivity, and a young and growing labour force.
+- **High import dependency in metals and capital goods** — Uganda imports the majority of its flat steel, copper products, fabricated metal goods, and vehicle parts, creating chronic current-account pressure and a large opportunity for domestic value addition (ITC TradeMap, HS 72/73/74/87, 2024).
+- **Underdeveloped upstream mineral processing** — Uganda has significant iron-ore and copper deposits that remain largely under-exploited commercially. The gap between resource endowment and the manufacturing base is the defining structural challenge for the Report 1 chains.
+- **Growing infrastructure demand** — national and regional infrastructure investment is accelerating, driving demand for steel, copper, and automotive products Uganda currently imports.
+- **A still-shallow export base in metals** — over 70% of Uganda's manufactured exports go to regional markets, but in metals Uganda participates mainly as a re-exporter of downstream finished products rather than as an upstream processor (Uganda Investment Authority, 2025).
+
+Despite these constraints, the Report 1 chains rest on genuine foundations: substantial iron-ore and copper reserves, a growing domestic and regional market, improving infrastructure connectivity, and a young, growing labour force.
 
 ---
 
 ## 2.4 Rationale for the Three Priority Value Chains in This Report
 
-The three value chains covered in this report — Iron & Steel, Copper & Allied Metals, and Automotives — were selected by MTIC through a deliberate prioritization process that drew on NDP IV designations, NIP sectoral priorities, Uganda's mineral resource endowments, import substitution potential, and the structure of Uganda's regional export markets.
+The three value chains — Iron & Steel, Copper & Allied Metals, and Automotives — were selected by MTIC through a prioritization process drawing on NDP IV designations, NIP sectoral priorities, Uganda's mineral endowments, import-substitution potential, and the structure of regional export markets. They also form an integrated industrial chain: **mined metal → processed metal → consumer/capital product**, culminating in domestic vehicle manufacturing.
 
-**Iron & Steel** was selected because Uganda possesses among the highest-grade hematite iron ore deposits in the world (60–65% Fe concentration), located in south-western Uganda. Uganda imports over USD 527 million worth of iron and steel products annually against exports of USD 153 million — a trade deficit of USD 374 million. The sector already has 40 active firms and over USD 900 million in private investment, concentrated in downstream rolling, but lacks the upstream mining and sponge iron production needed to supply this capacity domestically. Iron and steel is the foundational input for all other manufacturing and infrastructure development.
+**Iron & Steel** was selected because Uganda holds substantial iron-ore deposits (notably high-grade hematite and magnetite in the south-west and Muko area), while importing the bulk of its flat steel and semi-finished steel. The NPA/UDC *Mapping and Value Chain Analysis for Uganda's Iron and Steel Industry* (June 2025) records installed capacity of roughly 1.68 million tonnes per annum at about 30% utilization, with the deepest gap in upstream ironmaking and flat-steel production. Iron and steel is the foundational input for construction, infrastructure, and all downstream metal manufacturing.
 
-**Copper & Allied Metals** was selected on the basis of Uganda's copper mineral endowment, particularly the Kilembe copper mine in western Uganda — historically one of East Africa's most significant copper deposits — now being revitalized under the Uganda National Mining Company (UNMC). Copper and allied metals (including copper wire, cables, brass, and alloys) are essential inputs for construction, electrical infrastructure, telecommunications, and manufacturing. Uganda currently imports the bulk of its copper products despite the domestic resource base.
+**Copper & Allied Metals** was selected on the basis of Uganda's copper endowment, particularly the **Kilembe mine** in Kasese District — estimated to hold in excess of 6.5 million tonnes of copper ore at 1.77% copper grade, plus associated cobalt (Directorate of Geological Survey and Mines). In March 2025, Government signed its first mineral production-sharing agreement, with Sarrai Group and Nile Fibreboard, to redevelop Kilembe for copper-cathode and cobalt production (Mining Weekly, March 2025). Downstream, Uganda has an established cable-manufacturing base — led by Cable Corporation Limited (Mehta Group), which holds roughly 65% of the domestic market — but limited primary copper refining.
 
-**Automotives** was selected because Uganda has made a strategic commitment to domestic vehicle manufacturing through Kiira Motors Corporation (KMC), which has constructed a vehicle assembly facility in Jinja. The Automotive value chain — encompassing vehicle assembly, bus body fabrication, spare parts manufacturing, and vehicle-related components — represents a deliberate government-led industrialization anchor. Steel and copper are direct inputs into automotive manufacturing, creating natural forward linkage opportunities across all three Report 1 chains. Regional demand for commercial vehicles, buses, and spare parts in the EAC and DRC markets is substantial.
+**Automotives** was selected because Uganda has made a strategic commitment to domestic vehicle manufacturing through **Kiira Motors Corporation (KMC)**, whose vehicle plant at Jinja was commissioned on 27 September 2025 with an installed capacity of 2,500 vehicles per year, targeting 10,000 in the medium term (Uganda Broadcasting Corporation; Kiira Motors Corporation). Steel and copper are direct inputs to vehicle manufacturing, creating natural forward linkages across all three Report 1 chains. Uganda imports roughly 48,700 used vehicles annually, underscoring the scale of the domestic market currently met by imports (Mobility Foresights, Uganda Used Car Market).
 
-The analytical question across all three chains is the same: given Uganda's resource base, competitive position, and institutional capacity, **which 3–4 products or sub-sectors within each chain offer the most credible path to competitive manufacturing at scale?** This report provides that prioritization.
+The analytical question across all three chains is identical: given Uganda's resource base, competitive position, and institutional capacity, **which 3–4 products or sub-sectors within each chain offer the most credible path to competitive manufacturing at scale?** This report provides that prioritization.
 
 ---
 
 ## 2.5 NDP IV and Tenfold Targets Relevant to This Report
 
-The following specific targets from NDP IV and the Tenfold Growth Strategy frame the ambition against which this report's recommendations are calibrated:
+The following targets frame the ambition against which this report's recommendations are calibrated. Baseline figures are current; targets are drawn from NDP IV and the Tenfold Growth Strategy.
 
-| Indicator | Current Baseline | NDP IV Target (2024/25) | Tenfold Target (2040) |
+| Indicator | Current Baseline | NDP IV / NIP direction | Tenfold horizon (2040) |
 |---|---|---|---|
-| Manufacturing share of GDP | 16% | 21% | 20%+ |
-| Manufactured exports as % of total exports | ~12% | 35% | >50% |
-| Capacity utilization (manufacturing) | ~30% | 60%+ | 75%+ |
-| Annual manufacturing sector growth rate | ~6% | 12% | 12–15% |
-| Iron & steel trade deficit | USD 374 million | Significantly reduced | Near balance or surplus |
-| Mineral value addition as % of mineral exports | Low | Increasing | Dominant |
+| Manufacturing share of GDP | 15.2% (2024, World Bank) | toward 16%+ by FY29/30 (NIP) | 20%+ (Vision 2040) |
+| GDP | USD 53.2bn (FY23/24) | USD 158bn by FY29/30 (NDP IV) | ~USD 500bn (Tenfold) |
+| Per capita income | USD 1,146 (FY23/24) | USD 2,008 by FY29/30 (NDP IV) | USD 9,500 (Vision 2040) |
+| Annual GDP growth | 6.6% (FY24/25) | 10.1% by FY29/30 (NDP IV) | sustained double digits |
+| Manufactured exports to region | >70% of mfg exports regional (UIA 2025) | rising | dominant |
+| Capacity utilization (mfg) | ~30% (indicative, confirm UBOS) | 60%+ | 75%+ |
 
-Achieving these targets in the Report 1 value chains requires upstream investment in mineral extraction and processing, not only downstream manufacturing expansion. The diagnostic findings and recommendations in Chapters 4, 5, and 6 are calibrated to this ambition.
+Achieving these targets in the Report 1 chains requires upstream investment in mineral extraction and processing — not only downstream manufacturing expansion. The diagnostic findings and recommendations in Chapters 4–6 are calibrated to this ambition.
+
+---
+
+## References
+
+- National Planning Authority, *Uganda Vision 2040*. https://npa.go.ug/uganda-vision-2040/
+- National Planning Authority, *National Development Plan IV (FY2025/26–2029/30)*. https://npa.go.ug/national-development-plan/
+- Parliament of Uganda, "President Launches NDP IV to Drive Uganda's Economic Transformation." https://www.parliament.go.ug/news/3724/president-launches-ndp-iv-drive-ugandas-economic-transformation
+- Ministry of Finance, Planning and Economic Development, "Presentation of the Fourth National Development Plan (NDP IV) to the Parliamentary Committee on Budget." https://www.finance.go.ug/media-center/news-and-updates/presentation-fourth-national-development-plan-ndpiv-parliamentary
+- MTIC, *National Industrial Policy 2020*. https://www.mtic.go.ug/
+- UNIDO, *Programme for Country Partnership*. https://www.unido.org/programme-country-partnership
+- World Bank, *World Development Indicators — Manufacturing, value added (% of GDP), Uganda*. https://data.worldbank.org/indicator/NV.IND.MANF.ZS?locations=UG
+- NPA/UDC, *Report on the Mapping and Value Chain Analysis for Uganda's Iron and Steel Industry* (June 2025). [Repository: `data/` — provided by MTIC]
+- Directorate of Geological Survey and Mines, "Redevelopment of Kilembe Mines." https://dgsm.go.ug/redevelopment-of-kilembe-mines/
+- Mining Weekly, "Uganda signs maiden production-sharing deal to revive copper mine" (4 March 2025). https://www.miningweekly.com/article/uganda-signs-maiden-production-sharing-deal-to-revive-copper-mine-2025-03-04
+- Uganda Broadcasting Corporation, "Uganda Commissions Africa's Most Advanced Vehicle Plant" (27 September 2025). https://ubc.go.ug/2025/09/27/uganda-commissions-africas-most-advanced-vehicle-plant-a-historic-milestone-for-industrialization-and-innovation/
+- Mobility Foresights, *Uganda Used Car Market 2024–2030*. https://mobilityforesights.com/product/uganda-used-car-market
+- Uganda Investment Authority, "Uganda seeing surge in export of manufactured products" (2025). https://ugandainvest.go.ug/uganda-seeing-surge-in-export-of-manufactured-products/
+- ITC TradeMap, trade statistics by HS code. https://www.trademap.org
