@@ -55,40 +55,45 @@ The study also delivers two cross-cutting chapters: consolidated policy recommen
 
 ### 2.3 Workplan and Timeline
 
+The dates below are for the **desk-based report**. Validation (KIIs + stakeholder workshop) follows submission, and the validated final report is issued after that. Report 1 (3 chains, best-covered) is produced first; Report 2 follows.
+
 | Task | Target Date |
 |---|---|
-| Inception Report submitted for TWG review | 29 May 2026 |
-| TWG approval of Inception Report | 31 May 2026 |
-| Chapter 2: Background and Policy Context | 31 May 2026 |
-| Chapter 3: Methodology and Analytical Framework | 1 June 2026 |
-| Chapter 4: Iron & Steel — draft | 2 June 2026 |
-| Chapter 5: Copper & Allied Metals — draft | 3 June 2026 |
-| Chapter 6: Automotive — draft | 4 June 2026 |
-| Chapter 7: Cross-cutting recommendations | 5 June 2026 |
-| Chapter 8: Investment portfolio and roadmap | 6 June 2026 |
-| Chapter 1: Executive Summary | 7 June 2026 |
-| Final report submitted to MTIC | 8 June 2026 |
+| Chapter 2: Background and Policy Context | 2 June 2026 |
+| Chapter 3: Methodology and Analytical Framework | 2 June 2026 |
+| Chapter 4: Iron & Steel — desk draft | 3 June 2026 |
+| Chapter 5: Copper & Allied Metals — desk draft | 3 June 2026 |
+| Chapter 6: Automotive — desk draft | 4 June 2026 |
+| Chapter 7: Cross-cutting recommendations | 4 June 2026 |
+| Chapter 8: Investment portfolio and roadmap | 5 June 2026 |
+| Chapter 1: Executive Summary | 5 June 2026 |
+| **Report 1 desk report submitted to MTIC** | **5 June 2026** |
+| Validation (KIIs + stakeholder workshop) | after submission (TBC with TWG) |
+| Validated final Report 1 issued | after validation |
 
 ### 2.4 Gantt Chart
 
 ```
-Task                              May 29  May 31  Jun 1   Jun 2   Jun 3   Jun 4   Jun 5   Jun 6   Jun 7   Jun 8
-Inception Report draft            ████████
-TWG approval                      ████████
-Ch2 Background and Policy Context         ████████
-Ch3 Methodology and Framework                     ████████
-Ch4 Iron & Steel                                          ████████
-Ch5 Copper & Allied Metals                                        ████████
-Ch6 Automotive                                                            ████████
-Ch7 Cross-cutting                                                                 ████████
-Ch8 Investment roadmap                                                                    ████████
-Ch1 Executive Summary                                                                             ████████
-Final submission                                                                                          ████████
+Task                              Jun 2   Jun 3   Jun 4   Jun 5   then
+Ch2 Background & Policy            ████████
+Ch3 Methodology                   ████████
+Ch4 Iron & Steel                          ████████
+Ch5 Copper & Allied Metals                ████████
+Ch6 Automotive                                    ████████
+Ch7 Cross-cutting                                 ████████
+Ch8 Investment roadmap                                    ████████
+Ch1 Executive Summary                                     ████████
+Report 1 submitted to MTIC                                ████████
+Validation (KIIs + workshop)                                      ░░░░  (after submission, TBC)
+Validated final issued                                            ░░░░
 ```
+*(████ = desk drafting; ░░░░ = validation stage, scheduled with the TWG)*
 
 ---
 
 ## 3. Diagnostic Framework and Assessment Templates
+
+This is a **desk-based diagnostic**. The analysis draws on government and sector documents provided by MTIC, official Ugandan data sources (UBOS, DGSM, MEMD, UNBS and others), live trade data from ITC TradeMap, and current published sources. The findings will subsequently be **validated** through key informant interviews and a stakeholder workshop (see Section 5.2); inputs from that process will be incorporated into the final report.
 
 Each value chain chapter follows a consistent six-part analytical framework applied uniformly across all three chains to ensure comparability of findings.
 
@@ -129,11 +134,13 @@ Actions organized by timeframe: quick wins (0–12 months), policy and instituti
 
 ### 4.1 Primary Data Sources
 
+Primary documentary sources for the desk analysis (firm-level interview evidence is drawn from these source reports, not conducted by the study team; primary KIIs follow at the validation stage):
+
 | Value Chain | Primary Sources |
 |---|---|
-| Iron & Steel | NPA/UDC *Report on the Mapping and Value Chain Analysis for Uganda's Iron and Steel Industry* (June 2025); KIIs with 40 steel firms, 5 mining players, 9 MDAs |
-| Copper & Allied Metals | KIIs with copper wire/cable manufacturers; UNMC on Kilembe mine; MEMD on copper reserves and licenses |
-| Automotives | KIIs with Kiira Motors Corporation (KMC); bus body fabricators; spare parts manufacturers; MWT on vehicle import data |
+| Iron & Steel | NPA/UDC *Mapping and Value Chain Analysis for Uganda's Iron and Steel Industry* (Oct 2025), which itself draws on 40 steel firms, 5 mining players, and 9 MDAs; iron & steel feasibility study; taxation policy review (Nov 2025) |
+| Copper & Allied Metals | DGSM Kilembe reserves and redevelopment record (Sarrai production-sharing agreement, Mar 2025); MEMD mineral potential and occurrence data |
+| Automotives | Kiira Motors Corporation public record (plant commissioned Sept 2025); MTIC automotive sector documents and Dec 2025 sector minutes; EAC assembly regulations |
 
 ### 4.2 Secondary Data Sources
 
@@ -175,14 +182,14 @@ Actions organized by timeframe: quick wins (0–12 months), policy and instituti
 
 ### 5.2 Validation Workshop
 
-A structured stakeholder validation workshop will be held before the report is finalized. The workshop will:
+Because this is a desk-based diagnostic, validation is a core step, not a formality. After the desk report is produced, key informant interviews and a structured stakeholder workshop will test the findings before the report is finalized. The workshop will:
 
-- Present draft prioritization findings for each of the three value chains
+- Present the desk-based prioritization findings for each of the three value chains
 - Test the priority product selections and action matrices against stakeholder knowledge
-- Identify any material gaps or contested findings
-- Produce agreed outputs that are reflected in the final report
+- Identify any material gaps, errors, or contested findings
+- Produce agreed corrections and additions that are incorporated into the final report
 
-**Proposed timing:** Week of 2–6 June 2026 (after chapter drafts are complete, before final submission).
+**Proposed timing:** after the desk report is submitted (date to be confirmed by Jerome and the TWG).
 **Proposed participants:** TWG members, private sector representatives from each chain, MTIC, UIA, UNBS, UDB, and relevant development partners.
 
 ---

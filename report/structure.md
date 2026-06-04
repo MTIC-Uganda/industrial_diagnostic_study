@@ -23,7 +23,7 @@ The shared chapter template (value chain map, current state, binding constraints
 High-level synthesis of findings across all 9 value chains. Key prioritized products per chain. Top 5 cross-cutting recommendations. Summary investment portfolio. Written last, after all chapters are complete.
 
 ### Chapter 2: Background and Policy Context
-Uganda's industrialization ambition: Vision 2040, Tenfold Growth Strategy, NIP 2020, NDP IV, MTIC Strategic Plan. The Uganda-UNIDO Programme for Country Partnership (PCP) and its 5 priority areas. Why these 9 value chains were selected. Current baseline: manufacturing at 16% of GDP, 30% capacity utilization. NDP IV targets and Tenfold targets.
+Uganda's industrialization ambition: Vision 2040, Tenfold Growth Strategy, NIP 2020, NDP IV, MTIC Strategic Plan. The Uganda-UNIDO Programme for Country Partnership (PCP) and its six priority areas. Why these 9 value chains were selected. Current baseline: manufacturing at 15.2% of GDP (2024, World Bank), with capacity utilization to be cited from the latest UBOS figures. NDP IV targets and Tenfold targets.
 
 ### Chapter 3: Methodology and Analytical Framework
 How the diagnostic was conducted: desk review, data compilation and analysis, key informant interviews (public sector, private sector, associations, financiers, academia), targeted field visits to representative firms and clusters, prioritization scoring, and validation through TWG and stakeholder workshops. Data sources and limitations.

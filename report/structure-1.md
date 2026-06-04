@@ -13,14 +13,14 @@
 High-level synthesis of findings across all 3 value chains. Key prioritized products per chain. Top cross-cutting recommendations. Summary investment portfolio. Written last, after all chapters are complete.
 
 ### Chapter 2: Background and Policy Context
-Uganda's industrialization ambition: Vision 2040, Tenfold Growth Strategy, NIP 2020, NDP IV, MTIC Strategic Plan. The Uganda-UNIDO Programme for Country Partnership (PCP) and its five priority areas. Why Iron & Steel, Copper & Allied Metals, and Automotive were selected as priority value chains. Current baseline: manufacturing at 16% of GDP, 30% capacity utilization. NDP IV targets and Tenfold targets.
+Uganda's industrialization ambition: Vision 2040, Tenfold Growth Strategy, NIP 2020, NDP IV, MTIC Strategic Plan. The Uganda-UNIDO Programme for Country Partnership (PCP) and its six priority areas. Why Iron & Steel, Copper & Allied Metals, and Automotive were selected as priority value chains. Current baseline: manufacturing at 15.2% of GDP (2024, World Bank), with capacity utilization to be cited from the latest UBOS figures. NDP IV targets and Tenfold targets.
 
 ### Chapter 3: Methodology and Analytical Framework
-How the diagnostic was conducted: desk review, data compilation and analysis, key informant interviews (public sector, private sector, associations, financiers, academia), targeted field visits to representative firms and clusters, prioritization scoring, and validation through the Technical Working Group (TWG) and stakeholder workshops. Data sources and limitations.
+How the diagnostic was conducted. This is a **desk-based diagnostic**: it draws on a structured review of government and sector documents provided by MTIC, official Ugandan data sources (UBOS, DGSM, NDA, NEMA, UNBS and others), live trade data from ITC TradeMap, and current published sources. The analytical framework, prioritization scoring, and data sources and limitations are set out here.
 
 This report is preceded by an Inception Report that documented the study design, diagnostic framework, data plan, and stakeholder consultation plan, submitted to the TWG prior to the diagnostic phase.
 
-Findings were validated through a structured stakeholder workshop with TWG members, private sector actors, and development partners before finalization.
+**Validation (planned).** The findings in this report are presented for validation. Following submission, they will be tested through key informant interviews and a structured stakeholder workshop with TWG members, private sector actors, financiers, and development partners. Inputs from that process will be incorporated into the final version. Where this report states a finding, it reflects the best available desk evidence at the time of writing and is subject to that validation.
 
 **Prioritization Framework**
 A transparent scoring framework was applied consistently across all 3 value chains to identify the 3–4 products or sub-sectors Uganda should prioritize in each chain. Products were scored against five criteria: (1) accessible market size — domestic, regional, and export; (2) Uganda's comparative advantage — availability of inputs, existing productive base; (3) feasibility — capital requirements, technology readiness, lead time; (4) job creation and income potential; and (5) import substitution impact. The scoring and weightings are documented in the Inception Report.
@@ -69,9 +69,11 @@ Themes that cut across the three value chains: industrial parks and free zones, 
 Recommendations are mapped explicitly to the six priority areas of the Uganda-UNIDO Programme for Country Partnership (PCP): (1) strengthening industrial policy implementation and institutional coordination; (2) mobilizing large-scale public and private investments for agro- and mineral-based industrialization; (3) supporting sustainable industrial parks and free zones; (4) strengthening national standards, quality infrastructure, and accreditation systems; (5) advancing green industry, circular economy, and Industry 4.0 solutions; and (6) supporting productive use of renewable energy and energy efficiency. This mapping ensures the report's outputs are directly usable as technical inputs into PCP formulation and partner engagement.
 
 ### Chapter 8: Investment Portfolio and Implementation Roadmap
-Portfolio of priority investment opportunities across the 3 value chains. For each: investment size, implementation modality (public investment, Public-Private Partnership (PPP), or private-led), indicative capital expenditure (CAPEX) and operating expenditure (OPEX) assumptions, risk and mitigation, financing options. Implementation sequencing: what to do in year 1, years 2–3, years 4–5.
+Portfolio of priority investment opportunities across the 3 value chains. For each: investment size, implementation modality (public investment, Public-Private Partnership (PPP), or private-led), capital expenditure (CAPEX) and operating expenditure (OPEX) assumptions, risk and mitigation, financing options. Implementation sequencing: what to do in year 1, years 2–3, years 4–5.
 
-For each priority investment, a standalone project profile is produced — a one-to-two page investor-facing summary covering the business case, financing structure, and implementation modality, packaged to a standard that can be presented directly to financiers, investors, and development partners.
+**All CAPEX/OPEX and financing figures are indicative** — order-of-magnitude estimates for prioritization and planning, not appraisal-grade costings. Each figure is sourced or flagged as an assumption; bankable figures require dedicated feasibility studies.
+
+A standalone project profile is produced **for the priority products only** (the 3–4 selected per chain) — a one-to-two page investor-facing summary covering the business case, financing structure, and implementation modality, packaged to a standard that can be presented to financiers, investors, and development partners as a basis for further appraisal.
 
 ---
 

@@ -61,46 +61,51 @@ The study also delivers two cross-cutting chapters: consolidated policy recommen
 
 ### 2.3 Workplan and Timeline
 
+The dates below are for the **desk-based report**. Validation (KIIs + stakeholder workshop) follows submission, and the validated final report is issued after that. Report 2 (6 chains) is produced after Report 1.
+
 | Task | Target Date |
 |---|---|
-| Inception Report submitted for TWG review | 29 May 2026 |
-| TWG approval of Inception Report | 31 May 2026 |
-| Chapter 2: Background and Policy Context | 31 May 2026 |
-| Chapter 3: Methodology and Analytical Framework | 1 June 2026 |
-| Chapter 4: Textiles & Garments — draft | 2 June 2026 |
-| Chapter 5: Pharmaceuticals — draft | 3 June 2026 |
-| Chapter 6: Petrochemicals & Fertilizers — draft | 4 June 2026 |
-| Chapter 7: Sugar & Confectionery — draft | 5 June 2026 |
-| Chapter 8: Plastics & Packaging — draft | 6 June 2026 |
-| Chapter 9: Cement & Building Materials — draft | 6 June 2026 |
-| Chapter 10: Cross-cutting recommendations | 7 June 2026 |
-| Chapter 11: Investment portfolio and roadmap | 7 June 2026 |
-| Chapter 1: Executive Summary | 8 June 2026 |
-| Final report submitted to MTIC | 8 June 2026 |
+| Chapter 2: Background and Policy Context | 6 June 2026 |
+| Chapter 3: Methodology and Analytical Framework | 6 June 2026 |
+| Chapter 4: Textiles & Garments — desk draft | 6 June 2026 |
+| Chapter 5: Pharmaceuticals — desk draft | 7 June 2026 |
+| Chapter 6: Petrochemicals & Fertilizers — desk draft | 7 June 2026 |
+| Chapter 7: Sugar & Confectionery — desk draft | 7 June 2026 |
+| Chapter 8: Plastics & Packaging — desk draft | 8 June 2026 |
+| Chapter 9: Cement & Building Materials — desk draft | 8 June 2026 |
+| Chapter 10: Cross-cutting recommendations | 8 June 2026 |
+| Chapter 11: Investment portfolio and roadmap | 9 June 2026 |
+| Chapter 1: Executive Summary | 9 June 2026 |
+| **Report 2 desk report submitted to MTIC** | **9 June 2026** |
+| Validation (KIIs + stakeholder workshop) | after submission (TBC with TWG) |
+| Validated final Report 2 issued | after validation |
 
 ### 2.4 Gantt Chart
 
 ```
-Task                              May 29  May 31  Jun 1   Jun 2   Jun 3   Jun 4   Jun 5   Jun 6   Jun 7   Jun 8
-Inception Report draft            ████████
-TWG approval                      ████████
-Ch2 Background and Policy Context         ████████
-Ch3 Methodology and Framework                     ████████
-Ch4 Textiles & Garments                                   ████████
-Ch5 Pharmaceuticals                                               ████████
-Ch6 Petrochemicals & Fertilizers                                          ████████
-Ch7 Sugar & Confectionery                                                         ████████
-Ch8 Plastics & Packaging                                                                  ████████
-Ch9 Cement & Building Materials                                                           ████████
-Ch10 Cross-cutting                                                                                ████████
-Ch11 Investment Roadmap                                                                           ████████
-Ch1 Executive Summary                                                                                     ████████
-Final submission                                                                                          ████████
+Task                              Jun 6   Jun 7   Jun 8   Jun 9   then
+Ch2 Background & Policy            ████████
+Ch3 Methodology                   ████████
+Ch4 Textiles & Garments           ████████
+Ch5 Pharmaceuticals                       ████████
+Ch6 Petrochemicals & Fertilizers          ████████
+Ch7 Sugar & Confectionery                 ████████
+Ch8 Plastics & Packaging                          ████████
+Ch9 Cement & Building Materials                   ████████
+Ch10 Cross-cutting                                ████████
+Ch11 Investment Roadmap                                   ████████
+Ch1 Executive Summary                                     ████████
+Report 2 submitted to MTIC                                ████████
+Validation (KIIs + workshop)                                      ░░░░  (after submission, TBC)
+Validated final issued                                            ░░░░
 ```
+*(████ = desk drafting; ░░░░ = validation stage, scheduled with the TWG)*
 
 ---
 
 ## 3. Diagnostic Framework and Assessment Templates
+
+This is a **desk-based diagnostic**. The analysis draws on government and sector documents provided by MTIC, official Ugandan data sources (UBOS, NDA, NEMA, UNBS, CDO and others), live trade data from ITC TradeMap, and current published sources. The findings will subsequently be **validated** through key informant interviews and a stakeholder workshop (see Section 5.2); inputs from that process will be incorporated into the final report.
 
 Each value chain chapter follows a consistent six-part analytical framework applied uniformly across all six chains to ensure comparability of findings.
 
@@ -141,14 +146,16 @@ Actions organized by timeframe: quick wins (0–12 months), policy and instituti
 
 ### 4.1 Primary Data Sources
 
+Primary documentary sources for the desk analysis (firm-level evidence is drawn from these source reports and registers, not interviews conducted by the study team; primary KIIs follow at the validation stage):
+
 | Value Chain | Primary Sources |
 |---|---|
-| Textiles & Garments | KIIs with textile mills, garment manufacturers, cotton ginneries; Cotton Development Organisation (CDO) data; URA trade data by HS code |
-| Pharmaceuticals | KIIs with pharmaceutical manufacturers; National Drug Authority (NDA) data; URA pharmaceutical import data |
-| Petrochemicals & Fertilizers | KIIs with fertilizer blenders; Ministry of Energy data on oil and gas feedstocks; URA chemical import data |
-| Sugar & Confectionery | KIIs with sugar manufacturers (Kakira, SCOUL, others); Uganda Sugar Board data; URA sugar trade data |
-| Plastics & Packaging | KIIs with plastics manufacturers and recyclers; URA plastic import data; NEMA data on plastic waste |
-| Cement & Building Materials | KIIs with cement plants; Uganda Cement Industry Association data; URA cement trade data; limestone reserve data from MEMD |
+| Textiles & Garments | National Cotton, Textiles and Apparel Strategy; CDO production/ginning/lint data; Lira spinning mill studies; manufacturers register |
+| Pharmaceuticals | NDA National Drug Register (June 2024) and annual/performance reports; sector profile; QCIL and local-production data |
+| Petrochemicals & Fertilizers | UNOC/PAU refinery and Kabalega Petrochemical Park record; Sukulu/Osukuru fertilizer plant record; fertiliser industry brief |
+| Sugar & Confectionery | USMA Sugar Industry Annual Report 2024; Sugar Act, Amendment Act 2025 and Regulations; sector brief (May 2026) |
+| Plastics & Packaging | NEMA Plastic Circularity Strategy 2023–2028; packaging value chain draft; UNBS manufacturer register; GIZ waste brief |
+| Cement & Building Materials | Cement sector status report 2025; producer records (Hima, Tororo, Simba, Kampala Cement); limestone reserve data |
 
 ### 4.2 Secondary Data Sources
 
@@ -197,14 +204,14 @@ Actions organized by timeframe: quick wins (0–12 months), policy and instituti
 
 ### 5.2 Validation Workshop
 
-A structured stakeholder validation workshop will be held before the report is finalized. The workshop will:
+Because this is a desk-based diagnostic, validation is a core step, not a formality. After the desk report is produced, key informant interviews and a structured stakeholder workshop will test the findings before the report is finalized. The workshop will:
 
-- Present draft prioritization findings for each of the six value chains
+- Present the desk-based prioritization findings for each of the six value chains
 - Test the priority product selections and action matrices against stakeholder knowledge
-- Identify any material gaps or contested findings
-- Produce agreed outputs reflected in the final report
+- Identify any material gaps, errors, or contested findings
+- Produce agreed corrections and additions that are incorporated into the final report
 
-**Proposed timing:** Week of 2–6 June 2026 (after chapter drafts are complete, before final submission). This may be combined with the Report 1 validation workshop if Jerome and the TWG prefer a single joint session.
+**Proposed timing:** after the desk report is submitted (date to be confirmed by Jerome and the TWG). This may be combined with the Report 1 validation workshop if Jerome and the TWG prefer a single joint session.
 **Proposed participants:** TWG members, private sector representatives from each of the six chains, MTIC, UIA, UNBS, NDA, UDB, and relevant development partners.
 
 ---
