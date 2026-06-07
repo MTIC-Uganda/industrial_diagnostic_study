@@ -11,6 +11,8 @@
 
 This chapter consolidates the prioritized products from Chapters 4–9 into an investment portfolio and phased roadmap for the six value chains — Textiles & Garments, Pharmaceuticals, Petrochemicals & Fertilizers, Sugar & Confectionery, Plastics & Packaging, and Cement & Building Materials. Project profiles cover the **priority products only**.
 
+**Tenfold framing and the three-criteria screen.** Every investment here is selected for its contribution to the **Tenfold Growth Strategy**, and each is screened on three criteria *simultaneously* (Section 11.2): **(1) strategic alignment to tenfold growth**, **(2) a quick-win element**, and **(3) a green/sustainability dimension**.
+
 ---
 
 ## 11.2 Investment Portfolio Overview
@@ -27,6 +29,19 @@ This chapter consolidates the prioritized products from Chapters 4–9 into an i
 | 8 | Higher-value building materials | Cement | Private-led | ~USD 20–60m | Fibre-cement, tiles, precast |
 
 **Portfolio logic.** The largest single item (refinery, #4) is investor-led and already anchored; it is the medium-term feedstock enabler for plastics (#6) and fertilizers (#3). The fastest, highest-certainty wins are in **sugar downstream (#5), plastics recycling (#6), cement clinker (#7), and essential generics (#2)** — all building on existing competitive bases.
+
+**Three-criteria screen (#13).** Each investment is strategic, carries a quick-win element, and has a green dimension:
+
+| # | Investment | Strategic (tenfold) | Quick-win element | Green dimension |
+|---|---|---|---|---|
+| 1 | Spinning/weaving + garments | Agro-industrial flagship; jobs at scale | Expand Nytil/Fine Spinners/Lira; uniform procurement | Organic cotton; closed-loop wet-processing |
+| 2 | GMP essential generics | Health security + skilled jobs | Preferential NMS/JMS procurement fills capacity | Solar/efficient GMP utilities |
+| 3 | Fertilizer revival/blending | Farm productivity (agro pillar) | Expand blending now; restructure Sukulu | Green-ammonia route; phosphogypsum reuse |
+| 4 | Refinery & petrochemical park | Minerals/energy pillar; feedstock anchor | Park readiness pre-2029 | Gas capture; emissions control |
+| 5 | Industrial sugar + ethanol + co-gen | Surplus → higher value | Ethanol mandate; build on existing mills | Biofuel; bagasse renewable power; vinasse biogas |
+| 6 | Plastics recycling + packaging | Circular feedstock; enables all chains | Build on existing recyclers + EPR | Recycling is the green flagship |
+| 7 | Clinker capacity | Closes >50% import gap | Support NE/Buikwe plants underway | Alt-fuel kilns; slag/phosphogypsum SCMs |
+| 8 | Higher-value building materials | Construction value-add | Build on existing cement base | Blended/low-carbon cement inputs |
 
 ---
 

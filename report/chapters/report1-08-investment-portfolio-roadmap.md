@@ -11,6 +11,8 @@
 
 This chapter consolidates the prioritized products from Chapters 4–6 into an investment portfolio and a phased implementation roadmap. It is organised to enable a decision: what to invest in, in what order, by whom, and at what indicative scale. Each priority product carries a short project profile (Section 8.3).
 
+**Tenfold framing and the three-criteria screen.** Every investment here is selected for its contribution to the **Tenfold Growth Strategy**, and each is screened on three criteria *simultaneously* (Section 8.2): **(1) strategic alignment to tenfold growth**, **(2) a quick-win element** to build early momentum, and **(3) a green/sustainability dimension** so that scale-up and decarbonisation advance together.
+
 ---
 
 ## 8.2 Investment Portfolio Overview
@@ -26,6 +28,18 @@ This chapter consolidates the prioritized products from Chapters 4–6 into an i
 | 7 | Motorcycle CKD assembly plant(s) | Automotive | Private-led | ~USD 20–50m (indicative) | Substitutes part of USD 157m imports |
 
 **Portfolio logic.** Items 1, 3, and 4 are the **upstream enablers** (close the mining/processing gap). Items 2 and 5 are the **largest import-substitution prizes** (flat steel; cable). Items 6 and 7 are the **demand anchors and job multipliers** (buses/EVs; motorcycles). Sequenced correctly, the upstream investments feed the downstream ones.
+
+**Three-criteria screen (#13).** Each investment is strategic, carries a quick-win element, and has a green dimension:
+
+| # | Investment | Strategic (tenfold) | Quick-win element | Green dimension |
+|---|---|---|---|---|
+| 1 | Integrated steel complex | Backbone for tenfold-scale domestic steel | Phase via Tembo/Devki already underway | Gas/H₂-DRI + hydro-EAF; slag→cement |
+| 2 | Flat-steel rolling mill | Largest import-substitution prize | Cold-rolling/coating line starts on imported coil | Hydro-powered, efficient lines |
+| 3 | Iron-ore mining & beneficiation | Enables domestic ironmaking | Scale an existing miner via UDC | On-site beneficiation; rail vs road |
+| 4 | Kilembe copper–cobalt | Reopens midstream; battery minerals | 2025 PSA signed; tailings reprocessing first | Hydro electro-refining; tailings recovery |
+| 5 | Cable & conductor expansion | Captures electrification demand | Expands proven Cable Corp base | Hydro power; scrap-copper recycling |
+| 6 | KMC buses/EVs | State-anchored mobility industry | Plant commissioned; fleet procurement | Electric buses on hydro grid |
+| 7 | Motorcycle CKD/e-boda | Largest-volume mobility market | CKD assembly feasible now | Transition to electric boda |
 
 ---
 
