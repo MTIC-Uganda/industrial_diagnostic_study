@@ -55,11 +55,11 @@ Manufacturing capacity utilization is estimated at around 30% on average (indica
 Key structural characteristics relevant to this report:
 
 - **High import dependency in metals and capital goods** — Uganda imports the majority of its flat steel, copper products, fabricated metal goods, and vehicle parts, creating chronic current-account pressure and a large opportunity for domestic value addition (ITC TradeMap, HS 72/73/74/87, 2024).
-- **Underdeveloped upstream mineral processing** — Uganda has significant iron-ore and copper deposits that remain largely under-exploited commercially. The gap between resource endowment and the manufacturing base is the defining structural challenge for the Report 1 chains.
+- **Underdeveloped upstream mineral processing** — Uganda has significant iron-ore and copper deposits that remain largely under-exploited commercially. The gap between resource endowment and the manufacturing base is the defining structural challenge for Iron & Steel, Copper & Allied Metals, and Automotives.
 - **Growing infrastructure demand** — national and regional infrastructure investment is accelerating, driving demand for steel, copper, and automotive products Uganda currently imports.
 - **A still-shallow export base in metals** — over 70% of Uganda's manufactured exports go to regional markets, but in metals Uganda participates mainly as a re-exporter of downstream finished products rather than as an upstream processor (Uganda Investment Authority, 2025).
 
-Despite these constraints, the Report 1 chains rest on genuine foundations: substantial iron-ore and copper reserves, a growing domestic and regional market, improving infrastructure connectivity, and a young, growing labour force.
+Despite these constraints, Iron & Steel, Copper & Allied Metals, and Automotives rest on genuine foundations: substantial iron-ore and copper reserves, a growing domestic and regional market, improving infrastructure connectivity, and a young, growing labour force.
 
 ---
 
@@ -71,7 +71,7 @@ The three value chains — Iron & Steel, Copper & Allied Metals, and Automotives
 
 **Copper & Allied Metals** was selected on the basis of Uganda's copper endowment, particularly the **Kilembe mine** in Kasese District — estimated to hold in excess of 6.5 million tonnes of copper ore at 1.77% copper grade, plus associated cobalt (Directorate of Geological Survey and Mines). In March 2025, Government signed its first mineral production-sharing agreement, with Sarrai Group and Nile Fibreboard, to redevelop Kilembe for copper-cathode and cobalt production (Mining Weekly, March 2025). Downstream, Uganda has an established cable-manufacturing base — led by Cable Corporation Limited (Mehta Group), which holds roughly 65% of the domestic market — but limited primary copper refining.
 
-**Automotives** was selected because Uganda has made a strategic commitment to domestic vehicle manufacturing through **Kiira Motors Corporation (KMC)**, whose vehicle plant at Jinja was commissioned on 27 September 2025 with an installed capacity of 2,500 vehicles per year, targeting 10,000 in the medium term (Uganda Broadcasting Corporation; Kiira Motors Corporation). Steel and copper are direct inputs to vehicle manufacturing, creating natural forward linkages across all three Report 1 chains. Uganda imports roughly 48,700 used vehicles annually, underscoring the scale of the domestic market currently met by imports (Mobility Foresights, Uganda Used Car Market).
+**Automotives** was selected because Uganda has made a strategic commitment to domestic vehicle manufacturing through **Kiira Motors Corporation (KMC)**, whose vehicle plant at Jinja was commissioned on 27 September 2025 with an installed capacity of 2,500 vehicles per year, targeting 10,000 in the medium term (Uganda Broadcasting Corporation; Kiira Motors Corporation). Steel and copper are direct inputs to vehicle manufacturing, creating natural forward linkages across all three — Iron & Steel, Copper & Allied Metals, and Automotives. Uganda imports roughly 48,700 used vehicles annually, underscoring the scale of the domestic market currently met by imports (Mobility Foresights, Uganda Used Car Market).
 
 The analytical question across all three chains is identical: given Uganda's resource base, competitive position, and institutional capacity, **which 3–4 products or sub-sectors within each chain offer the most credible path to competitive manufacturing at scale?** This report provides that prioritization.
 
@@ -90,7 +90,7 @@ The following targets frame the ambition against which this report's recommendat
 | Manufactured exports to region | >70% of mfg exports regional (UIA 2025) | rising | dominant |
 | Capacity utilization (mfg) | ~30% (indicative, confirm UBOS) | 60%+ | 75%+ |
 
-Achieving these targets in the Report 1 chains requires upstream investment in mineral extraction and processing — not only downstream manufacturing expansion. The diagnostic findings and recommendations in Chapters 4–6 are calibrated to this ambition.
+Achieving these targets in Iron & Steel, Copper & Allied Metals, and Automotives requires upstream investment in mineral extraction and processing — not only downstream manufacturing expansion. The diagnostic findings and recommendations in Chapters 4–6 are calibrated to this ambition.
 
 ---
 

@@ -7,7 +7,7 @@
 
 ## 7.1 Introduction
 
-The three Report 1 value chains share a common set of binding constraints and a common industrial logic. This chapter consolidates the cross-cutting actions that would lift all three chains simultaneously, and maps them to the six priority areas of the Uganda–UNIDO Programme for Country Partnership (PCP). These recommendations complement — and should be read alongside — the chain-specific action matrices in Chapters 4–6.
+Iron & Steel, Copper & Allied Metals, and Automotives share a common set of binding constraints and a common industrial logic. This chapter consolidates the cross-cutting actions that would lift all three chains simultaneously, and maps them to the six priority areas of the Uganda–UNIDO Programme for Country Partnership (PCP). These recommendations complement — and should be read alongside — the chain-specific action matrices in Chapters 4–6.
 
 The integrating insight of Report 1 is that **Iron & Steel, Copper, and Automotive form a single industrial system**: mined and processed metal feeds fabricated products that feed vehicle manufacture. Constraints that raise the cost of metal — energy, logistics, finance, feedstock policy — cascade through all three. Addressing them once benefits the whole system.
 

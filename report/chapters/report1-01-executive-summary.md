@@ -23,7 +23,7 @@ The three chains are not separate. They form **one industrial system: mined meta
 
 ## What the evidence shows
 
-Uganda's manufacturing sector contributes about **15.2% of Gross Domestic Product (GDP) (2024)** — below even the National Industrial Policy's own 2029/30 target of ~16% — at roughly 30% capacity utilization (World Bank; NIP 2020). Across all three Report 1 chains, the same pattern recurs: **Uganda exports raw materials and imports the processed product**, forgoing the value, jobs, and foreign exchange in between.
+Uganda's manufacturing sector contributes about **15.2% of Gross Domestic Product (GDP) (2024)** — below even the National Industrial Policy's own 2029/30 target of ~16% — at roughly 30% capacity utilization (World Bank; NIP 2020). Across all three chains — Iron & Steel, Copper & Allied Metals, and Automotives — the same pattern recurs: **Uganda exports raw materials and imports the processed product**, forgoing the value, jobs, and foreign exchange in between.
 
 - **Iron & Steel:** Uganda is competitive in finished long products — exporting **United States Dollar (USD) 55.8m of rebar** in 2024, mostly to South Sudan and the Democratic Republic of Congo (DRC) — but imports **USD 219.5m of flat steel** and **USD 78.5m of semi-finished steel**, and **exports USD 35.8m of iron ore raw** (ITC TradeMap, 2024). The missing middle is ironmaking and flat-rolling. Momentum is real: Tembo Steel's new DRI plant (Jan 2025) and Devki's USD 500m integrated complex (ground broken Nov 2025).
 

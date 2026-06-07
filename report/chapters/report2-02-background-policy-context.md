@@ -35,7 +35,7 @@ The Uganda PCP operates across six priority areas:
 5. **Advancing green industry, circular economy, and Industry 4.0 solutions** — directly relevant to plastics circularity.
 6. **Supporting productive use of renewable energy and energy efficiency** — relevant to energy-intensive cement.
 
-This study supports PCP Priority Areas 1 and 2, providing technical inputs for the six Report 2 value chains.
+This study supports PCP Priority Areas 1 and 2, providing technical inputs for the study's six value chains — Textiles & Garments, Pharmaceuticals, Petrochemicals & Fertilizers, Sugar & Confectionery, Plastics & Packaging, and Cement & Building Materials.
 
 ---
 

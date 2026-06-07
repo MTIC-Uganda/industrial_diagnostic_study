@@ -9,7 +9,7 @@
 
 ## 11.1 Purpose
 
-This chapter consolidates the prioritized products from Chapters 4–9 into an investment portfolio and phased roadmap for the six Report 2 chains. Project profiles cover the **priority products only**.
+This chapter consolidates the prioritized products from Chapters 4–9 into an investment portfolio and phased roadmap for the six value chains — Textiles & Garments, Pharmaceuticals, Petrochemicals & Fertilizers, Sugar & Confectionery, Plastics & Packaging, and Cement & Building Materials. Project profiles cover the **priority products only**.
 
 ---
 

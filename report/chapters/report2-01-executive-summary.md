@@ -72,7 +72,7 @@ Excluding the investor-financed refinery (~USD 4bn, separately anchored), the pr
 
 ## Bottom line for decision-makers
 
-Report 2's chains divide into three groups, each with a clear move:
+The six value chains divide into three groups, each with a clear move:
 - **Build on proven strength** — sugar (go downstream), cement (close the clinker gap), pharmaceuticals (scale GMP generics).
 - **Capture the value being exported raw** — textiles (process the lint), fertilizer (supply the farms).
 - **Sequence the transformational bet** — the petrochemical park, with plastics recycling and packaging prepared to use its output.

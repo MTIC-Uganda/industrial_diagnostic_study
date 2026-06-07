@@ -7,7 +7,7 @@
 
 ## 10.1 Introduction
 
-The six Report 2 value chains span agro-processing (textiles, sugar), health (pharmaceuticals), agricultural inputs and energy (fertilizers, petrochemicals), and construction-linked manufacturing (cement, plastics). Despite their diversity, they share a common set of binding constraints and a common strategic pattern: **Uganda exports or under-processes raw inputs and imports the finished product.** This chapter consolidates the cross-cutting actions that lift all six, mapped to the six PCP priority areas.
+The six value chains — Textiles & Garments, Pharmaceuticals, Petrochemicals & Fertilizers, Sugar & Confectionery, Plastics & Packaging, and Cement & Building Materials — span agro-processing (textiles, sugar), health (pharmaceuticals), agricultural inputs and energy (fertilizers, petrochemicals), and construction-linked manufacturing (cement, plastics). Despite their diversity, they share a common set of binding constraints and a common strategic pattern: **Uganda exports or under-processes raw inputs and imports the finished product.** This chapter consolidates the cross-cutting actions that lift all six, mapped to the six PCP priority areas.
 
 ---
 
