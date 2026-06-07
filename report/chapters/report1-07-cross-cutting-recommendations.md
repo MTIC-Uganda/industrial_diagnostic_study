@@ -30,7 +30,7 @@ Across the three chains, five constraints recur as decisive. Weighted by how cri
 
 Narrative on each:
 
-**1. Energy cost and reliability.** Metals processing (DRI, electro-refining, rolling) is electricity-intensive. Uganda's extra-large industrial tariff is around **5.5 US¢/kWh (5¢ off-peak) in 2025** (Electricity Regulatory Authority) — regionally competitive — but reliability and the cost of self-generation backup erode this advantage. The 2025 transition from UMEME to UEDCL as distributor is an opportunity to lock in industrial reliability commitments.
+**1. Energy cost and reliability.** Metals processing (DRI, electro-refining, rolling) is electricity-intensive. A dedicated **extra-large-load tariff (~5.5 US¢/kWh, ERA 2025)** helps the very largest plants, but the **effective/general industrial tariff is ~8–10 US¢/kWh — higher than Kenya (5–7), Tanzania (6–8) and Egypt (4–5)** (NPA/UDC 2025) — and power **reliability is the single issue firms cite most**. The 2025 transition from UMEME to UEDCL as distributor is an opportunity to lock in industrial reliability commitments and competitive large-load tariffs.
 
 **2. Logistics and the landlocked penalty.** Logistics inefficiencies cost the economy an estimated **USD 827 million a year**, and logistics account for **18–20% of the sale price** of goods (sector estimates). For bulk, low-value-density products like steel and ore, this is a first-order competitiveness drag and a reason to favour domestic processing over raw-material export.
 

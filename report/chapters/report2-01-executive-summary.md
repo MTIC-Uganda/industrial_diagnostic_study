@@ -83,4 +83,4 @@ The six value chains divide into three groups, each with a clear move:
 
 The decision this report supports is to **concentrate scarce resources on the prioritized products and the seven cross-cutting actions** — turning Uganda's agricultural base, established sugar and cement industries, proven pharmaceutical capability, and emerging oil sector into a value-adding, import-substituting industrial system, rather than spreading effort across everything.
 
-*This summary reflects desk-based findings to be confirmed through the validation step in Chapter 3.*
+*This summary reflects findings from TWG sector-expert engagement and supporting evidence, to be confirmed through the continued validation in Chapter 3.*

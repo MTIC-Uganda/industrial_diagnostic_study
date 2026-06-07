@@ -28,7 +28,7 @@ Weighted by how critical each is to unlocking the six chains (1 = low, 5 = criti
 
 Narrative on each:
 
-**1. Energy cost and reliability.** Cement (clinker), textiles (spinning/wet-processing), and any future petrochemical processing are energy-intensive. Uganda's industrial tariff (~5.5 US¢/kWh, 2025; ERA) is regionally competitive, but reliability and backup cost matter. Sugar co-generation is a partial in-sector solution that can ease grid pressure.
+**1. Energy cost and reliability.** Cement (clinker), textiles (spinning/wet-processing), and any future petrochemical processing are energy-intensive. A dedicated extra-large-load tariff (~5.5 US¢/kWh, ERA 2025) helps the largest plants, but the **effective industrial tariff (~8–10 US¢/kWh) is higher than Kenya, Tanzania and Egypt** (NPA/UDC 2025), and reliability is a top firm-cited issue. Sugar co-generation is a partial in-sector solution that can ease grid pressure.
 
 **2. Logistics and the landlocked penalty.** Logistics inefficiencies cost the economy ~USD 827 million/year and ~18–20% of the sale price of goods — affecting imported inputs (resin, APIs, clinker) and regional exports (sugar, cement, garments) alike.
 

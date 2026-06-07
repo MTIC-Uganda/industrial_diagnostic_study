@@ -128,7 +128,7 @@ And domestic vehicle manufacturing is an emerging steel buyer: Kiira Motors' bus
 | Level | Size / Uganda position | Drivers |
 |---|---|---|
 | **Uganda (domestic)** | ~0.9–1.1 Mtpa apparent consumption (confirm: UBOS); long products met domestically, flat & semi-finished imported | Construction, infrastructure (SGR, dams, roads, housing), urbanisation |
-| **Regional (EAC + COMESA)** | EAC intra-regional trade ~USD 4.8bn; Uganda competitive in rebar to S. Sudan & eastern DRC (USD 55.8m, 2024) | Reconstruction (S. Sudan, DRC), CET protection |
+| **Regional (EAC + COMESA)** | Intra-EAC trade ~USD 12bn (2023), rising toward ~USD 18bn by mid-2025; Uganda competitive in rebar to S. Sudan & eastern DRC (USD 55.8m, 2024) | Reconstruction (S. Sudan, DRC), CET protection |
 | **Continental (Africa)** | African steel demand ~35–40 Mtpa with a large import-met deficit; AfCFTA opens access | Africa-wide infrastructure deficit, AfCFTA |
 | **Global** | ~1,892 Mt/yr (World Steel 2025), China-dominated; commodity scale Uganda cannot match | Not accessible for Ugandan commodity-steel export |
 

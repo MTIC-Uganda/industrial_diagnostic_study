@@ -68,4 +68,4 @@ Seven priority investments total an **indicative USD 1.0–2.0 billion over five
 
 Uganda already has the anchors — Tembo and Devki in steel, the Kilembe revival and Cable Corporation in copper, Kiira Motors in automotive. What is missing is the **connective tissue**: domestic feedstock, reliable industrial power, long-term finance, enforced standards, and skills. The decision this report supports is to **concentrate scarce resources on the prioritized products above and the six cross-cutting actions**, turning Uganda's resource endowment and its new industrial anchors into a competitive metals-to-mobility system — rather than spreading effort thinly across everything.
 
-*This summary reflects desk-based findings to be confirmed through the validation step in Chapter 3.*
+*This summary reflects findings from TWG sector-expert engagement and supporting evidence, to be confirmed through the continued validation in Chapter 3.*
