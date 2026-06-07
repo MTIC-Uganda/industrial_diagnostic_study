@@ -8,15 +8,17 @@
 
 ## 3.1 Overview of the Research Approach
 
-This is a **desk-based diagnostic**. Its findings are built from a structured review of government and sector documents provided by MTIC, official Ugandan data sources, live international trade data, and current published evidence — not from primary fieldwork. This is stated plainly because the credibility of a diagnostic that will inform national investment decisions depends on an honest account of how it was produced.
+This diagnostic was produced through **constant engagement with sector experts from the Ministry of Trade, Industry and Cooperatives (MTIC) via the Technical Working Group (TWG)**, complemented by a structured review of government and sector documents, official Ugandan statistics, live international trade data, and current published evidence. **Most of the primary information used in this study was secured through these TWG engagements** — the sector experts who work with these industries daily are the single richest source of current, firm-level knowledge. Documentary and statistical sources corroborate, quantify, and extend what the engagements established. This is stated plainly because the credibility of a diagnostic that will inform national investment decisions depends on an honest account of how it was produced.
 
-The study was preceded by an Inception Report documenting the study design, diagnostic framework, data plan, and stakeholder-consultation plan, submitted to the Technical Working Group (TWG) prior to the diagnostic phase. The work proceeded in three phases: (1) evidence assembly; (2) value-chain analysis and prioritization scoring; and (3) validation (planned, post-submission).
+The study was preceded by an Inception Report documenting the study design, diagnostic framework, data plan, and stakeholder-consultation plan, submitted to the TWG prior to the diagnostic phase. The work proceeded in three phases: (1) **primary engagement** — continuous consultation with MTIC sector experts through the TWG; (2) **evidence assembly and analysis** — corroborating and quantifying the engagement findings against documents, official statistics, and trade data, then applying the analytical framework and scoring; and (3) **validation and refinement** — continued TWG review and a stakeholder workshop.
 
-**The findings in this report are presented for validation.** Where the report states a finding, it reflects the best available desk evidence at the time of writing and is subject to the validation step in Section 3.7.
+**The findings in this report are presented for validation.** Where the report states a finding, it reflects the combined weight of TWG engagement and the best available documentary evidence at the time of writing, and is subject to the continued validation in Section 3.7.
 
 ---
 
 ## 3.2 Evidence Base and Data Sources
+
+**Primary — TWG sector-expert engagements** — continuous consultation with MTIC sector experts through the Technical Working Group provided the primary, current, firm-level intelligence on each chain. The sources below corroborate and quantify it. Where UBOS data exists for an indicator, it is used before any secondary or international source.
 
 **Government policy and planning** — Vision 2040; NDP IV (FY2025/26–2029/30); NIP 2020; MTIC Strategic Plan; Tenfold Growth Strategy.
 
@@ -42,7 +44,7 @@ Each of the six value chains was analysed using a consistent six-part framework:
 
 **c. Binding Constraints Analysis** — ten dimensions (Section 3.4).
 
-**d. Market Assessment** — domestic, regional (EAC/COMESA), and global levels.
+**d. Market Assessment** — **four levels** (domestic; regional EAC/COMESA; continental/Africa; global), each with a **2040 projection**: Uganda's market on the Tenfold Growth Strategy logic (reasoned per chain, not a simple ×10), other markets on business-as-usual growth.
 
 **e. Prioritization Scoring** — five weighted criteria (Section 3.5) → 3–4 priorities per chain.
 
@@ -89,15 +91,15 @@ Each chain is modelled as a single underlying data graph that drives both this r
 
 ---
 
-## 3.7 Validation (Planned)
+## 3.7 Engagement and Validation
 
-Validation follows submission. **Key informant interviews** are planned with public-sector institutions (MTIC, UIA, URA, UBOS, UNBS, NDA, CDO, USMA/Uganda Sugar Board, NEMA, Ministry of Energy/PAU/UNOC), private-sector manufacturers across the six chains, industry associations (UMA, Uganda Pharmaceutical Manufacturers Association), financial institutions, and research institutions. A **stakeholder validation workshop** (which may be held jointly with the Report 1 workshop) will test the prioritization findings and action matrices. Inputs will be incorporated into the final version.
+Engagement with MTIC sector experts through the TWG was **continuous throughout the study** and is the primary basis of its firm-level findings. Validation now extends that engagement. **Key informant interviews** continue with public-sector institutions (MTIC, UIA, URA, UBOS, UNBS, NDA, CDO, USMA/Uganda Sugar Board, NEMA, Ministry of Energy/PAU/UNOC), private-sector manufacturers across the six chains, industry associations (UMA, Uganda Pharmaceutical Manufacturers Association), financial institutions, and research institutions. A **stakeholder validation workshop** (which may be held jointly with the Report 1 workshop) will test the prioritization findings and action matrices. Inputs will be incorporated into the final version.
 
 ---
 
 ## 3.8 Limitations
 
-- **Desk-based scope** — findings rest on documentary and statistical evidence; the planned KIIs and workshop are how firm-level realities will be tested.
+- **Firm-level data completeness** — while TWG engagement provides strong current sector intelligence, comprehensive audited firm-level data are not uniformly available; the continued KIIs and workshop test them further.
 - **Uneven data depth** — sugar, cement, and pharmaceuticals are relatively well-documented; petrochemicals (pre-production) and parts of plastics rely on programme documents and proxies.
 - **Firm-level statistics** — comprehensive current firm-level production/employment data are not uniformly available; figures are triangulated and flagged.
 - **Indicative investment figures** — Capital expenditure (CAPEX)/OPEX in the investment chapter are indicative planning estimates, labelled as such.
