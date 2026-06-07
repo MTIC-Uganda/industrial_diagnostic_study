@@ -86,15 +86,3 @@ This chapter consolidates the prioritized products from Chapters 4–9 into an i
 ## 11.5 Indicative Portfolio Total
 
 Excluding the investor-financed refinery (~USD 4bn, separately anchored), the seven other priority investments represent an **indicative total in the order of USD 0.6–1.3 billion** over five years, the majority **private-led**, with public/PPP support concentrated in **standards, skills, effluent/circular-economy infrastructure, blended finance, and guaranteed procurement**. All figures are indicative and require feasibility confirmation.
-
----
-
-## References
-
-- ITC TradeMap, trade statistics (2024). https://www.trademap.org
-- UNOC; Petroleum Authority of Uganda — refinery project. https://www.unoc.co.ug/midstream/the-uganda-refinery-project/ ; https://www.pau.go.ug/the-uganda-refinery-project/
-- Ecofin Agency; CemNet — new cement plants (2024–25). https://www.cemnet.com/News/story/181356/uganda-launching-us-300m-cement-plant-to-boost-industry.html
-- Quality Chemical Industries Limited / Cipla Uganda. https://en.wikipedia.org/wiki/Quality_Chemical_Industries_Limited
-- Cotton Development Organisation; EPRC cotton value-chain study. https://eprcug.org/
-- NEMA, *Plastics Circularity Strategy 2023–2028*. https://www.nema.go.ug/
-- Uganda Investment Authority. https://ugandainvest.go.ug/

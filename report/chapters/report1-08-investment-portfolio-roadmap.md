@@ -81,15 +81,3 @@ Per the agreed scope, standalone profiles are produced for the **priority produc
 ## 8.5 Indicative Portfolio Total
 
 The seven priority investments represent an **indicative total in the order of USD 1.0–2.0 billion** over five years, dominated by the integrated steel complex and Kilembe redevelopment. The majority is intended to be **private- or investor-financed** (Devki; Sarrai/Nile Fibreboard production-sharing; Cable Corp; motorcycle assemblers), with public and PPP support concentrated in **enabling infrastructure, the KMC anchor, and blended finance**. These figures are indicative and require feasibility confirmation.
-
----
-
-## References
-
-- ITC TradeMap, trade statistics (2024). https://www.trademap.org
-- Directorate of Geological Survey and Mines, "Redevelopment of Kilembe Mines." https://dgsm.go.ug/redevelopment-of-kilembe-mines/
-- Mining Weekly, "Uganda signs maiden production-sharing deal to revive copper mine" (4 March 2025). https://www.miningweekly.com/article/uganda-signs-maiden-production-sharing-deal-to-revive-copper-mine-2025-03-04
-- GMK Center, "A steel plant will be built in Uganda with investments of $500 million" (2025). https://gmk.center/en/news/a-steel-plant-will-be-built-in-uganda-with-investments-of-500-million/
-- The Independent, "Devki Group bets $500m on Uganda steel production" (2025). https://www.independent.co.ug/devki-group-bets-500m-on-uganda-steel-production/
-- Uganda Broadcasting Corporation, "Uganda Commissions Africa's Most Advanced Vehicle Plant" (2025). https://ubc.go.ug/2025/09/27/uganda-commissions-africas-most-advanced-vehicle-plant-a-historic-milestone-for-industrialization-and-innovation/
-- Uganda Investment Authority. https://ugandainvest.go.ug/

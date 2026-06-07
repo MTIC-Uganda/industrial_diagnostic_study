@@ -74,14 +74,3 @@ Use **government procurement** — infrastructure steel, electrical cable for gr
 6. **Anchor demand through public procurement** (infrastructure steel, grid cable, KMC buses).
 
 These six actions, taken together, address the shared constraints that hold back all three chains and convert Uganda's resource endowment and its new industrial anchors (Tembo, Devki, Kilembe redevelopment, KMC) into a competitive metals-to-mobility industrial system.
-
----
-
-## References
-
-- Electricity Regulatory Authority, end-user tariffs 2025. https://www.era.go.ug/
-- KPMG, *Uganda Budget Brief 2025/26*. https://assets.kpmg.com/
-- Uganda Manufacturers Association; UNIDO — manufacturing skills evidence. https://uma.or.ug/ ; https://www.unido.org/
-- NEMA, *Effluent Discharge Regulations 2020*. https://www.nema.go.ug/
-- ITC TradeMap, trade statistics (2024). https://www.trademap.org
-- UNIDO, *Programme for Country Partnership*. https://www.unido.org/programme-country-partnership

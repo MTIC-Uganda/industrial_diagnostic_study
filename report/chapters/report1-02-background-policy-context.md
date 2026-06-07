@@ -91,22 +91,3 @@ The following targets frame the ambition against which this report's recommendat
 | Capacity utilization (mfg) | ~30% (indicative, confirm UBOS) | 60%+ | 75%+ |
 
 Achieving these targets in Iron & Steel, Copper & Allied Metals, and Automotives requires upstream investment in mineral extraction and processing — not only downstream manufacturing expansion. The diagnostic findings and recommendations in Chapters 4–6 are calibrated to this ambition.
-
----
-
-## References
-
-- National Planning Authority, *Uganda Vision 2040*. https://npa.go.ug/uganda-vision-2040/
-- National Planning Authority, *National Development Plan IV (FY2025/26–2029/30)*. https://npa.go.ug/national-development-plan/
-- Parliament of Uganda, "President Launches NDP IV to Drive Uganda's Economic Transformation." https://www.parliament.go.ug/news/3724/president-launches-ndp-iv-drive-ugandas-economic-transformation
-- Ministry of Finance, Planning and Economic Development, "Presentation of the Fourth National Development Plan (NDP IV) to the Parliamentary Committee on Budget." https://www.finance.go.ug/media-center/news-and-updates/presentation-fourth-national-development-plan-ndpiv-parliamentary
-- MTIC, *National Industrial Policy 2020*. https://www.mtic.go.ug/
-- UNIDO, *Programme for Country Partnership*. https://www.unido.org/programme-country-partnership
-- World Bank, *World Development Indicators — Manufacturing, value added (% of GDP), Uganda*. https://data.worldbank.org/indicator/NV.IND.MANF.ZS?locations=UG
-- NPA/UDC, *Report on the Mapping and Value Chain Analysis for Uganda's Iron and Steel Industry* (June 2025). [Repository: `data/` — provided by MTIC]
-- Directorate of Geological Survey and Mines, "Redevelopment of Kilembe Mines." https://dgsm.go.ug/redevelopment-of-kilembe-mines/
-- Mining Weekly, "Uganda signs maiden production-sharing deal to revive copper mine" (4 March 2025). https://www.miningweekly.com/article/uganda-signs-maiden-production-sharing-deal-to-revive-copper-mine-2025-03-04
-- Uganda Broadcasting Corporation, "Uganda Commissions Africa's Most Advanced Vehicle Plant" (27 September 2025). https://ubc.go.ug/2025/09/27/uganda-commissions-africas-most-advanced-vehicle-plant-a-historic-milestone-for-industrialization-and-innovation/
-- Mobility Foresights, *Uganda Used Car Market 2024–2030*. https://mobilityforesights.com/product/uganda-used-car-market
-- Uganda Investment Authority, "Uganda seeing surge in export of manufactured products" (2025). https://ugandainvest.go.ug/uganda-seeing-surge-in-export-of-manufactured-products/
-- ITC TradeMap, trade statistics by HS code. https://www.trademap.org

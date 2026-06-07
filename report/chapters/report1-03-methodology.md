@@ -122,19 +122,3 @@ Inputs from this continued process will be incorporated into the final version o
 - **Trade-data basis.** Trade figures are from ITC TradeMap for the latest available year (generally 2024); some partner-level cells are suppressed or lag, which TradeMap notes and which is reflected where relevant.
 
 These limitations define where the validation step and subsequent monitoring will most strengthen the evidence base. They do not alter the direction of the diagnostic's conclusions.
-
----
-
-## References
-
-- National Planning Authority, *Uganda Vision 2040*; *National Development Plan IV (FY2025/26–2029/30)*. https://npa.go.ug/national-development-plan/
-- MTIC, *National Industrial Policy 2020*. https://www.mtic.go.ug/
-- NPA/UDC, *Report on the Mapping and Value Chain Analysis for Uganda's Iron and Steel Industry* (June 2025). [Repository: `data/` — provided by MTIC]
-- Directorate of Geological Survey and Mines. https://dgsm.go.ug/
-- Electricity Regulatory Authority, end-user tariffs 2025. https://www.era.go.ug/
-- NEMA, *National Environment (Standards for Discharge of Effluent into Water or Land) Regulations 2020*. https://www.nema.go.ug/
-- World Bank, *World Development Indicators*. https://data.worldbank.org/country/UG
-- World Steel Association, *World Steel in Figures 2025*. https://worldsteel.org/data/world-steel-in-figures/
-- International Copper Study Group, *World Copper Factbook 2025*. https://icsg.org/copper-factbook/
-- Uganda Bankers Association, *Unlocking the Potential of Uganda's Manufacturing Sector* (2024). https://ugandabankers.org/
-- ITC TradeMap. https://www.trademap.org

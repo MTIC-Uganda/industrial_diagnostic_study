@@ -93,13 +93,3 @@ The pharmaceuticals chain runs from active pharmaceutical ingredients (APIs) and
 | Reform (1–3y) | Pharma skills programme (QA/QC, regulatory affairs) with Makerere | MoES, NDA | Medium |
 | **Investment (3–5y)** | Expansion of GMP generics capacity (QCIL and others) | Private-led + PPP | Indicative (see Ch.11) |
 | Investment (3–5y) | Selective API/excipient plant where volumes justify | Private-led / PPP | Indicative (see Ch.11) |
-
----
-
-## References
-
-- National Drug Authority, *National Drug Register of Uganda — Human Medicines* (June 2024). https://www.nda.or.ug/
-- UNIDO, *Pharmaceutical Sector Profile — Uganda*. https://open.unido.org/api/documents/4699932/download/Pharmaceutical%20Sector%20Profile%20-%20Uganda
-- Statista, *Pharmaceuticals — Uganda*. https://www.statista.com/outlook/hmo/pharmaceuticals/uganda
-- Quality Chemical Industries Limited (Wikipedia summary); Cipla Uganda. https://en.wikipedia.org/wiki/Quality_Chemical_Industries_Limited ; https://www.cipla.com/our-presence/uganda
-- ITC TradeMap, trade statistics — HS 3004, Uganda, 2024. https://www.trademap.org

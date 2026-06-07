@@ -1,0 +1,41 @@
+# References
+
+Consolidated sources for Report 1. Trade figures throughout are from ITC TradeMap (2024) and cited at the point of use; primary sector intelligence is from MTIC TWG engagements (see Chapter 3).
+
+- National Planning Authority, *Uganda Vision 2040*. https://npa.go.ug/uganda-vision-2040/
+- National Planning Authority, *National Development Plan IV (FY2025/26–2029/30)*. https://npa.go.ug/national-development-plan/
+- Parliament of Uganda, "President Launches NDP IV to Drive Uganda's Economic Transformation." https://www.parliament.go.ug/news/3724/president-launches-ndp-iv-drive-ugandas-economic-transformation
+- Ministry of Finance, Planning and Economic Development, "Presentation of the Fourth National Development Plan (NDP IV) to the Parliamentary Committee on Budget." https://www.finance.go.ug/media-center/news-and-updates/presentation-fourth-national-development-plan-ndpiv-parliamentary
+- MTIC, *National Industrial Policy 2020*. https://www.mtic.go.ug/
+- UNIDO, *Programme for Country Partnership*. https://www.unido.org/programme-country-partnership
+- World Bank, *World Development Indicators — Manufacturing, value added (% of GDP), Uganda*. https://data.worldbank.org/indicator/NV.IND.MANF.ZS?locations=UG
+- NPA/UDC, *Report on the Mapping and Value Chain Analysis for Uganda's Iron and Steel Industry* (June 2025). [Repository: `data/` — provided by MTIC]
+- Directorate of Geological Survey and Mines, "Redevelopment of Kilembe Mines." https://dgsm.go.ug/redevelopment-of-kilembe-mines/
+- Mining Weekly, "Uganda signs maiden production-sharing deal to revive copper mine" (4 March 2025). https://www.miningweekly.com/article/uganda-signs-maiden-production-sharing-deal-to-revive-copper-mine-2025-03-04
+- Uganda Broadcasting Corporation, "Uganda Commissions Africa's Most Advanced Vehicle Plant" (27 September 2025). https://ubc.go.ug/2025/09/27/uganda-commissions-africas-most-advanced-vehicle-plant-a-historic-milestone-for-industrialization-and-innovation/
+- Mobility Foresights, *Uganda Used Car Market 2024–2030*. https://mobilityforesights.com/product/uganda-used-car-market
+- Uganda Investment Authority, "Uganda seeing surge in export of manufactured products" (2025). https://ugandainvest.go.ug/uganda-seeing-surge-in-export-of-manufactured-products/
+- ITC TradeMap, trade statistics by HS code. https://www.trademap.org
+- National Planning Authority, *Uganda Vision 2040*; *National Development Plan IV (FY2025/26–2029/30)*. https://npa.go.ug/national-development-plan/
+- Directorate of Geological Survey and Mines. https://dgsm.go.ug/
+- Electricity Regulatory Authority, end-user tariffs 2025. https://www.era.go.ug/
+- NEMA, *National Environment (Standards for Discharge of Effluent into Water or Land) Regulations 2020*. https://www.nema.go.ug/
+- World Bank, *World Development Indicators*. https://data.worldbank.org/country/UG
+- World Steel Association, *World Steel in Figures 2025*. https://worldsteel.org/data/world-steel-in-figures/
+- International Copper Study Group, *World Copper Factbook 2025*. https://icsg.org/copper-factbook/
+- Uganda Bankers Association, *Unlocking the Potential of Uganda's Manufacturing Sector* (2024). https://ugandabankers.org/
+- ITC TradeMap. https://www.trademap.org
+- Cable Corporation (Uganda), "About us." https://cablecorp-uganda.com/pages/about-us
+- Mehta Group, "Electric Cables." https://www.mehtagroup.com/electric_cables.html
+- ITC TradeMap, trade statistics — HS 8544, 7403, 7408, Uganda, 2024. https://www.trademap.org
+- NEMA, *Effluent Discharge Regulations 2020*. https://www.nema.go.ug/
+- Kiira Motors Corporation. https://kiiramotors.com/ ; Wikipedia summary: https://en.wikipedia.org/wiki/Kiira_Motors_Corporation
+- AutoMag.ug, "Kiira Motors unveils Kayoola electric buses for public transport" (2025). https://automag.ug/2025/08/25/kiira-motors-unveils-kayoola-electric-buses-for-public-transport/
+- ITC TradeMap, trade statistics — HS 8703, 8704, 8711, 8708, Uganda, 2024. https://www.trademap.org
+- NEMA. https://www.nema.go.ug/
+- KPMG, *Uganda Budget Brief 2025/26*. https://assets.kpmg.com/
+- Uganda Manufacturers Association; UNIDO — manufacturing skills evidence. https://uma.or.ug/ ; https://www.unido.org/
+- ITC TradeMap, trade statistics (2024). https://www.trademap.org
+- GMK Center, "A steel plant will be built in Uganda with investments of $500 million" (2025). https://gmk.center/en/news/a-steel-plant-will-be-built-in-uganda-with-investments-of-500-million/
+- The Independent, "Devki Group bets $500m on Uganda steel production" (2025). https://www.independent.co.ug/devki-group-bets-500m-on-uganda-steel-production/
+- Uganda Investment Authority. https://ugandainvest.go.ug/

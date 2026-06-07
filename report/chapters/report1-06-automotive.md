@@ -110,15 +110,3 @@ Exports are negligible — Uganda is overwhelmingly a **vehicle-importing market
 | Reform (1–3y) | Supplier-development programme to localise parts (batteries, wiring, seats, panels) | MTIC, UIA | Medium |
 | **Investment (3–5y)** | KMC capacity expansion toward 10,000 vehicles/yr; EV-bus line | Public + PPP | Indicative (see Ch.8) |
 | Investment (3–5y) | Motorcycle CKD assembly plant(s) | Private-led | Indicative (see Ch.8) |
-
----
-
-## References
-
-- Uganda Broadcasting Corporation, "Uganda Commissions Africa's Most Advanced Vehicle Plant" (27 September 2025). https://ubc.go.ug/2025/09/27/uganda-commissions-africas-most-advanced-vehicle-plant-a-historic-milestone-for-industrialization-and-innovation/
-- Kiira Motors Corporation. https://kiiramotors.com/ ; Wikipedia summary: https://en.wikipedia.org/wiki/Kiira_Motors_Corporation
-- AutoMag.ug, "Kiira Motors unveils Kayoola electric buses for public transport" (2025). https://automag.ug/2025/08/25/kiira-motors-unveils-kayoola-electric-buses-for-public-transport/
-- Mobility Foresights, *Uganda Used Car Market 2024–2030*. https://mobilityforesights.com/product/uganda-used-car-market
-- ITC TradeMap, trade statistics — HS 8703, 8704, 8711, 8708, Uganda, 2024. https://www.trademap.org
-- Electricity Regulatory Authority, end-user tariffs 2025. https://www.era.go.ug/
-- NEMA. https://www.nema.go.ug/

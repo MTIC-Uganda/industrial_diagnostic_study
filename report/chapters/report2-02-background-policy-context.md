@@ -86,17 +86,3 @@ The analytical question is identical across all six: **which 3–4 products or s
 | Pharmaceutical local production | ~10% of market | rising | substantial |
 
 Achieving these targets requires moving from raw-commodity export and finished-goods import toward domestic value addition. Chapters 4–9 provide the chain-by-chain prioritization.
-
----
-
-## References
-
-- National Planning Authority, *Uganda Vision 2040*; *NDP IV (FY2025/26–2029/30)*. https://npa.go.ug/national-development-plan/
-- Parliament of Uganda, NDP IV launch. https://www.parliament.go.ug/news/3724/president-launches-ndp-iv-drive-ugandas-economic-transformation
-- MTIC, *National Industrial Policy 2020*. https://www.mtic.go.ug/
-- UNIDO, *Programme for Country Partnership*. https://www.unido.org/programme-country-partnership
-- World Bank, *World Development Indicators*. https://data.worldbank.org/indicator/NV.IND.MANF.ZS?locations=UG
-- Cotton Development Organisation. https://www.cdouga.org/
-- UNIDO, *Pharmaceutical Sector Profile — Uganda*. https://open.unido.org/
-- Uganda Investment Authority (2025). https://ugandainvest.go.ug/
-- ITC TradeMap. https://www.trademap.org

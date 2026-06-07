@@ -93,14 +93,3 @@ The plastics chain runs from polymer resin (feedstock) through conversion (mould
 | Reform (1–3y) | Incentives for recycling plants and recycled-content packaging | MTIC, UIA, MoFPED | Medium |
 | **Investment (3–5y)** | Recycling capacity (PET/HDPE flake & pellet) | Private-led | Indicative (see Ch.11) |
 | Investment (3–5y) | Modern food/beverage & agri packaging plants; resin (sequenced to refinery) | Private-led / PPP | Indicative (see Ch.11) |
-
----
-
-## References
-
-- NEMA, *National Strategy for Management of Plastic Pollution / Plastics Circularity (2023–2028)*. https://www.nema.go.ug/new_site/wp-content/uploads/2024/05/Plastic_circularity_-Report-2023-1.pdf
-- NEMA, "Plastics." https://www.nema.go.ug/en/plastics/
-- Margherita News, "NEMA pushes for total ban of polythene bags in Uganda" (Mar 2025). https://margheritanews.ug/2025/03/nema-pushes-for-total-polythene-bags-of-kevera-in-uganda/
-- Reportlinker, *Uganda Plastic Industry Outlook 2024–2028*. https://www.reportlinker.com/clp/country/6347/726256
-- Nile Plastic Industries. https://www.nileplasticindustries.com/
-- ITC TradeMap, trade statistics — HS 3923, Uganda, 2024. https://www.trademap.org

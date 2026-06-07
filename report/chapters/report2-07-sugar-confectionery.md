@@ -93,14 +93,3 @@ The sugar chain runs from sugarcane cultivation through milling to refined sugar
 | Reform (1–3y) | Grid feed-in framework for bagasse co-generation | ERA, MEMD | Medium |
 | **Investment (3–5y)** | Industrial-sugar refining & ethanol distillery capacity | Private-led | Indicative (see Ch.11) |
 | Investment (3–5y) | Confectionery manufacturing | Private-led | Indicative (see Ch.11) |
-
----
-
-## References
-
-- *Sugar industry in Uganda* (Wikipedia, with USMA and Uganda Sugar Board data). https://en.wikipedia.org/wiki/Sugar_industry_in_Uganda
-- Daily Monitor, "Surge in sugar factories imperils industry's future." https://www.monitor.co.ug/uganda/news/national/surge-in-sugar-factories-imperils-industry-s-future-3943728
-- Food Business MEA, "Kinyara Sugar opens US$15m industrial sugar refinery" (2023). https://www.foodbusinessmea.com/ugandas-second-largest-sugar-miller-kinyara-sugar-has-opened-us15m-industrial-sugar-refinery/
-- Kakira Sugar. https://kakirasugar.com/
-- Uganda Sugar Manufacturers' Association annual report 2024 [Repository: `data/` — provided by MTIC].
-- ITC TradeMap, trade statistics — HS 1701, Uganda, 2024. https://www.trademap.org

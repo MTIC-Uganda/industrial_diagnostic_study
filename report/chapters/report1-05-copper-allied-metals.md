@@ -107,16 +107,3 @@ Exports across all copper lines are negligible — Uganda is a **net importer at
 | Reform (1–3y) | Power and transport upgrades for Kasese/Kilembe | ERA, Uganda National Roads Authority (UNRA), MEMD | Medium–High |
 | **Investment (3–5y)** | Kilembe mine + cathode/cobalt processing (production-sharing) | Private-led / PPP | Indicative (see Ch.8) |
 | Investment (3–5y) | Expansion of cable & conductor manufacturing capacity | Private-led | Indicative (see Ch.8) |
-
----
-
-## References
-
-- Directorate of Geological Survey and Mines, "Redevelopment of Kilembe Mines." https://dgsm.go.ug/redevelopment-of-kilembe-mines/
-- Mining Weekly, "Uganda signs maiden production-sharing deal to revive copper mine" (4 March 2025). https://www.miningweekly.com/article/uganda-signs-maiden-production-sharing-deal-to-revive-copper-mine-2025-03-04
-- Cable Corporation (Uganda), "About us." https://cablecorp-uganda.com/pages/about-us
-- Mehta Group, "Electric Cables." https://www.mehtagroup.com/electric_cables.html
-- International Copper Study Group, *World Copper Factbook 2025*. https://icsg.org/copper-factbook/
-- ITC TradeMap, trade statistics — HS 8544, 7403, 7408, Uganda, 2024. https://www.trademap.org
-- Electricity Regulatory Authority, end-user tariffs 2025. https://www.era.go.ug/
-- NEMA, *Effluent Discharge Regulations 2020*. https://www.nema.go.ug/

@@ -92,14 +92,3 @@ The textiles and garments chain runs from cotton cultivation through ginning, sp
 | Reform (1–3y) | Textile/garment skills programme | Ministry of Education and Sports (MoES), mills | Medium |
 | **Investment (3–5y)** | Spinning/weaving capacity expansion (Nytil, Fine Spinners, Lira) | Private-led + PPP | Indicative (see Ch.11) |
 | Investment (3–5y) | Integrated garment park (institutional + regional export) | Private-led / PPP | Indicative (see Ch.11) |
-
----
-
-## References
-
-- Cotton Development Organisation. https://www.cdouga.org/ ; World Business Journal, "CDO Leads Way for Increased Cotton Subsector Growth." https://worldbusinessjournal.com/cdo-leads-way/
-- Economic Policy Research Centre, *Upgrading the cotton value chain for textile industry development*. https://eprcug.org/publication/upgrading-the-cotton-value-chain-for-textile-industry-development/
-- ChimpReports, "Inside Fine Spinners: spinning Uganda's cotton to European garment stores." https://chimpreports.com/inside-fine-spinners-spinning-ugandas-cotton-to-european-garment-stores/
-- Uganda Investment Authority, "UIA, CDO team up to boost import substitution in cotton sector." https://www.ugandainvest.go.ug/uia-cdo-team-up-to-boost-import-substitution-in-cotton-sector/
-- ITC TradeMap, trade statistics — HS 5201, 6109, Uganda, 2024. https://www.trademap.org
-- NEMA, *Effluent Discharge Regulations 2020*. https://www.nema.go.ug/

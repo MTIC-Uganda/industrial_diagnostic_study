@@ -76,15 +76,3 @@ Treat the **Kabaale refinery / Kabalega petrochemical park** as the medium-term 
 7. **Sequence the petrochemical park** and prepare its downstream linkages now.
 
 Together these convert Uganda's agricultural base, established sugar/cement industries, proven pharmaceutical capability, and emerging oil sector into a value-adding, import-substituting industrial system.
-
----
-
-## References
-
-- Electricity Regulatory Authority, tariffs 2025. https://www.era.go.ug/
-- KPMG, *Uganda Budget Brief 2025/26*. https://assets.kpmg.com/
-- Uganda Manufacturers Association; UNIDO — skills evidence. https://uma.or.ug/ ; https://www.unido.org/
-- NEMA, *Plastics Circularity Strategy 2023–2028*; *Effluent Discharge Regulations 2020*. https://www.nema.go.ug/
-- National Drug Authority. https://www.nda.or.ug/
-- UNIDO, *Programme for Country Partnership*. https://www.unido.org/programme-country-partnership
-- ITC TradeMap. https://www.trademap.org

@@ -106,15 +106,3 @@ Engagement with MTIC sector experts through the TWG was **continuous throughout 
 - **Trade-data basis** — figures are ITC TradeMap, latest available year (generally 2024); some partner cells are suppressed or lag.
 
 These limitations define where validation and monitoring will most strengthen the evidence base; they do not alter the direction of the conclusions.
-
----
-
-## References
-
-- National Planning Authority, *Vision 2040*; *NDP IV*. https://npa.go.ug/national-development-plan/
-- MTIC, *National Industrial Policy 2020*. https://www.mtic.go.ug/
-- National Drug Authority, *National Drug Register* (June 2024). https://www.nda.or.ug/
-- NEMA, *National Strategy for Plastics Circularity 2023–2028*; *Effluent Discharge Regulations 2020*. https://www.nema.go.ug/
-- Electricity Regulatory Authority, tariffs 2025. https://www.era.go.ug/
-- World Bank, *World Development Indicators*. https://data.worldbank.org/country/UG
-- ITC TradeMap. https://www.trademap.org

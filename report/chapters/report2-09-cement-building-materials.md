@@ -97,15 +97,3 @@ The cement chain runs from limestone quarrying through clinker production to cem
 | Reform (1–3y) | Regional-export facilitation (standards mutual recognition, corridor logistics) | MTIC, EAC | Low–Medium |
 | **Investment (3–5y)** | Clinker capacity build-out (NE plant, Buikwe, expansions) | Private-led | ~USD 200–300m+ (announced) |
 | Investment (3–5y) | Higher-value building-materials plants (fibre-cement, tiles, precast) | Private-led | Indicative (see Ch.11) |
-
----
-
-## References
-
-- IndexBox, *Uganda's Cement Market Report 2025*. https://www.indexbox.io/store/uganda-cement-market-analysis-forecast-size-trends-and-insights/
-- CemNet / International Cement Review, Uganda country data. https://www.cemnet.com/global-cement-report/country/uganda
-- Ecofin Agency, "Uganda to Commission $300 Million Cement Plant to Cut Imports Amid Rising Demand." https://www.ecofinagency.com/news-industry/2104-54866-uganda-to-commission-300-million-cement-plant-to-cut-imports-amid-rising-demand
-- CemNet, "Uganda launching US$300m cement plant to boost industry." https://www.cemnet.com/News/story/181356/uganda-launching-us-300m-cement-plant-to-boost-industry.html
-- *List of cement manufacturers in Uganda* (Wikipedia). https://en.wikipedia.org/wiki/List_of_cement_manufacturers_in_Uganda
-- Hima Cement, "About Us." https://himacement.co/About-Us
-- ITC TradeMap, trade statistics — HS 2523, Uganda, 2024. https://www.trademap.org

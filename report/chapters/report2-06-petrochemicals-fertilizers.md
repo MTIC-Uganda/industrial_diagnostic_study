@@ -91,15 +91,3 @@ This chain has two related but distinct strands: **petrochemicals** (derived fro
 | Reform (1–3y) | Kabalega Petrochemical Park readiness (infrastructure, downstream plastics linkage, skills) | PAU, UNOC, MTIC | Medium |
 | **Investment (3–5y)** | Refinery + petrochemical park build-out (Alpha MBM agreement) | Investor + UNOC (PPP) | ~USD 4bn (announced) |
 | Investment (3–5y) | Phosphate processing revival / new blending capacity | Private-led / PPP | Indicative (see Ch.11) |
-
----
-
-## References
-
-- Uganda National Oil Company, "The Uganda Refinery Project." https://www.unoc.co.ug/midstream/the-uganda-refinery-project/
-- Petroleum Authority of Uganda, "The Uganda Refinery Project." https://www.pau.go.ug/the-uganda-refinery-project/
-- Hydrocarbon Engineering, "Uganda refinery to start operations by early 2030" (Oct 2025). https://www.hydrocarbonengineering.com/refining/13102025/uganda-refinery-to-start-operations-by-early-2030/
-- Osukuru Industrial Complex (Wikipedia). https://en.wikipedia.org/wiki/Osukuru_Industrial_Complex
-- Free Zones Authority, "President commissions Tororo Sukulu Phosphate Project." https://freezones.go.ug/president-commissions-tororo-sukulu-phosphate-project/
-- Milling Middle East & Africa, "Tororo Fertiliser Factory in limbo five months after resuming operations" (2023). https://www.millingmea.com/tororo-fertiliser-factory-in-limbo-five-months-after-resuming-operations/
-- ITC TradeMap, trade statistics — HS 3105, Uganda, 2024. https://www.trademap.org
