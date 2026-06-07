@@ -9,13 +9,26 @@
 
 Iron & Steel, Copper & Allied Metals, and Automotives share a common set of binding constraints and a common industrial logic. This chapter consolidates the cross-cutting actions that would lift all three chains simultaneously, and maps them to the six priority areas of the Uganda–UNIDO Programme for Country Partnership (PCP). These recommendations complement — and should be read alongside — the chain-specific action matrices in Chapters 4–6.
 
-The integrating insight of Report 1 is that **Iron & Steel, Copper, and Automotive form a single industrial system**: mined and processed metal feeds fabricated products that feed vehicle manufacture. Constraints that raise the cost of metal — energy, logistics, finance, feedstock policy — cascade through all three. Addressing them once benefits the whole system.
+The integrating insight of this report is that **Iron & Steel, Copper, and Automotive form a single industrial system**: mined and processed metal feeds fabricated products that feed vehicle manufacture. Constraints that raise the cost of metal — energy, logistics, finance, feedstock policy — cascade through all three. Addressing them once benefits the whole system.
+
+**Tenfold framing.** These cross-cutting actions are the enablers of the Tenfold Growth Strategy in the metals-to-mobility system: a ten-times-larger economy needs domestically-processed metal, reliable industrial power, long-term capital, and skills at a scale that no single chain can unlock alone. Fixing the shared constraints is therefore the highest-leverage investment toward tenfold growth — it multiplies the return on every chain-specific action in Chapters 4–6.
 
 ---
 
 ## 7.2 The Shared Binding Constraints
 
-Across the three chains, five constraints recur as decisive (drawing on the chain analyses and on cross-cutting evidence):
+Across the three chains, five constraints recur as decisive. Weighted by how critical each is to unlocking the system (1 = low, 5 = critical), drawing on the chain analyses and NPA/UDC regional-competitiveness data:
+
+| Rank | Cross-cutting constraint | Weight | Hard evidence |
+|---|---|---|---|
+| 1 | Feedstock leakage / upstream gap | **5** | Iron ore exported raw (USD 35.8m); copper ore unmined; metal re-imported — billet/scrap most-expensive route (~USD 676/t) |
+| 2 | Access to long-term finance | **5** | Uganda commercial interest **18–23% — highest in region** (Kenya 13–17, Egypt 10–12); 2025 liquidity tightening crowds out private credit |
+| 3 | Energy cost & reliability | **4** | Effective industrial tariff **~8–10 US¢/kWh vs Kenya 5–7, Egypt 4–5**; reliability the #1 firm-cited issue |
+| 4 | Logistics / landlocked penalty | **4** | ~USD 827m/yr inefficiency; logistics ~18–20% of sale price; worst transport tier regionally |
+| 5 | Skills | **3** | ~68% of manufacturers cannot find required technical skills (UMA) |
+| 6 | Standards & enforcement | **3** | Sub-standard steel/cable imports distort the market; uneven UNBS enforcement |
+
+Narrative on each:
 
 **1. Energy cost and reliability.** Metals processing (DRI, electro-refining, rolling) is electricity-intensive. Uganda's extra-large industrial tariff is around **5.5 US¢/kWh (5¢ off-peak) in 2025** (Electricity Regulatory Authority) — regionally competitive — but reliability and the cost of self-generation backup erode this advantage. The 2025 transition from UMEME to UEDCL as distributor is an opportunity to lock in industrial reliability commitments.
 
@@ -49,6 +62,9 @@ A targeted **skills programme in metallurgy, process engineering, mechatronics, 
 ### F. Demand-side anchors through public procurement
 Use **government procurement** — infrastructure steel, electrical cable for grid expansion, and KMC buses for public fleets — as a guaranteed demand anchor that de-risks domestic investment.
 
+### G. Green industrialisation as a competitiveness strategy
+Treat decarbonisation as a cost-and-market advantage, not a burden, across the system: **hydro-powered gas/green-hydrogen DRI and scrap-EAF steel** (the NPA/UDC data shows gas-DRI is also the *cheapest* route), **low-carbon electro-refined copper and cobalt for batteries**, **EV manufacturing (KMC) on the hydro grid**, and **circular links** (steel slag and tailings into cement/construction; scrap-cable recycling). A low-carbon metals-to-mobility system hedges against carbon-border measures (e.g. EU CBAM) and differentiates Ugandan products in regional and global markets — directly serving PCP Priority Area 5.
+
 ---
 
 ## 7.4 Alignment to PCP Priority Areas
@@ -72,5 +88,6 @@ Use **government procurement** — infrastructure steel, electrical cable for gr
 4. **Enforce UNBS standards** on steel and cable imports (quick win).
 5. **Launch a metals/automotive/EV skills compact.**
 6. **Anchor demand through public procurement** (infrastructure steel, grid cable, KMC buses).
+7. **Pursue green industrialisation as a competitiveness strategy** (hydro-powered DRI/EAF, low-carbon copper/cobalt, EVs, circular slag/tailings/scrap links).
 
 These six actions, taken together, address the shared constraints that hold back all three chains and convert Uganda's resource endowment and its new industrial anchors (Tembo, Devki, Kilembe redevelopment, KMC) into a competitive metals-to-mobility industrial system.
