@@ -9,7 +9,11 @@
 
 ## The purpose of this report
 
-This diagnostic examines three of Uganda's NDP IV priority manufacturing value chains — **Iron & Steel, Copper & Allied Metals, and Automotives** — and identifies, for each, the three to four products or sub-sectors Uganda should prioritize to build competitive manufacturing at scale. It is a **desk-based diagnostic, offered for validation** through key informant interviews and a stakeholder workshop (see Chapter 3). All trade figures are drawn from International Trade Centre (ITC) TradeMap (2024) and cited at the point of use.
+This diagnostic examines three of Uganda's NDP IV priority manufacturing value chains — **Iron & Steel, Copper & Allied Metals, and Automotives** — and identifies, for each, the three to four products or sub-sectors Uganda should prioritize to build competitive manufacturing at scale.
+
+**The governing purpose of this report is the Tenfold Growth Strategy.** Every finding, market projection and recommendation is assessed against a single question: *what does it take for these chains to help grow Uganda's economy roughly tenfold by 2040?* That lens sets the ambition (the markets Uganda must create and secure ahead of demand — Chapter 4 onward), the prioritisation (what builds durable, sustainable advantage rather than short-lived wins), and the tone (diagnostic and action-oriented).
+
+The study draws **primarily on engagement with MTIC sector experts through the Technical Working Group (TWG)**, corroborated by official Ugandan data (UBOS first) and International Trade Centre (ITC) TradeMap (2024) trade figures cited at the point of use; it is offered for validation (see Chapter 3).
 
 The guiding principle, set by MTIC, is discipline: *successful economies are built around a few products done exceptionally well, not a broad catalogue.* This report therefore states not only what Uganda should pursue, but what it should not.
 
@@ -17,7 +21,7 @@ The guiding principle, set by MTIC, is discipline: *successful economies are bui
 
 ## The integrating insight
 
-The three chains are not separate. They form **one industrial system: mined metal → processed metal → fabricated product → vehicle.** Iron and copper feed steel and cable; steel and cable feed vehicles built by Kiira Motors. The same constraints — energy, logistics, finance, feedstock policy — run through all three. Fixing them once lifts the whole system. This integrated framing is the strategic core of Report 1.
+The three chains are not separate. They form **one industrial system: mined metal → processed metal → fabricated product → vehicle.** Iron and copper feed steel and cable; steel and cable feed vehicles built by Kiira Motors. The same constraints — energy, logistics, finance, feedstock policy — run through all three. Fixing them once lifts the whole system. This integrated framing is the strategic core of this report — and the fastest route to the Tenfold Growth Strategy: a metals-to-vehicles industrial system, built once, compounds across construction, machinery and transport as the economy scales toward tenfold.
 
 ---
 

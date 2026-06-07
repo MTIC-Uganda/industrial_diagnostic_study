@@ -9,7 +9,11 @@
 
 ## The purpose of this report
 
-This diagnostic examines six of Uganda's NDP IV priority manufacturing value chains — **Textiles & Garments, Pharmaceuticals, Petrochemicals & Fertilizers, Sugar & Confectionery, Plastics & Packaging, and Cement & Building Materials** — and identifies, for each, the three to four products Uganda should prioritize for competitive manufacturing. It is a **desk-based diagnostic, offered for validation** through key informant interviews and a stakeholder workshop (Chapter 3). All trade figures are from International Trade Centre (ITC) TradeMap (2024), cited at the point of use.
+This diagnostic examines six of Uganda's NDP IV priority manufacturing value chains — **Textiles & Garments, Pharmaceuticals, Petrochemicals & Fertilizers, Sugar & Confectionery, Plastics & Packaging, and Cement & Building Materials** — and identifies, for each, the three to four products Uganda should prioritize for competitive manufacturing.
+
+**The governing purpose of this report is the Tenfold Growth Strategy.** Every finding, market projection and recommendation is assessed against one question: *what does it take for these chains to help grow Uganda's economy roughly tenfold by 2040?* That lens sets the ambition (the markets Uganda must create and secure ahead of demand), the prioritisation (durable, sustainable advantage over short-lived wins), and the diagnostic, action-oriented tone.
+
+The study draws **primarily on engagement with MTIC sector experts through the Technical Working Group (TWG)**, corroborated by official Ugandan data (UBOS first) and International Trade Centre (ITC) TradeMap (2024) figures cited at the point of use; it is offered for validation (Chapter 3).
 
 The guiding principle is discipline: *successful economies are built around a few products done exceptionally well.* With six chains in scope, this report is deliberately selective — it states what to prioritize and what to set aside.
 
