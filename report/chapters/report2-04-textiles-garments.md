@@ -2,7 +2,7 @@
 
 **Report:** Report 2
 **Status:** Draft for validation
-**Primary sources:** Cotton Development Organisation (CDO); EPRC cotton value-chain study; ITC TradeMap (2024).
+**Primary sources:** Cotton Development Organisation (CDO); Economic Policy Research Centre (EPRC) cotton value-chain study; ITC TradeMap (2024).
 
 ---
 
@@ -54,7 +54,7 @@ The textiles and garments chain runs from cotton cultivation through ginning, sp
 
 **Domestic.** Growing demand for apparel, uniforms, and home textiles, currently met substantially by imports and used clothing. Institutional demand (uniforms for schools, security, health) is an addressable anchor.
 
-**Regional (EAC/COMESA).** Regional apparel and fabric markets are accessible; Uganda's cotton base is a comparative advantage if processed. AGOA/EU access has historically supported garment export, subject to policy continuity.
+**Regional (EAC/COMESA).** Regional apparel and fabric markets are accessible; Uganda's cotton base is a comparative advantage if processed. African Growth and Opportunity Act (AGOA)/EU access has historically supported garment export, subject to policy continuity.
 
 **Global.** Commodity textile export is highly competitive (Asia dominates); Uganda's realistic global niche is **organic/traceable cotton and specialty apparel**, not commodity volume.
 
@@ -86,10 +86,10 @@ The textiles and garments chain runs from cotton cultivation through ginning, sp
 
 | Timeframe | Action | Lead | Indicative cost |
 |---|---|---|---|
-| **Quick win (0–12m)** | Institutional-uniform procurement from domestic garment makers; review used-clothing policy | MTIC, MoFPED, MDAs | Procurement |
-| Quick win (0–12m) | Cotton agronomy/seed programme to raise yields and ginnery utilization | CDO, MAAIF | Low–Medium |
+| **Quick win (0–12m)** | Institutional-uniform procurement from domestic garment makers; review used-clothing policy | MTIC, Ministry of Finance, Planning and Economic Development (MoFPED), Ministries, Departments and Agencies (MDAs) | Procurement |
+| Quick win (0–12m) | Cotton agronomy/seed programme to raise yields and ginnery utilization | CDO, Ministry of Agriculture, Animal Industry and Fisheries (MAAIF) | Low–Medium |
 | **Reform (1–3y)** | Wet-processing/effluent infrastructure for textile parks | NEMA, MTIC, UIA | Medium |
-| Reform (1–3y) | Textile/garment skills programme | MoES, mills | Medium |
+| Reform (1–3y) | Textile/garment skills programme | Ministry of Education and Sports (MoES), mills | Medium |
 | **Investment (3–5y)** | Spinning/weaving capacity expansion (Nytil, Fine Spinners, Lira) | Private-led + PPP | Indicative (see Ch.11) |
 | Investment (3–5y) | Integrated garment park (institutional + regional export) | Private-led / PPP | Indicative (see Ch.11) |
 

@@ -9,7 +9,7 @@
 
 ## The purpose of this report
 
-This diagnostic examines six of Uganda's NDP IV priority manufacturing value chains — **Textiles & Garments, Pharmaceuticals, Petrochemicals & Fertilizers, Sugar & Confectionery, Plastics & Packaging, and Cement & Building Materials** — and identifies, for each, the three to four products Uganda should prioritize for competitive manufacturing. It is a **desk-based diagnostic, offered for validation** through key informant interviews and a stakeholder workshop (Chapter 3). All trade figures are from ITC TradeMap (2024), cited at the point of use.
+This diagnostic examines six of Uganda's NDP IV priority manufacturing value chains — **Textiles & Garments, Pharmaceuticals, Petrochemicals & Fertilizers, Sugar & Confectionery, Plastics & Packaging, and Cement & Building Materials** — and identifies, for each, the three to four products Uganda should prioritize for competitive manufacturing. It is a **desk-based diagnostic, offered for validation** through key informant interviews and a stakeholder workshop (Chapter 3). All trade figures are from International Trade Centre (ITC) TradeMap (2024), cited at the point of use.
 
 The guiding principle is discipline: *successful economies are built around a few products done exceptionally well.* With six chains in scope, this report is deliberately selective — it states what to prioritize and what to set aside.
 
@@ -23,11 +23,11 @@ Across all six chains, one pattern dominates: **Uganda exports or under-processe
 
 ## What the evidence shows
 
-Manufacturing is about **15.2% of GDP (2024)**, below the National Industrial Policy's own ~16% target for 2029/30 (World Bank; NIP 2020). Chain by chain (ITC TradeMap, 2024 unless noted):
+Manufacturing is about **15.2% of Gross Domestic Product (GDP) (2024)**, below the National Industrial Policy's own ~16% target for 2029/30 (World Bank; NIP 2020). Chain by chain (ITC TradeMap, 2024 unless noted):
 
-- **Textiles & Garments:** ~90% of cotton lint is exported raw at under USD 1/kg; **39 ginneries run at ~10% capacity**; only two integrated mills (Nytil, Fine Spinners). The lint-to-garment value gap is among the largest in the economy.
+- **Textiles & Garments:** ~90% of cotton lint is exported raw at under United States Dollar (USD) 1/kg; **39 ginneries run at ~10% capacity**; only two integrated mills (Nytil, Fine Spinners). The lint-to-garment value gap is among the largest in the economy.
 
-- **Pharmaceuticals:** ~90% of medicines imported (down from 96% in 2016); medicaments imports **USD 263.4m**; market ~USD 221m. But Uganda has a proven WHO-GMP base — Cipla QCIL (~1.2bn tablets/year) exporting regionally.
+- **Pharmaceuticals:** ~90% of medicines imported (down from 96% in 2016); medicaments imports **USD 263.4m**; market ~USD 221m. But Uganda has a proven World Health Organization (WHO)-GMP base — Cipla QCIL (~1.2bn tablets/year) exporting regionally.
 
 - **Petrochemicals & Fertilizers:** the Sukulu fertilizer plant has **stalled** (shut 2021, halted again 2023) while Uganda needs ~1m t of fertilizer and imports ~50,000 t; the **Kabaale refinery + Kabalega petrochemical park** (Alpha MBM deal, March 2025) is the medium-term feedstock anchor (~2029–30).
 
@@ -44,7 +44,7 @@ Manufacturing is about **15.2% of GDP (2024)**, below the National Industrial Po
 | Chain | Priorities | Deprioritize (for now) |
 |---|---|---|
 | **Textiles & Garments** | (1) Garments/apparel; (2) Yarn & fabric; (3) Cottonseed oil & cake | Commodity textile export to global market |
-| **Pharmaceuticals** | (1) Essential generics (ARVs, antimalarials, anti-TB, NCD); (2) Medical consumables; (3) Selective API | Broad-spectrum API synthesis at scale |
+| **Pharmaceuticals** | (1) Essential generics (ARVs, antimalarials, anti-TB, NCD); (2) Medical consumables; (3) Selective Active Pharmaceutical Ingredient (API) | Broad-spectrum API synthesis at scale |
 | **Petrochemicals & Fertilizers** | (1) Fertilizer (blending + phosphate revival); (2) Sulphuric acid/chemicals; (3) Petrochemicals (sequenced to refinery) | Greenfield specialty chemicals; premature refined-product export |
 | **Sugar & Confectionery** | (1) Industrial/refined sugar; (2) Ethanol; (3) Co-generation | More raw brown-sugar capacity (already in surplus) |
 | **Plastics & Packaging** | (1) Industrial/food packaging; (2) Recycling; (3) Agri/cement packaging | Single-use carrier bags (2025 ban) |

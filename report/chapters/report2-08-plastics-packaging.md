@@ -12,7 +12,7 @@ The plastics chain runs from polymer resin (feedstock) through conversion (mould
 
 | Phase | Activity | Main inputs | Output |
 |---|---|---|---|
-| I | Resin / feedstock | Petrochemicals (imported) | PE, PP, PET, PVC resin |
+| I | Resin / feedstock | Petrochemicals (imported) | Polyethylene (PE), Polypropylene (PP), Polyethylene Terephthalate (PET), Polyvinyl Chloride (PVC) resin |
 | II | Conversion | Resin | Films, sheets, preforms, mouldings |
 | III | Packaging & products | Converted plastic | Bottles, sacks, containers, household goods |
 | IV | Use | Products | Consumer/industrial use |

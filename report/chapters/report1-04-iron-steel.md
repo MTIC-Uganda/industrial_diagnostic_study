@@ -44,7 +44,7 @@ The single largest value-addition steps — ironmaking and steelmaking — are p
 | Firm | Role | Notes |
 |---|---|---|
 | Tembo Steel (U) Ltd | Closest to integrated production | Operates Uganda's main sponge-iron (DRI) capacity; commissioned a second DRI plant in January 2025 (~250,000 t), the only producer reaching upstream (State House Uganda, 2025) |
-| Roofings Ltd / Roofings Rolling Mills | Long products, wire, roofing, coated sheet | ~1,850 permanent employees (2021); two integrated entities |
+| Roofings Ltd / Roofings Rolling Mills | Long products, wire, roofing, coated sheet | ~1,850 permanent employees (2021); two integrated entities (African Business, 2021) |
 | Steel & Tube Industries Ltd (STIL) | Long products, tubes, sections | ~1,080 permanent staff; ~6,000 total beneficiaries including the wider value chain (Uganda Development Bank) |
 | Uganda Baati Ltd | Roofing & coated sheet | Leading roofing-sheet manufacturer |
 | BM Steel, Pramukh, Sembule, Yogi Steels, Abyssinia, others | Rolling, sections, wire | Downstream finishing |
@@ -78,10 +78,10 @@ The pattern is unambiguous: Uganda is **competitive in finished long products (r
 | **Technology & productivity** | Predominantly induction-furnace and re-rolling technology; little DRI/EAF integrated capacity. Productivity and energy efficiency lag regional integrated producers. Tembo's DRI expansion is the main exception. |
 | **Energy** | Electricity is a decisive cost in steel. The extra-large industrial tariff is ~5.5 US¢/kWh (5¢ off-peak) in 2025 (ERA), competitive regionally but reliability and the cost of backup remain issues. |
 | **Water** | Process and cooling water needed; managed under NEMA/NWSC frameworks; not the binding constraint. |
-| **Logistics** | Landlocked-cost penalty is severe: national logistics inefficiency costs the economy ~USD 827m/yr and logistics is ~18–20% of the sale price of goods — heavy for a bulk, low-value-density product like steel. |
+| **Logistics** | Landlocked-cost penalty is severe: national logistics inefficiency costs the economy ~USD 827m/yr and logistics is ~18–20% of the sale price of goods (sector estimates) — heavy for a bulk, low-value-density product like steel. |
 | **Waste & effluent** | Slag, dust, and scale managed under NEMA Effluent Discharge Regulations 2020; circular-economy potential in slag reuse. |
 | **Finance & investment** | Integrated steel is highly capital-intensive; long-term finance is scarce and costly, with 2025 liquidity tightening crowding out private credit (KPMG Budget Brief 2025/26). |
-| **Skills & workforce** | Shortage of metallurgical and process-engineering skills; ~68% of manufacturers report difficulty finding required technical skills (UMA). |
+| **Skills & workforce** | Shortage of metallurgical and process-engineering skills; ~68% of manufacturers report difficulty finding required technical skills (Uganda Manufacturers Association, UMA). |
 | **Standards & quality** | UNBS standards and Q-Mark apply; substandard imports and uneven enforcement distort the market. |
 | **Policy & regulatory** | EAC Common External Tariff and import policy shape competitiveness; protection of finished products without securing feedstock can raise downstream costs. Mining licensing and land access constrain upstream entry. |
 
@@ -127,11 +127,11 @@ Applying the five-criterion scoring framework (Chapter 3) to the chain:
 
 | Timeframe | Action | Lead | Indicative cost |
 |---|---|---|---|
-| **Quick win (0–12m)** | Enforce UNBS standards against substandard steel imports; level the playing field for compliant domestic mills | UNBS, MTIC, URA | Low (administrative) |
-| Quick win (0–12m) | Restrict or tax raw iron-ore exports (HS 2601) to retain feedstock for domestic ironmaking | MEMD, MoFPED | Low (policy) |
+| **Quick win (0–12m)** | Enforce UNBS standards against substandard steel imports; level the playing field for compliant domestic mills | UNBS, MTIC, Uganda Revenue Authority (URA) | Low (administrative) |
+| Quick win (0–12m) | Restrict or tax raw iron-ore exports (HS 2601) to retain feedstock for domestic ironmaking | Ministry of Energy and Mineral Development (MEMD), Ministry of Finance, Planning and Economic Development (MoFPED) | Low (policy) |
 | **Reform (1–3y)** | Secure iron-ore mining licences and beneficiation at Muko/Mutaka; resolve land access | MEMD/DGSM, MTIC | Medium |
 | Reform (1–3y) | Power agreement for extra-large steel loads; reliability guarantees | ERA, UEDCL, MEMD | Medium |
-| Reform (1–3y) | Skills programme in metallurgy/process engineering with UIRI, Makerere, TVET | MoES, UIRI | Medium |
+| Reform (1–3y) | Skills programme in metallurgy/process engineering with Uganda Industrial Research Institute (UIRI), Makerere, Technical and Vocational Education and Training (TVET) | Ministry of Education and Sports (MoES), UIRI | Medium |
 | **Investment (3–5y)** | Integrated ore→DRI→steel→flat-rolling capacity (e.g. Devki complex; Tembo expansion) | Private-led + PPP | Indicative USD 0.5–1.0bn (see Ch.8) |
 | Investment (3–5y) | Flat-rolling mill to substitute HS 7208 imports | Private-led | Indicative (see Ch.8) |
 
@@ -148,6 +148,7 @@ Applying the five-criterion scoring framework (Chapter 3) to the chain:
 - African Business, "Construction boom drives growth for Uganda steel manufacturer" (2021). https://african.business/2021/07/energy-resources/construction-boom-drives-growth-for-uganda-steel-manufacturer
 - World Steel Association, *World Steel in Figures 2025*. https://worldsteel.org/data/world-steel-in-figures/
 - Electricity Regulatory Authority, end-user tariffs 2025. https://www.era.go.ug/
+- Uganda Manufacturers Association (UMA), skills and manufacturing survey evidence. https://www.uma.or.ug/
 - NEMA, *Effluent Discharge Regulations 2020*. https://www.nema.go.ug/
 - KPMG, *Uganda Budget Brief 2025/26*. https://assets.kpmg.com/
 - East African Community, market and trade data (2025). https://www.eac.int/

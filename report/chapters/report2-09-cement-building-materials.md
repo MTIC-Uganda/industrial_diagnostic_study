@@ -35,7 +35,7 @@ The cement chain runs from limestone quarrying through clinker production to cem
 
 **Clinker dependence.** Despite strong grinding capacity, Uganda imports **>50% of its clinker** — the structural weakness the new plants aim to address.
 
-**Trade position (ITC TradeMap, 2024).** Cement & clinker (HS 2523): imports ~USD 162.2m, exports ~USD 86.0m. Uganda exports finished cement to **Rwanda, DRC, South Sudan, and Kenya** while importing clinker — a chain that is competitive downstream but leaks value upstream.
+**Trade position (ITC TradeMap, 2024).** Cement & clinker (HS 2523): imports ~USD 162.2m, exports ~USD 86.0m. Uganda exports finished cement to **Rwanda, Democratic Republic of Congo (DRC), South Sudan, and Kenya** while importing clinker — a chain that is competitive downstream but leaks value upstream.
 
 ---
 

@@ -12,10 +12,10 @@ This chain has two related but distinct strands: **petrochemicals** (derived fro
 
 | Strand | Phase | Inputs | Output |
 |---|---|---|---|
-| Petrochemicals | Refining | Crude oil | Fuels, LPG, naphtha, base chemicals |
+| Petrochemicals | Refining | Crude oil | Fuels, Liquefied Petroleum Gas (LPG), naphtha, base chemicals |
 | Petrochemicals | Petrochemical processing | Naphtha/gas | Polymers, solvents, intermediates |
 | Fertilizers | Phosphate mining & processing | Phosphate rock, sulphur | Phosphate fertilizer, sulphuric acid |
-| Fertilizers | Blending | Imported/local nutrients | NPK blends |
+| Fertilizers | Blending | Imported/local nutrients | Nitrogen, Phosphorus, Potassium (NPK) blends |
 | Both | Market | Products | Fuel, plastics feedstock, fertilizer |
 
 **Where value is captured and lost.** Uganda currently imports refined fuels, plastics feedstock (Chapter 8 linkage), and most fertilizer. Phosphatic/other mineral fertilizer imports (HS 3105) were about **USD 32.1 million in 2024** (ITC TradeMap), and total fertilizer need vastly exceeds domestic supply. The future petrochemical base depends on the Kabaale refinery reaching production.
@@ -85,7 +85,7 @@ This chain has two related but distinct strands: **petrochemicals** (derived fro
 
 | Timeframe | Action | Lead | Indicative cost |
 |---|---|---|---|
-| **Quick win (0–12m)** | Resolve Sukulu status (restructure, re-finance, or re-tender); expand fertilizer blending & quality enforcement | MTIC, MEMD, MAAIF, UNBS | Low–Medium |
+| **Quick win (0–12m)** | Resolve Sukulu status (restructure, re-finance, or re-tender); expand fertilizer blending & quality enforcement | MTIC, Ministry of Energy and Mineral Development (MEMD), MAAIF, UNBS | Low–Medium |
 | Quick win (0–12m) | Fertilizer quality enforcement against adulteration (UNBS) | UNBS, MAAIF | Low |
 | **Reform (1–3y)** | Fertilizer strategy + targeted subsidy/agro-input programme to lift application rates | MAAIF, MoFPED | Medium |
 | Reform (1–3y) | Kabalega Petrochemical Park readiness (infrastructure, downstream plastics linkage, skills) | PAU, UNOC, MTIC | Medium |

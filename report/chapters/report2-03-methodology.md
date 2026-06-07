@@ -22,11 +22,11 @@ The study was preceded by an Inception Report documenting the study design, diag
 
 **Sector studies and regulator data provided by or sourced for MTIC** — Cotton Development Organisation (CDO) data; National Drug Authority (NDA) National Drug Register (June 2024) and reports; Uganda Sugar Manufacturers' Association (USMA) data; NEMA plastics strategy; cement and fertilizer sector records.
 
-**Official Ugandan data sources** — UBOS (production, employment, national accounts); UNBS (standards and certified-manufacturer registers); NEMA (environmental standards and plastics circularity); ERA (energy tariffs); UIA (investment pipeline); UNOC and the Petroleum Authority of Uganda (PAU) for the refinery/petrochemical programme.
+**Official Ugandan data sources** — UBOS (production, employment, national accounts); UNBS (standards and certified-manufacturer registers); NEMA (environmental standards and plastics circularity); Electricity Regulatory Authority (ERA) (energy tariffs); UIA (investment pipeline); UNOC and the Petroleum Authority of Uganda (PAU) for the refinery/petrochemical programme.
 
-**Trade data** — **ITC TradeMap** is the source for all import/export values, partner breakdowns, and time series, drawing on the same underlying data as UN Comtrade. TradeMap figures are pulled directly and cited inline with HS code and year.
+**Trade data** — **ITC TradeMap** is the source for all import/export values, partner breakdowns, and time series, drawing on the same underlying data as UN Comtrade. TradeMap figures are pulled directly and cited inline with Harmonized System (HS) code and year.
 
-**Global benchmarks** — UNIDO and WHO (pharmaceuticals); World Cement Association / CemNet (cement); IFA and AfricaFertilizer (fertilizer); and reputable market-intelligence sources, cited where used.
+**Global benchmarks** — United Nations Industrial Development Organization (UNIDO) and WHO (pharmaceuticals); World Cement Association / CemNet (cement); International Fertilizer Association (IFA) and AfricaFertilizer (fertilizer); and reputable market-intelligence sources, cited where used.
 
 Estimates, proxies, and currency caveats are flagged in each chapter; material gaps are marked `DATA NEEDED` for the validation step to target.
 
@@ -57,13 +57,13 @@ Each of the six value chains was analysed using a consistent six-part framework:
 | Inputs and raw materials | Sector studies; agricultural data (cotton, cane); TradeMap |
 | Technology and productivity | Sector studies; global benchmarks |
 | Energy | ERA tariffs 2025 (cement especially energy-intensive) |
-| Water | NWSC; NEMA (textiles wet-processing, sugar) |
+| Water | National Water and Sewerage Corporation (NWSC); NEMA (textiles wet-processing, sugar) |
 | Logistics and transport | Sector analyses (logistics ≈18–20% of sale price) |
 | Waste and effluent management | NEMA Effluent Regulations 2020; Plastics Circularity Strategy 2023–2028 |
-| Finance and investment | KPMG Budget Brief 2025/26; UDB |
+| Finance and investment | KPMG Budget Brief 2025/26; Uganda Development Bank (UDB) |
 | Skills and workforce | UMA/UNIDO skills evidence |
 | Standards and quality | UNBS; NDA/WHO-GMP for pharmaceuticals |
-| Policy and regulatory | NIP 2020; sector Acts; EAC CET; NEMA plastics policy 2025 |
+| Policy and regulatory | NIP 2020; sector Acts; East African Community (EAC) Common External Tariff (CET); NEMA plastics policy 2025 |
 
 ---
 
@@ -100,7 +100,7 @@ Validation follows submission. **Key informant interviews** are planned with pub
 - **Desk-based scope** — findings rest on documentary and statistical evidence; the planned KIIs and workshop are how firm-level realities will be tested.
 - **Uneven data depth** — sugar, cement, and pharmaceuticals are relatively well-documented; petrochemicals (pre-production) and parts of plastics rely on programme documents and proxies.
 - **Firm-level statistics** — comprehensive current firm-level production/employment data are not uniformly available; figures are triangulated and flagged.
-- **Indicative investment figures** — CAPEX/OPEX in the investment chapter are indicative planning estimates, labelled as such.
+- **Indicative investment figures** — Capital expenditure (CAPEX)/OPEX in the investment chapter are indicative planning estimates, labelled as such.
 - **Trade-data basis** — figures are ITC TradeMap, latest available year (generally 2024); some partner cells are suppressed or lag.
 
 These limitations define where validation and monitoring will most strengthen the evidence base; they do not alter the direction of the conclusions.

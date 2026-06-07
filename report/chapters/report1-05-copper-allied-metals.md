@@ -104,7 +104,7 @@ Exports across all copper lines are negligible — Uganda is a **net importer at
 | Quick win (0–12m) | Finalize Kilembe redevelopment workplan and milestones under the production-sharing agreement | MEMD/DGSM, investor | Low (admin) |
 | **Reform (1–3y)** | Develop a cobalt strategy (battery-minerals positioning, off-take, value addition) | MEMD, MTIC | Medium |
 | Reform (1–3y) | Tailings management and reprocessing framework at Kilembe (liability + resource) | NEMA, MEMD | Medium |
-| Reform (1–3y) | Power and transport upgrades for Kasese/Kilembe | ERA, UNRA, MEMD | Medium–High |
+| Reform (1–3y) | Power and transport upgrades for Kasese/Kilembe | ERA, Uganda National Roads Authority (UNRA), MEMD | Medium–High |
 | **Investment (3–5y)** | Kilembe mine + cathode/cobalt processing (production-sharing) | Private-led / PPP | Indicative (see Ch.8) |
 | Investment (3–5y) | Expansion of cable & conductor manufacturing capacity | Private-led | Indicative (see Ch.8) |
 

@@ -36,7 +36,7 @@ The diagnostic draws on the following sources, prioritizing official Ugandan and
 
 **Global benchmarks** — World Steel Association (*World Steel in Figures / Statistical Yearbook 2025*) and the International Copper Study Group (*World Copper Factbook 2025*) for global production, consumption, and price context.
 
-**Development-partner and industry sources** — World Bank World Development Indicators; UNIDO; the Uganda Bankers Association *Unlocking the Potential of Uganda's Manufacturing Sector* (2024); and company and regulator disclosures, cited where used.
+**Development-partner and industry sources** — World Bank World Development Indicators; United Nations Industrial Development Organization (UNIDO); the Uganda Bankers Association *Unlocking the Potential of Uganda's Manufacturing Sector* (2024); and company and regulator disclosures, cited where used.
 
 Where a figure is an estimate, a proxy, or carries a currency caveat, this is flagged in the relevant chapter. Material data gaps are marked `DATA NEEDED` so the validation step can target them.
 
@@ -66,14 +66,14 @@ Each of the three value chains was analysed using a consistent six-part diagnost
 |---|---|---|
 | Inputs and raw materials | Availability, quality, cost, supply reliability | Reserves data (DGSM); sector studies; TradeMap |
 | Technology and productivity | Equipment vintage; productivity gap vs peers | Sector studies; global benchmarks |
-| Energy | Cost, reliability, access | ERA tariffs 2025; UEDCL |
-| Water | Availability and cost for industry | NWSC; NEMA framework |
+| Energy | Cost, reliability, access | ERA tariffs 2025; Uganda Electricity Distribution Company Limited (UEDCL) |
+| Water | Availability and cost for industry | National Water and Sewerage Corporation (NWSC); National Environment Management Authority (NEMA) framework |
 | Logistics and transport | Transport cost, corridor and customs efficiency | Sector analyses (logistics ≈18–20% of sale price) |
 | Waste and effluent management | Compliance cost, circular-economy options | NEMA Effluent Discharge Regulations 2020 |
-| Finance and investment | Long-term capital, rates, collateral | KPMG Budget Brief 2025/26; UDB |
+| Finance and investment | Long-term capital, rates, collateral | KPMG Budget Brief 2025/26; Uganda Development Bank (UDB) |
 | Skills and workforce | Technical, vocational, managerial skills | UMA/UNIDO skills evidence |
 | Standards and quality | UNBS and international compliance | UNBS |
-| Policy and regulatory | Tariffs, NTBs, licensing, land, incentives | NIP 2020; sector Acts; EAC CET |
+| Policy and regulatory | Tariffs, Non-Tariff Barriers (NTBs), licensing, land, incentives | NIP 2020; sector Acts; East African Community (EAC) Common External Tariff (CET) |
 
 ---
 

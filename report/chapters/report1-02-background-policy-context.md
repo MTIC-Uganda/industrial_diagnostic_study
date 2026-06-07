@@ -2,7 +2,7 @@
 
 **Report:** Report 1 — Iron & Steel, Copper & Allied Metals, and Automotive Value Chains
 **Status:** Draft for validation
-**ToR Reference:** MTIC-Diagnostic Study on Iron & Steel, Copper.docx
+**Terms of Reference (ToR) Reference:** MTIC-Diagnostic Study on Iron & Steel, Copper.docx
 
 ---
 
@@ -67,7 +67,7 @@ Despite these constraints, the Report 1 chains rest on genuine foundations: subs
 
 The three value chains — Iron & Steel, Copper & Allied Metals, and Automotives — were selected by MTIC through a prioritization process drawing on NDP IV designations, NIP sectoral priorities, Uganda's mineral endowments, import-substitution potential, and the structure of regional export markets. They also form an integrated industrial chain: **mined metal → processed metal → consumer/capital product**, culminating in domestic vehicle manufacturing.
 
-**Iron & Steel** was selected because Uganda holds substantial iron-ore deposits (notably high-grade hematite and magnetite in the south-west and Muko area), while importing the bulk of its flat steel and semi-finished steel. The NPA/UDC *Mapping and Value Chain Analysis for Uganda's Iron and Steel Industry* (June 2025) records installed capacity of roughly 1.68 million tonnes per annum at about 30% utilization, with the deepest gap in upstream ironmaking and flat-steel production. Iron and steel is the foundational input for construction, infrastructure, and all downstream metal manufacturing.
+**Iron & Steel** was selected because Uganda holds substantial iron-ore deposits (notably high-grade hematite and magnetite in the south-west and Muko area), while importing the bulk of its flat steel and semi-finished steel. The National Planning Authority (NPA)/UDC *Mapping and Value Chain Analysis for Uganda's Iron and Steel Industry* (June 2025) records installed capacity of roughly 1.68 million tonnes per annum at about 30% utilization, with the deepest gap in upstream ironmaking and flat-steel production. Iron and steel is the foundational input for construction, infrastructure, and all downstream metal manufacturing.
 
 **Copper & Allied Metals** was selected on the basis of Uganda's copper endowment, particularly the **Kilembe mine** in Kasese District — estimated to hold in excess of 6.5 million tonnes of copper ore at 1.77% copper grade, plus associated cobalt (Directorate of Geological Survey and Mines). In March 2025, Government signed its first mineral production-sharing agreement, with Sarrai Group and Nile Fibreboard, to redevelop Kilembe for copper-cathode and cobalt production (Mining Weekly, March 2025). Downstream, Uganda has an established cable-manufacturing base — led by Cable Corporation Limited (Mehta Group), which holds roughly 65% of the domestic market — but limited primary copper refining.
 

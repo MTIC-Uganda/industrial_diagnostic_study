@@ -59,7 +59,7 @@ Use **government procurement** — infrastructure steel, electrical cable for gr
 | 2. Mobilizing large-scale public & private investment | Industrial-finance instrument (C); investment portfolio (Ch.8); production-sharing model (Kilembe) |
 | 3. Sustainable industrial parks & free zones | Parks, power, shared infrastructure (B) |
 | 4. National standards, quality & accreditation | UNBS enforcement and capacity (D) |
-| 5. Green industry, circular economy & Industry 4.0 | Slag/tailings reuse; EV manufacturing (KMC); scrap-based EAF steel |
+| 5. Green industry, circular economy & Industry 4.0 | Slag/tailings reuse; EV manufacturing (KMC); scrap-based Electric Arc Furnace (EAF) steel |
 | 6. Productive use of renewable energy & efficiency | Industrial power reliability (A/B); hydro-grid-aligned EV strategy |
 
 ---

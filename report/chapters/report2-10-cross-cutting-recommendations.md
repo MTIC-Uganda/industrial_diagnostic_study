@@ -45,7 +45,7 @@ Develop serviced parks with reliable power, water, and **effluent treatment** (c
 Scale a **long-term industrial-finance facility** (UDB + partners, blended/concessional) for the capital-intensive plants — GMP pharma, spinning, clinker, recycling — to offset the crowding-out of private credit.
 
 ### F. Skills compact
-A targeted skills programme spanning **textile engineering, pharmaceutical QA/QC and regulatory affairs, chemical/process engineering, and food technology**, delivered through Makerere, UIRI, and TVET in partnership with anchor firms.
+A targeted skills programme spanning **textile engineering, pharmaceutical QA/QC and regulatory affairs, chemical/process engineering, and food technology**, delivered through Makerere, Uganda Industrial Research Institute (UIRI), and Technical and Vocational Education and Training (TVET) in partnership with anchor firms.
 
 ### G. Sequence the petrochemical opportunity
 Treat the **Kabaale refinery / Kabalega petrochemical park** as the medium-term feedstock anchor for plastics and fertilizers, and **prepare the downstream linkages now** (recycling, blending, conversion) so that domestic resin and chemicals have ready demand when the refinery comes online (~2029–30).

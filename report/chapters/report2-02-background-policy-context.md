@@ -2,7 +2,7 @@
 
 **Report:** Report 2 — Textiles & Garments, Pharmaceuticals, Petrochemicals & Fertilizers, Sugar & Confectionery, Plastics & Packaging, and Cement & Building Materials Value Chains
 **Status:** Draft for validation
-**ToR Reference:** MTIC-Diagnostic Study on Textiles, Garments.docx
+**Terms of Reference (ToR) Reference:** MTIC-Diagnostic Study on Textiles, Garments.docx
 
 ---
 
@@ -16,7 +16,7 @@ Uganda's long-term industrialization trajectory is anchored in a hierarchy of na
 
 **The National Industrial Policy (NIP) 2020** provides the sector framework: raising manufacturing's contribution to GDP, deepening domestic value addition, and reducing dependence on imported intermediate and finished goods (MTIC, *NIP 2020*). It designates MTIC as lead coordinating ministry and calls for value-chain diagnostics — the mandate for this study.
 
-**The MTIC Strategic Plan** translates these objectives into ministerial priorities: facilitating private investment, leading value-chain technical working groups, and coordinating UIA, UEPB, UNBS, NDA, NEMA, and other agencies.
+**The MTIC Strategic Plan** translates these objectives into ministerial priorities: facilitating private investment, leading value-chain technical working groups, and coordinating Uganda Investment Authority (UIA), Uganda Export Promotion Board (UEPB), UNBS, NDA, NEMA, and other agencies.
 
 **The Tenfold Growth Strategy** targets growing the economy roughly tenfold (≈USD 50bn → USD 500bn), organized around **ATMs — Agro-industrialization, Tourism, Minerals, and Science, Technology & Innovation (STI)**. For Report 2, **agro-industrialization** is the dominant driver: textiles (cotton), sugar, and pharmaceuticals all build on Uganda's agricultural and resource base, while cement, plastics, and fertilizers are core import-substitution and input industries.
 
@@ -43,7 +43,7 @@ This study supports PCP Priority Areas 1 and 2, providing technical inputs for t
 
 Manufacturing value added was about **15.2% of GDP in 2024** (World Bank, WDI), below the NIP 2020 target of ~16% by FY2029/30, at roughly 30% capacity utilization (indicative; to be confirmed from latest UBOS data).
 
-> **DATA NOTE:** The "~30% capacity utilization" figure should be confirmed against the latest UBOS data before finalization; it is used here as indicative and attributed accordingly.
+> **DATA NOTE:** The "~30% capacity utilization" figure should be confirmed against the latest Uganda Bureau of Statistics (UBOS) data before finalization; it is used here as indicative and attributed accordingly.
 
 Structural characteristics relevant to Report 2:
 

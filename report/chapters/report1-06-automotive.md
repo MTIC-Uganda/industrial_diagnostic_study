@@ -55,14 +55,14 @@ Exports are negligible — Uganda is overwhelmingly a **vehicle-importing market
 | Dimension | Assessment for Automotive |
 |---|---|
 | **Inputs / raw materials** | Depends on domestic steel/copper (Chapters 4–5, still maturing) and imported components/CKD kits. Local content is currently low. |
-| **Technology & productivity** | KMC brings modern assembly technology; component manufacture and tooling remain shallow. EV capability (Kayoola) is a genuine differentiator. |
+| **Technology & productivity** | KMC brings modern assembly technology; component manufacture and tooling remain shallow. Electric Vehicle (EV) capability (Kayoola) is a genuine differentiator. |
 | **Energy** | Assembly is less energy-intensive than metals; reliable power needed for plant operations; EV strategy aligns with Uganda's hydro-based grid. |
 | **Water** | Not a binding constraint. |
 | **Logistics** | Landlocked import costs raise CKD-kit and component costs; export of finished vehicles faces the same penalty (~18–20% of sale price). |
 | **Waste & effluent** | Paint, solvents, batteries — managed under NEMA; end-of-life vehicle and battery recycling is an emerging issue. |
-| **Finance & investment** | The binding constraint for scale-up: KMC's ~UGX 50bn FY25/26 gap; long-term capital for tooling and working capital is scarce. |
-| **Skills & workforce** | Automotive/mechatronics and EV skills are scarce; KMC and Makerere/Nakawa VTI partnerships are building them. |
-| **Standards & quality** | Vehicle standards, homologation, and used-import age limits shape the market; UNBS and MWT regulation matter. |
+| **Finance & investment** | The binding constraint for scale-up: KMC's ~Uganda Shilling (UGX) 50bn FY25/26 gap; long-term capital for tooling and working capital is scarce. |
+| **Skills & workforce** | Automotive/mechatronics and EV skills are scarce; KMC and Makerere/Nakawa Vocational Training Institute (VTI) partnerships are building them. |
+| **Standards & quality** | Vehicle standards, homologation, and used-import age limits shape the market; UNBS and Ministry of Works and Transport (MoWT) regulation matter. |
 | **Policy & regulatory** | Decisive lever: used-vehicle age limits and taxation, public-fleet procurement, and local-content/assembly incentives can pivot demand toward domestic assembly. The 2025 plant gives policy something real to support. |
 
 ---

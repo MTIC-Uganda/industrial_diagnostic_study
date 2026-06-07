@@ -71,7 +71,7 @@ Per the agreed scope, standalone profiles are produced for the **priority produc
 | Horizon | Iron & Steel | Copper | Automotive |
 |---|---|---|---|
 | **Year 1 (quick wins)** | Ore-export restriction; UNBS enforcement; secure ore licences | Finalise Kilembe workplan; UNBS cable enforcement | Close KMC financing gap; public-fleet bus procurement |
-| **Years 2–3 (reforms + first capital)** | Power agreement; beneficiation start; flat-mill FEED | Cobalt strategy; tailings framework; cable expansion | Local-content/CKD incentives; skills compact; supplier development |
+| **Years 2–3 (reforms + first capital)** | Power agreement; beneficiation start; flat-mill Front-End Engineering Design (FEED) | Cobalt strategy; tailings framework; cable expansion | Local-content/CKD incentives; skills compact; supplier development |
 | **Years 4–5 (major investment)** | Integrated complex + flat mill commissioning | Kilembe cathode/cobalt production | KMC expansion to 10,000/yr; motorcycle CKD plant(s) |
 
 **Sequencing principle.** Year 1 is policy and demand-anchoring (low cost, high signal). Years 2–3 secure feedstock, power, skills, and finance. Years 4–5 are the major capital builds, by which time the enabling conditions are in place. This ordering reduces the risk that large plants are built without feedstock, power, or demand.

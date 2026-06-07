@@ -9,7 +9,7 @@
 
 ## The purpose of this report
 
-This diagnostic examines three of Uganda's NDP IV priority manufacturing value chains — **Iron & Steel, Copper & Allied Metals, and Automotives** — and identifies, for each, the three to four products or sub-sectors Uganda should prioritize to build competitive manufacturing at scale. It is a **desk-based diagnostic, offered for validation** through key informant interviews and a stakeholder workshop (see Chapter 3). All trade figures are drawn from ITC TradeMap (2024) and cited at the point of use.
+This diagnostic examines three of Uganda's NDP IV priority manufacturing value chains — **Iron & Steel, Copper & Allied Metals, and Automotives** — and identifies, for each, the three to four products or sub-sectors Uganda should prioritize to build competitive manufacturing at scale. It is a **desk-based diagnostic, offered for validation** through key informant interviews and a stakeholder workshop (see Chapter 3). All trade figures are drawn from International Trade Centre (ITC) TradeMap (2024) and cited at the point of use.
 
 The guiding principle, set by MTIC, is discipline: *successful economies are built around a few products done exceptionally well, not a broad catalogue.* This report therefore states not only what Uganda should pursue, but what it should not.
 
@@ -23,9 +23,9 @@ The three chains are not separate. They form **one industrial system: mined meta
 
 ## What the evidence shows
 
-Uganda's manufacturing sector contributes about **15.2% of GDP (2024)** — below even the National Industrial Policy's own 2029/30 target of ~16% — at roughly 30% capacity utilization (World Bank; NIP 2020). Across all three Report 1 chains, the same pattern recurs: **Uganda exports raw materials and imports the processed product**, forgoing the value, jobs, and foreign exchange in between.
+Uganda's manufacturing sector contributes about **15.2% of Gross Domestic Product (GDP) (2024)** — below even the National Industrial Policy's own 2029/30 target of ~16% — at roughly 30% capacity utilization (World Bank; NIP 2020). Across all three Report 1 chains, the same pattern recurs: **Uganda exports raw materials and imports the processed product**, forgoing the value, jobs, and foreign exchange in between.
 
-- **Iron & Steel:** Uganda is competitive in finished long products — exporting **USD 55.8m of rebar** in 2024, mostly to South Sudan and the DRC — but imports **USD 219.5m of flat steel** and **USD 78.5m of semi-finished steel**, and **exports USD 35.8m of iron ore raw** (ITC TradeMap, 2024). The missing middle is ironmaking and flat-rolling. Momentum is real: Tembo Steel's new DRI plant (Jan 2025) and Devki's USD 500m integrated complex (ground broken Nov 2025).
+- **Iron & Steel:** Uganda is competitive in finished long products — exporting **United States Dollar (USD) 55.8m of rebar** in 2024, mostly to South Sudan and the Democratic Republic of Congo (DRC) — but imports **USD 219.5m of flat steel** and **USD 78.5m of semi-finished steel**, and **exports USD 35.8m of iron ore raw** (ITC TradeMap, 2024). The missing middle is ironmaking and flat-rolling. Momentum is real: Tembo Steel's new DRI plant (Jan 2025) and Devki's USD 500m integrated complex (ground broken Nov 2025).
 
 - **Copper & Allied Metals:** Uganda has a dormant world-class resource (Kilembe: 6.5m t ore at 1.77% Cu, plus cobalt) and an established cable industry (Cable Corporation, ~65% market share) that runs on imported metal. It imports **USD 57.7m of insulated cable** a year. The **March 2025 production-sharing agreement** to revive Kilembe could reopen the midstream for the first time in a generation.
 

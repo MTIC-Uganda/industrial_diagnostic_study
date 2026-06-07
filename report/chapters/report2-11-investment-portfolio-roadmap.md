@@ -75,7 +75,7 @@ This chapter consolidates the prioritized products from Chapters 4–9 into an i
 
 | Horizon | Agro-processing (Textiles, Sugar) | Health & Inputs (Pharma, Fertilizer) | Construction-linked (Cement, Plastics) | Petrochemicals |
 |---|---|---|---|---|
-| **Year 1 (quick wins)** | Uniform procurement; cotton agronomy; sugar licensing discipline + ethanol mandate | NMS/JMS local-medicine procurement; resolve Sukulu; fertilizer quality enforcement | UNBS enforcement; support new clinker plants; phased single-use-bag rules | Park readiness planning |
+| **Year 1 (quick wins)** | Uniform procurement; cotton agronomy; sugar licensing discipline + ethanol mandate | National Medical Stores (NMS)/JMS local-medicine procurement; resolve Sukulu; fertilizer quality enforcement | UNBS enforcement; support new clinker plants; phased single-use-bag rules | Park readiness planning |
 | **Years 2–3 (reforms + first capital)** | Wet-processing/effluent infra; textile & food-tech skills | GMP-upgrade fund; fertilizer strategy/subsidy | EPR & recycling framework; energy agreements for clinker | Downstream linkage prep |
 | **Years 4–5 (major investment)** | Spinning/weaving + garment park; industrial sugar/ethanol/co-gen | GMP generics expansion; phosphate/blending capacity | Clinker build-out; recycling & packaging; building materials | Refinery + petrochemical park commissioning |
 

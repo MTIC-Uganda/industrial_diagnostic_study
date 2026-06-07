@@ -26,7 +26,7 @@ The pharmaceuticals chain runs from active pharmaceutical ingredients (APIs) and
 
 **Market and import dependence.** Uganda's pharmaceutical market is estimated at ~**USD 221 million (2023)**, growing ~9.4%/year, with **~90% of medicines imported** (Statista; sector analyses). The improvement from 96% (2016) to ~90% reflects deliberate local-production support.
 
-**Local manufacturing base.** Uganda has **six WHO-GMP-aligned manufacturing facilities / local manufacturers** producing NDA-registered drugs (NDA; UNIDO). The flagship is **Cipla Quality Chemical Industries Ltd (QCIL)** — established 2005, with capacity of about **1.2 billion tablets/capsules per year**, producing antiretrovirals (ARVs), antimalarials, and a growing non-communicable-disease portfolio, exporting across African markets; FY24/25 revenue was about UGX 267 billion (QCIL; Cipla). Other significant manufacturers include **Kampala Pharmaceutical Industries (KPI), Rene Industries, and Abacus Pharma**. Local pharmaceutical employment rose ~42% between 2017 and 2019 (UNIDO sector data).
+**Local manufacturing base.** Uganda has **six WHO-GMP-aligned manufacturing facilities / local manufacturers** producing NDA-registered drugs (NDA; UNIDO). The flagship is **Cipla Quality Chemical Industries Ltd (QCIL)** — established 2005, with capacity of about **1.2 billion tablets/capsules per year**, producing antiretrovirals (ARVs), antimalarials, and a growing non-communicable-disease portfolio, exporting across African markets; FY24/25 revenue was about Uganda Shilling (UGX) 267 billion (QCIL; Cipla). Other significant manufacturers include **Kampala Pharmaceutical Industries (KPI), Rene Industries, and Abacus Pharma**. Local pharmaceutical employment rose ~42% between 2017 and 2019 (UNIDO sector data).
 
 **Regulation.** The **National Drug Authority (NDA)** regulates registration, importation, manufacturing standards, and pharmacovigilance; the **National Drug Register (June 2024)** is the manufacturer/product reference.
 
@@ -40,12 +40,12 @@ The pharmaceuticals chain runs from active pharmaceutical ingredients (APIs) and
 |---|---|
 | **Inputs / raw materials** | Near-total dependence on imported APIs and excipients — the deepest structural constraint and a supply-security risk. |
 | **Technology & productivity** | WHO-GMP capability exists (QCIL) but is concentrated; broader industry needs technology and quality-systems upgrading. |
-| **Energy** | Reliable power and clean utilities essential for GMP; backup adds cost. |
+| **Energy** | Reliable power and clean utilities essential for Good Manufacturing Practice (GMP); backup adds cost. |
 | **Water** | Pharmaceutical-grade water systems required; a capital and compliance item. |
 | **Logistics** | Cold-chain and reliable distribution needed; landlocked import costs raise API costs. |
 | **Waste & effluent** | Pharmaceutical waste regulated (NEMA/NDA); incineration and effluent handling required. |
 | **Finance & investment** | GMP plants are capital-intensive with long regulatory lead times; patient capital scarce. |
-| **Skills & workforce** | Pharmacists, QA/QC, and regulatory-affairs specialists in short supply. |
+| **Skills & workforce** | Pharmacists, Quality Assurance (QA)/QC, and regulatory-affairs specialists in short supply. |
 | **Standards & quality** | WHO-GMP and NDA registration are the gatekeepers; meeting them is the core competitiveness challenge — and Uganda's proven strength via QCIL. |
 | **Policy & regulatory** | NDA verification fees, preferential public procurement for local manufacturers, and EAC harmonization shape the local-production trajectory. |
 
@@ -87,7 +87,7 @@ The pharmaceuticals chain runs from active pharmaceutical ingredients (APIs) and
 
 | Timeframe | Action | Lead | Indicative cost |
 |---|---|---|---|
-| **Quick win (0–12m)** | Preferential public procurement (NMS/JMS) for locally made essential medicines | MoH, NMS, MoFPED | Procurement |
+| **Quick win (0–12m)** | Preferential public procurement (NMS/JMS) for locally made essential medicines | Ministry of Health (MoH), NMS, MoFPED | Procurement |
 | Quick win (0–12m) | Streamline NDA registration/fees for local manufacturers | NDA, MTIC | Low |
 | **Reform (1–3y)** | GMP-upgrade support fund for local manufacturers seeking WHO-prequalification | MTIC, UDB, partners | Medium |
 | Reform (1–3y) | Pharma skills programme (QA/QC, regulatory affairs) with Makerere | MoES, NDA | Medium |
