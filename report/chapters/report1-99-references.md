@@ -8,7 +8,10 @@ Consolidated sources for Report 1. Trade figures throughout are from ITC TradeMa
 - Ministry of Finance, Planning and Economic Development, "Presentation of the Fourth National Development Plan (NDP IV) to the Parliamentary Committee on Budget." https://www.finance.go.ug/media-center/news-and-updates/presentation-fourth-national-development-plan-ndpiv-parliamentary
 - MTIC, *National Industrial Policy 2020*. https://www.mtic.go.ug/
 - UNIDO, *Programme for Country Partnership*. https://www.unido.org/programme-country-partnership
+- Uganda Bureau of Statistics (UBOS), *Statistical Abstract* and national/industrial accounts (production, employment, GDP, electrification). https://www.ubos.org/
 - World Bank, *World Development Indicators — Manufacturing, value added (% of GDP), Uganda*. https://data.worldbank.org/indicator/NV.IND.MANF.ZS?locations=UG
+- State House Uganda, "President Museveni commissions new Tembo Steels plant in Iganga" (2025). https://statehouse.go.ug/
+- East African Community, intra-regional trade data. https://www.eac.int/ ; Ecofin Agency, "East African Community trade rises 22% in 2024, topping $11bn" (2025). https://www.ecofinagency.com/
 - NPA/UDC, *Report on the Mapping and Value Chain Analysis for Uganda's Iron and Steel Industry* (June 2025). [Repository: `data/` — provided by MTIC]
 - Directorate of Geological Survey and Mines, "Redevelopment of Kilembe Mines." https://dgsm.go.ug/redevelopment-of-kilembe-mines/
 - Mining Weekly, "Uganda signs maiden production-sharing deal to revive copper mine" (4 March 2025). https://www.miningweekly.com/article/uganda-signs-maiden-production-sharing-deal-to-revive-copper-mine-2025-03-04

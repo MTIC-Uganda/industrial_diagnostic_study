@@ -83,6 +83,8 @@ NPA/UDC (2025) registers ~37 plants. Selected leading players:
 
 Two **sponge-iron (Phase II)** plants exist — Tembo (Iganga, 350,000 tpa) and Abyssinia (Jinja, 30,000 tpa) — together ~400,000 tpa, but they lack sufficient domestic ore and so cannot run at scale; Phase II is just ~5% of players (NPA/UDC, 2025).
 
+**Upstream (mining) is licensed but undeveloped.** Active iron-ore exploration and location licences are concentrated in **Kigezi (Rubanda, Rukiga, Kabale, Kisoro)**, held by firms including Diamond Steel Uganda, Kamuntu Investments and others (NPA/UDC, 2025) — the south-western mining frontier — yet commercial-scale extraction has not followed. NPA/UDC estimates that establishing a **1,000,000 tpa (≈4,000 t/day) commercial iron-ore mine would cost ~USD 6.73 million** — a modest sum relative to the downstream value it unlocks.
+
 ### Trade position (ITC TradeMap, 2024)
 
 | Segment (HS) | Imports 2024 | Exports 2024 | Reading |
@@ -233,7 +235,7 @@ Each profile is screened on three criteria simultaneously: **strategic alignment
 | **Quick win (0–12m)** | Stabilise power supply/quality for steel loads; extend the dedicated large-load (~5.5¢) tariff and guarantee reliability | ERA, UEDCL, MEMD | Low–Medium |
 | Quick win (0–12m) | Enforce UNBS standards against substandard imports; direct public-infrastructure steel procurement (SGR, dams) to compliant domestic mills to lift the 30.5% utilisation | UNBS, MTIC, MoWT, MoFPED | Low |
 | Quick win (0–12m) | Restrict/tax raw iron-ore exports (HS 2601); stabilise and industry-wide (not customer-targeted) tax treatment, incl. VAT on coal inputs | MEMD, MoFPED, URA | Low (policy) |
-| **Reform (1–3y)** | Establish a ≥1,000,000 tpa commercial iron-ore mine (UNMC/UDC or scale SINO Minerals); resolve land access at Muko/Mutaka | MEMD/DGSM, UNMC, UDC | Medium |
+| **Reform (1–3y)** | Establish a ≥1,000,000 tpa commercial iron-ore mine (UNMC/UDC or scale SINO Minerals); resolve land access at Muko/Mutaka & Kigezi licences | MEMD/DGSM, UNMC, UDC | ~USD 6.73m (mine, NPA/UDC) |
 | Reform (1–3y) | Concessional long-term finance for upstream integration (counter 18–23% commercial rates) | UDB, MoFPED, DFIs | Medium |
 | Reform (1–3y) | Skills programme in metallurgy/process engineering with UIRI, Makerere, TVET | MoES, UIRI | Medium |
 | **Investment (3–5y)** | Integrated ore→DRI→steel→flat-rolling capacity (e.g. Devki complex; Tembo expansion) | Private-led + PPP | Indicative USD 0.5–1.0bn (see Ch.8) |

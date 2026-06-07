@@ -6,7 +6,10 @@ Consolidated sources for Report 2. Trade figures throughout are from ITC TradeMa
 - Parliament of Uganda, NDP IV launch. https://www.parliament.go.ug/news/3724/president-launches-ndp-iv-drive-ugandas-economic-transformation
 - MTIC, *National Industrial Policy 2020*. https://www.mtic.go.ug/
 - UNIDO, *Programme for Country Partnership*. https://www.unido.org/programme-country-partnership
+- Uganda Bureau of Statistics (UBOS), *Statistical Abstract* and national/industrial accounts (production, employment, GDP). https://www.ubos.org/
 - World Bank, *World Development Indicators*. https://data.worldbank.org/indicator/NV.IND.MANF.ZS?locations=UG
+- Ministry of Agriculture, Animal Industry and Fisheries (MAAIF) — cotton, sugar and fertilizer programmes. https://www.agriculture.go.ug/
+- African Growth and Opportunity Act (AGOA) — US trade-preference programme. https://agoa.info/
 - Cotton Development Organisation. https://www.cdouga.org/
 - UNIDO, *Pharmaceutical Sector Profile — Uganda*. https://open.unido.org/
 - Uganda Investment Authority (2025). https://ugandainvest.go.ug/
