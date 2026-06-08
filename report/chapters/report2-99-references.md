@@ -1,0 +1,69 @@
+# References
+
+Consolidated sources for Report 2. Trade figures throughout are from ITC TradeMap (2024) and cited at the point of use; primary sector intelligence is from MTIC TWG engagements (see Chapter 3).
+
+- National Planning Authority, *Uganda Vision 2040*; *NDP IV (FY2025/26–2029/30)*. https://npa.go.ug/national-development-plan/
+- Parliament of Uganda, NDP IV launch. https://www.parliament.go.ug/news/3724/president-launches-ndp-iv-drive-ugandas-economic-transformation
+- MTIC, *National Industrial Policy 2020*. https://www.mtic.go.ug/
+- UNIDO, *Programme for Country Partnership*. https://www.unido.org/programme-country-partnership
+- Uganda Bureau of Statistics (UBOS), *Statistical Abstract* and national/industrial accounts (production, employment, GDP). https://www.ubos.org/
+- World Bank, *World Development Indicators*. https://data.worldbank.org/indicator/NV.IND.MANF.ZS?locations=UG
+- Ministry of Agriculture, Animal Industry and Fisheries (MAAIF) — cotton, sugar and fertilizer programmes. https://www.agriculture.go.ug/
+- African Growth and Opportunity Act (AGOA) — US trade-preference programme. https://agoa.info/
+- Cotton Development Organisation. https://www.cdouga.org/
+- UNIDO, *Pharmaceutical Sector Profile — Uganda*. https://open.unido.org/
+- Uganda Investment Authority (2025). https://ugandainvest.go.ug/
+- ITC TradeMap. https://www.trademap.org
+- National Planning Authority, *Vision 2040*; *NDP IV*. https://npa.go.ug/national-development-plan/
+- National Drug Authority, *National Drug Register* (June 2024). https://www.nda.or.ug/
+- NEMA, *National Strategy for Plastics Circularity 2023–2028*; *Effluent Discharge Regulations 2020*. https://www.nema.go.ug/
+- Electricity Regulatory Authority, tariffs 2025. https://www.era.go.ug/
+- World Bank, *World Development Indicators*. https://data.worldbank.org/country/UG
+- Cotton Development Organisation. https://www.cdouga.org/ ; World Business Journal, "CDO Leads Way for Increased Cotton Subsector Growth." https://worldbusinessjournal.com/cdo-leads-way/
+- Economic Policy Research Centre, *Upgrading the cotton value chain for textile industry development*. https://eprcug.org/publication/upgrading-the-cotton-value-chain-for-textile-industry-development/
+- ChimpReports, "Inside Fine Spinners: spinning Uganda's cotton to European garment stores." https://chimpreports.com/inside-fine-spinners-spinning-ugandas-cotton-to-european-garment-stores/
+- Uganda Investment Authority, "UIA, CDO team up to boost import substitution in cotton sector." https://www.ugandainvest.go.ug/uia-cdo-team-up-to-boost-import-substitution-in-cotton-sector/
+- ITC TradeMap, trade statistics — HS 5201, 6109, Uganda, 2024. https://www.trademap.org
+- NEMA, *Effluent Discharge Regulations 2020*. https://www.nema.go.ug/
+- National Drug Authority, *National Drug Register of Uganda — Human Medicines* (June 2024). https://www.nda.or.ug/
+- UNIDO, *Pharmaceutical Sector Profile — Uganda*. https://open.unido.org/api/documents/4699932/download/Pharmaceutical%20Sector%20Profile%20-%20Uganda
+- Statista, *Pharmaceuticals — Uganda*. https://www.statista.com/outlook/hmo/pharmaceuticals/uganda
+- Quality Chemical Industries Limited (Wikipedia summary); Cipla Uganda. https://en.wikipedia.org/wiki/Quality_Chemical_Industries_Limited ; https://www.cipla.com/our-presence/uganda
+- ITC TradeMap, trade statistics — HS 3004, Uganda, 2024. https://www.trademap.org
+- Uganda National Oil Company, "The Uganda Refinery Project." https://www.unoc.co.ug/midstream/the-uganda-refinery-project/
+- Petroleum Authority of Uganda, "The Uganda Refinery Project." https://www.pau.go.ug/the-uganda-refinery-project/
+- Hydrocarbon Engineering, "Uganda refinery to start operations by early 2030" (Oct 2025). https://www.hydrocarbonengineering.com/refining/13102025/uganda-refinery-to-start-operations-by-early-2030/
+- Osukuru Industrial Complex (Wikipedia). https://en.wikipedia.org/wiki/Osukuru_Industrial_Complex
+- Free Zones Authority, "President commissions Tororo Sukulu Phosphate Project." https://freezones.go.ug/president-commissions-tororo-sukulu-phosphate-project/
+- Milling Middle East & Africa, "Tororo Fertiliser Factory in limbo five months after resuming operations" (2023). https://www.millingmea.com/tororo-fertiliser-factory-in-limbo-five-months-after-resuming-operations/
+- ITC TradeMap, trade statistics — HS 3105, Uganda, 2024. https://www.trademap.org
+- *Sugar industry in Uganda* (Wikipedia, with USMA and Uganda Sugar Board data). https://en.wikipedia.org/wiki/Sugar_industry_in_Uganda
+- Daily Monitor, "Surge in sugar factories imperils industry's future." https://www.monitor.co.ug/uganda/news/national/surge-in-sugar-factories-imperils-industry-s-future-3943728
+- Food Business MEA, "Kinyara Sugar opens US$15m industrial sugar refinery" (2023). https://www.foodbusinessmea.com/ugandas-second-largest-sugar-miller-kinyara-sugar-has-opened-us15m-industrial-sugar-refinery/
+- Kakira Sugar. https://kakirasugar.com/
+- Uganda Sugar Manufacturers' Association annual report 2024 [Repository: `data/` — provided by MTIC].
+- ITC TradeMap, trade statistics — HS 1701, Uganda, 2024. https://www.trademap.org
+- NEMA, *National Strategy for Management of Plastic Pollution / Plastics Circularity (2023–2028)*. https://www.nema.go.ug/new_site/wp-content/uploads/2024/05/Plastic_circularity_-Report-2023-1.pdf
+- NEMA, "Plastics." https://www.nema.go.ug/en/plastics/
+- Margherita News, "NEMA pushes for total ban of polythene bags in Uganda" (Mar 2025). https://margheritanews.ug/2025/03/nema-pushes-for-total-polythene-bags-of-kevera-in-uganda/
+- Reportlinker, *Uganda Plastic Industry Outlook 2024–2028*. https://www.reportlinker.com/clp/country/6347/726256
+- Nile Plastic Industries. https://www.nileplasticindustries.com/
+- ITC TradeMap, trade statistics — HS 3923, Uganda, 2024. https://www.trademap.org
+- IndexBox, *Uganda's Cement Market Report 2025*. https://www.indexbox.io/store/uganda-cement-market-analysis-forecast-size-trends-and-insights/
+- CemNet / International Cement Review, Uganda country data. https://www.cemnet.com/global-cement-report/country/uganda
+- Ecofin Agency, "Uganda to Commission $300 Million Cement Plant to Cut Imports Amid Rising Demand." https://www.ecofinagency.com/news-industry/2104-54866-uganda-to-commission-300-million-cement-plant-to-cut-imports-amid-rising-demand
+- CemNet, "Uganda launching US$300m cement plant to boost industry." https://www.cemnet.com/News/story/181356/uganda-launching-us-300m-cement-plant-to-boost-industry.html
+- *List of cement manufacturers in Uganda* (Wikipedia). https://en.wikipedia.org/wiki/List_of_cement_manufacturers_in_Uganda
+- Hima Cement, "About Us." https://himacement.co/About-Us
+- ITC TradeMap, trade statistics — HS 2523, Uganda, 2024. https://www.trademap.org
+- KPMG, *Uganda Budget Brief 2025/26*. https://assets.kpmg.com/
+- Uganda Manufacturers Association; UNIDO — skills evidence. https://uma.or.ug/ ; https://www.unido.org/
+- NEMA, *Plastics Circularity Strategy 2023–2028*; *Effluent Discharge Regulations 2020*. https://www.nema.go.ug/
+- National Drug Authority. https://www.nda.or.ug/
+- ITC TradeMap, trade statistics (2024). https://www.trademap.org
+- UNOC; Petroleum Authority of Uganda — refinery project. https://www.unoc.co.ug/midstream/the-uganda-refinery-project/ ; https://www.pau.go.ug/the-uganda-refinery-project/
+- Ecofin Agency; CemNet — new cement plants (2024–25). https://www.cemnet.com/News/story/181356/uganda-launching-us-300m-cement-plant-to-boost-industry.html
+- Quality Chemical Industries Limited / Cipla Uganda. https://en.wikipedia.org/wiki/Quality_Chemical_Industries_Limited
+- Cotton Development Organisation; EPRC cotton value-chain study. https://eprcug.org/
+- NEMA, *Plastics Circularity Strategy 2023–2028*. https://www.nema.go.ug/
+- Uganda Investment Authority. https://ugandainvest.go.ug/
