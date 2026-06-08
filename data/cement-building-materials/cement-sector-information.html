@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Cement Manufacturing Industries in Uganda — May 2026</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Georgia', 'Times New Roman', serif;
+    background: #f5f0e8;
+    min-height: 100vh;
+    color: #1a1a1a;
+  }
+  a { color: inherit; }
+  button { font-family: inherit; }
+
+  /* Header */
+  #site-header {
+    background: #1a1a1a;
+    color: #f5f0e8;
+    padding: 32px 40px 24px;
+    border-bottom: 4px solid #c8a84b;
+  }
+  #site-header .inner { max-width: 1100px; margin: 0 auto; }
+  .eyebrow {
+    font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: #c8a84b; margin-bottom: 8px;
+  }
+  #site-header h1 {
+    font-size: clamp(22px, 4vw, 36px);
+    font-weight: normal; letter-spacing: -0.02em; line-height: 1.15;
+  }
+  #site-header h1 span { color: #c8a84b; }
+  .header-sub {
+    margin-top: 12px; font-size: 14px; color: #aaa;
+    max-width: 600px; line-height: 1.6;
+  }
+  .overview-box {
+    margin-top: 16px; padding: 10px 16px;
+    background: #2a2a2a; border-left: 3px solid #c8a84b;
+    font-size: 13px; color: #ccc; max-width: 620px;
+  }
+  .overview-box strong { color: #c8a84b; }
+  .overview-src { margin-top: 4px; font-size: 11px; color: #888; }
+
+  /* Main */
+  .main { max-width: 1100px; margin: 0 auto; padding: 24px 20px; }
+
+  /* Company nav */
+  .company-nav { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
+  .company-nav button {
+    padding: 8px 16px; border-radius: 4px; border: 2px solid #ccc;
+    background: #fff; color: #444; cursor: pointer; font-size: 13px;
+    font-weight: normal; transition: all 0.15s;
+  }
+  .company-nav button.active { color: #fff; font-weight: bold; }
+
+  /* Card */
+  .card { background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
+  .card-header { padding: 28px 32px; color: #fff; }
+  .card-header-row { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 12px; }
+  .card-eyebrow { font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 6px; }
+  .card-header h2 { font-size: clamp(18px, 3vw, 26px); font-weight: normal; }
+  .capacity-box { background: rgba(255,255,255,0.12); border-radius: 6px; padding: 10px 16px; font-size: 12px; min-width: 160px; text-align: right; }
+  .capacity-label { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; }
+  .capacity-val { font-size: 15px; font-weight: bold; margin-top: 4px; line-height: 1.3; }
+  .meta-grid { margin-top: 16px; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+  .meta-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; }
+  .meta-val { font-size: 13px; margin-top: 4px; line-height: 1.5; color: rgba(255,255,255,0.9); }
+  .capacity-src { margin-top: 10px; font-size: 11px; color: rgba(255,255,255,0.55); }
+
+  /* Tabs */
+  .tabs { display: flex; border-bottom: 1px solid #eee; background: #fafafa; }
+  .tabs button {
+    padding: 12px 24px; border: none; border-bottom: 3px solid transparent;
+    background: none; cursor: pointer; font-size: 13px; color: #666;
+    font-weight: normal; transition: all 0.15s;
+  }
+  .tabs button.active { font-weight: bold; }
+
+  /* Tab content */
+  .tab-content { padding: 28px; }
+  .tab-note { margin: 0 0 20px; font-size: 13px; color: #666; line-height: 1.6; }
+
+  /* Table */
+  .tbl-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  thead tr { background: #f5f0e8; }
+  th {
+    padding: 10px 14px; text-align: left; font-weight: bold;
+    font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em;
+    color: #555; border-bottom: 2px solid #ddd; white-space: nowrap;
+  }
+  td { padding: 12px 14px; border-bottom: 1px solid #f0ece4; vertical-align: top; }
+  .grade-badge {
+    display: inline-block; padding: 2px 8px; border-radius: 3px;
+    font-size: 11px; font-weight: bold; color: #fff;
+  }
+  .product-note {
+    margin-top: 16px; padding: 10px 14px; background: #f5f0e8;
+    border-radius: 4px; font-size: 12px; color: #666;
+  }
+
+  /* Sources */
+  .sources-list { display: flex; flex-direction: column; gap: 10px; }
+  .source-item {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px 16px; background: #f5f0e8;
+    border-radius: 6px;
+  }
+  .source-label { font-size: 12px; color: #333; flex: 1; }
+  .source-link { font-size: 11px; text-decoration: none; font-family: monospace; word-break: break-all; }
+
+  /* Summary table */
+  .summary { margin-top: 32px; background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
+  .summary-header { background: #1a1a1a; color: #f5f0e8; padding: 16px 24px; border-bottom: 3px solid #c8a84b; }
+  .summary-header h3 { font-size: 16px; font-weight: normal; letter-spacing: 0.05em; }
+  .summary table td { color: #555; }
+  .summary table tbody tr { cursor: pointer; }
+  .summary table tbody tr:hover { background: #fffbf0 !important; }
+  .num-badge {
+    display: inline-block; width: 22px; height: 22px; border-radius: 50%;
+    color: #fff; text-align: center; line-height: 22px; font-size: 11px; font-weight: bold;
+  }
+
+  /* Footer */
+  footer {
+    margin-top: 24px; padding: 16px 0; border-top: 1px solid #ddd;
+    font-size: 11px; color: #999; text-align: center;
+  }
+</style>
+</head>
+<body>
+
+<header id="site-header">
+  <div class="inner">
+    <div class="eyebrow">Verified Industry Report · May 2026</div>
+    <h1>Cement Manufacturing Industries<br><span>in Uganda</span></h1>
+    <p class="header-sub">A fully sourced reference covering all active manufacturers — locations, products, capacities per product grade, raw materials and their origins.</p>
+    <div class="overview-box">
+      <strong>Industry Overview:</strong> ~9 Mt/yr (as of May 2026) — Uganda's Energy Minister confirmed ~9Mt/yr combined capacity after commissioning of the Yaobai/WIH Moroto plant in April 2026.
+      <div class="overview-src">Source: Global Cement, April 2026 | globalcement.com</div>
+    </div>
+  </div>
+</header>
+
+<div class="main">
+  <div class="company-nav" id="company-nav"></div>
+  <div class="card" id="company-card"></div>
+
+  <div class="summary">
+    <div class="summary-header"><h3>Summary Comparison Table</h3></div>
+    <div class="tbl-wrap">
+      <table id="summary-table">
+        <thead>
+          <tr>
+            <th>#</th><th>Manufacturer</th><th>District / Region</th>
+            <th>Installed Capacity</th><th>No. of Products</th><th>Key Raw Material Sources</th>
+          </tr>
+        </thead>
+        <tbody id="summary-body"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <footer>
+    All data sourced from company websites, Wikipedia, Global Cement, PML Daily, New Vision, The Independent, World Cement Association, and government/state house press releases. Compiled May 2026.
+    Individual product capacity breakdowns are not publicly disclosed by any manufacturer; total figures represent combined installed plant capacity.
+  </footer>
+</div>
+
+<script>
+const data = {
+  companies: [
+    {
+      id: 1, name: "Tororo Cement Limited (TCL)", shortName: "Tororo Cement",
+      color: "#1a3c5e", accent: "#e8a020",
+      location: "Tororo District, Eastern Uganda (approx. 230 km from Kampala; ~13.5 km from Malaba border)",
+      founded: "1952 (as Uganda Cement Industries Ltd)", ownership: "Privately owned (privatised 1995)",
+      totalCapacity: "5.0 million metric tonnes/year (installed); currently producing ~3.0 Mt/yr",
+      capacitySource: "Tororo Cement Company Profile (tororocement.com); confirmed by multiple sources",
+      products: [
+        { name: "CEM I 42.5N (OPC) — 'Tororo Blue'", grade: "42.5N", type: "Ordinary Portland Cement", desc: "High-strength, low-alkali cement for reinforced concrete, bridges, high-rise structures, silos, dams, flyovers, precast pipes." },
+        { name: "CEM II A-P 42.5N (PPC) — 'Tororo Purple'", grade: "42.5N", type: "Portland Pozzolana Cement", desc: "Composite cement for high-strength foundations, bridges, road stabilisation, slip forming, dams, mass concrete." },
+        { name: "CEM II B-P 32.5N (PPC)", grade: "32.5N", type: "Portland Pozzolana Cement", desc: "General-purpose pozzolana cement; wide range of applications from home construction to large structural works. TCL's flagship product (90% of portfolio)." },
+        { name: "CEM IV B-P 32.5N (Pozzolanic Cement)", grade: "32.5N", type: "Pozzolanic Cement", desc: "High pozzolana content; suitable for general masonry, housing construction, moderate-exposure environments." },
+        { name: "Building Lime", grade: "—", type: "Hydrated Lime", desc: "Used in plastering, soil stabilisation, and as a construction additive." },
+      ],
+      rawMaterials: [
+        { material: "Limestone", source: "Local quarries in Tororo District & Amudat (Karamoja region)" },
+        { material: "Clay", source: "Local deposits in Eastern Uganda" },
+        { material: "Pozzolana (volcanic ash)", source: "Own quarry; 90% of PPC/CEM-IV pozzolana self-sourced" },
+        { material: "Gypsum (setting retarder)", source: "Imported from Garissa, Kenya" },
+        { material: "Iron ore (corrective)", source: "Local deposits" },
+      ],
+      sources: [
+        { label: "Tororo Cement Quality Process", url: "https://www.tororocement.com/quality-process/" },
+        { label: "Tororo Cement Company Profile", url: "https://www.tororocement.com/company-profile/" },
+        { label: "Wikipedia – Tororo Cement Limited", url: "https://en.wikipedia.org/wiki/Tororo_Cement_Limited" },
+      ],
+    },
+    {
+      id: 2, name: "Hima Cement Limited", shortName: "Hima Cement",
+      color: "#0d4a2f", accent: "#f4c430",
+      location: "3 plants: (1) Hima, Kasese District, Western Uganda (~350 km from Kampala); (2) Tororo Grinding Station, Tororo District; (3) Namanve Blending Station, Wakiso District (near Kampala)",
+      founded: "1994 (privatised from Uganda Cement Industries)", ownership: "Sarrai Group (acquired March 2024 from Holcim/Bamburi)",
+      totalCapacity: "Over 2.1 million metric tonnes/year (combined across 3 plants)",
+      capacitySource: "Hima Cement About Us (himacement.co); LinkedIn; Wikipedia",
+      products: [
+        { name: "PowerCrete 52.5N", grade: "52.5N", type: "OPC — High Strength", desc: "Highest-grade cement for demanding structural work, high-rise buildings, highways, bridges." },
+        { name: "PowerMax 42.5N", grade: "42.5N", type: "Portland Pozzolana Cement (CEM II)", desc: "Clinker interground with pozzolana & gypsum at Kasese. Versatile high-performance cement." },
+        { name: "PowerPlus 42.5N", grade: "42.5N", type: "Portland Pozzolana Cement", desc: "Multi-use cement for structural concrete applications, foundations, commercial construction." },
+        { name: "MultiPurpose 32.5N", grade: "32.5N", type: "Portland Pozzolana Cement", desc: "General-purpose cement for housing, masonry, plastering and everyday construction needs." },
+        { name: "Supaset 32.5R", grade: "32.5R", type: "Rapid-Hardening PPC", desc: "Fast setting, dark-textured cement made at Kasese for precast products (bricks, blocks, pavers, culverts)." },
+        { name: "RoadCem", grade: "Special", type: "Road/Soil Stabilisation Cement", desc: "Designed for road base stabilisation and pavement construction." },
+        { name: "MineCem SRC 42.5L", grade: "42.5L", type: "Sulphate-Resistant Cement", desc: "Produced at Namanve and Tororo plants; designed for mining industry and sulphate-aggressive environments." },
+        { name: "Fundi MC 22.5X", grade: "22.5X", type: "Masonry Cement", desc: "Hydraulic masonry cement for plastering, rendering, bricklaying, screeding. 54% less CO₂ than OPC. Made at Tororo & Kasese." },
+        { name: "Rapidset", grade: "Special", type: "Rapid-Set Cement", desc: "For precast concrete and applications requiring very fast strength gain." },
+      ],
+      rawMaterials: [
+        { material: "Limestone", source: "Own quarry at Dura, Kamwenge District (estimated reserves to 2036)" },
+        { material: "Pozzolana (volcanic)", source: "Western Uganda volcanic deposits; Kabale/Kisoro regions" },
+        { material: "Clinker (self-produced)", source: "Integrated kiln plant at Kasese; supplemented by imports via Mombasa" },
+        { material: "Gypsum", source: "Imported from Kenya" },
+      ],
+      sources: [
+        { label: "Hima Cement About Us", url: "https://himacement.co/About-Us" },
+        { label: "Hima Cement – PowerMax Product Page", url: "https://himacement.co/product/POWERMAX-42,5N" },
+        { label: "Wikipedia – Hima Cement Limited", url: "https://en.wikipedia.org/wiki/Hima_Cement_Limited" },
+        { label: "PML Daily – Fundi Masonry Cement Launch", url: "https://www.pmldaily.com/business/2021/07/hima-cement-launches-fundi-masonry-cement-in-western-uganda.html" },
+      ],
+    },
+    {
+      id: 3, name: "Yaobai International Holding Cement Uganda Ltd", shortName: "Yaobai Cement",
+      color: "#3d1a6e", accent: "#ff6b35",
+      location: "Phase 1 (Clinker): Nadunget Town Council, Moroto District, Karamoja (~460 km NE of Kampala). Phase 2 (Grinding, planned): Njeru, Buikwe District (near Jinja)",
+      founded: "Construction started September 2023; Phase 1 commissioned April 24, 2026",
+      ownership: "Yaobai International Holding Ltd (formerly West International Holding Ltd), subsidiary of West China Cement Limited (Hong Kong-listed)",
+      totalCapacity: "Phase 1: 6,000 tonnes clinker/day (~2.0 Mt/yr clinker). Full capacity (dual lines): 12,000 t/day clinker (~2.0 Mt clinker + 1.0 Mt cement/yr). Total investment: USD 300 million.",
+      capacitySource: "Global Cement (Apr 2026); APT News (Mar 2026); ConstructAfrica; UG Standard",
+      products: [
+        { name: "Industrial Clinker", grade: "—", type: "Clinker (intermediate product)", desc: "Phase 1 primary output. Sold to grinding stations domestically and regionally. Reduces Uganda's ~USD 260m/yr clinker import bill." },
+        { name: "Yaobai Portland Cement (Bulk & Bagged)", grade: "OPC / PPC", type: "Portland Cement", desc: "Finished cement for structural infrastructure, housing, roads. Branding as 'Yaobai Cement Karamoja'. Markets: Uganda, DRC, South Sudan, W. Kenya." },
+      ],
+      rawMaterials: [
+        { material: "Limestone / Marble (~85% of raw feed)", source: "Sunbird Quarry, Moroto District (est. 67M+ tonnes in deposits; 180M tonnes in Rupa Sub-county)" },
+        { material: "Clay & corrective materials", source: "Local Karamoja deposits" },
+        { material: "Gypsum", source: "Blended/imported at processing points" },
+      ],
+      sources: [
+        { label: "Global Cement – Moroto Plant Commissioned", url: "https://www.globalcement.com/news/20697-president-of-uganda-commissions-first-phase-of-moroto-plant" },
+        { label: "APT News – USD 300M Yaobai Plant", url: "https://aptnews.ug/usd-300-million-yaobai-cement-plant-set-to-revolutionize-ugandas-cement-production-industry/" },
+        { label: "Homeland Media – Museveni Commissions Yaobai", url: "https://www.homelandmedia.co.ug/museveni-commissions-new-ugx1-1-trillion-cement-plant-in-moroto-warns-ura-off-taxes/" },
+        { label: "ConstructAfrica – Uganda Breaks Ground", url: "https://constructafrica.com/news/uganda-breaks-ground-cement-plant" },
+      ],
+    },
+    {
+      id: 4, name: "Simba Cement Uganda Limited (SCUL)", shortName: "Simba Cement",
+      color: "#8b1a1a", accent: "#ffd700",
+      location: "Nyakesi Village, Rubongi Sub-County, Tororo District (~9 km north of Tororo town). A second plant in Mbarara was announced for end-2024.",
+      founded: "May 2018 (commissioned by President Museveni August 2018)",
+      ownership: "National Cement Company Limited (Kenya), a subsidiary of Devki Group",
+      totalCapacity: "1.0 million metric tonnes/year (Tororo plant; ~3,000 t/day). Mbarara plant (1.5 Mt/yr, USD 60M) announced for late 2024.",
+      capacitySource: "Wikipedia – Simba Cement Uganda; PML Daily (2024); Grokipedia",
+      products: [
+        { name: "Simba Cement Power 42.5N", grade: "42.5N", type: "Portland Pozzolana Cement", desc: "For specialised applications including bridges, highways, reinforced concrete structures, large infrastructure." },
+        { name: "Simba Cement Extra 32.5R", grade: "32.5R", type: "Rapid-Hardening Portland Cement", desc: "General-purpose cement for housing, masonry, and broad construction applications across Uganda." },
+        { name: "Paving Blocks", grade: "—", type: "Pre-cast product", desc: "Durable paving blocks for pavements, aesthetic installations and hardscape construction." },
+      ],
+      rawMaterials: [
+        { material: "Clinker", source: "Primarily from parent company's West Pokot, Kenya clinker plant (launched April 2024, 6,000 t/day, USD 220M). Previously imported via Mombasa." },
+        { material: "Pozzolana", source: "Local Eastern Uganda deposits" },
+        { material: "Gypsum (setting retarder)", source: "Imported via regional distribution networks" },
+        { material: "Limestone (supplementary)", source: "Regional deposits in Karamoja and Tororo" },
+      ],
+      sources: [
+        { label: "Wikipedia – Simba Cement Uganda Limited", url: "https://en.wikipedia.org/wiki/Simba_Cement_Uganda_Limited" },
+        { label: "PML Daily – Simba Cement & West Pokot Clinker Plant", url: "https://www.pmldaily.com/business/2024/09/simba-cement-banks-on-new-kenyan-clinker-plant-to-cut-cost-of-production-in-uganda.html" },
+        { label: "PML Daily – Mbarara Plant Announcement", url: "https://pmldaily.com/news/2023/11/new-cement-plant-to-open-in-mbarara.html" },
+        { label: "Grokipedia – SCUL", url: "https://grokipedia.com/page/simba_cement_uganda_limited" },
+      ],
+    },
+    {
+      id: 5, name: "Metro Cement Limited", shortName: "Metro Cement",
+      color: "#1a4a6e", accent: "#e63946",
+      location: "Plot 811, Block 2, Nyanza Village, Kamonkoli, Budaka District (near Mbale), Eastern Uganda",
+      founded: "2019 (initial entry into Uganda)",
+      ownership: "UAE-based investors (Dubai-backed); Group Director: Shamil Razack; Chairman: Nowfu Hameed",
+      totalCapacity: "1.0 million metric tonnes/year (as of December 2025 expansion — up from initial 300,000 t/yr in 2019). USD ~30M invested in expansion.",
+      capacitySource: "New Vision (Dec 2025); The Independent (Dec 2025); Business Focus",
+      products: [
+        { name: "Emirate Brand (32.5N)", grade: "32.5N", type: "Portland Pozzolana Cement", desc: "Original Metro Cement product; general-purpose pozzolana cement for housing and construction." },
+        { name: "Farasi (new, 2025)", grade: "TBC", type: "Portland Pozzolana Cement", desc: "New product launched December 2025 alongside plant expansion." },
+        { name: "Njovu Branda (new, 2025)", grade: "TBC", type: "Portland Pozzolana Cement", desc: "New product launched December 2025; named for the Ugandan market." },
+        { name: "muFundi (new, 2025)", grade: "TBC", type: "Masonry/General Cement", desc: "New product launched December 2025 targeting masons and individual home builders." },
+      ],
+      rawMaterials: [
+        { material: "Clinker", source: "Imported via UAE supply chains / Mombasa port. Plant uses German milling technology adapted to local raw materials." },
+        { material: "Pozzolana", source: "Local Eastern Uganda deposits" },
+        { material: "Gypsum", source: "Regional/imported sources" },
+        { material: "Limestone", source: "Eastern Uganda quarries (supplementary)" },
+      ],
+      sources: [
+        { label: "New Vision – Metro Cement Increases Output to 1M Tonnes", url: "https://www.newvision.co.ug/category/business/metro-cement-increases-output-to-1-million-to-NV_224993" },
+        { label: "The Independent – Metro Cement New Products", url: "https://www.independent.co.ug/uganda-uae-ties-deepen-as-investment-and-exports-surge-metro-cement-pre-launches-new-products/" },
+        { label: "Metro Cement Website", url: "https://metro-cement.com/" },
+      ],
+    },
+    {
+      id: 6, name: "Kampala Cement Company Limited (KCCL)", shortName: "Kampala Cement",
+      color: "#2d4a1e", accent: "#ff9f1c",
+      location: "Namataba, Mukono District (on Kampala–Jinja Highway, ~40 km east of Kampala)",
+      founded: "2015",
+      ownership: "Multiple Industries Limited (conglomerate); Co-owners: Charles Mbire & Rajinder Singh Baryan",
+      totalCapacity: "1.2 million metric tonnes/year across 5 brand names (3 state-of-the-art grinding mills; continuous backup power supply)",
+      capacitySource: "World Cement Association member profile (worldcementassociation.org); Kampala Cement website",
+      products: [
+        { name: "Nyati 32.5N", grade: "32.5N", type: "Portland Pozzolana Cement", desc: "General-purpose cement for housing, masonry, and standard construction applications." },
+        { name: "Chui 32.5N", grade: "32.5N", type: "Portland Pozzolana Cement", desc: "Economy-grade pozzolana cement targeting the mass housing and retail market." },
+        { name: "Kifaru 42.5N", grade: "42.5N", type: "Portland Pozzolana Cement", desc: "Mid-high strength cement for medium-to-large construction projects and structural concrete." },
+        { name: "Ndovu 42.5N", grade: "42.5N", type: "Portland Cement", desc: "High-strength cement for structural applications, bridges, and reinforced concrete." },
+        { name: "SuperCrete 52.5N", grade: "52.5N", type: "High-Strength OPC", desc: "Premium highest-grade cement for specialised high-strength applications and critical infrastructure." },
+      ],
+      rawMaterials: [
+        { material: "Clinker", source: "Imported (clinker storage unit and four 1,000t steel silos on-site)" },
+        { material: "Pozzolana", source: "Local Eastern Uganda / regional deposits" },
+        { material: "Gypsum", source: "Imported / regional sources" },
+        { material: "Other additives", source: "UAE and regional supply chains" },
+      ],
+      sources: [
+        { label: "World Cement Association – Kampala Cement", url: "https://www.worldcementassociation.org/about-us/our-members/kampala-cement" },
+        { label: "Wikipedia – Kampala Cement Company Limited", url: "https://en.wikipedia.org/wiki/Kampala_Cement_Company_Limited" },
+        { label: "Buildmax Hardware – Kampala Cement Brands", url: "https://buildmaxhardware.com/kampala-cement-brands-in-uganda.html" },
+        { label: "Cemnet – Kampala Cement Investors", url: "https://www.cemnet.com/News/story/160336/uganda-kampala-cement-s-investors-revealed.html" },
+      ],
+    },
+  ]
+};
+
+const materialRoles = {
+  "Limestone": "Provides calcium carbonate — primary binding compound (~80% of raw mix)",
+  "Clay": "Supplies silica, alumina, and iron oxide for clinker chemistry",
+  "Pozzolana (volcanic ash)": "Siliceous/aluminous additive; reacts with Ca(OH)₂ to form cementitious compounds; reduces CO₂",
+  "Pozzolana (volcanic)": "Siliceous additive; increases durability and lowers heat of hydration in PPC/CEM II/IV",
+  "Pozzolana": "Siliceous additive; increases durability and lowers heat of hydration in PPC/CEM II/IV",
+  "Gypsum (setting retarder)": "Controls hydration rate; prevents flash setting (typically 3–5% of final mix)",
+  "Gypsum": "Setting retarder — controls how quickly cement hardens",
+  "Clinker": "Pre-calcined intermediate (from limestone/clay at 1450°C); backbone of all Portland cements",
+  "Clinker (self-produced)": "Pre-calcined intermediate; produced on-site in rotary kilns at Kasese",
+  "Clinker (supplementary)": "Intermediate product imported when local output insufficient",
+  "Iron ore (corrective)": "Adds iron oxide to correct raw mix chemistry; improves clinker formation",
+  "Limestone / Marble (~85% of raw feed)": "Primary calcareous raw material; especially high-purity marble in Karamoja",
+  "Limestone (supplementary)": "Supplementary calcium source to adjust raw mix chemistry",
+  "Clay & corrective materials": "Supplies silica and alumina; corrects clinker phase chemistry",
+  "Other additives": "Mineral additions (fly ash, slag, etc.) for specialty grades",
+};
+
+function gradeColor(grade) {
+  if (!grade || grade === "—" || grade === "Special" || grade === "TBC" || grade === "OPC / PPC") return "#94a3b8";
+  if (grade.startsWith("52")) return "#dc2626";
+  if (grade.startsWith("42")) return "#d97706";
+  if (grade.startsWith("32")) return "#16a34a";
+  if (grade.startsWith("22")) return "#2563eb";
+  return "#6b7280";
+}
+
+let activeIdx = 0;
+let activeTab = "products";
+
+function renderNav() {
+  const nav = document.getElementById("company-nav");
+  nav.innerHTML = data.companies.map((c, i) => `
+    <button class="${i === activeIdx ? 'active' : ''}"
+      style="${i === activeIdx ? `border-color:${c.color};background:${c.color};` : ''}"
+      onclick="setCompany(${i})">${c.shortName}</button>
+  `).join("");
+}
+
+function renderCard() {
+  const c = data.companies[activeIdx];
+  document.getElementById("company-card").innerHTML = `
+    <div class="card-header" style="background:${c.color};border-bottom:4px solid ${c.accent}">
+      <div class="card-header-row">
+        <div>
+          <div class="card-eyebrow" style="color:${c.accent}">Manufacturer #${c.id}</div>
+          <h2>${c.name}</h2>
+        </div>
+        <div class="capacity-box">
+          <div class="capacity-label" style="color:${c.accent}">Total Installed Capacity</div>
+          <div class="capacity-val">${c.totalCapacity.split("(")[0].trim()}</div>
+        </div>
+      </div>
+      <div class="meta-grid">
+        ${[["Location", c.location], ["Founded / Commissioned", c.founded], ["Ownership", c.ownership]].map(([label, val]) => `
+          <div>
+            <div class="meta-label" style="color:${c.accent}">${label}</div>
+            <div class="meta-val">${val}</div>
+          </div>
+        `).join("")}
+      </div>
+      <div class="capacity-src">Capacity source: ${c.capacitySource}</div>
+    </div>
+
+    <div class="tabs">
+      ${[["products","Products"],["rawmaterials","Raw Materials"],["sources","Sources"]].map(([t,label]) => `
+        <button class="${activeTab === t ? 'active' : ''}"
+          style="${activeTab === t ? `border-bottom-color:${c.color};color:${c.color};` : ''}"
+          onclick="setTab('${t}')">${label}</button>
+      `).join("")}
+    </div>
+
+    <div class="tab-content">${renderTabContent(c)}</div>
+  `;
+}
+
+function renderTabContent(c) {
+  if (activeTab === "products") {
+    return `
+      <p class="tab-note">All grades conform to Uganda National Bureau of Standards (UNBS) and East African Standards (EAS) based on EN 197-1.</p>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr>
+            <th>Product / Brand Name</th><th>Grade</th><th>Cement Type</th><th>Description &amp; Applications</th>
+          </tr></thead>
+          <tbody>
+            ${c.products.map(p => `
+              <tr>
+                <td style="font-weight:bold;color:${c.color}">${p.name}</td>
+                <td><span class="grade-badge" style="background:${gradeColor(p.grade)}">${p.grade}</span></td>
+                <td style="white-space:nowrap;color:#444">${p.type}</td>
+                <td style="color:#555;line-height:1.6">${p.desc}</td>
+              </tr>
+            `).join("")}
+          </tbody>
+        </table>
+      </div>
+      <div class="product-note">
+        <strong>Note on individual product capacities:</strong> Manufacturers do not publicly disclose production capacity broken down per product/brand. The total installed capacity stated above covers all products combined. The product mix shifts with market demand — TCL, for example, notes that PPC (CEM II &amp; IV) constitutes 90% of its portfolio.
+      </div>
+    `;
+  }
+  if (activeTab === "rawmaterials") {
+    return `
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr>
+            <th>Raw Material</th><th>Role in Cement Production</th><th>Source / Origin</th>
+          </tr></thead>
+          <tbody>
+            ${c.rawMaterials.map(r => `
+              <tr>
+                <td style="font-weight:bold;color:${c.color}">${r.material}</td>
+                <td style="color:#444;line-height:1.6;font-size:12px">${materialRoles[r.material] || "Construction material additive"}</td>
+                <td style="color:#555;line-height:1.6">${r.source}</td>
+              </tr>
+            `).join("")}
+          </tbody>
+        </table>
+      </div>
+    `;
+  }
+  if (activeTab === "sources") {
+    return `
+      <p style="margin:0 0 16px;font-size:13px;color:#666">All data for this company entry is drawn from the following verifiable sources:</p>
+      <div class="sources-list">
+        ${c.sources.map(s => `
+          <div class="source-item" style="border-left:3px solid ${c.color}">
+            <span class="source-label">${s.label}</span>
+            <a href="${s.url}" target="_blank" rel="noopener noreferrer"
+               class="source-link" style="color:${c.color}">
+              ↗ ${s.url.replace(/https?:\/\//, "").split("/")[0]}
+            </a>
+          </div>
+        `).join("")}
+      </div>
+    `;
+  }
+  return "";
+}
+
+function renderSummary() {
+  const tbody = document.getElementById("summary-body");
+  tbody.innerHTML = data.companies.map((c, i) => `
+    <tr style="background:${i === activeIdx ? '#fffbf0' : 'transparent'}" onclick="setCompany(${i})">
+      <td><span class="num-badge" style="background:${c.color}">${c.id}</span></td>
+      <td style="font-weight:bold;color:${c.color}">${c.shortName}</td>
+      <td>${c.location.split(",").slice(-2).join(",").trim()}</td>
+      <td style="font-weight:bold">${c.totalCapacity.split("(")[0].trim()}</td>
+      <td style="text-align:center">${c.products.length}</td>
+      <td>${c.rawMaterials.map(r => r.material.split(" ")[0]).join(", ")}</td>
+    </tr>
+  `).join("");
+}
+
+function setCompany(idx) {
+  activeIdx = idx;
+  activeTab = "products";
+  renderNav();
+  renderCard();
+  renderSummary();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function setTab(tab) {
+  activeTab = tab;
+  renderCard();
+}
+
+// Initial render
+renderNav();
+renderCard();
+renderSummary();
+</script>
+</body>
+</html>

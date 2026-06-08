@@ -1,0 +1,1187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Uganda Textile & Garment Industry — 2024/2025 Report</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,300&display=swap');
+
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  font-family:'Source Serif 4','Georgia',serif;
+  background:#f2ede6;
+  min-height:100vh;
+  color:#1c1a17;
+}
+a{color:inherit;}
+button{font-family:inherit;cursor:pointer;}
+
+/* ── HEADER ─────────────────────────────── */
+#hdr{
+  background:#1c1a17;
+  color:#f2ede6;
+  padding:40px 40px 28px;
+  border-bottom:4px solid #c07d3a;
+  position:relative;
+  overflow:hidden;
+}
+#hdr::before{
+  content:'';
+  position:absolute;top:0;left:0;right:0;bottom:0;
+  background:repeating-linear-gradient(
+    45deg,
+    transparent,transparent 40px,
+    rgba(192,125,58,0.04) 40px,rgba(192,125,58,0.04) 41px
+  );
+  pointer-events:none;
+}
+#hdr .inner{max-width:1140px;margin:0 auto;position:relative;}
+.hdr-pill{
+  display:inline-block;
+  background:#c07d3a;
+  color:#fff;
+  font-size:10px;
+  letter-spacing:.22em;
+  text-transform:uppercase;
+  padding:4px 12px;
+  border-radius:2px;
+  margin-bottom:14px;
+}
+#hdr h1{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(24px,4.5vw,44px);
+  font-weight:400;
+  letter-spacing:-.01em;
+  line-height:1.1;
+}
+#hdr h1 em{
+  font-style:italic;
+  color:#c07d3a;
+}
+.hdr-desc{
+  margin-top:14px;
+  font-size:14px;
+  color:#a89880;
+  max-width:640px;
+  line-height:1.7;
+  font-weight:300;
+}
+.hdr-stats{
+  display:flex;flex-wrap:wrap;gap:12px;
+  margin-top:20px;
+}
+.hdr-stat{
+  background:rgba(255,255,255,.07);
+  border:1px solid rgba(255,255,255,.12);
+  border-left:3px solid #c07d3a;
+  padding:10px 16px;
+  border-radius:3px;
+}
+.hdr-stat .val{
+  font-size:17px;font-weight:600;color:#f2ede6;
+  font-family:'Playfair Display',serif;
+}
+.hdr-stat .lbl{
+  font-size:10px;text-transform:uppercase;letter-spacing:.14em;
+  color:#8a7360;margin-top:2px;
+}
+
+/* ── MAIN ───────────────────────────────── */
+.main{max-width:1140px;margin:0 auto;padding:28px 20px 40px;}
+
+/* ── SECTION HEADER ────────────────────── */
+.sec-hdr{
+  margin-bottom:18px;
+  display:flex;align-items:center;gap:12px;
+}
+.sec-hdr h2{
+  font-family:'Playfair Display',serif;
+  font-size:20px;font-weight:600;letter-spacing:-.01em;
+}
+.sec-hdr::after{
+  content:'';flex:1;height:1px;background:#d4c9bc;
+}
+
+/* ── INDUSTRY OVERVIEW CALLOUT ──────────── */
+.overview-card{
+  background:#fff;
+  border-radius:6px;
+  overflow:hidden;
+  box-shadow:0 2px 16px rgba(0,0,0,.07);
+  margin-bottom:32px;
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+}
+@media(max-width:700px){.overview-card{grid-template-columns:1fr;}}
+.ov-block{
+  padding:22px 24px;
+  border-right:1px solid #ede8e0;
+}
+.ov-block:last-child{border-right:none;}
+.ov-block .ov-lbl{
+  font-size:10px;text-transform:uppercase;letter-spacing:.16em;color:#8a7360;margin-bottom:6px;
+}
+.ov-block .ov-val{
+  font-family:'Playfair Display',serif;
+  font-size:22px;font-weight:600;color:#1c1a17;line-height:1.2;
+}
+.ov-block .ov-sub{
+  font-size:12px;color:#666;margin-top:5px;line-height:1.5;
+}
+
+/* ── SEGMENT TABS ───────────────────────── */
+.seg-tabs{
+  display:flex;flex-wrap:wrap;gap:6px;margin-bottom:20px;
+}
+.seg-tabs button{
+  padding:7px 16px;
+  border-radius:3px;border:2px solid #d4c9bc;
+  background:#fff;color:#555;
+  font-size:12px;font-weight:600;
+  letter-spacing:.04em;text-transform:uppercase;
+  transition:all .15s;
+}
+.seg-tabs button.active{
+  background:#1c1a17;border-color:#1c1a17;color:#f2ede6;
+}
+
+/* ── COMPANY NAV ────────────────────────── */
+.co-nav{
+  display:flex;flex-wrap:wrap;gap:7px;margin-bottom:22px;
+}
+.co-nav button{
+  padding:8px 16px;
+  border-radius:4px;border:2px solid #d4c9bc;
+  background:#fff;color:#444;
+  font-size:12.5px;
+  transition:all .15s;
+}
+.co-nav button.active{color:#fff;font-weight:bold;}
+
+/* ── CARD ───────────────────────────────── */
+.card{
+  background:#fff;
+  border-radius:8px;
+  overflow:hidden;
+  box-shadow:0 2px 16px rgba(0,0,0,.08);
+  margin-bottom:24px;
+}
+.card-hdr{
+  padding:26px 30px 22px;
+  color:#fff;
+}
+.card-hdr-row{
+  display:flex;justify-content:space-between;align-items:flex-start;
+  flex-wrap:wrap;gap:12px;
+}
+.card-eyebrow{
+  font-size:10px;letter-spacing:.2em;text-transform:uppercase;
+  margin-bottom:6px;
+}
+.card-hdr h2{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(17px,3vw,24px);font-weight:400;
+}
+.cap-badge{
+  background:rgba(255,255,255,.13);
+  border-radius:5px;padding:10px 15px;
+  font-size:12px;min-width:155px;text-align:right;
+}
+.cap-badge .cb-lbl{
+  font-size:9px;text-transform:uppercase;letter-spacing:.12em;
+  margin-bottom:4px;
+}
+.cap-badge .cb-val{
+  font-size:14px;font-weight:700;line-height:1.3;
+}
+.meta-grid{
+  margin-top:16px;
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;
+}
+.meta-item .mi-lbl{
+  font-size:9px;text-transform:uppercase;letter-spacing:.14em;opacity:.7;
+}
+.meta-item .mi-val{
+  font-size:12.5px;margin-top:3px;line-height:1.5;
+  color:rgba(255,255,255,.88);
+}
+.cap-src{
+  margin-top:10px;font-size:10px;color:rgba(255,255,255,.45);
+}
+
+/* ── TABS ───────────────────────────────── */
+.tabs{
+  display:flex;border-bottom:1px solid #ede8e0;background:#faf8f4;
+}
+.tabs button{
+  padding:12px 22px;
+  border:none;border-bottom:3px solid transparent;
+  background:none;cursor:pointer;
+  font-size:12.5px;color:#777;
+  transition:all .15s;
+}
+.tabs button.active{font-weight:bold;}
+
+/* ── TAB CONTENT ────────────────────────── */
+.tc{padding:26px 28px;}
+.tc-note{margin:0 0 18px;font-size:13px;color:#666;line-height:1.65;}
+
+/* ── TABLE ──────────────────────────────── */
+.tbl-wrap{overflow-x:auto;}
+table{width:100%;border-collapse:collapse;font-size:12.5px;}
+thead tr{background:#f5f0e8;}
+th{
+  padding:9px 13px;text-align:left;
+  font-size:10px;text-transform:uppercase;letter-spacing:.08em;
+  color:#666;border-bottom:2px solid #ddd;white-space:nowrap;
+}
+td{padding:11px 13px;border-bottom:1px solid #f0ece4;vertical-align:top;}
+.grade-badge{
+  display:inline-block;padding:2px 8px;border-radius:3px;
+  font-size:10.5px;font-weight:bold;color:#fff;
+}
+.fn-bold{font-weight:700;}
+.td-note{margin-top:16px;padding:10px 13px;background:#f5f0e8;border-radius:4px;font-size:11.5px;color:#666;}
+
+/* ── SOURCES ────────────────────────────── */
+.src-list{display:flex;flex-direction:column;gap:8px;}
+.src-item{
+  display:flex;align-items:center;gap:12px;
+  padding:11px 14px;background:#f5f0e8;
+  border-radius:5px;
+}
+.src-label{font-size:12px;color:#333;flex:1;}
+.src-link{
+  font-size:10.5px;text-decoration:none;
+  font-family:monospace;word-break:break-all;
+}
+
+/* ── SUMMARY ────────────────────────────── */
+.summary{
+  background:#fff;border-radius:8px;overflow:hidden;
+  box-shadow:0 2px 16px rgba(0,0,0,.08);margin-top:30px;
+}
+.sum-hdr{
+  background:#1c1a17;color:#f2ede6;
+  padding:15px 24px;border-bottom:3px solid #c07d3a;
+}
+.sum-hdr h3{
+  font-family:'Playfair Display',serif;
+  font-size:16px;font-weight:400;letter-spacing:.03em;
+}
+.sum-hdr p{font-size:11px;color:#8a7360;margin-top:3px;}
+.summary tbody tr{cursor:pointer;}
+.summary tbody tr:hover{background:#fffbf4 !important;}
+.num-badge{
+  display:inline-block;width:22px;height:22px;border-radius:50%;
+  color:#fff;text-align:center;line-height:22px;
+  font-size:10px;font-weight:bold;
+}
+.park-badge{
+  display:inline-block;padding:2px 7px;
+  border-radius:2px;font-size:10px;font-weight:600;
+  letter-spacing:.04em;text-transform:uppercase;
+}
+
+/* ── CHALLENGES & POLICY ────────────────── */
+.ch-grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:14px;margin-bottom:32px;
+}
+.ch-card{
+  background:#fff;border-radius:6px;padding:18px 20px;
+  box-shadow:0 1px 8px rgba(0,0,0,.06);
+  border-top:3px solid #c07d3a;
+}
+.ch-card h4{
+  font-family:'Playfair Display',serif;
+  font-size:14px;margin-bottom:8px;
+}
+.ch-card p{font-size:12.5px;color:#555;line-height:1.65;}
+
+/* tier banners */
+.pol-tier{
+  margin-bottom:10px;
+}
+.pol-tier-hdr{
+  display:flex;align-items:center;gap:12px;
+  padding:10px 18px;border-radius:5px 5px 0 0;
+}
+.pol-tier-hdr .tier-num{
+  font-family:'Playfair Display',serif;
+  font-size:22px;font-weight:700;opacity:.55;min-width:28px;
+}
+.pol-tier-hdr .tier-title{font-size:13px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;}
+.pol-tier-hdr .tier-sub{font-size:11px;opacity:.7;margin-top:2px;}
+.pol-tier-body{
+  border-radius:0 0 5px 5px;
+  padding:18px 20px 20px;
+}
+/* supreme tier */
+.pol-tier.supreme .pol-tier-hdr{background:#7a3800;color:#ffd8a8;}
+.pol-tier.supreme .pol-tier-body{background:#1c1a17;border:2px solid #7a3800;border-top:none;}
+/* ndpiv tier */
+.pol-tier.ndpiv .pol-tier-hdr{background:#1a3a52;color:#a8d4f8;}
+.pol-tier.ndpiv .pol-tier-body{background:#1c1a17;border:2px solid #1a3a52;border-top:none;}
+/* nip tier */
+.pol-tier.nip .pol-tier-hdr{background:#2a3a1a;color:#b8d8a0;}
+.pol-tier.nip .pol-tier-body{background:#1c1a17;border:2px solid #2a3a1a;border-top:none;}
+
+.pol-tier-body h5{
+  font-family:'Playfair Display',serif;
+  font-size:13px;font-weight:600;margin:14px 0 5px;
+}
+.pol-tier-body h5:first-child{margin-top:0;}
+.pol-tier-body p{font-size:12.5px;color:#a89880;line-height:1.65;margin-bottom:8px;}
+.pol-kv{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:8px;margin:10px 0 14px;
+}
+.pol-kv-item{
+  background:rgba(255,255,255,.05);border-radius:4px;padding:8px 12px;
+}
+.pol-kv-item .kv-lbl{font-size:9.5px;text-transform:uppercase;letter-spacing:.14em;color:#6a5a48;margin-bottom:3px;}
+.pol-kv-item .kv-val{font-size:12.5px;color:#e8d8c8;font-weight:600;}
+
+/* supplementary grid */
+.pol-grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:14px;margin-top:14px;
+}
+.pol-card{
+  background:#1c1a17;color:#f2ede6;
+  border-radius:6px;padding:18px 20px;
+  border-left:3px solid #c07d3a;
+}
+.pol-card h4{
+  font-family:'Playfair Display',serif;
+  font-size:14px;margin-bottom:8px;color:#c07d3a;
+}
+.pol-card p{font-size:12.5px;color:#a89880;line-height:1.65;}
+
+/* ── FOOTER ─────────────────────────────── */
+footer{
+  margin-top:28px;padding:18px 0;
+  border-top:1px solid #d4c9bc;
+  font-size:11px;color:#999;text-align:center;line-height:1.6;
+}
+</style>
+</head>
+<body>
+
+<header id="hdr">
+  <div class="inner">
+    <div class="hdr-pill">Ministry of Trade, Industry &amp; Cooperatives · Industry Report</div>
+    <h1>Textile &amp; Garment Manufacturing<br>Industries in <em>Uganda</em></h1>
+    <p class="hdr-desc">
+      A fully sourced reference covering active manufacturers across Uganda's cotton–textile–apparel value chain — locations, products, capacities, raw material sourcing, industrial parks, and sector-wide challenges. Data drawn from Ministry of Trade field visits (2024), company sources, and independent research.
+    </p>
+    <div class="hdr-stats">
+      <div class="hdr-stat">
+        <div class="val">30 Mt/yr</div>
+        <div class="lbl">Uganda lint cotton production</div>
+      </div>
+      <div class="hdr-stat">
+        <div class="val">~10%</div>
+        <div class="lbl">Cotton processed locally</div>
+      </div>
+      <div class="hdr-stat">
+        <div class="val">3 Major</div>
+        <div class="lbl">Integrated textile mills</div>
+      </div>
+      <div class="hdr-stat">
+        <div class="val">36+</div>
+        <div class="lbl">Registered manufacturers (MTIC)</div>
+      </div>
+      <div class="hdr-stat">
+        <div class="val">USD 252M</div>
+        <div class="lbl">Textile &amp; apparel imports (2018)</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="main">
+
+  <!-- INDUSTRY OVERVIEW -->
+  <div class="sec-hdr"><h2>Industry Overview</h2></div>
+  <div class="overview-card">
+    <div class="ov-block">
+      <div class="ov-lbl">Value Chain Status</div>
+      <div class="ov-val">Nascent</div>
+      <div class="ov-sub">Only ~10% of Uganda's cotton lint is processed locally. About 40 ginneries exist nationally but most export raw lint, limiting value addition and job creation.</div>
+    </div>
+    <div class="ov-block">
+      <div class="ov-lbl">Key Industrial Parks</div>
+      <div class="ov-val">3 Private Parks</div>
+      <div class="ov-sub">Sino-Mbale (Mbale), Liao Shen / Namunkekera (Nakaseke) and MMP (Buikwe) are the three major private industrial parks hosting textile factories.</div>
+    </div>
+    <div class="ov-block">
+      <div class="ov-lbl">Sector Challenge</div>
+      <div class="ov-val">Mitumba</div>
+      <div class="ov-sub">Second-hand clothes (mitumba) imports reached USD 106 million in 2022 — up 43% from 2013 — severely competing with locally manufactured textiles.</div>
+    </div>
+  </div>
+
+  <!-- MANUFACTURERS SECTION -->
+  <div class="sec-hdr"><h2>Manufacturers</h2></div>
+
+  <!-- Segment filter -->
+  <div class="seg-tabs" id="seg-tabs">
+    <button class="active" onclick="filterSeg('all',this)">All Manufacturers</button>
+    <button onclick="filterSeg('integrated',this)">Integrated Mills</button>
+    <button onclick="filterSeg('garment',this)">Garment Factories</button>
+    <button onclick="filterSeg('fabric',this)">Fabric / Knitting</button>
+    <button onclick="filterSeg('specialty',this)">Specialty</button>
+  </div>
+
+  <!-- Company nav -->
+  <div class="co-nav" id="co-nav"></div>
+
+  <!-- Company card -->
+  <div class="card" id="co-card"></div>
+
+  <!-- Summary -->
+  <div class="summary">
+    <div class="sum-hdr">
+      <h3>Full Manufacturer Reference Table</h3>
+      <p>Compiled from MTIC field data, company records, and open sources. Click any row to view detailed profile above.</p>
+    </div>
+    <div class="tbl-wrap">
+      <table id="sum-tbl">
+        <thead>
+          <tr>
+            <th>#</th><th>Manufacturer</th><th>Type</th><th>District</th>
+            <th>Key Products</th><th>Est. Employment</th><th>Markets</th>
+          </tr>
+        </thead>
+        <tbody id="sum-body"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- CHALLENGES -->
+  <div class="sec-hdr" style="margin-top:36px;"><h2>Sector Challenges</h2></div>
+  <div class="ch-grid">
+    <div class="ch-card">
+      <h4>Second-Hand Clothes (Mitumba)</h4>
+      <p>Imports of used clothing reached USD 106 million in 2022, up 43% from 2013. This price competition is widely cited as the primary suppressor of local textile demand. President Museveni reaffirmed a ban commitment in early 2024, but implementation remains delayed due to trader opposition and diplomatic pressure.</p>
+    </div>
+    <div class="ch-card">
+      <h4>Electricity — Cost &amp; Reliability</h4>
+      <p>All three industrial parks reported electricity as their top challenge. Power tariffs exceed the promised USc 5/kWhr. Frequent blackouts cause production halts and machine damage. UMEME reportedly raised utilization thresholds, eliminating lower-tariff access for most parks.</p>
+    </div>
+    <div class="ch-card">
+      <h4>Imported Fabric Dependency</h4>
+      <p>Almost all garment factories in industrial parks use imported woven fabric — primarily from China. Locally produced yarn is limited to knitted fabrics. No locally produced woven fabric manufacturer operates at scale, forcing the industry to import most of its upstream inputs.</p>
+    </div>
+    <div class="ch-card">
+      <h4>Poor Road Access to Parks</h4>
+      <p>Access roads to Liao Shen (Semuto Road under construction as of 2024) and MMP (road construction started July 2022, still unfinished) cause supply chain delays. Only Sino-Mbale had tarmac access at the time of the 2024 MTIC visits, though internal park roads were also unfinished.</p>
+    </div>
+    <div class="ch-card">
+      <h4>High Labour Turnover</h4>
+      <p>Factories predominantly employ casual labour. Workers trained in garment skills — especially tailors and machine operators — frequently leave abruptly, reducing factory efficiency. Labour mobility is high because the skills are transferable and informal tailoring is widely available.</p>
+    </div>
+    <div class="ch-card">
+      <h4>AGOA Suspension &amp; Export Market Access</h4>
+      <p>Uganda's suspension from the African Growth and Opportunity Act (AGOA) over domestic policy issues removed duty-free access to the US market — a key advantage for garment exporters. This particularly affects GOKTA Workwear, whose European and US export model relies on Uganda's preferential trade status.</p>
+    </div>
+    <div class="ch-card">
+      <h4>Low Market Awareness</h4>
+      <p>MTIC field teams found that most products from industrial parks are not widely available in Ugandan retail markets. Consumers and traders are largely unaware of what is manufactured domestically. The MTIC recommended an exhibition program and trader–manufacturer linkage meetings.</p>
+    </div>
+    <div class="ch-card">
+      <h4>Cotton Value Chain Gap</h4>
+      <p>Uganda exported approximately 98,000 MT of cotton lint in 2022, while processing less than 10% locally. From a peak of 120,000 tonnes in the late 1960s, domestic cotton production now sits at ~30,000 tonnes. Policy targets five new vertically integrated mills to raise local processing and add 50,000 jobs.</p>
+    </div>
+  </div>
+
+  <!-- POLICY -->
+  <div class="sec-hdr"><h2>Policy &amp; Investment Context</h2></div>
+  <p style="font-size:12.5px;color:#666;margin-bottom:18px;line-height:1.65;">Three overarching national frameworks govern how Uganda's textile and garment sector is prioritised and resourced. They are presented here in descending order of authority — the Tenfold Growth Strategy sets the supreme long-term vision; the National Development Plan IV translates that into a five-year operational programme; and the National Industrial Policy provides the sector-specific implementation framework.</p>
+
+  <!-- TIER 1: TENFOLD -->
+  <div class="pol-tier supreme">
+    <div class="pol-tier-hdr">
+      <span class="tier-num">①</span>
+      <div>
+        <div class="tier-title">Tenfold Growth Strategy (2023–2040) — Supreme Framework</div>
+        <div class="tier-sub">Ministry of Finance, Planning &amp; Economic Development · Launched FY 2023/24 · Execution commenced FY 2025/26</div>
+      </div>
+    </div>
+    <div class="pol-tier-body">
+      <h5>Vision &amp; Mandate</h5>
+      <p>President Museveni announced in January 2024 that Uganda must expand its GDP tenfold — from USD 50 billion (FY 2023/24 baseline) to USD 500 billion by 2040. This is Uganda's supreme economic planning document. It supersedes all sectoral plans by setting the outer ambition that all other policies must serve. FY 2025/26 marks the first year of formal execution.</p>
+      <div class="pol-kv">
+        <div class="pol-kv-item"><div class="kv-lbl">GDP Target</div><div class="kv-val">USD 50B → USD 500B</div></div>
+        <div class="pol-kv-item"><div class="kv-lbl">Timeline</div><div class="kv-val">2023–2040 (15 years)</div></div>
+        <div class="pol-kv-item"><div class="kv-lbl">Required Annual Growth</div><div class="kv-val">&gt;10% p.a.; double GDP every 5 years</div></div>
+        <div class="pol-kv-item"><div class="kv-lbl">Per Capita Income Target</div><div class="kv-val">USD 1,039 → USD 7,000</div></div>
+        <div class="pol-kv-item"><div class="kv-lbl">Merchandise Exports Target</div><div class="kv-val">13% → 50% of GDP</div></div>
+        <div class="pol-kv-item"><div class="kv-lbl">Med/High-Tech Mfg Exports</div><div class="kv-val">21% → 50% of GDP by 2040</div></div>
+        <div class="pol-kv-item"><div class="kv-lbl">FDI Target</div><div class="kv-val">~USD 3B → USD 50B/year</div></div>
+        <div class="pol-kv-item"><div class="kv-lbl">Tax-to-GDP Target</div><div class="kv-val">13% → &gt;25%</div></div>
+      </div>
+      <h5>Four ATMS Pillars — Where Textiles Fit</h5>
+      <p>The strategy is anchored on four named sectors: <strong style="color:#ffd8a8">Agro-industrialisation (A), Tourism (T), Mineral-based industrial development (M), and Science &amp; Technology Innovation (S)</strong>. Cotton, textiles and garments fall explicitly under the Agro-industrialisation pillar — described in the official strategy document as Phase 4 of Uganda's economic evolution: "value addition through manufacturing of the expanded commodities basket," explicitly listing cotton as one of the priority commodities.</p>
+      <h5>Five Phases of Uganda's Economic Evolution (as defined in the Strategy)</h5>
+      <p>The strategy contextualises Uganda's growth through five phases: Phase 1 (recovery of the colonial 3Cs economy — Cotton, Coffee, Copper); Phase 2 (infrastructure and human capital); Phase 3 (services and monetisation); <strong style="color:#ffd8a8">Phase 4 (value addition through manufacturing — cotton, fruits, milk, tea, timber, sugar)</strong>; Phase 5 (knowledge economy — pathogens, automobiles, 4th Industrial Revolution). Uganda is currently transitioning from Phase 3 into Phase 4, making textile manufacturing investment directly aligned with the supreme national strategy.</p>
+      <h5>Implication for the Textile Sector</h5>
+      <p>The Tenfold Strategy explicitly requires Uganda to stop exporting raw cotton lint and begin processing it into yarn, fabric and finished garments. Each step up the value chain multiplies export value: lint earns USD 1.4/kg; yarn USD 3/kg; fabric USD 5/kg; garments USD 8–10/kg. Achieving the export targets — USD 250B in merchandise exports by 2040 — is impossible without a fully developed cotton–textile–apparel value chain. The strategy also sets the energy investment targets (4–10× increase in generation capacity) that would directly resolve the electricity bottleneck crippling industrial parks today.</p>
+    </div>
+  </div>
+
+  <!-- TIER 2: NDP IV -->
+  <div class="pol-tier ndpiv" style="margin-top:12px;">
+    <div class="pol-tier-hdr">
+      <span class="tier-num">②</span>
+      <div>
+        <div class="tier-title">Fourth National Development Plan — NDP IV (2025/26–2029/30)</div>
+        <div class="tier-sub">National Planning Authority · Approved by Parliament January 9, 2025 · Launched by President Museveni June 5, 2025</div>
+      </div>
+    </div>
+    <div class="pol-tier-body">
+      <h5>Role &amp; Status</h5>
+      <p>NDP IV is Uganda's five-year operational blueprint, the second in the series of six National Development Plans designed to deliver the Tenfold Growth target. It runs from FY 2025/26 to FY 2029/30 under the theme: <em style="color:#a8d4f8">"Sustainable Industrialisation for Inclusive Growth, Employment and Wealth Creation."</em> It explicitly describes its mandate as delivering the first phase of tenfold growth — doubling the size of the economy within the plan period.</p>
+      <div class="pol-kv">
+        <div class="pol-kv-item"><div class="kv-lbl">Plan Period</div><div class="kv-val">FY 2025/26 – 2029/30</div></div>
+        <div class="pol-kv-item"><div class="kv-lbl">Theme</div><div class="kv-val">Sustainable Industrialisation for Inclusive Growth</div></div>
+        <div class="pol-kv-item"><div class="kv-lbl">Parent Framework</div><div class="kv-val">Tenfold Growth Strategy (supreme)</div></div>
+        <div class="pol-kv-item"><div class="kv-lbl">Approved By</div><div class="kv-val">Parliament, January 9, 2025</div></div>
+      </div>
+      <h5>Five Strategic Pillars Relevant to Textiles</h5>
+      <p><strong style="color:#a8d4f8">1. Agro-industrialisation:</strong> Explicitly targets value addition to agricultural products — development of value-addition infrastructure, strengthened post-harvest handling, enhanced competitiveness. Cotton is a named priority crop; textiles and apparels are a named priority agro-industrial value chain.</p>
+      <p><strong style="color:#a8d4f8">2. Value Addition &amp; Industrialisation:</strong> Factories using locally available raw materials are a presidential priority. NDP IV mandates accelerating establishment of such factories — directly targeted at upgrading Uganda's lint-to-garment pipeline.</p>
+      <p><strong style="color:#a8d4f8">3. Strategic Infrastructure:</strong> Investment in transport, energy, water and ICT to support industrialisation. This directly addresses the road access and electricity challenges flagged by MTIC during the 2024 industrial park visits.</p>
+      <p><strong style="color:#a8d4f8">4. Private Sector-Led Growth:</strong> NDP IV frames the private sector as the primary engine of growth, with government providing an enabling environment. Industrial parks like Sino-Mbale and Liao Shen, driven by private developers and Chinese FDI, are consistent with this model.</p>
+      <p><strong style="color:#a8d4f8">5. Human Capital &amp; Skills:</strong> Industrial vocational hubs are a key priority — directly addressing the skills gap and high labour turnover seen in garment factories, where trained tailors frequently leave for informal work.</p>
+      <h5>Textile-Specific Relevance</h5>
+      <p>NDP IV explicitly lists cotton, textiles and apparels as a priority agro-industrial sub-sector. It notes that the Uganda Police Force and Uganda Prison Services engage in leather and textile manufacturing but their capacity remains underutilised — requiring mechanisation, R&amp;D and technology transfer. It also identifies the MTIC-flagged challenge of NDP IV period needing to address SHC (second-hand clothes) policy, AfCFTA market access, and the BUBU framework as key enablers for local textile producers.</p>
+    </div>
+  </div>
+
+  <!-- TIER 3: NIP -->
+  <div class="pol-tier nip" style="margin-top:12px;">
+    <div class="pol-tier-hdr">
+      <span class="tier-num">③</span>
+      <div>
+        <div class="tier-title">National Industrial Policy 2020 (NIP 2020) — Sector Implementation Framework</div>
+        <div class="tier-sub">Ministry of Trade, Industry &amp; Cooperatives · Cabinet approved 2020 · Launched May 4, 2021 (with UNDP support) · Effective 10-year horizon to 2029/30</div>
+      </div>
+    </div>
+    <div class="pol-tier-body">
+      <h5>Background &amp; Purpose</h5>
+      <p>NIP 2020 is a review and upgrade of the National Industrial Policy 2008. It provides the sector-specific implementation framework that operationalises NDP targets at the factory and value-chain level. It consolidates achievements from NIP 2008 and gives new direction to industrial development for the decade to 2030. It was developed with UNDP technical support and launched by Prime Minister Ruhakana Rugunda in May 2021.</p>
+      <div class="pol-kv">
+        <div class="pol-kv-item"><div class="kv-lbl">MVA Target</div><div class="kv-val">8.3% → 16% of GDP by 2029/30</div></div>
+        <div class="pol-kv-item"><div class="kv-lbl">Industry GDP Share Target</div><div class="kv-val">27.1% → 31.7% by 2029/30</div></div>
+        <div class="pol-kv-item"><div class="kv-lbl">Manufactured Exports Target</div><div class="kv-val">22.5% → 46.8% of total exports</div></div>
+        <div class="pol-kv-item"><div class="kv-lbl">Manufacturing Jobs Target</div><div class="kv-val">9.8% → 15% of national employment</div></div>
+        <div class="pol-kv-item"><div class="kv-lbl">Oversight Ministry</div><div class="kv-val">MTIC (Ministry of Trade, Industry &amp; Cooperatives)</div></div>
+        <div class="pol-kv-item"><div class="kv-lbl">Supporting Partner</div><div class="kv-val">UNDP Uganda</div></div>
+      </div>
+      <h5>Three Priority Industry Clusters</h5>
+      <p><strong style="color:#b8d8a0">1. Agro-Based Industries (includes Textiles):</strong> Fruits, Coffee, Tea, Cassava, <strong style="color:#b8d8a0">Cotton, Textile &amp; Apparels</strong>, Oil Seeds, Bananas, Grains, Sugarcane, Dairy, Leather &amp; Leather Products. The NIP explicitly selects these through "extensive study and consultation" as the value chains with the highest immediate potential for value addition, employment and import substitution.</p>
+      <p><strong style="color:#b8d8a0">2. Extractive Industries:</strong> Iron &amp; Steel, Cement, Oil &amp; Gas, Salt, Fertilizers — sectors that create enabling inputs for textile machinery and construction of industrial parks.</p>
+      <p><strong style="color:#b8d8a0">3. Knowledge-Based Industries:</strong> Automobiles, Pharmaceuticals, Electrical &amp; Electronic Products — Phase 5 aspirations consistent with Tenfold Strategy's vision of a future knowledge economy.</p>
+      <h5>Six Strategic Objectives of NIP 2020</h5>
+      <p>① Increase and sustain supply of quality raw materials for value addition — directly targeting the cotton lint export problem. ② Develop and strengthen skilled human resources — addressing the labour turnover crisis in garment factories. ③ Accelerate R&amp;D and adoption of appropriate technologies. ④ Promote resource-efficient and environmentally sustainable industrialisation — relevant to Hangda Textile's wood-fired boiler risk flagged by MTIC. ⑤ Lower the cost of manufacturing, especially energy — directly addressing the electricity tariff grievances of industrial parks. ⑥ Improve access to regional markets — relevant to AGOA, AfCFTA and EAC market development for garment exporters.</p>
+      <h5>Relationship to National Textile Policy</h5>
+      <p>NIP 2020 sits above the National Textile Policy (2008, updated 2020) in the policy hierarchy. The Textile Policy is a sub-sectoral implementation instrument for the cotton–textile–apparel value chain, while NIP 2020 is the economy-wide industrial framework. The Textile Policy's specific targets — five new integrated mills, mitumba phase-out, local fabric production — are consistent with but subordinate to NIP 2020's economy-wide manufacturing value-addition goals.</p>
+    </div>
+  </div>
+
+  <!-- SUPPLEMENTARY POLICY CARDS -->
+  <div class="sec-hdr" style="margin-top:28px;"><h2>Supporting Policy Instruments</h2></div>
+  <div class="pol-grid">
+    <div class="pol-card">
+      <h4>National Textile Policy (2008 / updated 2020)</h4>
+      <p>The sector-specific policy under NIP 2020. Targets a complete cotton–textile–apparel value chain, reduced dependence on imported fabric, five new vertically integrated mills over eight years, and a phase-out of second-hand clothes. Explicitly identifies mitumba imports, counterfeits and lack of local fabric production as the three primary threats to sector development.</p>
+    </div>
+    <div class="pol-card">
+      <h4>BUBU — Buy Uganda Build Uganda</h4>
+      <p>Requires public institutions to prioritise locally manufactured goods in procurement. Textile firms including Lurtex and Fine Spinners explicitly reference this policy. The UPDF uniform manufacturing JV (NEC-MMP at MMP park) is a direct application — though MTIC notes Uganda still imports UPDF uniforms from Asia despite Nytil's capacity to supply them.</p>
+    </div>
+    <div class="pol-card">
+      <h4>Industrial Park Investment Model</h4>
+      <p>Uganda operates 22 state-linked industrial parks, many under a tripartite model: Government (landlord) → Developer (Chinese firm) → Tenant factories. Sino-Mbale (Tian Tang Group / Hebei Province) and Liao Shen (Zhang Group, USD 400M) exemplify the model. The park model is formally supported under NDP IV's private sector-led growth pillar.</p>
+    </div>
+    <div class="pol-card">
+      <h4>Import Tariff Protection</h4>
+      <p>Government raised import duty on textile fabrics from 25% to 35% under NIP 2020 objectives to protect domestic producers. Paired with presidential commitment (reaffirmed early 2024) to eventually ban mitumba imports — delayed due to trader opposition and past US diplomatic pressure linked to AGOA. Policy under review for phased implementation under NDP IV.</p>
+    </div>
+    <div class="pol-card">
+      <h4>Free Trade Zones (UFZA)</h4>
+      <p>The Uganda Free Zones Authority has issued developer licences including to Shree Modern Textiles (81-acre free port in Jinja — ginning, weaving and apparel, projected 1,500 direct / 4,500 indirect jobs). Free zones offer tax relief and are a key instrument for attracting export-oriented garment FDI consistent with the Tenfold Strategy's export targets.</p>
+    </div>
+    <div class="pol-card">
+      <h4>Uganda Cotton Development Organisation (UCDO)</h4>
+      <p>UCDO oversees the ginning and primary processing layer of the value chain. Around 40 ginneries operate nationally. Most lint is exported to Asian buyers — only ~10% is processed locally. Under the Tenfold Strategy and NDP IV, UCDO's role is expected to shift from managing lint exports to facilitating domestic value addition and linking ginneries to spinning mills.</p>
+    </div>
+  </div>
+
+  <footer>
+    Data compiled from: Ministry of Trade, Industry &amp; Cooperatives (MTIC) Industrial Monitoring Report — Three Private Parks (June 2024); MTIC Textile &amp; Garment Manufacturers registry; Uganda Tenfold Growth Strategy (Ministry of Finance, 2023; official document June 2025); Fourth National Development Plan NDP IV 2025/26–2029/30 (National Planning Authority, approved January 2025, launched June 2025); National Industrial Policy 2020 (MTIC / UNDP, launched May 2021); National Textile Policy (MTIC, 2008/2020); Economic Policy Research Centre (EPRC) Uganda; IMF PFM Blog; World Bank Uganda Country Overview; Monitor (Daily Monitor); Grokipedia; Fibre2Fashion; Make It East Africa; company websites (finespinners.com, lurtextextiles.co.ug, moderntextile.co.ug, goctaworkwear.com). Web data current as of May 2026.
+  </footer>
+
+</div>
+
+<script>
+// ─── DATA ────────────────────────────────────────────────────────────────────
+const companies = [
+  {
+    id:1, name:"Southern Range Nyanza Ltd (Nytil)", short:"Nytil / SRN",
+    segment:"integrated",
+    color:"#1a4a2a", accent:"#e8c44a",
+    park:"Independent", district:"Buikwe (Jinja/Njeru)",
+    founded:"1954 (as Nytil); privatised March 1996",
+    ownership:"Picfare Group (private investors); MD: Khushbu Shah",
+    location:"Plot 35, Yusuf Lule Road, Njeru, Buikwe District (~77 km east of Kampala, on the western bank of the Victoria Nile)",
+    capacity:"Fabric: 30 million metres/year. Spinning: 8,000 kg of yarn/day. Weaving: ~100,000 metres of fabric/day. T-shirts: 18,000–35,000/day. Uniforms: 2,500–5,000 sets/day. Medical cotton wool: 1.5 million packages/year",
+    capSource:"Daily Monitor (2021 interview with GM Vinay Kumar); Grokipedia; Ministry data",
+    employment:"~1,500 employees across 3 shifts (est. 2021); predominantly women",
+    markets:"Uganda (domestic), regional armed forces uniforms (EAC), regional wholesale",
+    products:[
+      {name:"Knitted Fabric (Grey & Finished)", type:"Fabric — Knitted", desc:"Produced on circular knitting machines. Basis for T-shirts and knitted garments."},
+      {name:"Woven Fabric (Khaki, Kitenge, Suiting)", type:"Fabric — Woven", desc:"Traditional core product; khaki cloth, kitenge prints, gomesi materials, suiting. Processed with modern dyeing and finishing lines."},
+      {name:"T-shirts & Polo Shirts", type:"Garment — Knitted", desc:"18,000 per day production rate. Exported under 'Made in Uganda' labels to European buyers."},
+      {name:"Military / Armed Forces Uniforms", type:"Garment — Woven", desc:"Major supplier of uniforms to regional armed forces. Capacity: 2,500–5,000 sets/day. MTIC notes Uganda still imports some UPDF uniforms from Asia despite Nytil's capacity."},
+      {name:"School Uniforms & Workwear", type:"Garment — Mixed", desc:"Institutional uniform production for schools, corporations, and security services."},
+      {name:"Bed Sheets & Home Textiles", type:"Home Textile", desc:"Bedsheets, cloth material, mattress cover material — listed in MTIC export records."},
+      {name:"Medical Cotton Wool", type:"Medical Textile", desc:"1.5 million packages per year. Supplies healthcare institutions regionally."},
+    ],
+    rawMaterials:[
+      {material:"Cotton Yarn / Lint", source:"Sourced from Ugandan ginneries; ~20% of Uganda's domestic lint consumed locally by Nytil and Fine Spinners"},
+      {material:"Polyester Yarn", source:"Imported from India (primary source per trade data) and China"},
+      {material:"Synthetic Dyes & Finishing Chemicals", source:"Imported from India (Colourtex Industries, Gargi Enterprises) and China"},
+      {material:"Textile Machinery Parts", source:"Imported from India (Rajvitex Industries) — confirmed in customs records"},
+    ],
+    sources:[
+      {label:"Grokipedia — Nyanza Textile Industries Limited", url:"https://grokipedia.com/page/nyanza_textile_industries_limited"},
+      {label:"Daily Monitor — Nytil Moving Up the Textile Ladder (2021)", url:"https://www.monitor.co.ug/uganda/business/finance/nytil-is-moving-up-the-textile-ladder-after-a-turbulent-past-1646960"},
+      {label:"Wikipedia — Nyanza Textile Industries Limited", url:"https://en.wikipedia.org/wiki/Nyanza_Textile_Industries_Limited"},
+      {label:"MTIC Textile Data (Ministry Field Data, 2024)", url:"#"},
+    ]
+  },
+  {
+    id:2, name:"Fine Spinners Uganda Limited", short:"Fine Spinners",
+    segment:"integrated",
+    color:"#2d1a5e", accent:"#c9a84c",
+    park:"Independent", district:"Kampala (Bugolobi)",
+    founded:"2014 (US$40 million investment; took over former Tri-Star premises)",
+    ownership:"Private (Fine Spinners Group; also has Kenya operations); A&E licensed thread manufacturer",
+    location:"Plot 33A–41A Spring Road, Kiswa Zone 8, Bugolobi, Kampala",
+    capacity:"T-shirts: 450,000–550,000 per month (~18,000/day). Cotton yarn and knitted fabric production integrated on-site. Total installed spindles: not publicly disclosed.",
+    capSource:"MTIC Textile Data 2024; Fine Spinners social media / Threads; The Independent (2017 feature); UMA directory",
+    employment:"Not publicly disclosed; hiring confirmed expanding (ZoomInfo 2025)",
+    markets:"EU (Germany primarily — Bonprix is a key buyer); Uganda domestic; exports under 'Made in Uganda' / 'Made in Africa' labels",
+    products:[
+      {name:"100% Cotton T-shirts (Export)", type:"Garment — Knitted", desc:"Primary export product. Bright multi-coloured T-shirts for European fashion brands including Bonprix (Germany). CmiA (Cotton made in Africa) certified."},
+      {name:"Polo Shirts", type:"Garment — Knitted", desc:"Export and domestic. 100% cotton, knitted on-site."},
+      {name:"Cotton Yarn", type:"Yarn", desc:"Spun on-site from Ugandan cotton lint. Used internally and sold. A&E licensed sewing thread also produced."},
+      {name:"Knitted Fabric", type:"Fabric — Knitted", desc:"Grey and finished knitted fabric for internal garment-making and wholesale."},
+      {name:"Vests & Kids Wear", type:"Garment — Knitted", desc:"Domestic market products; listed in UMA directory."},
+      {name:"Sewing Thread (Cotton/Polyester)", type:"Thread", desc:"American & Efird (A&E) licensed thread manufacturer for the East African market."},
+      {name:"Cotton Waste", type:"By-product", desc:"Sold commercially as a by-product of spinning operations."},
+    ],
+    rawMaterials:[
+      {material:"Uganda Cotton Lint", source:"Sourced from Kasese area ginneries and other Ugandan cotton-growing regions; fully traceable (CmiA certified)"},
+      {material:"Polyester Yarn", source:"Imported (air-texturising machinery imported from Rieter India per trade data)"},
+    ],
+    sources:[
+      {label:"Fine Spinners Uganda — Official Website", url:"http://www.finespinners.com"},
+      {label:"The Independent — Uganda Textile Industry (2017)", url:"https://allafrica.com/stories/201710310109.html"},
+      {label:"UMA Directory — Fine Spinners Entry", url:"https://www.uma.or.ug/tradefair-catalogue/item/193-a-k-shoe-makers-suubi-cmmf-group"},
+      {label:"American & Efird — Uganda Licensee Listing", url:"https://www.amefird.com/blog/2012/09/uganda/"},
+      {label:"MTIC Textile Data (Ministry Field Data, 2024)", url:"#"},
+    ]
+  },
+  {
+    id:3, name:"Shree Modern Textiles Limited", short:"Shree Modern",
+    segment:"integrated",
+    color:"#5a1a1a", accent:"#f0a030",
+    park:"Free Trade Zone (Jinja)", district:"Jinja",
+    founded:"Established under Nile Agro Group; UFZA Free Trade Zone license issued 2019",
+    ownership:"Nile Agro Group of Companies; founder Mr Patel Meghi Megan (who commissioned by President Museveni in the same visit as MMP Park)",
+    location:"Plot 2471, Block 3 Road, near Nile Aluminium Ltd, Mafubira, Jinja. Also: Kyabazinga Road, Jinja. Free Trade Zone covers 81 acres.",
+    capacity:"Free Trade Zone at full build-out: projected 1,500 direct employees. Current production capacity not publicly disclosed. Exports fabric (HSN 5407) to Kenya. Imports textile chemicals from India.",
+    capSource:"Fibre2Fashion (2019); Museveni.com commissioning record; Shree Modern website; Volza trade data",
+    employment:"Up to 1,500 direct / 4,500 indirect jobs projected at full capacity (Fibre2Fashion); current headcount undisclosed",
+    markets:"Uganda domestic; Kenya (fabric exports confirmed); regional",
+    products:[
+      {name:"Crew-Neck & Polo T-shirts", type:"Garment — Knitted", desc:"Core product of the free trade zone; produced from cotton and synthetic blends."},
+      {name:"Trousers & Full-Sleeve Shirts", type:"Garment — Woven", desc:"Formal and workwear apparel; uses both locally processed and imported fabric."},
+      {name:"Terry Towels", type:"Home Textile", desc:"Woven cotton terry towels for export and domestic market."},
+      {name:"Bed Sheets", type:"Home Textile", desc:"Woven bedding products."},
+      {name:"Kitenge (Wax Print Fabric)", type:"Fabric — Woven", desc:"Listed in marketplace listings; traditional African print fabric."},
+      {name:"Suiting / Uniform Fabric", type:"Fabric — Woven", desc:"Cut and sewn uniforms for corporate, school and security clients."},
+    ],
+    rawMaterials:[
+      {material:"Cotton Yarn / Lint", source:"Nile Agro Group has ginning operations; some self-sourced from Uganda"},
+      {material:"Polyester / Synthetic Yarn (POY)", source:"Imported from India and China (confirmed via trade records — HSN 5402, 5513)"},
+      {material:"Textile Finishing Chemicals", source:"Imported from India (Colourtex Industries, Ascent Ind Tech Controls)"},
+    ],
+    sources:[
+      {label:"Shree Modern Textiles — Official Website", url:"https://www.moderntextile.co.ug"},
+      {label:"Fibre2Fashion — Shree Modern UFZA Free Trade Zone", url:"https://www.fibre2fashion.com/news/textile-news/shree-modern-textiles-to-develop-free-trade-zone-in-uganda-252064-newsdetails.htm"},
+      {label:"Museveni.com — Commissioning Record (Jinja & Buikwe)", url:"https://www.yowerikmuseveni.com/commissioned-10-factories-jinja-and-buikwe-districts"},
+      {label:"MTIC Textile Data (Ministry Field Data, 2024)", url:"#"},
+    ]
+  },
+  {
+    id:4, name:"GOKTA Workwear (Uganda) Company Limited", short:"GOKTA Workwear",
+    segment:"garment",
+    color:"#0d3a52", accent:"#e05c2a",
+    park:"Liao Shen (Nakaseke)", district:"Nakaseke",
+    founded:"Invested 2018/2019; production commenced September 2020",
+    ownership:"Jilin Province Runyu Import &amp; Export Co., Ltd. (China) — first Jilin Province investment enterprise in Uganda",
+    location:"Block 269, Liao Shen Industrial Park, Kapeeka, Nakaseke District (~50 km from Kampala)",
+    capacity:"30 standard garment production lines. Design capacity: 2,000 workers. Annual capacity: ~2 million workwear pieces/year. Current utilisation: ~30% at time of MTIC 2024 visit (1,000 pieces/8-hr shift).",
+    capSource:"Gocta corporate website (goctaworkwear.com); MTIC Visit Report June 2024; Jilin Province Runyu press release",
+    employment:"800 workers (MTIC 2024); design capacity 2,000. All sewing machines imported from Japan or Japanese brands.",
+    markets:"Europe (primary export market); USA; Uganda domestic. Exports: USD 1.93M (2024–2025). Imports: USD 3.64M (2024–2025).",
+    products:[
+      {name:"Safety Workwear / Hi-Vis Garments", type:"Safety Garment", desc:"Primary product. Safety vests, reflective jackets, coveralls and PPE-grade workwear. Exported to European and US buyers duty-free under Uganda's trade preferences."},
+      {name:"Industrial Uniforms", type:"Safety Garment", desc:"Corporate and industrial uniform sets for manufacturing, construction and logistics sectors."},
+      {name:"Professional Outerwear", type:"Garment — Woven", desc:"High-quality professional garments for export buyers in Europe and North America."},
+    ],
+    rawMaterials:[
+      {material:"Woven Fabric (Safety / Hi-Vis)", source:"Imported from China (primary) — functional safety-grade fabrics with reflective properties"},
+      {material:"Reflective Tape & Trims", source:"Imported from China and other Asian suppliers"},
+      {material:"Sewing Thread", source:"Imported; machines are Japanese brand for precision stitching"},
+    ],
+    sources:[
+      {label:"GOKTA Workwear — Official Company Profile", url:"http://en.goctaworkwear.com/company.html"},
+      {label:"Jilin Province Runyu — Uganda Investment Record", url:"https://en.goctaworkwear.com/news/31.html"},
+      {label:"MTIC Industrial Monitoring Visit Report (June 2024)", url:"#"},
+      {label:"Market Inside Data — GOKTA 2024–2025 Trade Figures", url:"https://www.marketinsidedata.com/en/company/gocta-workwear-uganda/04af2a61c140d34976b2aed6f1288796"},
+    ]
+  },
+  {
+    id:5, name:"Lurtex Textiles Limited", short:"Lurtex Textiles",
+    segment:"fabric",
+    color:"#1a3a1a", accent:"#dda030",
+    park:"Liao Shen (Nakaseke)", district:"Nakaseke",
+    founded:"Established under the Liao Shen industrial park development; operational by 2018",
+    ownership:"Chinese investors (specific parent not publicly named); aligned with Liao Shen Park (Zhang Group ecosystem)",
+    location:"Block 68, Liao Shen Industrial Park, Kapeeka, Nakaseke District",
+    capacity:"40 circular knitting machines + 10 collar-making machines + 20 boxer/underwear knitting machines. 600 workers on-site (MTIC 2024). Aims to raise worker count. Import volume: USD 6.04M (customs data).",
+    capSource:"MTIC Visit Report June 2024; Lurtex website (lurtextextiles.co.ug); Kapeeka Development Watch Centre feature",
+    employment:"800 workers (per lurtextextiles.co.ug About page); MTIC 2024 reported 600",
+    markets:"Uganda (primary, BUBU aligned); limited exports. Sells both wholesale and retail.",
+    products:[
+      {name:"Knitted Grey Fabric", type:"Fabric — Knitted", desc:"Produced on 40 circular knitting machines using imported polyester yarn. Grey base fabric for further processing or sale to garment makers."},
+      {name:"Finished / Coloured Knitted Fabric", type:"Fabric — Knitted", desc:"Grey fabric processed through dyeing and finishing to produce coloured fabrics for garments."},
+      {name:"Sweaters", type:"Garment — Knitted", desc:"Knitted sweaters for domestic market."},
+      {name:"T-shirts & Sports Jerseys", type:"Garment — Knitted", desc:"Cut-and-sew garments made from on-site knitted fabric."},
+      {name:"Trousers", type:"Garment — Woven / Mixed", desc:"Woven-fabric trousers; fabric may be imported."},
+      {name:"Blankets & Bed Duvets", type:"Home Textile", desc:"Confirmed via Merchandise Uganda listing; uses polyester fill and knitted shells."},
+      {name:"Boxer Shorts / Underwear", type:"Garment — Knitted", desc:"Made on dedicated underwear knitting machines; domestic market."},
+    ],
+    rawMaterials:[
+      {material:"Polyester Yarn (POY)", source:"Imported from China and India — confirmed in 3,276+ import shipment records"},
+      {material:"Cotton Yarn", source:"Limited; sourced regionally from Ugandan ginneries where available"},
+      {material:"Dyes & Finishing Chemicals", source:"Imported from India and China"},
+    ],
+    sources:[
+      {label:"Lurtex Textiles — Official Website", url:"https://www.lurtextextiles.co.ug"},
+      {label:"Development Watch Centre — Kapeeka Industrial Feature", url:"https://www.dwcug.org/kapeeka-from-war-auditorium-to-flourishing-industrial-epicenter-thanks-to-chinese-investments/"},
+      {label:"MTIC Industrial Monitoring Visit Report (June 2024)", url:"#"},
+      {label:"Market Inside Data — Lurtex Trade Profile", url:"https://www.marketinsidedata.com/en/company/lurtex-textiles-limited/eeb01c589f0283453741494ed8de0475/ug"},
+    ]
+  },
+  {
+    id:6, name:"Hangda Textile Corporation Limited", short:"Hangda Textile",
+    segment:"fabric",
+    color:"#3a1a52", accent:"#e87020",
+    park:"Sino-Mbale (Mbale)", district:"Mbale",
+    founded:"Commissioned as part of Sino-Mbale Industrial Park (park operational from 2018–2023 rollout)",
+    ownership:"Chinese investors (Sino-Mbale Park tenant)",
+    location:"Sino-Uganda Mbale Industrial Park, Mbale City (along Mbale–Soroti Highway, 2.51 km²  park area)",
+    capacity:"10 tonnes of fabric per day. 24-hour operations. Machines: circular knitting machines for grey fabric production. Also processes and imports jacquard/woven fabric.",
+    capSource:"MTIC Industrial Monitoring Visit Report (June 2024); Sino-Uganda Research Centre feature",
+    employment:"200 workers (24-hour operation in shifts) — MTIC 2024",
+    markets:"Uganda (primary); fabrics supplied to garment makers within Sino-Mbale park and externally",
+    products:[
+      {name:"Knitted Grey Fabric", type:"Fabric — Knitted", desc:"Produced from polyester yarn on circular knitting machines. 10 tonnes/day capacity. Grey fabric is the base material processed further on-site."},
+      {name:"Coloured / Printed Knitted Fabric", type:"Fabric — Knitted Finished", desc:"Grey fabric is dyed, coloured and printed in the processing section. Uses steam from a wood-fired boiler (6 trucks of wood per day — noted environmental risk in MTIC report)."},
+      {name:"Processed Woven Fabric (Imported & Finished)", type:"Fabric — Woven Finished", desc:"Imported woven and jacquard fabric is also processed (coloured and printed) at this facility — extending value to imported inputs."},
+      {name:"Kitenge / Coloured Fabric", type:"Fabric — Printed", desc:"Listed in MTIC and Sino-Mbale marketplace data; traditional pattern printing applied to fabric."},
+    ],
+    rawMaterials:[
+      {material:"Polyester Yarn", source:"Imported from China — used in circular knitting machines to produce grey fabric"},
+      {material:"Woven Fabric (imported)", source:"Imported (jacquard, plush and woven varieties) for processing and finishing"},
+      {material:"Dyes & Printing Chemicals", source:"Imported from China"},
+      {material:"Firewood (Boiler Fuel)", source:"Locally procured — 6 trucks per day for steam generation (environmental concern flagged by MTIC)"},
+    ],
+    sources:[
+      {label:"MTIC Industrial Monitoring Visit Report (June 2024)", url:"#"},
+      {label:"Sino-Uganda Research Centre — Mbale Park Profile", url:"https://sinoug.org/sino-uganda-mbale-industrial-park-revolutionising-ugandas-manufacturing-sector/"},
+      {label:"Adrianople Group — Zone Profile: Sino-Uganda Mbale", url:"https://www.adrianoplegroup.com/post/zone-profile-sino-uganda-mbale-industrial-park"},
+    ]
+  },
+  {
+    id:7, name:"LIDA Perfect Establishment Limited", short:"LIDA Perfect",
+    segment:"garment",
+    color:"#4a2a0a", accent:"#c8a030",
+    park:"Sino-Mbale (Mbale)", district:"Mbale",
+    founded:"Commissioned within Sino-Mbale Industrial Park",
+    ownership:"Chinese investors (Sino-Mbale Park tenant)",
+    location:"Sino-Uganda Mbale Industrial Park, Mbale City",
+    capacity:"3,000 trousers per day (primary line). Also: 560,000 face masks per day (COVID-era line, may have been repurposed). 600 workers.",
+    capSource:"MTIC Industrial Monitoring Visit Report (June 2024)",
+    employment:"600 workers — MTIC 2024",
+    markets:"Uganda domestic market (primary)",
+    products:[
+      {name:"Jean Trousers (Denim)", type:"Garment — Woven", desc:"Primary product: 3,000 units/day on dedicated denim production lines. Uses imported denim fabric."},
+      {name:"General Trousers / Bottoms", type:"Garment — Woven", desc:"Non-denim trouser production from imported woven fabric."},
+      {name:"Face Masks / Protective Wear", type:"Specialty Garment", desc:"560,000 masks per day capacity installed (COVID-era). Status of current utilisation not confirmed in 2024 visit."},
+    ],
+    rawMaterials:[
+      {material:"Denim / Jean Fabric", source:"Imported (primary raw material — no domestic woven fabric producer at scale)"},
+      {material:"Woven Fabric (various)", source:"Imported from China and other Asian suppliers"},
+      {material:"Sewing Thread & Trims", source:"Imported; some regionally sourced"},
+    ],
+    sources:[
+      {label:"MTIC Industrial Monitoring Visit Report (June 2024)", url:"#"},
+      {label:"Adrianople Group — Sino-Mbale Zone Profile", url:"https://www.adrianoplegroup.com/post/zone-profile-sino-uganda-mbale-industrial-park"},
+    ]
+  },
+  {
+    id:8, name:"Xinlong Textile Factory Limited", short:"Xinlong Textile",
+    segment:"garment",
+    color:"#1a3040", accent:"#d06020",
+    park:"Sino-Mbale (Mbale)", district:"Mbale",
+    founded:"Commissioned within Sino-Mbale Industrial Park; operational by 2023",
+    ownership:"Chinese investors; Xinlon Textile & Garment Technology Co. Ltd (featured in Bloomberg / Getty Mbale coverage)",
+    location:"Sino-Uganda Mbale Industrial Park, Mbale City",
+    capacity:"3,000 pieces (jeans/trousers) per day. Fabric production and clothing assembly. 800 workers.",
+    capSource:"MTIC Industrial Monitoring Visit Report (June 2024); Bloomberg/Getty photographic coverage",
+    employment:"800 workers — largest garment employer in Sino-Mbale park (MTIC 2024)",
+    markets:"Uganda domestic; limited regional",
+    products:[
+      {name:"Denim Jeans (Men, Women, Children)", type:"Garment — Woven", desc:"Core product. 3,000 pieces/day. Washed, coloured and finished denim. Bloomberg photographic coverage confirms large-scale production floor."},
+      {name:"Casual Trousers & Bottoms", type:"Garment — Woven", desc:"Non-denim casual trousers using woven imported fabric."},
+      {name:"Fabric Coloration & Finishing", type:"Fabric Processing", desc:"On-site dyeing and finishing of both knitted and woven fabric to achieve different colourways and finishes."},
+    ],
+    rawMaterials:[
+      {material:"Denim Fabric", source:"Imported (primary input — confirmed 'uses imported woven fabric', MTIC 2024)"},
+      {material:"Woven Fabric (mixed)", source:"Imported from China and regional suppliers"},
+    ],
+    sources:[
+      {label:"MTIC Industrial Monitoring Visit Report (June 2024)", url:"#"},
+      {label:"Monitor — New Factories Give Mbale Locals Hope (2023)", url:"https://www.monitor.co.ug/uganda/news/national/new-factories-give-mbale-locals-hope-4354492"},
+      {label:"Getty Images — Xinlon Factory, Sino-Mbale (photographic)", url:"https://www.gettyimages.com/editorial-images/news/event/china-owned-factories-in-sino-uganda-mbale-industrial-park/776095262"},
+    ]
+  },
+  {
+    id:9, name:"Grace Textiles", short:"Grace Textiles",
+    segment:"specialty",
+    color:"#2a1a3a", accent:"#c8d040",
+    park:"Sino-Mbale (Mbale)", district:"Mbale",
+    founded:"Commissioned within Sino-Mbale Industrial Park",
+    ownership:"Chinese investors (Sino-Mbale park tenant); also runs Grace Foam (U) Ltd — a related entity",
+    location:"Sino-Uganda Mbale Industrial Park, Mbale City",
+    capacity:"500 workers. Bed sheets, covers and curtains. Foam play mats: 1.5 million pieces/year. Executive spring mattresses: 1.5 million pieces/year. About 10% of output exported to Kenya.",
+    capSource:"MTIC Industrial Monitoring Visit Report (June 2024); MTIC Textile Data 2; Monitor (Grace Foam fire note)",
+    employment:"500 workers — MTIC 2024",
+    markets:"Uganda (90%), Kenya (10% exports)",
+    products:[
+      {name:"Bed Sheets & Bed Covers", type:"Home Textile", desc:"Core product; uses imported polyester woven fabric for sheets and covers."},
+      {name:"Pillows & Duvets", type:"Home Textile", desc:"Foam and polyester fill locally procured; outer shell from imported fabric."},
+      {name:"Curtains", type:"Home Textile", desc:"Sewn curtains and drapes for domestic and commercial use."},
+      {name:"Foam Play Mats", type:"Home / Kids Textile", desc:"1.5 million pieces per year capacity. Foam sourced locally (foam material is a local procurement item per MTIC data)."},
+      {name:"Executive Spring Mattresses", type:"Home / Bedding", desc:"1.5 million pieces per year. Mattress manufacturing integrates textile covers with spring/foam cores."},
+    ],
+    rawMaterials:[
+      {material:"Polyester Woven Fabric", source:"Imported from China (primary textile input)"},
+      {material:"Foam Material", source:"Locally procured (noted in MTIC report as a local input) — likely from Ugandan foam manufacturers"},
+      {material:"Spring Coils / Mattress Components", source:"Imported or regionally sourced"},
+    ],
+    sources:[
+      {label:"MTIC Industrial Monitoring Visit Report (June 2024)", url:"#"},
+      {label:"MTIC Textile Data 2 (Ministry registry data)", url:"#"},
+      {label:"Monitor — Grace Foam fire reference in Mbale park article", url:"https://www.monitor.co.ug/uganda/news/national/new-factories-give-mbale-locals-hope-4354492"},
+    ]
+  },
+  {
+    id:10, name:"Ebei Uganda Limited", short:"Ebei Uganda",
+    segment:"specialty",
+    color:"#1c3a2a", accent:"#e0b040",
+    park:"Liao Shen (Nakaseke)", district:"Nakaseke",
+    founded:"Operational within Liao Shen Industrial Park",
+    ownership:"Chinese investors (Liao Shen park tenant)",
+    location:"Liao Shen Industrial Park, Kapeeka, Nakaseke District",
+    capacity:"345 knitting machines, each with production capacity of 20 dozens per 24 hours (~83,000 pairs/day theoretical; ~28 million pairs/year). Brand name: EVA stockings.",
+    capSource:"MTIC Industrial Monitoring Visit Report (June 2024); MTIC Textile Data 2",
+    employment:"200 workers — MTIC 2024",
+    markets:"Uganda (~70% domestic sales); regional EAC",
+    products:[
+      {name:"EVA Brand Stockings / Hosiery", type:"Hosiery — Knitted", desc:"Primary product. Full-length and ankle socks/stockings under the EVA brand. 345 machines at 20 dozen/24hr each."},
+      {name:"Polyester Socks (Various)", type:"Hosiery — Knitted", desc:"Multiple styles for men, women and children using polyester yarn (POY) imported from China."},
+    ],
+    rawMaterials:[
+      {material:"Polyester Yarn (POY)", source:"Imported from China — primary raw material for stocking production"},
+      {material:"Elastic / Spandex Thread", source:"Imported for sock cuffs and ribbing"},
+    ],
+    sources:[
+      {label:"MTIC Industrial Monitoring Visit Report (June 2024)", url:"#"},
+      {label:"MTIC Textile Data 2 (Ministry registry data)", url:"#"},
+    ]
+  },
+  {
+    id:11, name:"Kyoga Capital Textile Corporation Limited", short:"Kyoga Capital",
+    segment:"specialty",
+    color:"#3a1a0a", accent:"#50b0e0",
+    park:"Sino-Mbale (Mbale)", district:"Mbale",
+    founded:"Operational within Sino-Mbale Industrial Park",
+    ownership:"Chinese investors (Sino-Mbale park tenant)",
+    location:"Sino-Uganda Mbale Industrial Park, Mbale City",
+    capacity:"8 million pairs of stockings per year. 80 workers per 10-hour shift. Uses polyester yarn imported from China.",
+    capSource:"MTIC Industrial Monitoring Visit Report (June 2024)",
+    employment:"80 workers per shift",
+    markets:"Uganda domestic",
+    products:[
+      {name:"Knitted Stockings / Hosiery", type:"Hosiery — Knitted", desc:"8 million pairs/year of socks and stockings. Polyester yarn knitted on dedicated hosiery machines."},
+    ],
+    rawMaterials:[
+      {material:"Polyester Yarn", source:"Imported from China (confirmed MTIC 2024)"},
+    ],
+    sources:[
+      {label:"MTIC Industrial Monitoring Visit Report (June 2024)", url:"#"},
+      {label:"Adrianople Group — Sino-Mbale Zone Profile", url:"https://www.adrianoplegroup.com/post/zone-profile-sino-uganda-mbale-industrial-park"},
+    ]
+  },
+  {
+    id:12, name:"Rongsheng Development Limited", short:"Rongsheng",
+    segment:"garment",
+    color:"#2a3a1a", accent:"#e04040",
+    park:"Sino-Mbale (Mbale)", district:"Mbale",
+    founded:"Operational within Sino-Mbale Industrial Park",
+    ownership:"Chinese investors (Sino-Mbale park tenant)",
+    location:"Sino-Uganda Mbale Industrial Park, Mbale City",
+    capacity:"100 workers. 10-hour shift. Garments and reflective/safety wear. Uses imported fabric.",
+    capSource:"MTIC Industrial Monitoring Visit Report (June 2024)",
+    employment:"100 workers — MTIC 2024",
+    markets:"Uganda domestic; import/export of consumer goods",
+    products:[
+      {name:"Shirts & T-shirts", type:"Garment — Woven / Knitted", desc:"General garment assembly from imported fabric; 1,000 units/month capacity noted in MTIC park-level data."},
+      {name:"Reflective Safety Wear", type:"Safety Garment", desc:"Reflective vests and workwear for safety applications."},
+      {name:"General Apparel", type:"Garment — Mixed", desc:"Import/export of consumer goods in addition to manufacturing — includes trade alongside factory production."},
+    ],
+    rawMaterials:[
+      {material:"Fabric (woven, mixed)", source:"Imported — MTIC notes 'use imported fabric' for all Rongsheng production"},
+    ],
+    sources:[
+      {label:"MTIC Industrial Monitoring Visit Report (June 2024)", url:"#"},
+      {label:"MTIC Textile Data 2 (Ministry registry data)", url:"#"},
+    ]
+  },
+];
+
+// ─── STATE ────────────────────────────────────────────────────────────────────
+let activeIdx = 0;
+let activeTab = "products";
+let activeSeg = "all";
+
+// ─── HELPERS ─────────────────────────────────────────────────────────────────
+function parkColor(park){
+  if(park.includes("Sino-Mbale")) return {bg:"#1a3a5e",fg:"#a8d4f8"};
+  if(park.includes("Liao Shen")) return {bg:"#1a3a1a",fg:"#a8d8a8"};
+  if(park.includes("MMP")) return {bg:"#3a1a1a",fg:"#d8a8a8"};
+  return {bg:"#2a2a2a",fg:"#ccc"};
+}
+function segLabel(s){
+  return {integrated:"Integrated Mill",garment:"Garment Factory",fabric:"Fabric / Knitting",specialty:"Specialty / Hosiery"}[s]||s;
+}
+function segColor(s){
+  return {integrated:"#1a4a2a",garment:"#3a1a0a",fabric:"#1a1a4a",specialty:"#3a2a0a"}[s]||"#333";
+}
+function filteredCompanies(){
+  if(activeSeg==="all") return companies;
+  return companies.filter(c=>c.segment===activeSeg);
+}
+
+// ─── RENDER NAV ───────────────────────────────────────────────────────────────
+function renderNav(){
+  const list=filteredCompanies();
+  const nav=document.getElementById("co-nav");
+  if(!list.length){nav.innerHTML="<em style='color:#999;font-size:13px'>No companies in this segment.</em>";return;}
+  // make sure activeIdx is valid
+  if(activeIdx>=list.length) activeIdx=0;
+  nav.innerHTML=list.map((c,i)=>`
+    <button class="${i===activeIdx?'active':''}"
+      style="${i===activeIdx?`border-color:${c.color};background:${c.color};`:''};"
+      onclick="setCompany(${i})">${c.short}</button>
+  `).join("");
+}
+
+// ─── RENDER CARD ──────────────────────────────────────────────────────────────
+function renderCard(){
+  const list=filteredCompanies();
+  if(!list.length){document.getElementById("co-card").innerHTML="";return;}
+  const c=list[activeIdx];
+  const pk=parkColor(c.park);
+  document.getElementById("co-card").innerHTML=`
+    <div class="card-hdr" style="background:${c.color};border-bottom:4px solid ${c.accent}">
+      <div class="card-hdr-row">
+        <div>
+          <div class="card-eyebrow" style="color:${c.accent}">Manufacturer #${c.id} · ${segLabel(c.segment)}</div>
+          <h2>${c.name}</h2>
+        </div>
+        <div class="cap-badge">
+          <div class="cb-lbl" style="color:${c.accent}">Industrial Park</div>
+          <div class="cb-val">
+            <span class="park-badge" style="background:${pk.bg};color:${pk.fg}">${c.park}</span>
+          </div>
+        </div>
+      </div>
+      <div class="meta-grid">
+        ${[["Location",c.location],["Founded / Commissioned",c.founded],["Ownership",c.ownership],["Employment",c.employment],["Markets",c.markets]].map(([l,v])=>`
+          <div class="meta-item">
+            <div class="mi-lbl" style="color:${c.accent}">${l}</div>
+            <div class="mi-val">${v}</div>
+          </div>
+        `).join("")}
+      </div>
+      <div class="cap-src">Capacity source: ${c.capSource}</div>
+    </div>
+    <div class="tabs">
+      ${[["products","Products"],["rawmaterials","Raw Materials"],["sources","Sources & Notes"]].map(([t,l])=>`
+        <button class="${activeTab===t?'active':''}"
+          style="${activeTab===t?`border-bottom-color:${c.color};color:${c.color};`:''}"
+          onclick="setTab('${t}')">${l}</button>
+      `).join("")}
+    </div>
+    <div class="tc">${renderTabContent(c)}</div>
+  `;
+}
+
+// ─── TAB CONTENT ─────────────────────────────────────────────────────────────
+function renderTabContent(c){
+  if(activeTab==="products") return `
+    <p class="tc-note">Products conform to Uganda National Bureau of Standards (UNBS) and East African Standards (EAS) where applicable.</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Product / Brand</th><th>Type</th><th>Description &amp; Applications</th></tr></thead>
+        <tbody>
+          ${c.products.map(p=>`
+            <tr>
+              <td class="fn-bold" style="color:${c.color}">${p.name}</td>
+              <td style="white-space:nowrap">
+                <span class="grade-badge" style="background:${segColor(c.segment)}">${p.type}</span>
+              </td>
+              <td style="color:#444;line-height:1.6">${p.desc}</td>
+            </tr>
+          `).join("")}
+        </tbody>
+      </table>
+    </div>
+    <div class="td-note">
+      <strong>Note on production capacity:</strong> Per-product capacity figures are generally not publicly disclosed. Where capacity data exists, it reflects total plant throughput. The MTIC notes that Ugandan garment factories primarily use imported woven fabric; local value addition is concentrated in knitting, cutting, sewing and finishing.
+    </div>
+  `;
+  if(activeTab==="rawmaterials") return `
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Raw Material</th><th>Role in Production</th><th>Source / Origin</th></tr></thead>
+        <tbody>
+          ${c.rawMaterials.map(r=>{
+            const roles={
+              "Uganda Cotton Lint":"Primary fibre input; spun into yarn then knitted/woven into fabric",
+              "Cotton Yarn / Lint":"Spun fibre used in spinning, weaving and knitting",
+              "Polyester Yarn (POY)":"Partially oriented yarn — melt-spun synthetic for knitting stockings and fabric",
+              "Polyester Yarn":"Synthetic fibre input; cheaper than cotton; dominant in socks and knitted fabrics",
+              "Polyester Woven Fabric":"Pre-woven fabric imported for cutting, sewing and home textile production",
+              "Woven Fabric (Safety / Hi-Vis)":"Specialist fabric with reflective or flame-resistant properties for PPE garments",
+              "Woven Fabric (imported)":"Pre-woven fabric (denim, general) imported for garment assembly",
+              "Woven Fabric (various)":"Pre-woven general fabric for garment cutting and sewing",
+              "Denim / Jean Fabric":"Woven cotton-blend fabric for jeans production",
+              "Denim Fabric":"Woven cotton-blend fabric for jeans production",
+              "Fabric (woven, mixed)":"Pre-woven imported fabric used for all garment assembly",
+              "Synthetic Dyes & Finishing Chemicals":"Applied in dyeing vats and finishing baths to colour and treat fabric",
+              "Dyes & Finishing Chemicals":"Applied in dyeing vats and finishing baths to colour and treat fabric",
+              "Dyes & Printing Chemicals":"Used in printing and dyeing sections for colour application",
+              "Textile Finishing Chemicals":"Sizing, softeners, and fixing agents applied to yarn and fabric",
+              "Textile Machinery Parts":"Spare parts and components for looms, knitting machines and sewing machines",
+              "Elastic / Spandex Thread":"Added to sock cuffs and waistbands for stretch and fit",
+              "Reflective Tape & Trims":"Sewn onto safety garments for high-visibility compliance",
+              "Sewing Thread & Trims":"Used for seaming and decorative stitching in all garment production",
+              "Sewing Thread":"Used for seaming in garment assembly",
+              "Firewood (Boiler Fuel)":"Burned to generate steam for fabric steaming, setting and finishing",
+              "Foam Material":"Used in mattresses, pillows and play mats — core cushioning component",
+              "Spring Coils / Mattress Components":"Metal spring units assembled into mattresses",
+              "Cotton Yarn / Lint":"Spun cotton used as yarn for knitting and as base for spinning operations",
+            };
+            return `
+              <tr>
+                <td class="fn-bold" style="color:${c.color}">${r.material}</td>
+                <td style="color:#444;font-size:12px;line-height:1.6">${roles[r.material]||"Input material for textile manufacturing"}</td>
+                <td style="color:#555;line-height:1.6">${r.source}</td>
+              </tr>
+            `;
+          }).join("")}
+        </tbody>
+      </table>
+    </div>
+  `;
+  if(activeTab==="sources") return `
+    <p class="tc-note">All data for this manufacturer is drawn from the following verifiable sources:</p>
+    <div class="src-list">
+      ${c.sources.map(s=>`
+        <div class="src-item" style="border-left:3px solid ${c.color}">
+          <span class="src-label">${s.label}</span>
+          ${s.url!="#"?`<a href="${s.url}" target="_blank" rel="noopener noreferrer"
+            class="src-link" style="color:${c.color}">
+            ↗ ${s.url.replace(/https?:\/\//,"").split("/")[0]}
+          </a>`:`<span style="font-size:10px;color:#999;font-style:italic">Ministry internal document</span>`}
+        </div>
+      `).join("")}
+    </div>
+    <div style="margin-top:18px;padding:14px 16px;background:#f5f0e8;border-radius:5px;font-size:12px;color:#666;line-height:1.6;">
+      <strong>Production Capacity:</strong> ${c.capacity}
+    </div>
+  `;
+  return "";
+}
+
+// ─── RENDER SUMMARY ───────────────────────────────────────────────────────────
+function renderSummary(){
+  const list=filteredCompanies();
+  document.getElementById("sum-body").innerHTML=list.map((c,i)=>`
+    <tr style="background:${i===activeIdx&&activeSeg!=="all"?'#fffbf0':'transparent'}"
+      onclick="setCompany(${i})">
+      <td><span class="num-badge" style="background:${c.color}">${c.id}</span></td>
+      <td class="fn-bold" style="color:${c.color}">${c.short}</td>
+      <td><span class="park-badge" style="background:${segColor(c.segment)};color:#fff;padding:2px 7px;border-radius:2px;font-size:10px">${segLabel(c.segment)}</span></td>
+      <td style="color:#555">${c.district}</td>
+      <td style="color:#444">${c.products.slice(0,2).map(p=>p.name).join(", ")}${c.products.length>2?"…":""}</td>
+      <td style="color:#555">${c.employment.split("—")[0].split("(")[0].trim()}</td>
+      <td style="color:#555">${c.markets.split(";")[0].trim()}</td>
+    </tr>
+  `).join("");
+}
+
+// ─── CONTROLS ────────────────────────────────────────────────────────────────
+function setCompany(idx){
+  activeIdx=idx;activeTab="products";
+  renderNav();renderCard();renderSummary();
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+function setTab(t){
+  activeTab=t;renderCard();
+}
+function filterSeg(seg,btn){
+  activeSeg=seg;activeIdx=0;activeTab="products";
+  document.querySelectorAll(".seg-tabs button").forEach(b=>b.classList.remove("active"));
+  btn.classList.add("active");
+  renderNav();renderCard();renderSummary();
+}
+
+// ─── INIT ────────────────────────────────────────────────────────────────────
+renderNav();renderCard();renderSummary();
+</script>
+</body>
+</html>
