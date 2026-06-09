@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Uganda Manufacturing — Sources of Truth | MTIC × UNIDO PCP</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;background:#f0f2f5;color:#1a1a2e;font-size:14px}
+:root{--blue:#1565c0;--green:#2e7d32;--amber:#f57f17;--red:#c62828;--light:#f5f5f5;--card:#fff;--border:#e0e0e0;--text:#212121;--muted:#757575}
+
+/* HEADER */
+.site-header{background:linear-gradient(135deg,#0d47a1 0%,#1565c0 60%,#1976d2 100%);color:#fff;padding:20px 32px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 2px 8px rgba(0,0,0,.3)}
+.site-header h1{font-size:22px;font-weight:700;letter-spacing:.5px}
+.site-header .sub{font-size:12px;opacity:.8;margin-top:3px}
+.badge{background:#f57f17;color:#fff;padding:4px 12px;border-radius:12px;font-size:11px;font-weight:700;letter-spacing:.5px}
+
+/* TABS */
+.tab-bar{background:#fff;border-bottom:2px solid var(--border);padding:0 32px;display:flex;gap:0;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+.tab-btn{padding:16px 28px;border:none;background:none;cursor:pointer;font-size:14px;font-weight:600;color:var(--muted);border-bottom:3px solid transparent;margin-bottom:-2px;transition:all .2s}
+.tab-btn:hover{color:var(--blue)}
+.tab-btn.active{color:var(--blue);border-bottom-color:var(--blue)}
+
+/* CONTENT */
+.tab-content{display:none;padding:28px 32px;max-width:1400px;margin:0 auto}
+.tab-content.active{display:block}
+
+/* CARDS */
+.card{background:var(--card);border-radius:10px;box-shadow:0 1px 6px rgba(0,0,0,.08);padding:20px;border:1px solid var(--border)}
+.card h3{font-size:13px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
+.card .value{font-size:28px;font-weight:700;color:var(--blue)}
+.card .sub-value{font-size:12px;color:var(--muted);margin-top:4px}
+
+/* GRIDS */
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-bottom:24px}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:24px}
+.three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;margin-bottom:24px}
+@media(max-width:900px){.two-col,.three-col{grid-template-columns:1fr}}
+
+/* SECTION TITLES */
+.section-title{font-size:18px;font-weight:700;color:var(--blue);margin-bottom:6px;display:flex;align-items:center;gap:8px}
+.section-sub{font-size:13px;color:var(--muted);margin-bottom:20px}
+.tenfold-banner{background:linear-gradient(135deg,#1b5e20,#2e7d32);color:#fff;border-radius:10px;padding:16px 24px;margin-bottom:24px;display:flex;align-items:center;gap:16px}
+.tenfold-banner .icon{font-size:32px}
+.tenfold-banner strong{font-size:15px;display:block;margin-bottom:4px}
+.tenfold-banner span{font-size:12px;opacity:.9}
+
+/* PROGRESS BARS */
+.progress-section{margin-bottom:24px}
+.progress-item{margin-bottom:16px}
+.progress-label{display:flex;justify-content:space-between;margin-bottom:6px;font-size:13px}
+.progress-track{background:#e8eaf6;border-radius:6px;height:20px;position:relative;overflow:visible}
+.progress-fill{height:100%;border-radius:6px;transition:width .8s ease;position:relative}
+.p-current{background:#1565c0}
+.p-ndpiv{background:#43a047}
+.p-tenfold{background:#f57f17}
+.progress-legend{display:flex;gap:20px;margin-top:8px;font-size:11px}
+.legend-dot{width:10px;height:10px;border-radius:50%;display:inline-block;margin-right:4px;vertical-align:middle}
+
+/* TABLES */
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{background:#e8eaf6;color:#1a237e;padding:10px 12px;text-align:left;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.3px}
+td{padding:9px 12px;border-bottom:1px solid #f0f0f0;vertical-align:top}
+tr:hover td{background:#fafafa}
+.tag{display:inline-block;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600}
+.tag-green{background:#e8f5e9;color:#2e7d32}
+.tag-yellow{background:#fff8e1;color:#f57f17}
+.tag-red{background:#ffebee;color:#c62828}
+.tag-blue{background:#e3f2fd;color:#1565c0}
+
+/* CHAIN SELECTOR */
+.chain-selector{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px}
+.chain-btn{padding:8px 16px;border:2px solid var(--border);border-radius:20px;background:#fff;cursor:pointer;font-size:13px;font-weight:600;color:var(--muted);transition:all .2s}
+.chain-btn:hover,.chain-btn.active{border-color:var(--blue);background:var(--blue);color:#fff}
+
+/* VALUE CHAIN MAP */
+.vc-map{background:#fff;border-radius:10px;padding:24px;box-shadow:0 1px 6px rgba(0,0,0,.08);border:1px solid var(--border);overflow-x:auto;margin-bottom:20px}
+.vc-map h3{font-size:16px;font-weight:700;color:var(--blue);margin-bottom:6px}
+.vc-map .desc{font-size:12px;color:var(--muted);margin-bottom:20px}
+.vc-flow{display:flex;align-items:stretch;gap:0;min-width:600px}
+.vc-phase{flex:1;display:flex;flex-direction:column;position:relative}
+.vc-phase:not(:last-child)::after{content:'▶';position:absolute;right:-12px;top:50%;transform:translateY(-50%);font-size:16px;color:#bdbdbd;z-index:2}
+.phase-box{border-radius:8px;padding:12px 10px;text-align:center;flex:1;display:flex;flex-direction:column;justify-content:center;margin:0 6px;min-height:110px;border:2px solid transparent;transition:all .2s;cursor:default}
+.phase-box:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.15)}
+.phase-strong{background:#e8f5e9;border-color:#43a047;color:#1b5e20}
+.phase-emerging{background:#fff8e1;border-color:#f9a825;color:#e65100}
+.phase-gap{background:#ffebee;border-color:#e57373;color:#b71c1c}
+.phase-name{font-weight:700;font-size:12px;margin-bottom:4px;text-transform:uppercase;letter-spacing:.3px}
+.phase-label{font-size:11px;opacity:.85;line-height:1.3}
+.phase-stat{font-size:10px;margin-top:6px;font-weight:600;padding:2px 6px;background:rgba(255,255,255,.6);border-radius:4px}
+.vc-legend{display:flex;gap:16px;margin-top:12px;font-size:11px;align-items:center}
+.vc-legend-item{display:flex;align-items:center;gap:6px}
+.vc-legend-box{width:14px;height:14px;border-radius:3px;border:2px solid transparent}
+
+/* CHAIN DETAIL */
+.chain-detail{display:none}
+.chain-detail.active{display:block}
+.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+@media(max-width:800px){.detail-grid{grid-template-columns:1fr}}
+.stat-box{background:#f8f9fa;border-radius:8px;padding:14px;border-left:4px solid var(--blue)}
+.stat-box.green{border-left-color:var(--green)}
+.stat-box.amber{border-left-color:var(--amber)}
+.stat-box.red{border-left-color:var(--red)}
+.stat-box h4{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:8px;font-weight:700}
+.stat-box p{font-size:13px;line-height:1.6}
+.constraint-bar{margin-bottom:8px}
+.constraint-label{display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px}
+.constraint-track{background:#e0e0e0;border-radius:4px;height:8px}
+.constraint-fill{height:100%;border-radius:4px;background:#1565c0}
+.w5{width:100%}.w4{width:80%}.w3{width:60%}.w2{width:40%}.w1{width:20%}
+.companies-list{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+.company-chip{background:#e3f2fd;color:#0d47a1;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:600}
+.priority-list{list-style:none}
+.priority-list li{padding:8px 0;border-bottom:1px solid #f0f0f0;font-size:13px;display:flex;gap:8px;align-items:flex-start}
+.priority-num{background:var(--blue);color:#fff;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;margin-top:1px}
+.proj-card{background:linear-gradient(135deg,#1b5e20,#388e3c);color:#fff;border-radius:10px;padding:20px;margin-top:4px}
+.proj-card h4{font-size:13px;font-weight:700;margin-bottom:12px;opacity:.9}
+.proj-row{display:flex;justify-content:space-between;font-size:13px;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.15)}
+.proj-row:last-child{border-bottom:none}
+.proj-val{font-weight:700;font-size:15px}
+
+/* FOOTER */
+footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-top:24px;border-top:1px solid var(--border)}
+</style>
+</head>
+<body>
+
+<div class="site-header">
+  <div>
+    <h1>🇺🇬 Uganda Manufacturing — Sources of Truth</h1>
+    <div class="sub">Ministry of Trade, Industry &amp; Cooperatives &nbsp;×&nbsp; UNIDO Programme for Country Partnership &nbsp;|&nbsp; Updated June 2026</div>
+  </div>
+  <div class="badge">TENFOLD GROWTH FRAMEWORK</div>
+</div>
+
+<div class="tab-bar">
+  <button class="tab-btn active" onclick="showTab('overview')">🏭 Manufacturing Overview</button>
+  <button class="tab-btn" onclick="showTab('maps')">🗺️ Value Chain Maps</button>
+  <button class="tab-btn" onclick="showTab('status')">📊 Chain Status &amp; 2040 Projections</button>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SECTION 1: MANUFACTURING OVERVIEW
+═══════════════════════════════════════════════════════════════ -->
+<div id="tab-overview" class="tab-content active">
+
+  <div class="tenfold-banner">
+    <div class="icon">🚀</div>
+    <div>
+      <strong>The Tenfold Growth Strategy is the governing purpose of this entire study.</strong>
+      <span>All analysis, projections, and prescribed solutions are calibrated to Uganda achieving a tenfold expansion of its economy by 2040 — driven by manufacturing, mineral value addition, and agro-industrialisation (ATMs framework). The question at every step: <em>what gets Uganda to tenfold growth sustainably?</em></span>
+    </div>
+  </div>
+
+  <div class="section-title">📊 Uganda Manufacturing — Key Indicators</div>
+  <div class="section-sub">Current status (2024) versus NDP IV targets (FY2029/30) versus Tenfold Growth targets (2040)</div>
+
+  <div class="kpi-grid">
+    <div class="card"><h3>Manufacturing / GDP</h3><div class="value">15.2%</div><div class="sub-value">NDP IV target: 21% &nbsp;|&nbsp; Tenfold target: 30%</div></div>
+    <div class="card"><h3>Uganda GDP</h3><div class="value">USD 53.2B</div><div class="sub-value">NDP IV: USD 158B by 2029/30 &nbsp;|&nbsp; Tenfold: ~USD 500B by 2040</div></div>
+    <div class="card"><h3>Capacity Utilisation</h3><div class="value">~30%</div><div class="sub-value">NDP IV target: 60% &nbsp;|&nbsp; Tenfold target: 80%</div></div>
+    <div class="card"><h3>Per Capita Income</h3><div class="value">USD 1,146</div><div class="sub-value">NDP IV: USD 2,008 &nbsp;|&nbsp; Vision 2040: USD 9,500</div></div>
+    <div class="card"><h3>GDP Growth Rate</h3><div class="value">6.6%</div><div class="sub-value">NDP IV target: 10.1% &nbsp;|&nbsp; Tenfold: 12–15% p.a.</div></div>
+    <div class="card"><h3>Manufactured Exports</h3><div class="value">~12%</div><div class="sub-value">of total exports &nbsp;|&nbsp; NDP IV target: 35% &nbsp;|&nbsp; Tenfold: >50%</div></div>
+  </div>
+
+  <div class="card" style="margin-bottom:24px">
+    <h3 style="font-size:15px;color:var(--blue);margin-bottom:16px;font-weight:700">Progress Towards 2040 Targets</h3>
+    <div class="progress-section">
+      <div class="progress-item">
+        <div class="progress-label"><span>Manufacturing share of GDP</span><span style="font-size:11px">Current 15.2% → NDP IV 21% → Tenfold 30%</span></div>
+        <div style="position:relative;height:28px;background:#f5f5f5;border-radius:6px;overflow:hidden">
+          <div style="position:absolute;left:0;top:0;height:100%;width:50.7%;background:#1565c0;border-radius:6px 0 0 6px;display:flex;align-items:center;padding-left:8px;color:#fff;font-size:11px;font-weight:700">15.2% (Current)</div>
+          <div style="position:absolute;left:50.7%;top:0;height:100%;width:19.3%;background:#43a047;display:flex;align-items:center;padding-left:6px;color:#fff;font-size:11px;font-weight:700">→21%</div>
+          <div style="position:absolute;left:70%;top:0;height:100%;width:30%;background:#f57f17;border-radius:0 6px 6px 0;display:flex;align-items:center;padding-left:6px;color:#fff;font-size:11px;font-weight:700">→30% Tenfold</div>
+        </div>
+      </div>
+      <div class="progress-item" style="margin-top:16px">
+        <div class="progress-label"><span>Capacity Utilisation</span><span style="font-size:11px">Current 30% → NDP IV 60% → Tenfold 80%</span></div>
+        <div style="position:relative;height:28px;background:#f5f5f5;border-radius:6px;overflow:hidden">
+          <div style="position:absolute;left:0;top:0;height:100%;width:37.5%;background:#1565c0;border-radius:6px 0 0 6px;display:flex;align-items:center;padding-left:8px;color:#fff;font-size:11px;font-weight:700">30% (Current)</div>
+          <div style="position:absolute;left:37.5%;top:0;height:100%;width:37.5%;background:#43a047;display:flex;align-items:center;padding-left:6px;color:#fff;font-size:11px;font-weight:700">→ 60% (NDP IV)</div>
+          <div style="position:absolute;left:75%;top:0;height:100%;width:25%;background:#f57f17;border-radius:0 6px 6px 0;display:flex;align-items:center;padding-left:6px;color:#fff;font-size:11px;font-weight:700">→80% Tenfold</div>
+        </div>
+      </div>
+      <div class="progress-item" style="margin-top:16px">
+        <div class="progress-label"><span>GDP (absolute, USD billions)</span><span style="font-size:11px">Current $53.2B → NDP IV $158B → Tenfold ~$500B</span></div>
+        <div style="position:relative;height:28px;background:#f5f5f5;border-radius:6px;overflow:hidden">
+          <div style="position:absolute;left:0;top:0;height:100%;width:10.6%;background:#1565c0;border-radius:6px 0 0 6px;display:flex;align-items:center;padding-left:6px;color:#fff;font-size:11px;font-weight:700">$53B</div>
+          <div style="position:absolute;left:10.6%;top:0;height:100%;width:21%;background:#43a047;display:flex;align-items:center;padding-left:6px;color:#fff;font-size:11px;font-weight:700">→$158B</div>
+          <div style="position:absolute;left:31.6%;top:0;height:100%;width:68.4%;background:#f57f17;border-radius:0 6px 6px 0;display:flex;align-items:center;padding-left:8px;color:#fff;font-size:11px;font-weight:700">→ ~$500B by 2040 (Tenfold)</div>
+        </div>
+      </div>
+    </div>
+    <div class="progress-legend">
+      <span><span class="legend-dot" style="background:#1565c0"></span>Current (2024)</span>
+      <span><span class="legend-dot" style="background:#43a047"></span>NDP IV Target (FY2029/30)</span>
+      <span><span class="legend-dot" style="background:#f57f17"></span>Tenfold Growth Target (2040)</span>
+    </div>
+  </div>
+
+  <div class="section-title" style="margin-bottom:16px">🏭 The 9 Priority Value Chains — Snapshot</div>
+  <div class="card">
+    <table>
+      <thead><tr><th>Value Chain</th><th>Key Import (2024)</th><th>Key Export (2024)</th><th>Uganda Position</th><th>Top 2040 Target</th><th>Priority</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Iron &amp; Steel</strong></td><td>USD 219.5m flat steel</td><td>USD 55.8m rebar</td><td><span class="tag tag-yellow">Downstream only</span></td><td>5.5–8 Mtpa demand; domestic flat steel</td><td><span class="tag tag-red">R1 — Minerals</span></td></tr>
+        <tr><td><strong>Copper &amp; Allied Metals</strong></td><td>USD 57.7m cable</td><td>Negligible</td><td><span class="tag tag-yellow">Cable mfg; mine dormant</span></td><td>USD 300–500m cable market; Kilembe revival</td><td><span class="tag tag-red">R1 — Minerals</span></td></tr>
+        <tr><td><strong>Automotives</strong></td><td>USD 298.4m vehicles</td><td>Negligible</td><td><span class="tag tag-yellow">KMC plant opened Sept 2025</span></td><td>KMC 10,000 veh/yr; e-boda assembly</td><td><span class="tag tag-red">R1 — Minerals</span></td></tr>
+        <tr><td><strong>Textiles &amp; Garments</strong></td><td>~USD 6.7m garments</td><td>USD 11.3m raw cotton</td><td><span class="tag tag-yellow">Raw cotton exporter; mills limited</span></td><td>Process 50%+ of lint domestically</td><td><span class="tag tag-blue">R2 — Agro/Light</span></td></tr>
+        <tr><td><strong>Pharmaceuticals</strong></td><td>USD 263.4m medicines</td><td>Small (QCIL regional)</td><td><span class="tag tag-green">6 WHO-GMP plants; QCIL flagship</span></td><td>USD 0.9–1.2B market; cut import to &lt;50%</td><td><span class="tag tag-blue">R2 — Agro/Light</span></td></tr>
+        <tr><td><strong>Petrochemicals &amp; Fertilizers</strong></td><td>USD 32.1m fertiliser</td><td>—</td><td><span class="tag tag-red">Refinery pre-2029; Sukulu stalled</span></td><td>1.5–2m tonnes fertiliser demand by 2040</td><td><span class="tag tag-blue">R2 — Agro/Light</span></td></tr>
+        <tr><td><strong>Sugar &amp; Confectionery</strong></td><td>USD 38.1m industrial sugar</td><td>Regional brown sugar</td><td><span class="tag tag-green">Surplus producer; export ready</span></td><td>Industrial sugar, ethanol, co-gen</td><td><span class="tag tag-blue">R2 — Agro/Light</span></td></tr>
+        <tr><td><strong>Plastics &amp; Packaging</strong></td><td>USD 37.1m packaging</td><td>—</td><td><span class="tag tag-yellow">Converters active; resin all imported</span></td><td>Circular plastics + domestic resin (Kabalega)</td><td><span class="tag tag-blue">R2 — Agro/Light</span></td></tr>
+        <tr><td><strong>Cement &amp; Building Materials</strong></td><td>USD 162.2m clinker</td><td>USD 86.0m cement</td><td><span class="tag tag-green">Exporter; clinker gap closing</span></td><td>Several USD Bn/yr market; regional leader</td><td><span class="tag tag-blue">R2 — Agro/Light</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card" style="margin-top:20px;background:linear-gradient(135deg,#0d47a1,#1565c0);color:#fff">
+    <h3 style="color:rgba(255,255,255,.8);margin-bottom:12px">🔗 How The 9 Chains Form One Integrated Industrial System</h3>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px;font-size:13px">
+      <div style="background:rgba(255,255,255,.1);border-radius:8px;padding:12px"><strong>Minerals → Manufacturing:</strong> Iron ore &amp; steel feed Automotive (KMC bus frames ~37,300 t); copper wiring harnesses feed KMC EVs; cobalt feeds EV batteries</div>
+      <div style="background:rgba(255,255,255,.1);border-radius:8px;padding:12px"><strong>Circular flows:</strong> Steel slag → cement (SCM); bagasse → grid power; sugar vinasse → bio-fertilizer; plastic waste → cement kilns (alt. fuel)</div>
+      <div style="background:rgba(255,255,255,.1);border-radius:8px;padding:12px"><strong>Petrochemicals unlock Plastics:</strong> Kabalega refinery (~2029) → domestic polymer resin → import substitution for USD 37m+ packaging imports</div>
+      <div style="background:rgba(255,255,255,.1);border-radius:8px;padding:12px"><strong>Green advantage:</strong> Uganda's hydro grid enables low-carbon steel (scrap-EAF), green ammonia fertiliser, and low-carbon EV buses — a genuine export differentiator</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SECTION 2: VALUE CHAIN MAPS
+═══════════════════════════════════════════════════════════════ -->
+<div id="tab-maps" class="tab-content">
+
+  <div class="section-title">🗺️ Value Chain Maps — All 9 Priority Chains</div>
+  <div class="section-sub">Colour coding: <span style="color:#2e7d32;font-weight:700">■ Green = Uganda strong/competitive</span> &nbsp; <span style="color:#f57f17;font-weight:700">■ Yellow = Emerging/limited</span> &nbsp; <span style="color:#c62828;font-weight:700">■ Red = Gap/absent in Uganda</span></div>
+
+  <div class="chain-selector" id="map-selector"></div>
+  <div id="map-display"></div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SECTION 3: CHAIN STATUS & 2040 PROJECTIONS
+═══════════════════════════════════════════════════════════════ -->
+<div id="tab-status" class="tab-content">
+
+  <div class="section-title">📊 Value Chain Status &amp; 2040 Projections</div>
+  <div class="section-sub">Current state of each value chain in Uganda, binding constraints, prioritised products, and tenfold-growth projections to 2040.</div>
+
+  <div class="chain-selector" id="status-selector"></div>
+  <div id="status-display"></div>
+
+</div>
+
+<footer>Uganda Industrial Diagnostic Study &nbsp;|&nbsp; MTIC × UNIDO PCP &nbsp;|&nbsp; June 2026 &nbsp;|&nbsp; For official use — not for public distribution</footer>
+
+<script>
+// ═══════════════════ DATA ═══════════════════
+const chains = [
+  {
+    id:'iron-steel', name:'Iron & Steel',
+    map:{
+      title:'Iron & Steel Value Chain',
+      desc:'From iron ore mining through ironmaking, steelmaking, rolling and finishing to market. Uganda holds 350 million tonnes of high-grade hematite ore (60–65% Fe) — but operates almost entirely in downstream rolling.',
+      phases:[
+        {name:'Phase I',label:'Mining &\nBeneficiation',detail:'Iron ore → concentrate',strength:'gap',stat:'1 commercial miner (SINO Minerals, 300k tpa)'},
+        {name:'Phase II',label:'Ironmaking\n(DRI/Sponge)',detail:'Ore → sponge iron',strength:'emerging',stat:'2 plants: Tembo 350k + Abyssinia 30k tpa'},
+        {name:'Phase III',label:'Steelmaking',detail:'Sponge/scrap → crude steel',strength:'emerging',stat:'Induction furnace; scrap-based'},
+        {name:'Phase IV',label:'Continuous Casting',detail:'Liquid steel → billets/blooms',strength:'emerging',stat:'Partial — some domestic billet'},
+        {name:'Phase V',label:'Rolling &\nFinishing',detail:'Billets → long/flat/wire products',strength:'strong',stat:'~70% of installed capacity; rebar net exporter'},
+        {name:'Phase VI',label:'Market',detail:'Domestic + regional export',strength:'strong',stat:'EAC + DRC + S.Sudan export'}
+      ],
+      gap:'CRITICAL GAP: Flat steel entirely absent. USD 219.5m imports annually (HS 7208). No hot-rolled coil capacity in Uganda.'
+    },
+    status:{
+      current:[
+        {label:'Installed Capacity',value:'1.68 Mtpa (all phases)',color:'blue'},
+        {label:'Capacity Utilised',value:'513,364 tpa (30.5%)',color:'amber'},
+        {label:'Active Plants',value:'~37 plants; 40 firms',color:'blue'},
+        {label:'Iron Ore Reserves',value:'~350 million tonnes (hematite 60–65% Fe)',color:'green'},
+        {label:'Annual Imports',value:'USD 527m total; USD 219.5m flat steel',color:'red'},
+        {label:'Annual Exports',value:'USD 55.8m rebar + sections (regional)',color:'green'},
+        {label:'Employment',value:'~2,500 direct; large indirect',color:'blue'},
+        {label:'Sector Investment',value:'>USD 1 billion (private)',color:'green'}
+      ],
+      companies:['Tembo Steels (Iganga/Lugazi)','Abyssinia Iron & Steel (Jinja)','Roofings Ltd (Lubowa)','Roofings Rolling Mills (Namanve)','Steel & Tube Industries (Namanve)','Uganda Baati (Kampala)','Devki Group (USD 500m — groundbreaking Nov 2025)','SINO Minerals (Kabale — iron ore)'],
+      constraints:[
+        {label:'Upstream feedstock gap — no commercial ironmaking from domestic ore',w:'w5'},
+        {label:'Electricity reliability & cost (8–10¢/kWh vs Kenya 5–7¢)',w:'w5'},
+        {label:'Import competition — flat steel (USD 219.5m) wholly imported',w:'w4'},
+        {label:'Capital cost (18–23% interest vs Kenya 13–17%)',w:'w4'},
+        {label:'Tax policy inconsistency (CPC letters, VAT on coal)',w:'w3'},
+        {label:'Logistics (USD 0.08–0.12/tonne-km; no rail to ore)',w:'w3'},
+        {label:'Skills gap (~68% firms struggle to find technical skills)',w:'w3'},
+        {label:'Standards enforcement (UNBS lab not yet equipped)',w:'w3'}
+      ],
+      priorities:['Sponge iron / DRI anchored on domestic ore — missing midstream; unlocks the entire chain','Flat steel production — largest import line USD 219.5m; NO domestic production; biggest import-substitution prize','Long products (rebar/sections) — already competitive, exporting ~USD 55.8m; defend and scale','Iron ore mining & beneficiation — enabling upstream step; 1,000,000 tpa commercial mine needed'],
+      proj:{
+        title:'2040 Tenfold Projection',
+        rows:[
+          {label:'Per capita steel consumption',current:'~20–25 kg/yr',target:'~90–130 kg/yr (population ~60m+)'},
+          {label:'Annual steel demand',current:'~1 Mtpa',target:'5.5–8 Mtpa'},
+          {label:'Flat steel production',current:'Zero',target:'Domestic production via upstream investment'},
+          {label:'Export position',current:'Regional rebar (~$55.8m)',target:'EAC integrated steel supplier'},
+          {label:'Iron ore mined',current:'~300,000 tpa (SINO Minerals)',target:'≥1,000,000 tpa commercial operation'}
+        ]
+      }
+    }
+  },
+  {
+    id:'copper', name:'Copper & Allied Metals',
+    map:{
+      title:'Copper & Allied Metals Value Chain',
+      desc:'From copper ore mining at Kilembe through smelting, refining, and semi-fabrication to insulated wire & cable. Kilembe (dormant since 1980s) holds >6.5m tonnes of copper ore. A production-sharing agreement was signed March 2025.',
+      phases:[
+        {name:'Phase I',label:'Mining &\nConcentration',detail:'Copper ore → concentrate',strength:'gap',stat:'Kilembe dormant since 1980s; PSA signed Mar 2025'},
+        {name:'Phase II',label:'Smelting',detail:'Concentrate → blister copper',strength:'gap',stat:'Absent — no smelter in Uganda'},
+        {name:'Phase III',label:'Refining',detail:'Blister → refined cathode HS7403',strength:'gap',stat:'All cathode imported; DRC + China'},
+        {name:'Phase IV',label:'Semi-fabrication',detail:'Cathode → wire rod HS7408',strength:'gap',stat:'Wire rod imported; largely from China'},
+        {name:'Phase V',label:'Fabrication',detail:'Rod → insulated wire & cable HS8544',strength:'strong',stat:'Cable Corporation Ltd ~65% market share'},
+        {name:'Phase VI',label:'Market',detail:'Domestic electrification + regional',strength:'strong',stat:'Grid access 25.3% → universal; growing demand'}
+      ],
+      gap:'CRITICAL GAP: Phases I–IV entirely absent. USD 57.7m cable imports (HS 8544) + USD 6.9m cathode imports. Raw ore potential untapped since 1980s.'
+    },
+    status:{
+      current:[
+        {label:'Kilembe Copper Reserves',value:'>6.5 million tonnes ore at 1.77% Cu',color:'green'},
+        {label:'Kilembe Cobalt',value:'~5.5 million tonnes at 0.17% Co (battery mineral)',color:'green'},
+        {label:'Mine Status',value:'Dormant since 1980s; PSA signed 3 March 2025 (Sarrai Group + Nile Fibreboard)',color:'amber'},
+        {label:'Cable Market',value:'Cable Corporation Ltd ~65% domestic share',color:'blue'},
+        {label:'Cable Imports',value:'USD 57.7m (HS 8544, 2024) — rising fast',color:'red'},
+        {label:'Cathode Imports',value:'USD 6.9m (HS 7403, 2024) — up from USD 444k in 2020',color:'red'},
+        {label:'Grid Access',value:'25.3% (UBOS 2024); rural only 9.1%',color:'amber'}
+      ],
+      companies:['Cable Corporation Ltd (Mehta Group — est. 1968; building wire, power cables, conductors)','East African Cables (Uganda)','Sarrai Group + Nile Fibreboard Ltd (Kilembe PSA investors — signed 3 Mar 2025)'],
+      constraints:[
+        {label:'Dormant midstream — Kilembe idle since 1980s; all cathode/rod imported',w:'w5'},
+        {label:'Capital & long lead time — mine redevelopment multi-year and capital-intensive',w:'w5'},
+        {label:'Energy reliability — electro-refining is power-intensive and continuous',w:'w4'},
+        {label:'Logistics / Kasese access — landlocked 18–20% of sale price; Kilembe upgrades needed',w:'w3'},
+        {label:'Historic tailings & environmental liability — acid-mine-drainage risk',w:'w3'},
+        {label:'Standards & substandard cable imports — safety-critical enforcement gap',w:'w3'},
+        {label:'Skills — mining/metallurgical skills scarce after decades of dormancy',w:'w3'}
+      ],
+      priorities:['Insulated wire & cable — expand Cable Corporation-led industry; capture USD 57.7m import market + electrification-driven growth','Kilembe copper cathode & cobalt — execute 2025 PSA; domestic cable feedstock + cobalt as battery-mineral export','Copper wire rod semi-fabrication — integrate midstream between cathode and cable domestically'],
+      proj:{
+        title:'2040 Tenfold Projection',
+        rows:[
+          {label:'Domestic cable market',current:'~USD 57.7m imports + Cable Corp production',target:'USD 300–500m+ per year'},
+          {label:'Kilembe status',current:'Dormant (PSA signed 2025)',target:'Operating copper cathode + cobalt production'},
+          {label:'Grid access',current:'25.3%',target:'Universal / near-universal'},
+          {label:'Cobalt positioning',current:'Untapped',target:'High-value battery-mineral export alongside copper cathode'}
+        ]
+      }
+    }
+  },
+  {
+    id:'automotive', name:'Automotives',
+    map:{
+      title:'Automotive Value Chain',
+      desc:'From raw materials (steel, copper, plastics) through component manufacture, vehicle assembly, and distribution to the after-market. Kiira Motors Corporation (KMC) plant commissioned 27 September 2025 in Jinja.',
+      phases:[
+        {name:'Phase I',label:'Raw Materials',detail:'Steel, copper, aluminium, rubber, plastics',strength:'emerging',stat:'Steel (Ch.4) + Copper (Ch.5) maturing'},
+        {name:'Phase II',label:'Components',detail:'Body panels, seats, wiring, batteries, tyres',strength:'gap',stat:'Largely imported; CKD/SKD kits'},
+        {name:'Phase III',label:'Assembly',detail:'Vehicles, buses, motorcycles',strength:'emerging',stat:'KMC Jinja (Sept 2025); CKD motorcycle assembly'},
+        {name:'Phase IV',label:'Distribution & Sales',detail:'New + used vehicle market',strength:'strong',stat:'USD 298.4m car imports (2024); 48,700 used/yr'},
+        {name:'Phase V',label:'After-Market',detail:'Spare parts, service, repair',strength:'strong',stat:'Ndeeba/Kisekka market; large informal cluster'}
+      ],
+      gap:'KEY GAP: Components (Phase II) — Uganda assembles but does not manufacture components. Local content almost zero. USD 31.7m parts imports alone (HS 8708).'
+    },
+    status:{
+      current:[
+        {label:'KMC Plant',value:'Kiira Vehicle Plant, Jinja — commissioned 27 Sept 2025',color:'green'},
+        {label:'KMC Capacity',value:'~2,500 vehicles/year (targeting 10,000 medium-term)',color:'blue'},
+        {label:'Used Vehicle Imports',value:'~48,700 vehicles/year',color:'amber'},
+        {label:'Total Vehicle Import Bill',value:'>USD 650 million/year (all categories)',color:'red'},
+        {label:'Motor Cars (HS 8703)',value:'USD 298.4m (2024); Japan 85% dominant',color:'red'},
+        {label:'Motorcycles (HS 8711)',value:'USD 157.1m (2024) — boda-boda market',color:'amber'},
+        {label:'KMC Steel Demand',value:'~37,300 tonnes of steel for bus frames by 2027/28 (~USD 75m)',color:'blue'},
+        {label:'Financing Gap',value:'~UGX 50 billion gap for KMC FY2025/26 scale-up',color:'amber'}
+      ],
+      companies:['Kiira Motors Corporation (KMC) — Jinja; state-anchored; Kayoola EV buses; plant commissioned Sept 2025','Bajaj / TVS assemblers — CKD/SKD motorcycle assembly (boda-boda market)','Bus/truck body fabricators — Kampala/Jinja; bodies on imported chassis','After-market parts cluster — Ndeeba/Kisekka; large import-based spare parts trade'],
+      constraints:[
+        {label:'Finance/capital for KMC scale-up (~UGX 50bn FY2025/26 gap)',w:'w5'},
+        {label:'Shallow local content — CKD/SKD kit dependence; domestic components almost zero',w:'w4'},
+        {label:'Used-import competition — no age-limit or taxation policy to direct demand to domestic assembly',w:'w4'},
+        {label:'Technology & tooling — assembly established but component manufacture absent',w:'w3'},
+        {label:'Skills — automotive/mechatronics and EV skills scarce',w:'w3'},
+        {label:'Logistics — landlocked raises CKD-kit costs (~18–20% of sale price)',w:'w3'},
+        {label:'Standards & homologation — vehicle standards and age limits shape market',w:'w2'}
+      ],
+      priorities:['Buses and electric buses (KMC anchor) — leverage new plant, EV differentiator, government fleet procurement','Motorcycle assembly (CKD → e-boda) — largest-volume mobility market (USD 157m imports); feasible, job-rich','Spare parts & component localisation — builds local content; supplies assembly + large after-market; deepens steel/copper/plastics links'],
+      proj:{
+        title:'2040 Tenfold Projection',
+        rows:[
+          {label:'KMC annual output',current:'2,500 vehicles/yr',target:'10,000+ vehicles/yr; regional EV-bus supplier'},
+          {label:'Motorcycle market',current:'USD 157m imports',target:'Majority assembled locally; e-boda transition'},
+          {label:'Local content',current:'~Near zero',target:'Domestic steel, copper, plastics inputs significantly localised'},
+          {label:'Vehicle import bill',current:'>USD 650m/yr',target:'Significantly reduced via domestic assembly + used-import policy'}
+        ]
+      }
+    }
+  },
+  {
+    id:'textiles', name:'Textiles & Garments',
+    map:{
+      title:'Textiles & Garments Value Chain',
+      desc:'From cotton growing through ginning, spinning, weaving, finishing and garment manufacture to market. Uganda has 39 ginneries with ~1 million bale annual capacity — running at only ~10%.',
+      phases:[
+        {name:'Phase I',label:'Cotton Growing',detail:'Seed cotton → raw cotton',strength:'strong',stat:'Smallholder base; ~116,000 bales (2023)'},
+        {name:'Phase II',label:'Ginning',detail:'Seed cotton → lint + cottonseed',strength:'strong',stat:'39 ginneries; ~1m bale capacity; only 10% used'},
+        {name:'Phase III',label:'Spinning',detail:'Lint → yarn',strength:'emerging',stat:'Fine Spinners + Nytil (limited)'},
+        {name:'Phase IV',label:'Weaving/Knitting',detail:'Yarn → fabric',strength:'gap',stat:'Largely absent'},
+        {name:'Phase V',label:'Wet Processing\n& Finishing',detail:'Grey fabric → dyed/finished fabric',strength:'gap',stat:'CRITICAL MISSING STEP — blocks whole chain'},
+        {name:'Phase VI',label:'Garment Mfg',detail:'Fabric → apparel, uniforms, home textiles',strength:'emerging',stat:'Limited; ~90% of lint exported raw'}
+      ],
+      gap:'CRITICAL GAP: Wet processing & finishing (Phase V) — without dyeing and finishing, Uganda cannot produce export-quality fabric or garments. This single gap blocks the entire chain.'
+    },
+    status:{
+      current:[
+        {label:'Cotton Output',value:'~116,000 bales (2023); up to 250,000 in good years',color:'blue'},
+        {label:'Ginneries',value:'39 ginneries; ~1 million bale annual capacity at ~10% use',color:'amber'},
+        {label:'Integrated Mills',value:'2 mills (Nytil + Fine Spinners); ~USD 50m combined turnover',color:'blue'},
+        {label:'Raw Lint Exported',value:'~90% — exported raw at <USD 1/kg',color:'red'},
+        {label:'Cotton Lint Exports',value:'USD 11.3m (HS 5201, 2024) — Bangladesh, Pakistan, UAE',color:'amber'},
+        {label:'Employment',value:'~18,000 (Fine Spinners + outgrowers)',color:'green'}
+      ],
+      companies:['Southern Range Nyanza (Nytil) — one of two integrated mills','Fine Spinners Ltd — integrated; ~USD 50m turnover; ~18,000 employment incl. outgrowers','Lira Spinning Facility — new investment under cotton-development programme'],
+      constraints:[
+        {label:'Wet-processing/finishing gap — dyeing/finishing absent; blocks garment scale-up',w:'w5'},
+        {label:'Used-clothing (mivumba) competition — directly undercuts domestic garments',w:'w4'},
+        {label:'Cotton output volatility & low yields — only 10% of ginnery capacity used',w:'w4'},
+        {label:'Capital for spinning/weaving — long-term finance scarce and costly',w:'w4'},
+        {label:'Water & effluent for wet-processing — dyeing needs treatable water; NEMA compliance costly',w:'w3'},
+        {label:'Skills — textile-engineering and supervisory skills limited',w:'w3'},
+        {label:'Logistics — landlocked costs vs Asian exporters',w:'w3'}
+      ],
+      priorities:['Garments & apparel (incl. institutional uniforms) — most job-rich step; anchor with institutional demand + EAC market','Yarn & fabric (spinning/weaving + wet-processing/finishing) — process domestic lint instead of exporting raw; add missing finishing','Cottonseed oil & cake — capture ginning by-products (edible oil, animal feed); feasible, green, quick value-add'],
+      proj:{
+        title:'2040 Tenfold Projection',
+        rows:[
+          {label:'Lint processed domestically',current:'~10%',target:'≥50% of national lint output'},
+          {label:'Ginnery utilisation',current:'~10%',target:'60%+'},
+          {label:'Garment employment',current:'~18,000',target:'One of Uganda\'s largest manufacturing employers'},
+          {label:'Export play',current:'Raw lint USD 11.3m',target:'Regional garments/fabric + premium organic cotton'}
+        ]
+      }
+    }
+  },
+  {
+    id:'pharma', name:'Pharmaceuticals',
+    map:{
+      title:'Pharmaceuticals Value Chain',
+      desc:'From API and excipient supply through formulation, packaging, distribution to dispensing. Uganda currently imports ~90% of medicines despite having 6 WHO-GMP aligned manufacturers led by QCIL.',
+      phases:[
+        {name:'Phase I',label:'API &\nExcipients',detail:'Active pharmaceutical ingredients',strength:'gap',stat:'Near-total import dependence; API all imported'},
+        {name:'Phase II',label:'Formulation\n& Mfg',detail:'APIs → tablets, capsules, syrups, injectables',strength:'strong',stat:'6 WHO-GMP plants; QCIL 1.2bn tabs/caps/yr'},
+        {name:'Phase III',label:'Packaging',detail:'Finished dosage forms',strength:'strong',stat:'Active; linked to plastics chain'},
+        {name:'Phase IV',label:'Distribution',detail:'NMS/JMS/wholesale network',strength:'strong',stat:'National Medicines Stores; JMS'},
+        {name:'Phase V',label:'Dispensing',detail:'Pharmacies, hospitals, patients',strength:'strong',stat:'Active; growing private sector'}
+      ],
+      gap:'KEY GAP: API & excipients (Phase I) — near-total import dependence is the deepest structural and supply-security risk. India (58% of medicine imports) and China dominate.'
+    },
+    status:{
+      current:[
+        {label:'Domestic Market',value:'~USD 221 million (2023); growing ~9.4%/year',color:'blue'},
+        {label:'Import Dependence',value:'~90% of medicines imported (down from 96% in 2016)',color:'red'},
+        {label:'Medicine Imports',value:'USD 263.4m (HS 3004, 2024); India 58% share',color:'red'},
+        {label:'QCIL Revenue',value:'~UGX 267 billion (FY2024/25)',color:'green'},
+        {label:'QCIL Capacity',value:'~1.2 billion tablets/capsules per year',color:'green'},
+        {label:'WHO-GMP Plants',value:'6 aligned manufacturers in Uganda',color:'green'},
+        {label:'Employment Growth',value:'+42% (2017–2019, UNIDO)',color:'green'}
+      ],
+      companies:['Cipla Quality Chemical Industries Ltd (QCIL) — WHO-GMP prequalified; ARVs, antimalarials, NCDs; UGX 267bn revenue','KPI (Kampala Pharmaceutical Industries)','Rene Industries','Abacus Pharma'],
+      constraints:[
+        {label:'API/excipient import dependence — deepest structural and supply-security risk',w:'w5'},
+        {label:'WHO-GMP / quality-systems depth — capability concentrated at QCIL',w:'w5'},
+        {label:'Capital + long regulatory lead times — GMP plants capital-intensive; multi-year approval cycles',w:'w4'},
+        {label:'Procurement/market access — NMS/JMS preferential procurement and NDA fees shape viability',w:'w4'},
+        {label:'Skills — pharmacists, QA/QC, regulatory-affairs specialists in short supply',w:'w3'},
+        {label:'Reliable power & pharma-grade utilities — GMP needs uninterrupted clean power and water',w:'w3'},
+        {label:'Cold-chain & distribution logistics',w:'w3'}
+      ],
+      priorities:['Essential generics (ARVs, antimalarials, anti-TB, priority NCD) — build on QCIL\'s WHO-GMP base; guaranteed domestic + donor/regional demand','Medical consumables and basic formulations — feasible, job-creating, broad import substitution','Selective local API/excipient production — strategic longer-term to reduce deepest dependency'],
+      proj:{
+        title:'2040 Tenfold Projection',
+        rows:[
+          {label:'Domestic market',current:'~USD 221m',target:'USD 0.9–1.2B by 2040 (at ~9.4%/yr growth)'},
+          {label:'Import dependence',current:'~90%',target:'Reduced to <50% via expanded domestic manufacturing'},
+          {label:'Export play',current:'QCIL regional exports (small)',target:'Regional + donor-funded essential generics supply'},
+          {label:'API production',current:'Near zero',target:'Selective domestic API for highest-volume products'}
+        ]
+      }
+    }
+  },
+  {
+    id:'petrochem', name:'Petrochemicals & Fertilizers',
+    map:{
+      title:'Petrochemicals & Fertilizers Value Chain',
+      desc:'Two parallel sub-chains: petroleum refining → petrochemicals, and phosphate mining → fertilisers. The Kabaale refinery (60,000 bpd, ~USD 4bn) is expected operational ~2029. The Sukulu phosphate plant (Tororo) is stalled.',
+      phases:[
+        {name:'Phase I',label:'Upstream\nExtraction',detail:'Crude oil production / Phosphate mining',strength:'emerging',stat:'Oil production pre-FID; Sukulu phosphate stalled'},
+        {name:'Phase II',label:'Refining /\nProcessing',detail:'Crude → fuels/LPG | Ore → phosphate',strength:'gap',stat:'Kabaale refinery ~2029; Sukulu shut 2021'},
+        {name:'Phase III',label:'Petrochemical\nProcessing',detail:'Naphtha → polymers/solvents',strength:'gap',stat:'Kabalega park future; post-refinery'},
+        {name:'Phase IV',label:'Blending &\nFormulation',detail:'NPK blends, LPG filling, plastics conversion',strength:'gap',stat:'Fertiliser blending limited; resin imported'},
+        {name:'Phase V',label:'Market',detail:'Domestic fuel, agri-inputs, industrial chemicals',strength:'strong',stat:'USD 32.1m fertiliser imports/yr; demand >> supply'}
+      ],
+      gap:'CRITICAL GAPS: Refinery not operational until ~2029. Sukulu phosphate stalled. Uganda imports ~50,000 tonnes of fertiliser vs ~1 million tonnes needed — a 950,000 tonne annual gap.'
+    },
+    status:{
+      current:[
+        {label:'Kabaale Refinery',value:'60,000 bpd; ~USD 4bn; Alpha MBM + UNOC (~40%); expected ops ~2029–30',color:'amber'},
+        {label:'Sukulu Phosphate Plant',value:'100,000 tpa design; Tororo; shut 2021; briefly resumed 2023; halted again',color:'red'},
+        {label:'Fertiliser Imports',value:'USD 32.1m (HS 3105, 2024); Saudi Arabia + Kenya dominant',color:'red'},
+        {label:'Fertiliser Gap',value:'~50,000 tonnes supplied vs ~1,000,000 tonnes needed — 95% gap',color:'red'},
+        {label:'Kabalega Petrochemical Park',value:'Future; post-refinery; polymer feedstock for plastics chain',color:'amber'}
+      ],
+      companies:['Alpha MBM Investments (UAE) + UNOC — Kabaale refinery (PSA signed March 2025)','Guangzhou Dongsong — Sukulu/Osukuru complex (stalled)','Uganda National Oil Company (UNOC) — ~40% refinery stake','Petroleum Authority of Uganda (PAU)'],
+      constraints:[
+        {label:'Stalled phosphate processing — Sukulu shut; ~50k t vs ~1m t need',w:'w5'},
+        {label:'Very large capital + financing fragility — refinery USD 4bn; Sukulu collapse shows fragility',w:'w5'},
+        {label:'Feedstock timing — refinery pre-2029; no domestic petrochemical feedstock until ~2029–30',w:'w4'},
+        {label:'Fertiliser quality & distribution — adulterated fertiliser (UNBS); rural distribution weak',w:'w4'},
+        {label:'Environmental management — refinery emissions; phosphogypsum hazard',w:'w3'},
+        {label:'Skills — chemical/process engineering scarce',w:'w3'}
+      ],
+      priorities:['Fertiliser blending + revival of phosphate processing (Sukulu or green ammonia alternative)','Sulphuric acid and basic industrial chemicals — paired with phosphate processing','Petrochemicals/polymers at Kabalega — transformational medium-term; sequenced to refinery ~2029–30'],
+      proj:{
+        title:'2040 Tenfold Projection',
+        rows:[
+          {label:'Fertiliser demand',current:'~50,000 t supplied vs 1m t needed',target:'1.5–2 million tonnes/year'},
+          {label:'Refinery status',current:'Under construction (ops ~2029–30)',target:'Operational; supplying domestic fuel + polymer feedstock'},
+          {label:'Petrochemical park',current:'Future planning',target:'Operational; supplying domestic resin to plastics chain'},
+          {label:'Green ammonia',current:'Not yet developed',target:'Hydro-powered electrolysis → low-carbon nitrogen fertiliser'}
+        ]
+      }
+    }
+  },
+  {
+    id:'sugar', name:'Sugar & Confectionery',
+    map:{
+      title:'Sugar & Confectionery Value Chain',
+      desc:'From sugarcane growing through milling, refining, and downstream diversification (confectionery, ethanol, co-generation). Uganda produces ~822,000 tonnes/year with a structural surplus of 180,000+ tonnes.',
+      phases:[
+        {name:'Phase I',label:'Cane Growing',detail:'Sugarcane cultivation',strength:'strong',stat:'Surplus — structural over-production'},
+        {name:'Phase II',label:'Milling',detail:'Cane → raw/brown sugar + molasses + bagasse',strength:'strong',stat:'~822,000 t output; Kakira ~50% of national'},
+        {name:'Phase III',label:'Refining',detail:'Brown → industrial/refined sugar',strength:'emerging',stat:'Kinyara ~75,000 t industrial; rest imported'},
+        {name:'Phase IV',label:'Downstream',detail:'Confectionery, ethanol, co-gen electricity',strength:'gap',stat:'Under-exploited; molasses largely wasted/exported'},
+        {name:'Phase V',label:'Market',detail:'Domestic + regional export',strength:'strong',stat:'Exporter; but USD 38.1m industrial sugar imported'}
+      ],
+      gap:'KEY GAP: Industrial sugar refining (Phase III) — USD 38.1m imported despite domestic surplus. Downstream (Phase IV) — ethanol from molasses and co-gen from bagasse largely unexploited.'
+    },
+    status:{
+      current:[
+        {label:'National Sugar Output',value:'~822,000 tonnes/year (~720k brown + ~102k industrial)',color:'blue'},
+        {label:'Structural Surplus',value:'180,000+ tonnes/year',color:'amber'},
+        {label:'Industrial Sugar Imports',value:'USD 38.1m (HS 1701, 2024) despite domestic surplus',color:'red'},
+        {label:'Kakira Output Share',value:'~50% of national output; >2 million tonnes cane crushed/year',color:'green'},
+        {label:'Kinyara Industrial Sugar',value:'~75,000 t (2023)',color:'blue'}
+      ],
+      companies:['Kakira Sugar Works — ~50% of national output; crushing >2m tonnes cane/yr','Kinyara Sugar — industrial-sugar refinery expanded to ~75,000 t (2023)','Sugar Corporation of Uganda (SCOUL)','Mayuge Sugar','Uganda Sugar Manufacturers Association (USMA)'],
+      constraints:[
+        {label:'Over-supply / over-licensing of raw sugar — 180,000+ t surplus; continued mill licensing strains cane per mill',w:'w5'},
+        {label:'Downstream capital & technology — refining, ethanol distilleries, confectionery need investment',w:'w4'},
+        {label:'Industrial sugar quality/standards — food/pharma buyers require industrial-grade specs (UNBS)',w:'w3'},
+        {label:'Grid feed-in for co-generation — bagasse power needs clear feed-in/tariff framework',w:'w3'},
+        {label:'Distillery effluent — vinasse and bagasse ash management',w:'w3'},
+        {label:'Out-grower coordination & cane quality',w:'w2'}
+      ],
+      priorities:['Industrial/refined sugar — substitute USD 38.1m import line using surplus domestic cane; serves beverages, food processing, pharmaceuticals','Ethanol (fuel & industrial) — convert molasses surplus into fuel-blending ethanol; strong regional demand','Co-generation (bagasse to grid) — monetise bagasse as renewable grid electricity; improve mill economics'],
+      proj:{
+        title:'2040 Tenfold Projection',
+        rows:[
+          {label:'Chain value',current:'Raw sugar dominated',target:'Downstream-dominated: industrial sugar, ethanol, co-gen, confectionery'},
+          {label:'Industrial sugar',current:'~USD 38m imported',target:'Domestic refining meets full industrial demand'},
+          {label:'Ethanol',current:'Negligible',target:'Significant fuel-blending + industrial export'},
+          {label:'Co-generation',current:'Under-exploited',target:'Bagasse-powered grid contribution'},
+          {label:'Export',current:'Regional brown sugar',target:'Regional industrial sugar/ethanol'}
+        ]
+      }
+    }
+  },
+  {
+    id:'plastics', name:'Plastics & Packaging',
+    map:{
+      title:'Plastics & Packaging Value Chain',
+      desc:'From resin/feedstock through conversion, packaging production, use and recycling. All virgin resin is imported. ~600 tonnes of plastic waste generated daily; <40% properly collected.',
+      phases:[
+        {name:'Phase I',label:'Resin/Feedstock\n(PE, PP, PET, PVC)',detail:'Virgin or recycled polymer resin',strength:'gap',stat:'100% imported until Kabalega park (~2029)'},
+        {name:'Phase II',label:'Conversion',detail:'Resin → films, sheets, preforms, mouldings',strength:'strong',stat:'Established; Nice House, Nile Plastic, others'},
+        {name:'Phase III',label:'Packaging\n& Products',detail:'Bottles, sacks, containers, household goods',strength:'strong',stat:'41 UNBS-certified firms; 67 valid permits'},
+        {name:'Phase IV',label:'Use',detail:'Consumer & industrial packaging use',strength:'strong',stat:'Growing demand across all sectors'},
+        {name:'Phase V',label:'Recycling',detail:'Waste → recycled flake/pellet',strength:'emerging',stat:'~600 t/day waste; <40% collected; under-scaled'}
+      ],
+      gap:'KEY GAP: Resin feedstock (Phase I) — 100% imported. Recycling (Phase V) — severely under-scaled despite 600t/day waste. Domestic resin awaits Kabalega petrochemical park (~2029).'
+    },
+    status:{
+      current:[
+        {label:'Plastic Imports',value:'USD 37.1m packaging (HS 3923, 2024); Kenya 71% dominant',color:'red'},
+        {label:'Virgin Resin',value:'~150,000 tonnes/year — all imported',color:'red'},
+        {label:'UNBS-Certified Firms',value:'41 certified bag manufacturers; 67 valid permits',color:'blue'},
+        {label:'Plastic Waste',value:'~600 tonnes/day generated; <40% properly collected',color:'amber'},
+        {label:'Policy',value:'National Plastics Circularity Strategy 2023–2028; 2025 single-use-bag ban (NEMA)',color:'green'}
+      ],
+      companies:['Nice House of Plastics — largest converter; est. 1970; Kampala area','Nile Plastic Industries — major converter','Quality Plastics (Mukono) — growing recycler'],
+      constraints:[
+        {label:'100% imported virgin resin — no domestic resin until petrochemical park',w:'w5'},
+        {label:'Low waste collection / weak circularity — ~600 t/day waste; <40% collected',w:'w4'},
+        {label:'Capital & fragmentation — recycling plants and modern converters need capital',w:'w3'},
+        {label:'Policy transition risk — single-use-ban opportunity for recyclers but risk for single-use producers',w:'w3'},
+        {label:'Standards & substandard bags — UNBS certification on thickness and food-grade',w:'w3'},
+        {label:'Logistics — imported resin bears landlocked penalty',w:'w2'}
+      ],
+      priorities:['Industrial and food/beverage packaging — substitute USD 37m+ imports with standards-compliant domestic packaging','Plastics recycling (PET/HDPE flake & pellet) — scale to turn 600 t/day waste into domestic feedstock; aligns with 2025 circularity policy','Agricultural and cement packaging (woven sacks, films) — feasible, job-rich, linked to agriculture and cement sectors'],
+      proj:{
+        title:'2040 Tenfold Projection',
+        rows:[
+          {label:'Packaging demand',current:'USD 37m+ imports',target:'Several-fold increase as all manufacturing sectors scale'},
+          {label:'Domestic resin',current:'Zero — 100% imported',target:'Kabalega park operational; domestic polymer feedstock'},
+          {label:'Recycling',current:'<40% of 600 t/day collected',target:'Circularity Strategy target: ~37% plastic pollution cut by 2040'},
+          {label:'Supply chain',current:'Import-dependent',target:'Domestic conversion + recycled content + domestic resin'}
+        ]
+      }
+    }
+  },
+  {
+    id:'cement', name:'Cement & Building Materials',
+    map:{
+      title:'Cement & Building Materials Value Chain',
+      desc:'From limestone quarrying through clinker production, cement grinding, and downstream building materials to construction market. Uganda grinds well but imports >50% of its clinker. Two new clinker plants (totalling ~USD 500m) are under construction.',
+      phases:[
+        {name:'Phase I',label:'Limestone\nQuarrying',detail:'Raw limestone extraction',strength:'strong',stat:'Dura (Kamwenge), Tororo, Karamoja deposits'},
+        {name:'Phase II',label:'Clinker\nProduction',detail:'Limestone → clinker (kiln)',strength:'emerging',stat:'>50% clinker imported; 2 new plants under construction'},
+        {name:'Phase III',label:'Cement\nGrinding',detail:'Clinker + gypsum → cement',strength:'strong',stat:'Tororo 3.0 Mtpa, Hima 2.0, Simba 1.0, Kampala 1.0'},
+        {name:'Phase IV',label:'Building\nMaterials',detail:'Concrete, blocks, tiles, fibre-cement',strength:'emerging',stat:'Growing; largely artisanal'},
+        {name:'Phase V',label:'Construction\nMarket',detail:'Infrastructure, housing, commercial',strength:'strong',stat:'USD 707m market; +12% YoY; regional exporter'}
+      ],
+      gap:'KEY GAP: Clinker (Phase II) — >50% imported; USD 162.2m import bill (2024). Closing this gap is the sector\'s #1 priority. Two new plants under construction are the right response.'
+    },
+    status:{
+      current:[
+        {label:'Market Size',value:'~USD 707 million (2024); growing ~12% YoY',color:'green'},
+        {label:'Clinker Imports',value:'USD 162.2m (HS 2523, 2024); Kenya 66% dominant',color:'red'},
+        {label:'Cement Exports',value:'USD 86.0m to Rwanda, DRC, South Sudan, Kenya',color:'green'},
+        {label:'Clinker Self-Sufficiency',value:'<50% — majority of clinker still imported',color:'red'},
+        {label:'New Clinker Investment',value:'NE Uganda: USD 300m, >6,000 t/day + Buikwe: USD 200m, ~4,000 t/day (2025)',color:'green'},
+        {label:'Hima Limestone Reserves',value:'Dura quarry (Kamwenge) — reserves to ~2036',color:'amber'}
+      ],
+      companies:['Tororo Cement — ~3.0 Mtpa; largest grinder','Hima Cement — ~2.0 Mtpa; owns Dura limestone quarry (Kamwenge)','Simba Cement — ~1.0 Mtpa','Kampala Cement — ~1.0 Mtpa','NE Uganda clinker plant — USD 300m new investment; >6,000 t/day (under construction)','West International Holding — USD 200m Buikwe clinker plant ~4,000 t/day (2025)'],
+      constraints:[
+        {label:'Clinker capacity gap — >50% imported despite strong grinding; USD 162.2m import line',w:'w5'},
+        {label:'Energy cost & reliability — clinker kilns highly energy-intensive; decisive for competitiveness',w:'w5'},
+        {label:'Capital intensity — clinker kilns USD 200–300m; large but appetite shown',w:'w4'},
+        {label:'Limestone licensing & land — reserves exist but licensing must keep pace with demand',w:'w3'},
+        {label:'Logistics — bulk/low-density; landlocked penalty protects domestic market but raises input costs',w:'w3'},
+        {label:'Kiln emissions/dust — carbon- and dust-intensive; NEMA-regulated; alt-fuel opportunity',w:'w3'},
+        {label:'Standards — substandard cement a safety/market issue; UNBS enforcement critical',w:'w2'}
+      ],
+      priorities:['Clinker production — close the >50% import gap; support USD 200–300m new plants; alt. fuels + SCM substitution (steel slag, phosphogypsum, pozzolana)','Finished cement for regional export — defend and grow USD 86m export position, strengthened by domestic clinker','Higher-value building materials — fibre-cement, tiles, precast/concrete products'],
+      proj:{
+        title:'2040 Tenfold Projection',
+        rows:[
+          {label:'Market size',current:'USD 707m (2024); +12%/yr',target:'Several USD Bn/yr — sustained infrastructure/urbanisation/housing'},
+          {label:'Clinker self-sufficiency',current:'<50%',target:'>90% — two new plants under construction are the start'},
+          {label:'Regional export',current:'USD 86m cement export',target:'Uganda as dominant regional cement supplier'},
+          {label:'Circular materials',current:'Limited',target:'Steel slag + phosphogypsum → SCM; waste → alt. kiln fuel'}
+        ]
+      }
+    }
+  }
+];
+
+// ═══════════════════ RENDER VALUE CHAIN MAPS ═══════════════════
+function renderMaps(){
+  const sel = document.getElementById('map-selector');
+  const disp = document.getElementById('map-display');
+  chains.forEach((c,i)=>{
+    const btn = document.createElement('button');
+    btn.className='chain-btn'+(i===0?' active':'');
+    btn.textContent=c.name;
+    btn.onclick=()=>{
+      document.querySelectorAll('#map-selector .chain-btn').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      renderMapDetail(c);
+    };
+    sel.appendChild(btn);
+  });
+  renderMapDetail(chains[0]);
+}
+
+function strengthClass(s){return s==='strong'?'phase-strong':s==='emerging'?'phase-emerging':'phase-gap';}
+
+function renderMapDetail(c){
+  const m=c.map;
+  const phases=m.phases.map(p=>`
+    <div class="vc-phase">
+      <div class="phase-box ${strengthClass(p.strength)}">
+        <div class="phase-name">${p.name}</div>
+        <div class="phase-label">${p.label.replace(/\n/g,'<br>')}</div>
+        <div class="phase-stat">${p.stat}</div>
+      </div>
+    </div>
+  `).join('');
+
+  document.getElementById('map-display').innerHTML=`
+    <div class="vc-map">
+      <h3>${m.title}</h3>
+      <p class="desc">${m.desc}</p>
+      <div class="vc-flow">${phases}</div>
+      <div class="vc-legend">
+        <div class="vc-legend-item"><div class="vc-legend-box" style="background:#e8f5e9;border-color:#43a047"></div> Strong / Competitive</div>
+        <div class="vc-legend-item"><div class="vc-legend-box" style="background:#fff8e1;border-color:#f9a825"></div> Emerging / Limited</div>
+        <div class="vc-legend-item"><div class="vc-legend-box" style="background:#ffebee;border-color:#e57373"></div> Gap / Absent</div>
+      </div>
+    </div>
+    <div class="card" style="background:#fff3e0;border-left:4px solid #f57f17">
+      <strong style="color:#e65100">⚠️ Critical Gap:</strong> <span style="font-size:13px">${m.gap}</span>
+    </div>
+  `;
+}
+
+// ═══════════════════ RENDER CHAIN STATUS ═══════════════════
+function renderStatus(){
+  const sel = document.getElementById('status-selector');
+  const disp = document.getElementById('status-display');
+  chains.forEach((c,i)=>{
+    const btn=document.createElement('button');
+    btn.className='chain-btn'+(i===0?' active':'');
+    btn.textContent=c.name;
+    btn.onclick=()=>{
+      document.querySelectorAll('#status-selector .chain-btn').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      renderStatusDetail(c);
+    };
+    sel.appendChild(btn);
+  });
+  renderStatusDetail(chains[0]);
+}
+
+const colorMap={blue:'',green:'green',amber:'amber',red:'red'};
+
+function renderStatusDetail(c){
+  const s=c.status;
+  const statCards=s.current.map(item=>`
+    <div class="stat-box ${colorMap[item.color]||''}">
+      <h4>${item.label}</h4>
+      <p>${item.value}</p>
+    </div>
+  `).join('');
+
+  const companies=s.companies.map(co=>`<span class="company-chip">${co}</span>`).join('');
+
+  const constraints=s.constraints.map(con=>`
+    <div class="constraint-bar">
+      <div class="constraint-label"><span>${con.label}</span><span style="font-weight:700;color:var(--blue)">${{w5:'Critical',w4:'High',w3:'Medium',w2:'Low'}[con.w]}</span></div>
+      <div class="constraint-track"><div class="constraint-fill ${con.w}"></div></div>
+    </div>
+  `).join('');
+
+  const priorities=s.priorities.map((p,i)=>`
+    <li><div class="priority-num">${i+1}</div><span>${p}</span></li>
+  `).join('');
+
+  const projRows=s.proj.rows.map(r=>`
+    <div class="proj-row">
+      <span>${r.label}</span>
+      <div style="text-align:right">
+        <div style="font-size:11px;opacity:.7">Current: ${r.current}</div>
+        <div class="proj-val">2040: ${r.target}</div>
+      </div>
+    </div>
+  `).join('');
+
+  document.getElementById('status-display').innerHTML=`
+    <div class="card" style="margin-bottom:16px">
+      <h3 style="font-size:16px;font-weight:700;color:var(--blue);margin-bottom:16px">Current Status — ${c.name}</h3>
+      <div class="detail-grid">${statCards}</div>
+      <h4 style="font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-top:4px;margin-bottom:8px">Key Players</h4>
+      <div class="companies-list">${companies}</div>
+    </div>
+    <div class="two-col">
+      <div class="card">
+        <h3 style="font-size:15px;font-weight:700;color:var(--blue);margin-bottom:14px">Binding Constraints (Weighted)</h3>
+        ${constraints}
+      </div>
+      <div>
+        <div class="card" style="margin-bottom:16px">
+          <h3 style="font-size:15px;font-weight:700;color:var(--blue);margin-bottom:12px">Priority Products</h3>
+          <ul class="priority-list">${priorities}</ul>
+        </div>
+        <div class="proj-card">
+          <h4>📈 ${s.proj.title}</h4>
+          ${projRows}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+// ═══════════════════ TAB SWITCHING ═══════════════════
+function showTab(id){
+  document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  event.target.classList.add('active');
+}
+
+// ═══════════════════ INIT ═══════════════════
+renderMaps();
+renderStatus();
+</script>
+</body>
+</html>
