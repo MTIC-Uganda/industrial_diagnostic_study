@@ -32,23 +32,10 @@ jobs:
 
       - name: Copy dashboard to staging
         run: |
-          rsync -az \
-            --include='report/sources-of-truth.html' \
-            --include='report/' \
-            --exclude='report/chapters/' \
-            --exclude='report/*.docx' \
-            --exclude='report/*.pptx' \
-            --exclude='report/inception*' \
-            --exclude='report/structure*' \
-            --exclude='*' \
-            -e "ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no" \
-            ./ $HETZNER_USER@$HETZNER_HOST:/tmp/mtic-deploy/
-
-          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no \
-            $HETZNER_USER@$HETZNER_HOST \
-            "cp /tmp/mtic-deploy/report/sources-of-truth.html $STAGING_DIR/index.html && \
-             echo 'staging: deployed at $(date)' && \
-             rm -rf /tmp/mtic-deploy"
+          scp -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no \
+            report/sources-of-truth.html \
+            $HETZNER_USER@$HETZNER_HOST:$STAGING_DIR/index.html
+          echo "staging: deployed at $(date)"
 
       - name: Verify staging is up
         run: |
@@ -88,8 +75,8 @@ jobs:
         run: |
           ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no \
             $HETZNER_USER@$HETZNER_HOST \
-            "cp $STAGING_DIR/index.html $PROD_DIR/index.html && \
-             echo 'prod: promoted at $(date)'"
+            "cp $STAGING_DIR/index.html $PROD_DIR/index.html"
+          echo "prod: promoted at $(date)"
 
       - name: Verify prod is up
         run: |
