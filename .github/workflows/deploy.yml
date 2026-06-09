@@ -1,0 +1,109 @@
+name: Deploy MTIC Value Chain Dashboard
+
+# Every push to any branch deploys to staging.
+# Push to main → staging first, then promote to prod automatically.
+
+on:
+  push:
+    branches: ["**"]
+
+env:
+  HETZNER_HOST:  89.167.121.193
+  HETZNER_USER:  root
+  STAGING_DIR:   /var/www/mtic-staging
+  PROD_DIR:      /var/www/mtic-prod
+  STAGING_URL:   http://89.167.121.193:8200
+  PROD_URL:      http://89.167.121.193:8201
+
+jobs:
+  # ── Deploy to staging (every push, every branch) ──────────────────────────
+  deploy-staging:
+    name: Deploy → Staging
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.HETZNER_SSH_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H $HETZNER_HOST >> ~/.ssh/known_hosts
+
+      - name: Copy dashboard to staging
+        run: |
+          rsync -az \
+            --include='report/sources-of-truth.html' \
+            --include='report/' \
+            --exclude='report/chapters/' \
+            --exclude='report/*.docx' \
+            --exclude='report/*.pptx' \
+            --exclude='report/inception*' \
+            --exclude='report/structure*' \
+            --exclude='*' \
+            -e "ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no" \
+            ./ $HETZNER_USER@$HETZNER_HOST:/tmp/mtic-deploy/
+
+          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no \
+            $HETZNER_USER@$HETZNER_HOST \
+            "cp /tmp/mtic-deploy/report/sources-of-truth.html $STAGING_DIR/index.html && \
+             echo 'staging: deployed at $(date)' && \
+             rm -rf /tmp/mtic-deploy"
+
+      - name: Verify staging is up
+        run: |
+          for i in $(seq 1 10); do
+            STATUS=$(curl -s -o /dev/null -w "%{http_code}" $STAGING_URL/ || echo "000")
+            echo "Attempt $i: HTTP $STATUS"
+            [ "$STATUS" = "200" ] && exit 0
+            sleep 3
+          done
+          echo "Staging did not respond with 200"
+          exit 1
+
+      - name: Report staging URL
+        run: |
+          echo "::notice::Staging live: $STAGING_URL"
+          BRANCH="${{ github.ref_name }}"
+          COMMIT="${{ github.sha }}"
+          echo "Branch: $BRANCH | Commit: ${COMMIT:0:7} | URL: $STAGING_URL"
+
+  # ── Promote to prod (main branch only, after staging passes) ─────────────
+  promote-to-prod:
+    name: Promote → Production
+    runs-on: ubuntu-latest
+    needs: deploy-staging
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.HETZNER_SSH_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H $HETZNER_HOST >> ~/.ssh/known_hosts
+
+      - name: Promote staging to prod
+        run: |
+          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no \
+            $HETZNER_USER@$HETZNER_HOST \
+            "cp $STAGING_DIR/index.html $PROD_DIR/index.html && \
+             echo 'prod: promoted at $(date)'"
+
+      - name: Verify prod is up
+        run: |
+          for i in $(seq 1 10); do
+            STATUS=$(curl -s -o /dev/null -w "%{http_code}" $PROD_URL/ || echo "000")
+            echo "Attempt $i: HTTP $STATUS"
+            [ "$STATUS" = "200" ] && exit 0
+            sleep 3
+          done
+          echo "Prod did not respond with 200"
+          exit 1
+
+      - name: Report prod URL
+        run: |
+          echo "::notice::Production live: $PROD_URL"
+          COMMIT="${{ github.sha }}"
+          echo "Commit ${COMMIT:0:7} is now live on prod: $PROD_URL"
