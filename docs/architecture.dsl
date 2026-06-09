@@ -1,76 +1,108 @@
-workspace "MTIC Industrial Diagnostic Study" "AI-assisted research and document generation pipeline for Uganda's 9 NDP IV priority manufacturing value chains." {
+workspace "MTIC Industrial Diagnostic Study — Value Chain Intelligence System" "Automated pipeline: Jerome uploads data → agentic ingest/synthesize/review → web dashboard updated. Phase 1 (manual) is live; Phases 2–3 (automation) are in progress." {
 
     model {
         # People
-        solomon = person "Solomon Ariho" "Lead executor. Runs Claude Code sessions, ingests data, generates chapters."
-        hillary  = person "Hillary Arinda" "Technical advisor. Sets up environment, reviews PRs, guides workflow."
-        jerome   = person "Jerome Nuwabaasa" "MTIC client coordinator. Reviews content, provides source data, unblocks Commissioner."
-        commissioner = person "Commissioner (MTIC)" "Final authority. Approved inception reports and report structure before chapter work began."
+        solomon   = person "Solomon Ariho" "Lead developer. Builds and iterates on the web dashboard. Pushes branches; main triggers prod deploy."
+        hillary   = person "Hillary Arinda" "Technical advisor and pipeline engineer. Sets up infra, builds agentic chain, reviews PRs."
+        jerome    = person "Jerome Nuwabaasa" "MTIC client. Uploads source data with context notes to the repo. Defines quality matrix (pass/fail criteria)."
+        commissioner = person "Commissioner (MTIC)" "Final authority. Reviews the public dashboard; approves strategic outputs."
+        colleagues = person "MTIC Colleagues" "Reviewers. Access the public prod URL to review value chain assessments and give feedback."
 
         # External systems
-        github = softwareSystem "GitHub (MTIC-Uganda org)" "Version control and collaboration. All chapters, data, and scripts live here. PRs are the review gate." "External"
-        itcTrademap = softwareSystem "ITC TradeMap" "International trade statistics portal. Automated extraction via trademap_fetch.py." "External"
-        claudeCode = softwareSystem "Claude Code (Anthropic)" "AI engine. Primary analytical and writing tool. Ingests source data, generates chapter content, builds Word/PPTX outputs." "External"
+        github    = softwareSystem "GitHub (MTIC-Uganda org)" "Version control, CI/CD trigger, PR review gate." "External"
+        itcTrade  = softwareSystem "ITC TradeMap" "International trade statistics. Automated extraction via trademap scripts." "External"
+        whatsapp  = softwareSystem "WhatsApp (Hillary's Agent)" "Push notifications at each pipeline stage: upload detected, ingestion done, review passed/failed, deploy complete." "External"
+        hetzner   = softwareSystem "Hetzner Server (89.167.121.193)" "Always-on server. Hosts staging and prod. Runs agentic pipeline workers (Phase 2+)."
 
-        # The pipeline system
-        pipeline = softwareSystem "Diagnostic Study Pipeline" "Local research and document generation toolchain." {
+        # The full pipeline system
+        pipeline = softwareSystem "Value Chain Intelligence Pipeline" "End-to-end data-to-dashboard automation." {
 
-            sourceData = container "Source Data Store" "All reference documents: ToR PDFs, value chain data, NIP 2020, Tenfold Strategy, TradeMap exports. Stored in data/ and tor/." "Markdown / PDF / XLSX"
+            # ── DATA LAYER ──────────────────────────────────────────────────
+            rawData = container "Raw Data Store" "Jerome uploads: PDFs, DOCX, XLSX, DOCX with context notes. Also TradeMap CSV exports. Path: data/ in repo." "PDF/XLSX/DOCX/Markdown"
 
-            chapterStore = container "Chapter Markdown Store" "One .md file per chapter per report. report/chapters/report1-*.md and report2-*.md. Markdown is the single source of truth; all formatted outputs are derived from these." "Markdown"
+            schema = container "Value Chain Schema" "Structured field definitions per stage per chain: production capacity, utilisation %, imports, exports (TradeMap), Tenfold 2040 targets, data gap flags. Authored by Jerome. Path: data/schema/." "Markdown/JSON"
 
-            buildScripts = container "Build Scripts" "Python scripts that assemble markdown chapters into final deliverables. Handles section order, abbreviation expansion (first-use), headers/footers, and all output formats." "Python" {
-                docxBuilder  = component "build_reports_docx.py"  "Assembles chapters into Word .docx reports."
-                pptxBuilder  = component "build_reports_pptx.py"  "Builds full PowerPoint slide decks."
-                execBuilder  = component "build_exec_decks.py"    "Builds short Commissioner/boardroom executive decks."
-                trademapClient = component "trademap_fetch.py"    "Automated ITC TradeMap data extraction."
-                acronymExpander = component "expand_acronyms.py"  "First-use acronym expansion across chapters."
-            }
+            qualityMatrix = container "Quality Matrix" "Jerome's pass/fail criteria for each section of the diagnostic. The review agent scores against this. Path: docs/quality-matrix.md." "Markdown"
 
-            outputs = container "Final Deliverables" "Word documents, PowerPoint decks, and executive decks delivered to MTIC." "DOCX / PPTX" {
-                report1 = component "Report 1 — Iron, Steel, Copper, Automotive" "Full diagnostic for 3 value chains."
-                report2 = component "Report 2 — Textiles, Pharma, Petrochem, Sugar, Plastics, Cement" "Full diagnostic for 6 value chains."
-                execDecks = component "Executive Decks (x2)" "Commissioner-level short-form presentations."
-                inceptionReports = component "Inception Reports (x2)" "Pre-chapter-work approval documents. Commissioner-signed before execution."
-            }
+            synthesizedDB = container "Synthesized Data Store" "Structured JSON records per chain per stage. Output of the ingestion and synthesis agents. Path: data/synthesized/." "JSON"
+
+            # ── AGENT LAYER (Phase 2+) ─────────────────────────────────────
+            ingestionAgent = container "Ingestion Agent" "Triggered by GitHub push to data/. Reads the uploaded file + Jerome's context note. Maps content to schema fields. Writes JSON to synthesized store. Flags unmapped fields as data gaps. (Phase 2)" "Python/Claude Code"
+
+            synthesisAgent = container "Synthesis Agent" "Reads all JSON for one value chain. Produces: current status assessment, gap vs Tenfold 2040, ranked bottleneck list, project profile sketches. Output: report/synthesized/<chain>/assessment.md. (Phase 2)" "Python/Claude Code"
+
+            reviewAgent = container "Review Agent" "Validates synthesis output against Jerome's quality matrix. PASS: opens PR to main. FAIL: sends specific feedback via WhatsApp and routes back to synthesis. Self-healing loop until PASS or human override. (Phase 2)" "Python/Claude Code"
+
+            # ── CI/CD LAYER ────────────────────────────────────────────────
+            ciPipeline = container "GitHub Actions Pipeline" "Triggered on every push. Any branch → staging deploy. main branch → staging + prod promotion. Health check after each deploy." "YAML"
+
+            # ── PRESENTATION LAYER ─────────────────────────────────────────
+            stagingApp = container "Staging Dashboard" "Live preview of every branch push. URL: http://89.167.121.193:8200. Reviewers check here before main." "Static HTML served by nginx"
+
+            prodApp = container "Production Dashboard" "Public-facing value chain dashboard. URL: http://89.167.121.193:8201. Promoted from staging on main only. Jerome shares this with MTIC colleagues and Commissioner." "Static HTML served by nginx"
+
+            # ── SCRIPTS ───────────────────────────────────────────────────
+            buildScripts = container "Report Build Scripts" "Assemble markdown chapters into Word/PPTX deliverables. Separate from the dashboard pipeline. scripts/build_reports_docx.py etc." "Python"
         }
 
-        # Relationships — people to systems
-        solomon -> claudeCode "Prompts chapter by chapter, ingests source data, commits output"
-        solomon -> github "Opens PRs per chapter, merges on approval"
-        hillary -> github "Reviews PRs, approves merges"
-        jerome -> github "Provides data, reviews content"
-        jerome -> commissioner "Presents inception reports and structure for approval"
-        hillary -> pipeline "Sets up environment, guides workflow"
+        # ── RELATIONSHIPS: people → systems ──────────────────────────────
+        jerome    -> rawData   "Uploads data files with context notes (push to data/ branch → PR → main)"
+        jerome    -> qualityMatrix "Authors and maintains pass/fail criteria"
+        solomon   -> pipeline  "Pushes dashboard code to branches; main triggers deploy"
+        hillary   -> pipeline  "Builds and maintains the agentic pipeline and CI/CD"
+        colleagues -> prodApp  "Reviews value chain assessments via public URL"
+        commissioner -> prodApp "Reviews strategic outputs"
 
-        # Relationships — pipeline internals
-        solomon -> sourceData "Uploads reference docs and TradeMap exports"
-        solomon -> chapterStore "Commits AI-generated chapter markdown"
-        sourceData -> claudeCode "Ingested as context before synthesis"
-        claudeCode -> chapterStore "Generates chapter content"
-        chapterStore -> buildScripts "Input to all build scripts"
-        buildScripts -> outputs "Assembles final deliverables"
-        itcTrademap -> trademapClient "Data extracted via automated login + scrape"
-        trademapClient -> sourceData "Exports stored in data/"
+        # ── DATA FLOW: ingest → synthesize → review ───────────────────────
+        rawData   -> ingestionAgent  "File + context note read on push event"
+        schema    -> ingestionAgent  "Field definitions guide extraction"
+        ingestionAgent -> synthesizedDB "Writes structured JSON, flags data gaps"
+        synthesizedDB  -> synthesisAgent "All stage JSONs for one chain"
+        qualityMatrix  -> reviewAgent    "Pass/fail criteria loaded at review time"
+        synthesisAgent -> reviewAgent    "Assessment markdown submitted for review"
+        reviewAgent    -> ciPipeline     "PASS: triggers PR to main"
+        reviewAgent    -> whatsapp       "FAIL: pushes specific gap feedback to Hillary/Solomon"
+        reviewAgent    -> synthesisAgent "FAIL: feedback routed back, loop repeats"
 
-        # External deliveries
-        outputs -> jerome "Final Word + PPTX reports delivered"
-        outputs -> commissioner "Executive decks presented at Commissioner level"
+        # ── CI/CD FLOW ────────────────────────────────────────────────────
+        github    -> ciPipeline  "Push event triggers pipeline"
+        ciPipeline -> stagingApp "Every push: scp dashboard HTML to staging"
+        ciPipeline -> prodApp    "main only: copy staging → prod after health check"
+        ciPipeline -> whatsapp   "Deploy complete notification to MTIC group (Phase 2)"
+
+        # ── EXTERNAL DATA ─────────────────────────────────────────────────
+        itcTrade  -> rawData     "TradeMap CSV exports stored in data/"
+
+        # ── REPORT TRACK (separate from dashboard) ────────────────────────
+        synthesizedDB -> buildScripts "Phase 3: synthesized data feeds report assembly"
+        buildScripts -> prodApp       "Report sections rendered in dashboard"
     }
 
     views {
-        systemContext pipeline "SystemContext" "How the pipeline sits within the broader MTIC ecosystem." {
+        systemContext pipeline "SystemContext" "People and external systems around the pipeline." {
             include *
             autoLayout lr
         }
 
-        container pipeline "Containers" "Internal structure of the diagnostic study pipeline." {
+        container pipeline "Containers" "Internal structure and data flow of the pipeline." {
             include *
             autoLayout tb
         }
 
-        component buildScripts "BuildScripts" "Build script components." {
-            include *
+        dynamic pipeline "DataFlow" "How a Jerome data upload flows through the full pipeline to the live dashboard." {
+            jerome -> rawData "1. Jerome pushes data file + context note to data/ branch"
+            rawData -> ingestionAgent "2. Push event triggers ingestion agent"
+            schema -> ingestionAgent "3. Schema loaded for field mapping"
+            ingestionAgent -> synthesizedDB "4. Structured JSON written; data gaps flagged"
+            synthesizedDB -> synthesisAgent "5. Synthesis agent reads all stage data for one chain"
+            qualityMatrix -> reviewAgent "6. Quality matrix loaded"
+            synthesisAgent -> reviewAgent "7. Assessment submitted to review agent"
+            reviewAgent -> ciPipeline "8a. PASS: PR opened to main, CI triggered"
+            ciPipeline -> stagingApp "9a. Staging updated"
+            ciPipeline -> prodApp "10a. Prod promoted (main only)"
+            ciPipeline -> whatsapp "11. WhatsApp notification: prod live"
+            reviewAgent -> whatsapp "8b. FAIL: specific gap feedback sent to team"
+            reviewAgent -> synthesisAgent "8c. FAIL: feedback looped back for re-synthesis"
             autoLayout lr
         }
 
@@ -81,7 +113,7 @@ workspace "MTIC Industrial Diagnostic Study" "AI-assisted research and document 
                 color #ffffff
             }
             element "External" {
-                background #999999
+                background #888888
                 color #ffffff
             }
             element "Software System" {
