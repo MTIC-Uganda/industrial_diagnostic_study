@@ -1,25 +1,39 @@
 name: Deploy MTIC Value Chain Dashboard
 
-# Every push to any branch deploys to staging.
-# Push to main → staging first, then promote to prod automatically.
+# Every push to any branch:
+#   1. Deploy to staging
+#   2. Run health check (with self-heal retry up to MAX_HEAL_ATTEMPTS)
+#   3. If staging passes: promote to prod + auto-merge branch to main
+#
+# The self-heal loop retries the deploy+health-check sequence on transient
+# failures (SSH blip, nginx restart, etc.). If all attempts fail, the run
+# fails loudly and prod is never touched.
 
 on:
   push:
     branches: ["**"]
 
 env:
-  HETZNER_HOST:  89.167.121.193
-  HETZNER_USER:  root
-  STAGING_DIR:   /var/www/mtic-staging
-  PROD_DIR:      /var/www/mtic-prod
-  STAGING_URL:   http://89.167.121.193:8200
-  PROD_URL:      http://89.167.121.193:8201
+  HETZNER_HOST:        89.167.121.193
+  HETZNER_USER:        root
+  STAGING_DIR:         /var/www/mtic-staging
+  PROD_DIR:            /var/www/mtic-prod
+  STAGING_URL:         http://89.167.121.193:8200
+  PROD_URL:            http://89.167.121.193:8201
+  PROD_SHORT_URL:      https://tinyurl.com/28lxntmc
+  MAX_HEAL_ATTEMPTS:   3
+
+permissions:
+  contents: write
 
 jobs:
-  # ── Deploy to staging (every push, every branch) ──────────────────────────
+  # ── 1. Deploy to staging (every push, every branch) ───────────────────────
   deploy-staging:
     name: Deploy → Staging
     runs-on: ubuntu-latest
+    outputs:
+      staged: ${{ steps.heal.outputs.staged }}
+
     steps:
       - uses: actions/checkout@v4
 
@@ -30,39 +44,63 @@ jobs:
           chmod 600 ~/.ssh/deploy_key
           ssh-keyscan -H $HETZNER_HOST >> ~/.ssh/known_hosts
 
-      - name: Copy dashboard to staging
+      - name: Deploy + self-heal retry loop
+        id: heal
         run: |
-          scp -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no \
-            report/sources-of-truth.html \
-            $HETZNER_USER@$HETZNER_HOST:$STAGING_DIR/index.html
-          echo "staging: deployed at $(date)"
+          MAX=${{ env.MAX_HEAL_ATTEMPTS }}
+          STAGED=false
 
-      - name: Verify staging is up
-        run: |
-          for i in $(seq 1 10); do
-            STATUS=$(curl -s -o /dev/null -w "%{http_code}" $STAGING_URL/ || echo "000")
-            echo "Attempt $i: HTTP $STATUS"
-            [ "$STATUS" = "200" ] && exit 0
-            sleep 3
+          for attempt in $(seq 1 $MAX); do
+            echo ""
+            echo "=== Heal attempt $attempt/$MAX ==="
+
+            # --- copy the file ---
+            echo "Copying to staging..."
+            if ! scp -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no \
+                report/sources-of-truth.html \
+                $HETZNER_USER@$HETZNER_HOST:$STAGING_DIR/index.html; then
+              echo "SCP failed on attempt $attempt"
+              [ $attempt -lt $MAX ] && sleep 10 && continue || break
+            fi
+
+            # --- health check ---
+            echo "Health checking $STAGING_URL ..."
+            for i in $(seq 1 10); do
+              STATUS=$(curl -s -o /dev/null -w "%{http_code}" $STAGING_URL/ || echo "000")
+              echo "  Check $i: HTTP $STATUS"
+              if [ "$STATUS" = "200" ]; then
+                STAGED=true
+                break
+              fi
+              sleep 3
+            done
+
+            $STAGED && break
+            echo "Health check failed on attempt $attempt"
+            [ $attempt -lt $MAX ] && sleep 10
           done
-          echo "Staging did not respond with 200"
-          exit 1
 
-      - name: Report staging URL
-        run: |
-          echo "::notice::Staging live: $STAGING_URL"
-          BRANCH="${{ github.ref_name }}"
-          COMMIT="${{ github.sha }}"
-          echo "Branch: $BRANCH | Commit: ${COMMIT:0:7} | URL: $STAGING_URL"
+          if $STAGED; then
+            echo "staged=true"  >> $GITHUB_OUTPUT
+            echo "::notice::Staging healthy: $STAGING_URL"
+          else
+            echo "staged=false" >> $GITHUB_OUTPUT
+            echo "::error::Staging FAILED after $MAX heal attempt(s). Prod unchanged."
+            exit 1
+          fi
 
-  # ── Promote to prod (main branch only, after staging passes) ─────────────
-  promote-to-prod:
+  # ── 2. Promote to prod + auto-merge to main (staging must pass) ────────────
+  deploy-prod:
     name: Promote → Production
     runs-on: ubuntu-latest
     needs: deploy-staging
-    if: github.ref == 'refs/heads/main'
+    if: needs.deploy-staging.outputs.staged == 'true'
+
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set up SSH
         run: |
@@ -71,26 +109,51 @@ jobs:
           chmod 600 ~/.ssh/deploy_key
           ssh-keyscan -H $HETZNER_HOST >> ~/.ssh/known_hosts
 
-      - name: Promote staging to prod
+      - name: Promote staging → prod
         run: |
           ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no \
             $HETZNER_USER@$HETZNER_HOST \
             "cp $STAGING_DIR/index.html $PROD_DIR/index.html"
-          echo "prod: promoted at $(date)"
+          echo "prod: promoted at $(date -u '+%Y-%m-%d %H:%M UTC')"
 
-      - name: Verify prod is up
+      - name: Verify prod
         run: |
           for i in $(seq 1 10); do
             STATUS=$(curl -s -o /dev/null -w "%{http_code}" $PROD_URL/ || echo "000")
             echo "Attempt $i: HTTP $STATUS"
-            [ "$STATUS" = "200" ] && exit 0
+            [ "$STATUS" = "200" ] && break
+            [ $i -eq 10 ] && { echo "Prod health check failed"; exit 1; }
             sleep 3
           done
-          echo "Prod did not respond with 200"
-          exit 1
 
-      - name: Report prod URL
+      - name: Auto-merge branch to main
+        if: github.ref != 'refs/heads/main'
         run: |
-          echo "::notice::Production live: $PROD_URL"
+          BRANCH="${{ github.ref_name }}"
+          git config user.name  "MTIC CI Bot"
+          git config user.email "ci-bot@mtic-pipeline"
+          git fetch origin main
+          git checkout main
+
+          if git merge --no-ff origin/$BRANCH -m "ci: auto-merge $BRANCH (staging passed)"; then
+            git push origin main
+            echo "::notice::Auto-merged $BRANCH → main"
+          else
+            git merge --abort || true
+            echo "::warning::Merge conflict: $BRANCH not merged to main. Prod is updated. Resolve manually."
+          fi
+          # Note: GITHUB_TOKEN pushes do not re-trigger workflows — this is intentional.
+          # main stays current without a redundant CI run.
+
+      - name: Report live URLs
+        run: |
           COMMIT="${{ github.sha }}"
-          echo "Commit ${COMMIT:0:7} is now live on prod: $PROD_URL"
+          BRANCH="${{ github.ref_name }}"
+          echo ""
+          echo "============================================"
+          echo "  PROD LIVE"
+          echo "  Full URL:  $PROD_URL"
+          echo "  Short URL: $PROD_SHORT_URL"
+          echo "  Commit:    ${COMMIT:0:7} from $BRANCH"
+          echo "============================================"
+          echo "::notice::Prod live: $PROD_SHORT_URL (full: $PROD_URL)"

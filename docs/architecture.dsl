@@ -34,7 +34,7 @@ workspace "MTIC Industrial Diagnostic Study — Value Chain Intelligence System"
             reviewAgent = container "Review Agent" "Validates synthesis output against Jerome's quality matrix. PASS: opens PR to main. FAIL: sends specific feedback via WhatsApp and routes back to synthesis. Self-healing loop until PASS or human override. (Phase 2)" "Python/Claude Code"
 
             # ── CI/CD LAYER ────────────────────────────────────────────────
-            ciPipeline = container "GitHub Actions Pipeline" "Triggered on every push. Any branch → staging deploy. main branch → staging + prod promotion. Health check after each deploy." "YAML"
+            ciPipeline = container "GitHub Actions Pipeline" "Triggered on every push. Any branch → staging deploy (self-heal retry loop up to 3×). Staging pass → prod promotion + auto-merge to main. Merge conflict → warning only (prod still updated). Short URL: https://tinyurl.com/28lxntmc" "YAML"
 
             # ── PRESENTATION LAYER ─────────────────────────────────────────
             stagingApp = container "Staging Dashboard" "Live preview of every branch push. URL: http://89.167.121.193:8200. Reviewers check here before main." "Static HTML served by nginx"
