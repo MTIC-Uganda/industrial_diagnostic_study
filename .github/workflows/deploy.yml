@@ -27,6 +27,40 @@ permissions:
   contents: write
 
 jobs:
+  # ── 0. Doc guardian (runs in parallel, never blocks deploy) ───────────────
+  doc-check:
+    name: Doc Guardian
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Warn if architecture changed without DSL update
+        run: |
+          # Files that indicate a structural change worth documenting
+          ARCH_PATTERNS=".github/workflows scripts agents"
+          DSL="docs/architecture.dsl"
+
+          ARCH_CHANGED=false
+          for pattern in $ARCH_PATTERNS; do
+            if git diff --name-only HEAD~1 HEAD -- "$pattern" 2>/dev/null | grep -q .; then
+              ARCH_CHANGED=true
+              echo "Architecture-relevant change in: $pattern"
+            fi
+          done
+
+          if $ARCH_CHANGED; then
+            if git diff --name-only HEAD~1 HEAD -- "$DSL" 2>/dev/null | grep -q .; then
+              echo "docs/architecture.dsl updated in this commit — good."
+            else
+              echo "::warning::Architecture files changed but docs/architecture.dsl was NOT updated."
+              echo "::warning::Update docs/architecture.dsl and docs/adr/ before this becomes a bottleneck."
+            fi
+          else
+            echo "No architecture-relevant changes — doc check skipped."
+          fi
+
   # ── 1. Deploy to staging (every push, every branch) ───────────────────────
   deploy-staging:
     name: Deploy → Staging
