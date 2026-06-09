@@ -1,0 +1,977 @@
+{
+  "title": "Iron & Steel Value Chain",
+  "description": "Structured value chain analysis following the valuechains.ai methodology: System -> Production Route (with prevalence %) -> Technology Type -> Component/Material (with HS code, category, cost-share weight, CO2 intensity, upstream inputs)",
+  "methodology": {
+    "levels": ["Stage", "Production route", "Technology type", "Component / material"],
+    "fields_per_component": ["name", "hs_code", "category", "cost_share_pct", "function", "mechanism", "co2_intensity", "upstream_inputs"],
+    "categories": ["material", "energy", "labor", "machinery", "additive", "component"],
+    "prevalence": "Estimated global share of that production route within its stage (%)",
+    "cost_share_pct": "Relative cost weight of this component within its technology type (0-100)",
+    "input_weight_pct": "Relative cost contribution of each upstream input within the component (sums to 100)"
+  },
+  "stages": [
+    {
+      "id": "s1",
+      "label": "Raw materials & inputs",
+      "sub": "Ores, coal, scrap, energy",
+      "color": "#1D9E75",
+      "routes": [
+        {
+          "id": "r1a",
+          "label": "Iron ore supply",
+          "prevalence_pct": 72,
+          "types": [
+            {
+              "id": "t1a1",
+              "label": "Iron ore (lump & fines)",
+              "components": [
+                {
+                  "name": "Iron ore lump",
+                  "hs_code": "2601.11",
+                  "category": "material",
+                  "cost_share_pct": 35,
+                  "function": "Direct BF feed; 60-65% Fe content",
+                  "mechanism": "Open-pit mining -> crushing -> screening by size",
+                  "co2_intensity": "Mine: 0.03 tCO2/t ore",
+                  "upstream_inputs": [
+                    {"name": "Mining equipment", "category": "machinery", "weight_pct": 20},
+                    {"name": "Explosives", "category": "material", "weight_pct": 10},
+                    {"name": "Water", "category": "material", "weight_pct": 5},
+                    {"name": "Diesel fuel", "category": "energy", "weight_pct": 30},
+                    {"name": "Labour", "category": "labor", "weight_pct": 35}
+                  ]
+                },
+                {
+                  "name": "Iron ore fines",
+                  "hs_code": "2601.11",
+                  "category": "material",
+                  "cost_share_pct": 30,
+                  "function": "Sintered before BF use; >80% of seaborne trade",
+                  "mechanism": "Open-pit -> crushing -> wet magnetic separation -> dewatering",
+                  "co2_intensity": "Mine: 0.03 tCO2/t ore",
+                  "upstream_inputs": [
+                    {"name": "Mining machinery", "category": "machinery", "weight_pct": 15},
+                    {"name": "Magnetic separators", "category": "machinery", "weight_pct": 10},
+                    {"name": "Water & chemicals", "category": "material", "weight_pct": 15},
+                    {"name": "Energy", "category": "energy", "weight_pct": 25},
+                    {"name": "Labour", "category": "labor", "weight_pct": 35}
+                  ]
+                },
+                {
+                  "name": "Iron ore pellets",
+                  "hs_code": "2601.12",
+                  "category": "material",
+                  "cost_share_pct": 20,
+                  "function": "High-Fe feed for DRI & BF; uniform size & grade",
+                  "mechanism": "Fine ore + binder -> balling disc -> indurating furnace at 1300C",
+                  "co2_intensity": "Pelletising: 0.05 tCO2/t",
+                  "upstream_inputs": [
+                    {"name": "Iron ore fines", "category": "material", "weight_pct": 70},
+                    {"name": "Bentonite binder", "category": "material", "weight_pct": 3},
+                    {"name": "Indurating furnace fuel", "category": "energy", "weight_pct": 20},
+                    {"name": "Water", "category": "material", "weight_pct": 5},
+                    {"name": "Labour", "category": "labor", "weight_pct": 2}
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "t1a2",
+              "label": "Coal & coke",
+              "components": [
+                {
+                  "name": "Coking coal",
+                  "hs_code": "2701.12",
+                  "category": "material",
+                  "cost_share_pct": 40,
+                  "function": "Primary reductant & energy in BF ironmaking",
+                  "mechanism": "Underground or open-cut mining -> washing -> coking",
+                  "co2_intensity": "Mining: 0.04 tCO2/t coal",
+                  "upstream_inputs": [
+                    {"name": "Mining equipment", "category": "machinery", "weight_pct": 20},
+                    {"name": "Diesel & electricity", "category": "energy", "weight_pct": 25},
+                    {"name": "Water treatment", "category": "material", "weight_pct": 5},
+                    {"name": "Labour", "category": "labor", "weight_pct": 50}
+                  ]
+                },
+                {
+                  "name": "Metallurgical coke",
+                  "hs_code": "2704.00",
+                  "category": "material",
+                  "cost_share_pct": 35,
+                  "function": "Porous reductant & structural support in BF",
+                  "mechanism": "Coking coal -> coke oven at 1000C for 18h -> quenching",
+                  "co2_intensity": "Coking: 0.15 tCO2/t coke",
+                  "upstream_inputs": [
+                    {"name": "Coking coal", "category": "material", "weight_pct": 75},
+                    {"name": "Coke oven energy", "category": "energy", "weight_pct": 18},
+                    {"name": "Quenching water", "category": "material", "weight_pct": 3},
+                    {"name": "Labour", "category": "labor", "weight_pct": 4}
+                  ]
+                },
+                {
+                  "name": "Pulverised coal (PCI)",
+                  "hs_code": "2701.19",
+                  "category": "material",
+                  "cost_share_pct": 15,
+                  "function": "Injected into BF tuyeres to reduce coke rate",
+                  "mechanism": "Thermal coal -> milling to <75um -> pneumatic injection",
+                  "co2_intensity": "0.02 tCO2/t PCI",
+                  "upstream_inputs": [
+                    {"name": "Thermal coal", "category": "material", "weight_pct": 80},
+                    {"name": "Pulverising mills", "category": "machinery", "weight_pct": 10},
+                    {"name": "Compressed air", "category": "energy", "weight_pct": 7},
+                    {"name": "Labour", "category": "labor", "weight_pct": 3}
+                  ]
+                },
+                {
+                  "name": "Coke oven gas (COG)",
+                  "hs_code": "2705.00",
+                  "category": "energy",
+                  "cost_share_pct": 10,
+                  "function": "Byproduct gas; fuel for downstream reheating furnaces",
+                  "mechanism": "Recovered from coke ovens -> cleaned -> distributed by pipeline",
+                  "co2_intensity": "Recovered energy; net negative",
+                  "upstream_inputs": [
+                    {"name": "Coke oven operations", "category": "machinery", "weight_pct": 40},
+                    {"name": "Gas cleaning plant", "category": "machinery", "weight_pct": 30},
+                    {"name": "Pipeline distribution", "category": "component", "weight_pct": 20},
+                    {"name": "Labour", "category": "labor", "weight_pct": 10}
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "t1a3",
+              "label": "Fluxes & additives",
+              "components": [
+                {
+                  "name": "Limestone (CaCO3)",
+                  "hs_code": "2521.00",
+                  "category": "material",
+                  "cost_share_pct": 30,
+                  "function": "Flux in BF & BOF; removes impurities as slag",
+                  "mechanism": "Quarrying -> crushing -> calcining at 900C",
+                  "co2_intensity": "Calcining: 0.44 tCO2/t lime",
+                  "upstream_inputs": [
+                    {"name": "Limestone quarry", "category": "material", "weight_pct": 50},
+                    {"name": "Calcining kiln fuel", "category": "energy", "weight_pct": 35},
+                    {"name": "Crushing equipment", "category": "machinery", "weight_pct": 10},
+                    {"name": "Labour", "category": "labor", "weight_pct": 5}
+                  ]
+                },
+                {
+                  "name": "Dolomite",
+                  "hs_code": "2518.10",
+                  "category": "material",
+                  "cost_share_pct": 20,
+                  "function": "MgO source; protects BOF refractory lining",
+                  "mechanism": "Quarrying -> calcining -> crushing to specified sizing",
+                  "co2_intensity": "0.47 tCO2/t dolomite",
+                  "upstream_inputs": [
+                    {"name": "Dolomite rock", "category": "material", "weight_pct": 55},
+                    {"name": "Calcining energy", "category": "energy", "weight_pct": 30},
+                    {"name": "Crushing equipment", "category": "machinery", "weight_pct": 10},
+                    {"name": "Labour", "category": "labor", "weight_pct": 5}
+                  ]
+                },
+                {
+                  "name": "Ferroalloys (Mn, Cr, Ni, V)",
+                  "hs_code": "7202.11",
+                  "category": "material",
+                  "cost_share_pct": 35,
+                  "function": "Alloying elements for steel grade specification",
+                  "mechanism": "Smelting of ore concentrates in submerged arc furnace",
+                  "co2_intensity": "Varies: 1-4 tCO2/t alloy",
+                  "upstream_inputs": [
+                    {"name": "Ore concentrates", "category": "material", "weight_pct": 60},
+                    {"name": "Reductant (coke)", "category": "material", "weight_pct": 15},
+                    {"name": "Electric energy", "category": "energy", "weight_pct": 20},
+                    {"name": "Labour", "category": "labor", "weight_pct": 5}
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "r1b",
+          "label": "Scrap supply",
+          "prevalence_pct": 22,
+          "types": [
+            {
+              "id": "t1b1",
+              "label": "Steel scrap grades",
+              "components": [
+                {
+                  "name": "Heavy melting scrap (HMS)",
+                  "hs_code": "7204.10",
+                  "category": "material",
+                  "cost_share_pct": 45,
+                  "function": "Primary EAF feedstock; structural & plate offcuts",
+                  "mechanism": "Collection -> shredding or cutting to size -> grading",
+                  "co2_intensity": "Scrap has zero primary burden; displaces virgin iron",
+                  "upstream_inputs": [
+                    {"name": "Industrial scrap collection", "category": "material", "weight_pct": 50},
+                    {"name": "Shredder / cutting", "category": "machinery", "weight_pct": 25},
+                    {"name": "Transport", "category": "energy", "weight_pct": 15},
+                    {"name": "Labour", "category": "labor", "weight_pct": 10}
+                  ]
+                },
+                {
+                  "name": "Shredded scrap",
+                  "hs_code": "7204.41",
+                  "category": "material",
+                  "cost_share_pct": 30,
+                  "function": "Auto-body & white goods; consistent density & chemistry",
+                  "mechanism": "End-of-life vehicles -> car shredder -> eddy-current separation -> magnetics",
+                  "co2_intensity": "~0 tCO2 (secondary resource)",
+                  "upstream_inputs": [
+                    {"name": "End-of-life vehicles", "category": "material", "weight_pct": 40},
+                    {"name": "Shredder machine", "category": "machinery", "weight_pct": 25},
+                    {"name": "Eddy-current separator", "category": "machinery", "weight_pct": 15},
+                    {"name": "Electricity", "category": "energy", "weight_pct": 10},
+                    {"name": "Labour", "category": "labor", "weight_pct": 10}
+                  ]
+                },
+                {
+                  "name": "Direct reduced iron (DRI/HBI)",
+                  "hs_code": "7203.10",
+                  "category": "material",
+                  "cost_share_pct": 25,
+                  "function": "Premium scrap substitute; low residuals for quality steel",
+                  "mechanism": "Iron ore pellets + natural gas / H2 in shaft furnace -> sponge iron -> hot briquetting",
+                  "co2_intensity": "Gas DRI: 1.0 tCO2/t; H2-DRI: ~0",
+                  "upstream_inputs": [
+                    {"name": "Iron ore pellets", "category": "material", "weight_pct": 55},
+                    {"name": "Natural gas or H2", "category": "energy", "weight_pct": 30},
+                    {"name": "Shaft furnace", "category": "machinery", "weight_pct": 10},
+                    {"name": "Labour", "category": "labor", "weight_pct": 5}
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "label": "Iron-making",
+      "sub": "BF, DRI, Smelting reduction",
+      "color": "#534AB7",
+      "routes": [
+        {
+          "id": "r2a",
+          "label": "BF (blast furnace)",
+          "prevalence_pct": 70,
+          "types": [
+            {
+              "id": "t2a1",
+              "label": "Sinter plant",
+              "components": [
+                {
+                  "name": "Sinter machine",
+                  "hs_code": "8454.10",
+                  "category": "machinery",
+                  "cost_share_pct": 40,
+                  "function": "Agglomerates fine ore into porous burden for BF",
+                  "mechanism": "Iron ore fines + coke breeze + lime -> strand sintering machine -> cooling",
+                  "co2_intensity": "0.1-0.2 tCO2/t sinter",
+                  "upstream_inputs": [
+                    {"name": "Iron ore fines", "category": "material", "weight_pct": 75},
+                    {"name": "Coke breeze", "category": "material", "weight_pct": 5},
+                    {"name": "Limestone flux", "category": "material", "weight_pct": 8},
+                    {"name": "Ignition fuel", "category": "energy", "weight_pct": 7},
+                    {"name": "Labour", "category": "labor", "weight_pct": 5}
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "t2a2",
+              "label": "Blast furnace",
+              "components": [
+                {
+                  "name": "Blast furnace vessel",
+                  "hs_code": "8454.10",
+                  "category": "machinery",
+                  "cost_share_pct": 30,
+                  "function": "Reduces iron ore to liquid pig iron at 1500C",
+                  "mechanism": "Coke + sinter + pellets + limestone charged at top; hot air blast (1200C) injected at tuyeres",
+                  "co2_intensity": "1.6-1.8 tCO2/t pig iron",
+                  "upstream_inputs": [
+                    {"name": "Metallurgical coke", "category": "material", "weight_pct": 30},
+                    {"name": "Iron ore sinter", "category": "material", "weight_pct": 45},
+                    {"name": "Hot blast (1200C)", "category": "energy", "weight_pct": 15},
+                    {"name": "PCI coal", "category": "material", "weight_pct": 5},
+                    {"name": "Labour", "category": "labor", "weight_pct": 5}
+                  ]
+                },
+                {
+                  "name": "Hot stoves (Cowper stoves)",
+                  "hs_code": "8417.10",
+                  "category": "machinery",
+                  "cost_share_pct": 15,
+                  "function": "Pre-heat blast air to 1200C for tuyere injection",
+                  "mechanism": "BF gas burned in checker brickwork -> refractory stores heat -> air blown through",
+                  "co2_intensity": "Recovers and reuses BF off-gas",
+                  "upstream_inputs": [
+                    {"name": "Blast furnace gas", "category": "energy", "weight_pct": 70},
+                    {"name": "Refractory brickwork", "category": "material", "weight_pct": 15},
+                    {"name": "Combustion equipment", "category": "machinery", "weight_pct": 10},
+                    {"name": "Labour", "category": "labor", "weight_pct": 5}
+                  ]
+                },
+                {
+                  "name": "Pig iron (hot metal)",
+                  "hs_code": "7201.10",
+                  "category": "material",
+                  "cost_share_pct": 45,
+                  "function": "Liquid iron at 1400C; primary input to BOF",
+                  "mechanism": "Tapped from BF hearth via taphole -> torpedo ladle to steelmaking",
+                  "co2_intensity": "Output: ~0.4 t Fe per t ore",
+                  "upstream_inputs": [
+                    {"name": "Iron ore burden", "category": "material", "weight_pct": 55},
+                    {"name": "Coke reductant", "category": "material", "weight_pct": 30},
+                    {"name": "Hot blast energy", "category": "energy", "weight_pct": 10},
+                    {"name": "Labour", "category": "labor", "weight_pct": 5}
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "r2b",
+          "label": "DRI route",
+          "prevalence_pct": 8,
+          "types": [
+            {
+              "id": "t2b1",
+              "label": "DRI shaft furnace",
+              "components": [
+                {
+                  "name": "MIDREX / HYL shaft furnace",
+                  "hs_code": "8454.90",
+                  "category": "machinery",
+                  "cost_share_pct": 50,
+                  "function": "Gas-based direct reduction of iron ore pellets to sponge iron",
+                  "mechanism": "Reformed gas (H2+CO) flows counter-current to descending pellets at 900C",
+                  "co2_intensity": "Gas DRI: 1.0 tCO2/t; H2 DRI: <0.1",
+                  "upstream_inputs": [
+                    {"name": "Iron ore pellets", "category": "material", "weight_pct": 55},
+                    {"name": "Natural gas / H2", "category": "energy", "weight_pct": 30},
+                    {"name": "Reformer catalyst", "category": "material", "weight_pct": 5},
+                    {"name": "Labour", "category": "labor", "weight_pct": 10}
+                  ]
+                },
+                {
+                  "name": "H2-DRI green iron",
+                  "hs_code": "7203.10",
+                  "category": "material",
+                  "cost_share_pct": 35,
+                  "function": "Near-zero emission iron via green hydrogen reduction",
+                  "mechanism": "Electrolysis of water -> green H2 -> shaft furnace reduction of pellets",
+                  "co2_intensity": "~0.05 tCO2/t with green electricity",
+                  "upstream_inputs": [
+                    {"name": "Green hydrogen", "category": "energy", "weight_pct": 55},
+                    {"name": "Iron ore pellets (DR grade)", "category": "material", "weight_pct": 35},
+                    {"name": "Electrolyser", "category": "machinery", "weight_pct": 5},
+                    {"name": "Labour", "category": "labor", "weight_pct": 5}
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "r2c",
+          "label": "Smelting reduction",
+          "prevalence_pct": 2,
+          "types": [
+            {
+              "id": "t2c1",
+              "label": "COREX / FINEX process",
+              "components": [
+                {
+                  "name": "Melter-gasifier (COREX)",
+                  "hs_code": "8454.10",
+                  "category": "machinery",
+                  "cost_share_pct": 60,
+                  "function": "Coal-based alternative to BF; uses non-coking coal",
+                  "mechanism": "Pre-reduced iron + coal -> melter-gasifier at 1550C -> liquid iron + export gas",
+                  "co2_intensity": "~2.4 tCO2/t iron (higher than BF)",
+                  "upstream_inputs": [
+                    {"name": "Non-coking coal", "category": "material", "weight_pct": 40},
+                    {"name": "Pre-reduced iron (DRI)", "category": "material", "weight_pct": 40},
+                    {"name": "Oxygen", "category": "energy", "weight_pct": 12},
+                    {"name": "Labour", "category": "labor", "weight_pct": 8}
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "label": "Steel-making",
+      "sub": "BOF, EAF, secondary metallurgy",
+      "color": "#D85A30",
+      "routes": [
+        {
+          "id": "r3a",
+          "label": "BOF route",
+          "prevalence_pct": 70,
+          "types": [
+            {
+              "id": "t3a1",
+              "label": "Basic oxygen furnace",
+              "components": [
+                {
+                  "name": "BOF converter vessel",
+                  "hs_code": "8454.20",
+                  "category": "machinery",
+                  "cost_share_pct": 35,
+                  "function": "Converts liquid pig iron + scrap to crude steel in ~30 min",
+                  "mechanism": "Oxygen blown at supersonic speed onto hot metal -> oxidises C, Si, Mn, P -> steel",
+                  "co2_intensity": "~0.1 tCO2/t steel (process only)",
+                  "upstream_inputs": [
+                    {"name": "Liquid pig iron (~75%)", "category": "material", "weight_pct": 55},
+                    {"name": "Steel scrap (~25%)", "category": "material", "weight_pct": 20},
+                    {"name": "Pure oxygen", "category": "energy", "weight_pct": 10},
+                    {"name": "Lime & dolomite flux", "category": "material", "weight_pct": 10},
+                    {"name": "Labour", "category": "labor", "weight_pct": 5}
+                  ]
+                },
+                {
+                  "name": "BOF slag",
+                  "hs_code": "2618.00",
+                  "category": "additive",
+                  "cost_share_pct": 10,
+                  "function": "Byproduct; used in cement & road construction",
+                  "mechanism": "Skimmed off converter -> cooled -> crushed -> sold",
+                  "co2_intensity": "Offsets CO2 in cement production",
+                  "upstream_inputs": [
+                    {"name": "Lime & dolomite (from BOF)", "category": "material", "weight_pct": 60},
+                    {"name": "Cooling yard", "category": "machinery", "weight_pct": 20},
+                    {"name": "Crushing equipment", "category": "machinery", "weight_pct": 15},
+                    {"name": "Labour", "category": "labor", "weight_pct": 5}
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "t3a2",
+              "label": "Secondary metallurgy",
+              "components": [
+                {
+                  "name": "Ladle furnace (LF)",
+                  "hs_code": "8514.10",
+                  "category": "machinery",
+                  "cost_share_pct": 30,
+                  "function": "Trim composition & homogenise temperature before casting",
+                  "mechanism": "Graphite electrodes heat steel + wire feeding of alloys + Ar stirring",
+                  "co2_intensity": "~0.05 tCO2/t (electricity)",
+                  "upstream_inputs": [
+                    {"name": "Electricity", "category": "energy", "weight_pct": 40},
+                    {"name": "Graphite electrodes", "category": "material", "weight_pct": 15},
+                    {"name": "Ferroalloys", "category": "material", "weight_pct": 30},
+                    {"name": "Argon gas", "category": "material", "weight_pct": 5},
+                    {"name": "Labour", "category": "labor", "weight_pct": 10}
+                  ]
+                },
+                {
+                  "name": "Vacuum degasser (VD/RH)",
+                  "hs_code": "8419.89",
+                  "category": "machinery",
+                  "cost_share_pct": 25,
+                  "function": "Remove H2, O2, N2 for ultra-clean steel grades",
+                  "mechanism": "Steel exposed to <1 mbar vacuum -> dissolved gases bubble out -> alloy trim",
+                  "co2_intensity": "~0.02 tCO2/t",
+                  "upstream_inputs": [
+                    {"name": "Vacuum pumps", "category": "machinery", "weight_pct": 40},
+                    {"name": "Electricity", "category": "energy", "weight_pct": 30},
+                    {"name": "Alloy additions", "category": "material", "weight_pct": 20},
+                    {"name": "Labour", "category": "labor", "weight_pct": 10}
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "r3b",
+          "label": "EAF route",
+          "prevalence_pct": 28,
+          "types": [
+            {
+              "id": "t3b1",
+              "label": "Electric arc furnace",
+              "components": [
+                {
+                  "name": "EAF vessel",
+                  "hs_code": "8514.10",
+                  "category": "machinery",
+                  "cost_share_pct": 40,
+                  "function": "Melts scrap/DRI via electric arc at 3500C",
+                  "mechanism": "Graphite electrodes create arc -> scrap melts -> O2 injection -> tapping",
+                  "co2_intensity": "0.4-0.7 tCO2/t (grid-dependent)",
+                  "upstream_inputs": [
+                    {"name": "Steel scrap or DRI", "category": "material", "weight_pct": 55},
+                    {"name": "Electricity", "category": "energy", "weight_pct": 25},
+                    {"name": "Graphite electrodes", "category": "material", "weight_pct": 8},
+                    {"name": "Oxygen & lime", "category": "material", "weight_pct": 7},
+                    {"name": "Labour", "category": "labor", "weight_pct": 5}
+                  ]
+                },
+                {
+                  "name": "Graphite electrodes",
+                  "hs_code": "8545.11",
+                  "category": "material",
+                  "cost_share_pct": 15,
+                  "function": "Conduct arc current; consumed at ~2-3 kg/t steel",
+                  "mechanism": "Petroleum needle coke -> graphitisation at 3000C -> machining",
+                  "co2_intensity": "~3 tCO2/t electrode",
+                  "upstream_inputs": [
+                    {"name": "Petroleum needle coke", "category": "material", "weight_pct": 55},
+                    {"name": "Coal tar pitch binder", "category": "material", "weight_pct": 15},
+                    {"name": "Graphitising furnace energy", "category": "energy", "weight_pct": 25},
+                    {"name": "Labour", "category": "labor", "weight_pct": 5}
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "label": "Casting & rolling",
+      "sub": "Continuous casting, hot & cold rolling",
+      "color": "#BA7517",
+      "routes": [
+        {
+          "id": "r4a",
+          "label": "Continuous casting",
+          "prevalence_pct": 95,
+          "types": [
+            {
+              "id": "t4a1",
+              "label": "Continuous caster types",
+              "components": [
+                {
+                  "name": "Slab caster",
+                  "hs_code": "8454.30",
+                  "category": "machinery",
+                  "cost_share_pct": 40,
+                  "function": "Produces flat slabs for hot strip mills",
+                  "mechanism": "Liquid steel -> tundish -> water-cooled copper mould -> strand -> slab cutting",
+                  "co2_intensity": "~0.02 tCO2/t slab",
+                  "upstream_inputs": [
+                    {"name": "Liquid steel", "category": "material", "weight_pct": 65},
+                    {"name": "Mould copper plates", "category": "material", "weight_pct": 5},
+                    {"name": "Cooling water", "category": "material", "weight_pct": 10},
+                    {"name": "Electricity", "category": "energy", "weight_pct": 10},
+                    {"name": "Labour", "category": "labor", "weight_pct": 10}
+                  ]
+                },
+                {
+                  "name": "Bloom & billet caster",
+                  "hs_code": "8454.30",
+                  "category": "machinery",
+                  "cost_share_pct": 30,
+                  "function": "Produces sections for long product rolling",
+                  "mechanism": "Tundish -> oscillating mould -> straightener -> torch cutter",
+                  "co2_intensity": "~0.02 tCO2/t",
+                  "upstream_inputs": [
+                    {"name": "Liquid steel", "category": "material", "weight_pct": 68},
+                    {"name": "Mould flux", "category": "material", "weight_pct": 3},
+                    {"name": "Cooling water", "category": "material", "weight_pct": 9},
+                    {"name": "Electricity", "category": "energy", "weight_pct": 10},
+                    {"name": "Labour", "category": "labor", "weight_pct": 10}
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "r4b",
+          "label": "Hot rolling",
+          "prevalence_pct": 90,
+          "types": [
+            {
+              "id": "t4b1",
+              "label": "Flat products",
+              "components": [
+                {
+                  "name": "Hot strip mill (HSM)",
+                  "hs_code": "8455.21",
+                  "category": "machinery",
+                  "cost_share_pct": 45,
+                  "function": "Reduces slab 200mm -> 1.5-12mm hot rolled coil",
+                  "mechanism": "Reheating furnace -> roughing mill -> 6-7 finishing stands -> laminar cooling -> coiler",
+                  "co2_intensity": "~0.1 tCO2/t HRC",
+                  "upstream_inputs": [
+                    {"name": "Steel slab", "category": "material", "weight_pct": 70},
+                    {"name": "Reheating furnace gas", "category": "energy", "weight_pct": 18},
+                    {"name": "Roll cooling water", "category": "material", "weight_pct": 5},
+                    {"name": "Electricity", "category": "energy", "weight_pct": 5},
+                    {"name": "Labour", "category": "labor", "weight_pct": 2}
+                  ]
+                },
+                {
+                  "name": "Hot rolled coil (HRC)",
+                  "hs_code": "7208.37",
+                  "category": "component",
+                  "cost_share_pct": 50,
+                  "function": "Primary flat steel semi-product; sold or further rolled",
+                  "mechanism": "HSM output -> coiled at 600-750C",
+                  "co2_intensity": "~1.8-2.0 tCO2/t (BF-BOF route)",
+                  "upstream_inputs": [
+                    {"name": "Steel slab", "category": "material", "weight_pct": 75},
+                    {"name": "Rolling energy", "category": "energy", "weight_pct": 15},
+                    {"name": "Roll wear allowance", "category": "material", "weight_pct": 5},
+                    {"name": "Labour", "category": "labor", "weight_pct": 5}
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "t4b2",
+              "label": "Long products",
+              "components": [
+                {
+                  "name": "Section / structural mill",
+                  "hs_code": "8455.22",
+                  "category": "machinery",
+                  "cost_share_pct": 35,
+                  "function": "Rolls blooms into beams, angles, channels, rails",
+                  "mechanism": "Walking beam reheating -> breakdown -> universal mill passes -> cooling bed",
+                  "co2_intensity": "~0.05 tCO2/t section",
+                  "upstream_inputs": [
+                    {"name": "Steel bloom", "category": "material", "weight_pct": 72},
+                    {"name": "Reheating gas", "category": "energy", "weight_pct": 18},
+                    {"name": "Mill rolls (work rolls)", "category": "material", "weight_pct": 5},
+                    {"name": "Labour", "category": "labor", "weight_pct": 5}
+                  ]
+                },
+                {
+                  "name": "Wire rod mill",
+                  "hs_code": "8455.22",
+                  "category": "machinery",
+                  "cost_share_pct": 25,
+                  "function": "Rolls billets to 5-20mm rod coils at 120 m/s",
+                  "mechanism": "Billet -> roughing -> intermediate -> finishing block -> Stelmor cooling conveyor",
+                  "co2_intensity": "~0.05 tCO2/t rod",
+                  "upstream_inputs": [
+                    {"name": "Steel billet", "category": "material", "weight_pct": 74},
+                    {"name": "Reheating furnace gas", "category": "energy", "weight_pct": 16},
+                    {"name": "Stelmor conveyor electricity", "category": "energy", "weight_pct": 5},
+                    {"name": "Labour", "category": "labor", "weight_pct": 5}
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "r4c",
+          "label": "Cold rolling & coating",
+          "prevalence_pct": 55,
+          "types": [
+            {
+              "id": "t4c1",
+              "label": "Cold rolling",
+              "components": [
+                {
+                  "name": "Cold rolled coil (CRC)",
+                  "hs_code": "7209.16",
+                  "category": "component",
+                  "cost_share_pct": 40,
+                  "function": "High-surface quality flat steel; automotive, appliances",
+                  "mechanism": "Tandem mill + continuous annealing -> temper rolling",
+                  "co2_intensity": "~2.1-2.3 tCO2/t (BF-BOF)",
+                  "upstream_inputs": [
+                    {"name": "HRC feedstock", "category": "material", "weight_pct": 75},
+                    {"name": "Annealing gas", "category": "energy", "weight_pct": 12},
+                    {"name": "Temper roll electricity", "category": "energy", "weight_pct": 5},
+                    {"name": "Labour", "category": "labor", "weight_pct": 8}
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "t4c2",
+              "label": "Surface coating",
+              "components": [
+                {
+                  "name": "Hot-dip galvanised (HDG)",
+                  "hs_code": "8422.40",
+                  "category": "machinery",
+                  "cost_share_pct": 35,
+                  "function": "Zinc coating for corrosion protection; auto body & construction",
+                  "mechanism": "CRC -> annealing -> zinc bath (460C) -> air knife -> spangle control",
+                  "co2_intensity": "Zn smelting adds ~0.2 tCO2/t",
+                  "upstream_inputs": [
+                    {"name": "Cold rolled steel", "category": "material", "weight_pct": 65},
+                    {"name": "Zinc ingot", "category": "material", "weight_pct": 20},
+                    {"name": "Annealing gas", "category": "energy", "weight_pct": 8},
+                    {"name": "Electricity", "category": "energy", "weight_pct": 3},
+                    {"name": "Labour", "category": "labor", "weight_pct": 4}
+                  ]
+                },
+                {
+                  "name": "Electrolytic tinplate (ETP)",
+                  "hs_code": "7210.11",
+                  "category": "component",
+                  "cost_share_pct": 25,
+                  "function": "Tin-coated steel for food & beverage cans",
+                  "mechanism": "CRC -> electrolytic tinning -> reflow -> passivation -> oiling",
+                  "co2_intensity": "Low tin weight: 2-8 g/m2",
+                  "upstream_inputs": [
+                    {"name": "Cold rolled coil", "category": "material", "weight_pct": 75},
+                    {"name": "Tin anodes", "category": "material", "weight_pct": 10},
+                    {"name": "Electrolyte chemicals", "category": "material", "weight_pct": 5},
+                    {"name": "Electricity", "category": "energy", "weight_pct": 5},
+                    {"name": "Labour", "category": "labor", "weight_pct": 5}
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "s5",
+      "label": "Finished steel products",
+      "sub": "Flat, long, tube & specialty products",
+      "color": "#378ADD",
+      "routes": [
+        {
+          "id": "r5a",
+          "label": "Flat products",
+          "prevalence_pct": 50,
+          "types": [
+            {
+              "id": "t5a1",
+              "label": "Sheet & plate",
+              "components": [
+                {
+                  "name": "Hot rolled plate",
+                  "hs_code": "7208.51",
+                  "category": "component",
+                  "cost_share_pct": 35,
+                  "function": "Heavy plate >6mm; shipbuilding, pressure vessels, bridges",
+                  "mechanism": "Slab -> plate mill -> normalising -> flame cutting",
+                  "co2_intensity": "~1.9 tCO2/t (BF-BOF)",
+                  "upstream_inputs": [
+                    {"name": "Steel slab", "category": "material", "weight_pct": 80},
+                    {"name": "Rolling & heat treat energy", "category": "energy", "weight_pct": 12},
+                    {"name": "Labour", "category": "labor", "weight_pct": 5},
+                    {"name": "Inspection (UT, MPI)", "category": "machinery", "weight_pct": 3}
+                  ]
+                },
+                {
+                  "name": "Galvanised sheet (GI/GA)",
+                  "hs_code": "7210.49",
+                  "category": "component",
+                  "cost_share_pct": 30,
+                  "function": "Corrosion-resistant sheet; construction, automotive",
+                  "mechanism": "HDG line -> skin pass -> recoil -> cut-to-length",
+                  "co2_intensity": "~2.0 tCO2/t",
+                  "upstream_inputs": [
+                    {"name": "CRC substrate", "category": "material", "weight_pct": 72},
+                    {"name": "Zinc", "category": "material", "weight_pct": 18},
+                    {"name": "Process energy", "category": "energy", "weight_pct": 6},
+                    {"name": "Labour", "category": "labor", "weight_pct": 4}
+                  ]
+                },
+                {
+                  "name": "Electrical steel (GOES/NOES)",
+                  "hs_code": "7225.11",
+                  "category": "component",
+                  "cost_share_pct": 25,
+                  "function": "Transformer cores & motors; low core loss",
+                  "mechanism": "Silicon alloyed steel -> cold rolling + decarburising anneal + MgO coat",
+                  "co2_intensity": "High-value: ~2.5 tCO2/t",
+                  "upstream_inputs": [
+                    {"name": "Si-alloyed steel", "category": "material", "weight_pct": 70},
+                    {"name": "MgO coating", "category": "material", "weight_pct": 5},
+                    {"name": "Annealing gas (H2)", "category": "energy", "weight_pct": 15},
+                    {"name": "Labour", "category": "labor", "weight_pct": 10}
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "r5b",
+          "label": "Long products",
+          "prevalence_pct": 30,
+          "types": [
+            {
+              "id": "t5b1",
+              "label": "Construction & infrastructure",
+              "components": [
+                {
+                  "name": "Reinforcing bar (rebar)",
+                  "hs_code": "7214.20",
+                  "category": "component",
+                  "cost_share_pct": 40,
+                  "function": "Concrete reinforcement; most-produced long product globally",
+                  "mechanism": "Billet -> bar & rod mill -> cooling bed -> bundling",
+                  "co2_intensity": "EAF rebar: ~0.5 tCO2/t",
+                  "upstream_inputs": [
+                    {"name": "Steel billet", "category": "material", "weight_pct": 78},
+                    {"name": "Rolling energy", "category": "energy", "weight_pct": 14},
+                    {"name": "Cooling & bundling", "category": "machinery", "weight_pct": 5},
+                    {"name": "Labour", "category": "labor", "weight_pct": 3}
+                  ]
+                },
+                {
+                  "name": "Structural sections (I, H beams)",
+                  "hs_code": "7216.33",
+                  "category": "component",
+                  "cost_share_pct": 30,
+                  "function": "Columns & beams for steel frame buildings",
+                  "mechanism": "Bloom -> universal mill (web + flange) -> straightener -> saw cutting",
+                  "co2_intensity": "~0.6 tCO2/t (EAF)",
+                  "upstream_inputs": [
+                    {"name": "Steel bloom", "category": "material", "weight_pct": 77},
+                    {"name": "Rolling energy", "category": "energy", "weight_pct": 14},
+                    {"name": "Finishing energy", "category": "energy", "weight_pct": 5},
+                    {"name": "Labour", "category": "labor", "weight_pct": 4}
+                  ]
+                },
+                {
+                  "name": "Rails",
+                  "hs_code": "7302.10",
+                  "category": "component",
+                  "cost_share_pct": 15,
+                  "function": "Railway track; head-hardened for heavy haul",
+                  "mechanism": "Bloom -> rail mill -> head-hardening quench -> straightening -> ultrasonic inspection",
+                  "co2_intensity": "~1.8 tCO2/t (BF-BOF)",
+                  "upstream_inputs": [
+                    {"name": "Steel bloom (rail grade)", "category": "material", "weight_pct": 78},
+                    {"name": "Rolling energy", "category": "energy", "weight_pct": 12},
+                    {"name": "Head-hardening energy", "category": "energy", "weight_pct": 5},
+                    {"name": "Labour", "category": "labor", "weight_pct": 5}
+                  ]
+                },
+                {
+                  "name": "Wire rod & drawn wire",
+                  "hs_code": "7213.10",
+                  "category": "component",
+                  "cost_share_pct": 15,
+                  "function": "PC wire, welding wire, mesh, rope & fasteners",
+                  "mechanism": "Billet -> wire rod mill -> Stelmor -> patenting -> wet drawing",
+                  "co2_intensity": "~0.6 tCO2/t (EAF)",
+                  "upstream_inputs": [
+                    {"name": "Steel billet", "category": "material", "weight_pct": 78},
+                    {"name": "Rolling energy", "category": "energy", "weight_pct": 12},
+                    {"name": "Drawing lubricant", "category": "material", "weight_pct": 3},
+                    {"name": "Labour", "category": "labor", "weight_pct": 7}
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "r5c",
+          "label": "Tube & pipe products",
+          "prevalence_pct": 10,
+          "types": [
+            {
+              "id": "t5c1",
+              "label": "Welded & seamless tube",
+              "components": [
+                {
+                  "name": "ERW pipe (electric resistance welded)",
+                  "hs_code": "7306.30",
+                  "category": "component",
+                  "cost_share_pct": 45,
+                  "function": "Line pipe for oil & gas; structural hollow sections",
+                  "mechanism": "Strip -> forming rolls -> HF induction weld -> sizing mill",
+                  "co2_intensity": "~2.0 tCO2/t (BF-BOF HRC)",
+                  "upstream_inputs": [
+                    {"name": "Hot rolled strip", "category": "material", "weight_pct": 78},
+                    {"name": "HF welding electricity", "category": "energy", "weight_pct": 12},
+                    {"name": "Forming rolls", "category": "machinery", "weight_pct": 5},
+                    {"name": "Labour", "category": "labor", "weight_pct": 5}
+                  ]
+                },
+                {
+                  "name": "Seamless OCTG",
+                  "hs_code": "7304.29",
+                  "category": "component",
+                  "cost_share_pct": 25,
+                  "function": "Oil country tubular goods for drilling & completion",
+                  "mechanism": "Round billet -> rotary piercer -> mandrel mill -> heat treat -> threading",
+                  "co2_intensity": "~2.0 tCO2/t",
+                  "upstream_inputs": [
+                    {"name": "Round billet (clean steel)", "category": "material", "weight_pct": 76},
+                    {"name": "Rolling & piercing energy", "category": "energy", "weight_pct": 14},
+                    {"name": "Heat treatment energy", "category": "energy", "weight_pct": 5},
+                    {"name": "Labour", "category": "labor", "weight_pct": 5}
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "r5d",
+          "label": "Specialty & alloy steel",
+          "prevalence_pct": 10,
+          "types": [
+            {
+              "id": "t5d1",
+              "label": "Special grades",
+              "components": [
+                {
+                  "name": "Stainless steel (304 / 316)",
+                  "hs_code": "7219.12",
+                  "category": "component",
+                  "cost_share_pct": 35,
+                  "function": "Corrosion-resistant; food, chemical, medical equipment",
+                  "mechanism": "EAF + AOD converter -> continuous casting -> cold rolling + bright annealing -> slitting",
+                  "co2_intensity": "~4-6 tCO2/t (Ni & Cr intensive)",
+                  "upstream_inputs": [
+                    {"name": "Stainless scrap & DRI", "category": "material", "weight_pct": 55},
+                    {"name": "Nickel", "category": "material", "weight_pct": 10},
+                    {"name": "Chromium", "category": "material", "weight_pct": 12},
+                    {"name": "EAF & AOD energy", "category": "energy", "weight_pct": 15},
+                    {"name": "Labour", "category": "labor", "weight_pct": 8}
+                  ]
+                },
+                {
+                  "name": "High-strength low-alloy (HSLA)",
+                  "hs_code": "7225.50",
+                  "category": "component",
+                  "cost_share_pct": 30,
+                  "function": "Lightweight structural steel; automotive, bridges",
+                  "mechanism": "Controlled rolling (TMCP) + micro-alloying with Nb, V, Ti",
+                  "co2_intensity": "~1.9 tCO2/t",
+                  "upstream_inputs": [
+                    {"name": "Steel slab (micro-alloyed)", "category": "material", "weight_pct": 78},
+                    {"name": "Nb/V/Ti alloys", "category": "material", "weight_pct": 5},
+                    {"name": "Rolling energy (TMCP)", "category": "energy", "weight_pct": 12},
+                    {"name": "Labour", "category": "labor", "weight_pct": 5}
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,4 @@
+* { box-sizing: border-box; }
+body { margin: 0; }
+select, input[type="range"] { vertical-align: middle; }
+a { color: #1565c0; }

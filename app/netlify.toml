@@ -1,0 +1,10 @@
+# Netlify build config. Serves the static frontend (runs off the committed
+# graph-bundle.json — no backend). Hosted at the site root, so VITE_BASE=/.
+[build]
+  base = "app/frontend"
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  VITE_BASE = "/"
+  NODE_VERSION = "20"
