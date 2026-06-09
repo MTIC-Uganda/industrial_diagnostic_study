@@ -1,33 +1,30 @@
-name: Deploy MTIC Value Chain Dashboard
+name: Deploy MTIC Value Chains App
 
 # Every push to any branch:
-#   1. Deploy to staging
-#   2. Run health check (with self-heal retry up to MAX_HEAL_ATTEMPTS)
-#   3. If staging passes: promote to prod + auto-merge branch to main
-#
-# The self-heal loop retries the deploy+health-check sequence on transient
-# failures (SSH blip, nginx restart, etc.). If all attempts fail, the run
-# fails loudly and prod is never touched.
+#   1. Doc Guardian (parallel, non-blocking)
+#   2. Build the React frontend (app/frontend → dist/)
+#   3. Deploy dist/ to staging + health check (self-heal retry up to MAX_HEAL_ATTEMPTS)
+#   4. Staging passes → promote to prod + auto-merge branch to main
 
 on:
   push:
     branches: ["**"]
 
 env:
-  HETZNER_HOST:        89.167.121.193
-  HETZNER_USER:        root
-  STAGING_DIR:         /var/www/mtic-staging
-  PROD_DIR:            /var/www/mtic-prod
-  STAGING_URL:         http://89.167.121.193:8200
-  PROD_URL:            http://89.167.121.193:8201
-  PROD_SHORT_URL:      https://tinyurl.com/28lxntmc
-  MAX_HEAL_ATTEMPTS:   3
+  HETZNER_HOST:       89.167.121.193
+  HETZNER_USER:       root
+  STAGING_DIR:        /var/www/mtic-staging
+  PROD_DIR:           /var/www/mtic-prod
+  STAGING_URL:        http://89.167.121.193:8200
+  PROD_URL:           http://89.167.121.193:8201
+  PROD_SHORT_URL:     https://tinyurl.com/28lxntmc
+  MAX_HEAL_ATTEMPTS:  3
 
 permissions:
   contents: write
 
 jobs:
-  # ── 0. Doc guardian (runs in parallel, never blocks deploy) ───────────────
+  # ── 0. Doc Guardian (parallel, never blocks deploy) ───────────────────────
   doc-check:
     name: Doc Guardian
     runs-on: ubuntu-latest
@@ -38,10 +35,8 @@ jobs:
 
       - name: Warn if architecture changed without DSL update
         run: |
-          # Files that indicate a structural change worth documenting
-          ARCH_PATTERNS=".github/workflows scripts agents"
+          ARCH_PATTERNS=".github/workflows app/backend app/frontend/src scripts agents"
           DSL="docs/architecture.dsl"
-
           ARCH_CHANGED=false
           for pattern in $ARCH_PATTERNS; do
             if git diff --name-only HEAD~1 HEAD -- "$pattern" 2>/dev/null | grep -q .; then
@@ -49,27 +44,59 @@ jobs:
               echo "Architecture-relevant change in: $pattern"
             fi
           done
-
           if $ARCH_CHANGED; then
             if git diff --name-only HEAD~1 HEAD -- "$DSL" 2>/dev/null | grep -q .; then
-              echo "docs/architecture.dsl updated in this commit — good."
+              echo "docs/architecture.dsl updated — good."
             else
               echo "::warning::Architecture files changed but docs/architecture.dsl was NOT updated."
-              echo "::warning::Update docs/architecture.dsl and docs/adr/ before this becomes a bottleneck."
+              echo "::warning::Run: update docs/architecture.dsl and docs/adr/ to document what changed."
             fi
           else
             echo "No architecture-relevant changes — doc check skipped."
           fi
 
-  # ── 1. Deploy to staging (every push, every branch) ───────────────────────
+  # ── 1. Build React frontend ───────────────────────────────────────────────
+  build:
+    name: Build Frontend
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: app/frontend/package-lock.json
+
+      - name: Install dependencies
+        run: cd app/frontend && npm ci
+
+      - name: Build
+        run: cd app/frontend && VITE_BASE=/ npm run build
+
+      - name: Upload dist
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-dist
+          path: app/frontend/dist/
+          retention-days: 1
+
+  # ── 2. Deploy to staging + self-heal ─────────────────────────────────────
   deploy-staging:
     name: Deploy → Staging
     runs-on: ubuntu-latest
+    needs: build
     outputs:
       staged: ${{ steps.heal.outputs.staged }}
 
     steps:
       - uses: actions/checkout@v4
+
+      - name: Download dist
+        uses: actions/download-artifact@v4
+        with:
+          name: frontend-dist
+          path: dist/
 
       - name: Set up SSH
         run: |
@@ -88,16 +115,13 @@ jobs:
             echo ""
             echo "=== Heal attempt $attempt/$MAX ==="
 
-            # --- copy the file ---
-            echo "Copying to staging..."
-            if ! scp -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no \
-                report/sources-of-truth.html \
-                $HETZNER_USER@$HETZNER_HOST:$STAGING_DIR/index.html; then
-              echo "SCP failed on attempt $attempt"
+            echo "Syncing dist/ to staging..."
+            if ! rsync -az --delete -e "ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no" \
+                dist/ $HETZNER_USER@$HETZNER_HOST:$STAGING_DIR/; then
+              echo "rsync failed on attempt $attempt"
               [ $attempt -lt $MAX ] && sleep 10 && continue || break
             fi
 
-            # --- health check ---
             echo "Health checking $STAGING_URL ..."
             for i in $(seq 1 10); do
               STATUS=$(curl -s -o /dev/null -w "%{http_code}" $STAGING_URL/ || echo "000")
@@ -115,7 +139,7 @@ jobs:
           done
 
           if $STAGED; then
-            echo "staged=true"  >> $GITHUB_OUTPUT
+            echo "staged=true" >> $GITHUB_OUTPUT
             echo "::notice::Staging healthy: $STAGING_URL"
           else
             echo "staged=false" >> $GITHUB_OUTPUT
@@ -123,7 +147,7 @@ jobs:
             exit 1
           fi
 
-  # ── 2. Promote to prod + auto-merge to main (staging must pass) ────────────
+  # ── 3. Promote to prod + auto-merge to main ───────────────────────────────
   deploy-prod:
     name: Promote → Production
     runs-on: ubuntu-latest
@@ -147,7 +171,7 @@ jobs:
         run: |
           ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no \
             $HETZNER_USER@$HETZNER_HOST \
-            "cp $STAGING_DIR/index.html $PROD_DIR/index.html"
+            "rsync -a --delete $STAGING_DIR/ $PROD_DIR/"
           echo "prod: promoted at $(date -u '+%Y-%m-%d %H:%M UTC')"
 
       - name: Verify prod
@@ -168,7 +192,6 @@ jobs:
           git config user.email "ci-bot@mtic-pipeline"
           git fetch origin main
           git checkout main
-
           if git merge --no-ff origin/$BRANCH -m "ci: auto-merge $BRANCH (staging passed)"; then
             git push origin main
             echo "::notice::Auto-merged $BRANCH → main"
@@ -176,8 +199,6 @@ jobs:
             git merge --abort || true
             echo "::warning::Merge conflict: $BRANCH not merged to main. Prod is updated. Resolve manually."
           fi
-          # Note: GITHUB_TOKEN pushes do not re-trigger workflows — this is intentional.
-          # main stays current without a redundant CI run.
 
       - name: Report live URLs
         run: |
@@ -185,9 +206,9 @@ jobs:
           BRANCH="${{ github.ref_name }}"
           echo ""
           echo "============================================"
-          echo "  PROD LIVE"
+          echo "  PROD LIVE — MTIC Value Chains App"
           echo "  Full URL:  $PROD_URL"
           echo "  Short URL: $PROD_SHORT_URL"
           echo "  Commit:    ${COMMIT:0:7} from $BRANCH"
           echo "============================================"
-          echo "::notice::Prod live: $PROD_SHORT_URL (full: $PROD_URL)"
+          echo "::notice::Prod live: $PROD_SHORT_URL"
