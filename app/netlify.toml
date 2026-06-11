@@ -1,7 +1,16 @@
-# Serves Jerome's sources-of-truth dashboard at the root URL, and the
-# React Sankey app at /app/. The dashboard iframes the app in the
-# Value Chain Maps tab.
+# sources-of-truth.html served at root; React Sankey app built at /app/.
+# The dashboard iframes /app/ inside the Value Chain Maps tab.
+
 [build]
   base    = "app"
-  command = "mkdir -p site site/app && cp ../report/sources-of-truth.html site/index.html && cp ../report/uganda_coat_of_arms.png site/uganda_coat_of_arms.png && cd frontend && npm install && VITE_BASE=/app/ npm run build && cp -r dist/* ../site/app/"
+  command = "mkdir -p site/app && cp ../report/sources-of-truth.html site/index.html && cp ../report/uganda_coat_of_arms.png site/uganda_coat_of_arms.png && (cd frontend && npm install && npm run build) && cp -r frontend/dist/* site/app/"
   publish = "site"
+
+[build.environment]
+  VITE_BASE = "/app/"
+
+# Serve the React SPA for any /app/* path (handles asset requests + direct nav)
+[[redirects]]
+  from   = "/app/*"
+  to     = "/app/index.html"
+  status = 200
