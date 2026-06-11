@@ -935,7 +935,9 @@ function initMap(){
     });
   }
 
-  // Build markers grouped by chain
+  // Build markers grouped by chain.
+  // No autoClose so switching chains doesn't leave ghost popups;
+  // but one-popup-at-a-time is handled by Leaflet's default (autoClose:true).
   const markersByChain={};
   FACTORIES.forEach(f=>{
     const col=CHAIN_COLORS[f.chain]||'#555';
@@ -947,76 +949,61 @@ function initMap(){
           <div style="font-size:11px;color:#444;margin-bottom:4px">📍 ${f.loc}</div>
           <hr style="margin:4px 0;border:none;border-top:1px solid #e0e0e0">
           <div style="font-size:11px;line-height:1.5;color:#333">${f.note}</div>
-        </div>`,{closeOnClick:false,autoClose:false})
+        </div>`)
       .addTo(map);
-    m._fname=f.name; // store for rebinding
+    m._fname=f.name;
     if(!markersByChain[f.chain])markersByChain[f.chain]=[];
     markersByChain[f.chain].push(m);
   });
 
-  // ── Smart label placement ──────────────────────────────────────────────────
-  // Assigns permanent tooltips to a set of markers so labels spread outward
-  // from the cluster centroid. Within each compass quadrant, labels are
-  // staggered perpendicularly so they never stack on top of one another.
+  // ── Label placement ────────────────────────────────────────────────────────
+  // Splits markers at the median longitude: markers right of the median get
+  // their label on the right, markers left get it on the left.  Within each
+  // side, markers are sorted north→south and staggered 18 px vertically so no
+  // two labels in the same column ever overlap, even in dense industrial parks.
   function showLabels(markers){
-    // Compute centroid of this chain's markers
-    let clat=0,clng=0;
-    markers.forEach(m=>{clat+=m.getLatLng().lat;clng+=m.getLatLng().lng;});
-    clat/=markers.length; clng/=markers.length;
+    if(!markers.length) return;
 
-    // Assign a direction (right/left/top/bottom) per marker based on bearing
-    // from centroid so labels point away from the cluster centre.
-    const assigned=markers.map(m=>{
+    // Median longitude as the left/right split point
+    const lngs=[...markers].map(m=>m.getLatLng().lng).sort((a,b)=>a-b);
+    const medLng=lngs[Math.floor(lngs.length/2)];
+
+    const right=[], left=[];
+    markers.forEach(m=>{
       const ll=m.getLatLng();
-      const dlat=ll.lat-clat, dlng=ll.lng-clng;
-      const dir=Math.abs(dlng)>Math.abs(dlat)
-        ?(dlng>=0?'right':'left')
-        :(dlat>=0?'top':'bottom');
-      return {m,dir,dlat,dlng};
+      (ll.lng>=medLng ? right : left).push({m, lat:ll.lat});
     });
 
-    // Group by direction; within each group sort by perpendicular axis so
-    // we can stagger labels outward without overlap.
-    const byDir={right:[],left:[],top:[],bottom:[]};
-    assigned.forEach(a=>byDir[a.dir].push(a));
+    // Sort each side north→south (largest lat first)
+    right.sort((a,b)=>b.lat-a.lat);
+    left.sort((a,b)=>b.lat-a.lat);
 
-    // Sort and assign staggered offsets (16 px step ≈ label height)
-    const STEP=17; // px between labels in same direction
-    const BASE=6;  // px gap between dot and nearest label edge
+    const STEP=18; // px between label centres — matches label height
+    const BASE=7;  // px gap: dot edge → label edge
 
-    Object.entries(byDir).forEach(([dir,items])=>{
-      if(!items.length)return;
-      // Sort by the axis perpendicular to the label direction so nearby markers
-      // get consecutive slots (keeps visual order intuitive).
-      const byPerp=(dir==='right'||dir==='left')
-        ?(a,b)=>b.dlat-a.dlat   // top→bottom by latitude
-        :(a,b)=>a.dlng-b.dlng;  // left→right by longitude
-      items.sort(byPerp);
-
+    function bind(items, dir){
       const half=(items.length-1)/2;
       items.forEach(({m},i)=>{
-        const perp=Math.round((i-half)*STEP); // perpendicular shift in px
-        const offset=
-          dir==='right' ?[BASE, perp]:
-          dir==='left'  ?[-BASE,perp]:
-          dir==='top'   ?[perp,-BASE]:
-                         [perp, BASE];
+        const shift=Math.round((i-half)*STEP);
         m.unbindTooltip();
         m.bindTooltip(m._fname,{
-          permanent:true,      // stays visible through hover and popup events
+          permanent:true,
           direction:dir,
           className:'factory-label',
-          offset:offset
+          offset: dir==='right' ? [BASE,shift] : [-BASE,shift]
         });
       });
-    });
+    }
+
+    bind(right,'right');
+    bind(left,'left');
   }
 
   function clearLabels(){
     Object.values(markersByChain).flat().forEach(m=>m.unbindTooltip());
   }
 
-  // ── Sidebar filter list ───────────────────────────────────────────────────
+  // ── Sidebar ────────────────────────────────────────────────────────────────
   const list=document.getElementById('chain-filter-list');
 
   function setActive(row){
@@ -1024,7 +1011,6 @@ function initMap(){
     row.classList.add('active');
   }
 
-  // "All" row — show every marker, no labels (89 names at once = too dense)
   const allRow=document.createElement('div');
   allRow.className='chain-filter-item active';
   allRow.innerHTML=`
@@ -1033,13 +1019,13 @@ function initMap(){
     <span class="chain-count-badge" style="background:#e3f2fd;color:var(--blue)">${FACTORIES.length}</span>`;
   allRow.onclick=()=>{
     clearLabels();
+    map.closePopup();
     Object.values(markersByChain).flat().forEach(m=>m.addTo(map));
     map.setView([1.3,32.5],7);
     setActive(allRow);
   };
   list.appendChild(allRow);
 
-  // One row per chain
   Object.entries(CHAIN_COLORS).forEach(([name,col])=>{
     const markers=markersByChain[name]||[];
     const row=document.createElement('div');
@@ -1049,14 +1035,11 @@ function initMap(){
       <span style="flex:1;font-size:13px;color:var(--text)">${name}</span>
       <span class="chain-count-badge" style="background:${col}22;color:${col}">${markers.length}</span>`;
     row.onclick=()=>{
-      // Hide all markers and clear labels first
       clearLabels();
+      map.closePopup();
       Object.values(markersByChain).flat().forEach(m=>map.removeLayer(m));
-      // Compute smart label positions for this chain
       if(markers.length) showLabels(markers);
-      // Add markers to map (tooltips are now bound with permanent:true)
       markers.forEach(m=>m.addTo(map));
-      // Zoom to fit this chain
       if(markers.length)
         map.fitBounds(L.featureGroup(markers).getBounds().pad(0.35));
       setActive(row);
