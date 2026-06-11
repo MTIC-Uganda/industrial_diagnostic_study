@@ -65,9 +65,29 @@ export default function NodeDetail({ node, onClose }) {
         <h2 style={{ fontSize: 18, margin: 0, color: "#002b5b" }}>{p.name}</h2>
         <button onClick={onClose} style={{ border: "none", background: "none", fontSize: 18, cursor: "pointer" }}>✕</button>
       </div>
-      <div style={{ fontSize: 11, color: "#888", marginBottom: 14 }}>
+      <div style={{ fontSize: 11, color: "#888", marginBottom: p.strength ? 10 : 14 }}>
         {node.labels.join(", ")}{p.component_type ? ` · ${p.component_type}` : ""}
       </div>
+
+      {p.strength && (() => {
+        const cfg = {
+          strong:   { bg: "#e8f5e9", color: "#2e7d32", border: "#2e7d32", label: "● Strong / Competitive" },
+          emerging: { bg: "#fff8e1", color: "#f57f17", border: "#f57f17", label: "◐ Emerging / Limited" },
+          gap:      { bg: "#ffebee", color: "#c62828", border: "#c62828", label: "○ Gap / Absent" },
+        }[p.strength];
+        return (
+          <div style={{ marginBottom: 12 }}>
+            <span style={{
+              display: "inline-block", padding: "3px 10px", borderRadius: 12,
+              fontSize: 12, fontWeight: 700, background: cfg.bg, color: cfg.color,
+              border: `1px solid ${cfg.border}`, marginBottom: p.strength_note ? 6 : 0,
+            }}>{cfg.label}</span>
+            {p.strength_note && (
+              <div style={{ fontSize: 12, color: "#555", lineHeight: 1.5 }}>{p.strength_note}</div>
+            )}
+          </div>
+        );
+      })()}
 
       <Section title="Synonyms">{(p.synonyms || []).join("; ")}</Section>
       <Section title="Function">{p.function}</Section>

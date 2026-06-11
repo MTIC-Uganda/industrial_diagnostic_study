@@ -19,6 +19,348 @@ import db
 
 SRC = ["MTIC value-chain taxonomy; standard industrial process routes (estimated weights)"]
 
+# Strength data from Jerome's sources-of-truth.html (Value Chain Maps tab).
+# green=strong, yellow=emerging, red=gap.  node_id → (strength, note)
+STRENGTH = {
+    # ══════════════════════════════════════════════════════
+    # COPPER & ALLIED METALS
+    # Phases: I Mining→gap  II Smelting→gap  III Refining→gap
+    #         IV Semi-fab→gap  V Fabrication→strong  VI Market→strong
+    # Critical gap: Phases I–IV entirely absent. USD 57.7m cable imports.
+    # 2040 target: USD 300–500m cable market; Kilembe revival.
+    # ══════════════════════════════════════════════════════
+    "cu_m_ore":      ("gap",      "Kilembe mine dormant since 1980s; PSA signed March 2025 — not yet operational"),
+    "cu_m_scrap":    ("emerging", "Secondary copper from recycling; limited scale in Uganda"),
+    "cu_m_zinc":     ("gap",      "No domestic zinc production; all imported"),
+    "cu_m_tin":      ("gap",      "No domestic tin; all imported"),
+    "cu_m_lead":     ("gap",      "No domestic lead; all imported"),
+    "cu_m_alu":      ("gap",      "Aluminium absent — all imported"),
+    "cu_m_pvc":      ("gap",      "PVC insulation imported; domestic resin awaits Kabalega park (~2029)"),
+    "cu_e_elec":     ("emerging", "Grid access 25.3%; reliability constraints for electro-refining"),
+    "cu_e_heat":     ("gap",      "Process heat from imported fuels; no domestic alternative"),
+    "cu_l_labour":   ("gap",      "Mining/metallurgical skills scarce after decades of Kilembe dormancy"),
+    "cu_k_smelt":    ("gap",      "No smelter in Uganda; all blister copper absent or imported"),
+    "cu_k_cast":     ("strong",   "Cable Corporation Ltd casting and rolling plant operational"),
+    "cu_k_draw":     ("strong",   "Wire-drawing and extrusion at Cable Corporation Ltd"),
+    "cu_t_smelt":    ("gap",      "Flash smelting absent — no smelter in Uganda"),
+    "cu_t_refine":   ("gap",      "Electrorefining absent — all cathode imported from DRC/China"),
+    "cu_t_sxew":     ("gap",      "SX-EW absent — Kilembe oxide ore untapped"),
+    "cu_c_conc":     ("gap",      "Copper concentrate absent — Kilembe dormant since 1980s"),
+    "cu_c_blister":  ("gap",      "Blister copper absent — no smelter in Uganda"),
+    "cu_c_cathode":  ("gap",      "Refined cathode entirely imported; USD 6.9m (HS 7403, 2024)"),
+    "cu_c_wirerod":  ("gap",      "Wire rod imported — Phase IV semi-fabrication absent"),
+    "cu_c_billet":   ("gap",      "Copper billet imported — no local semi-fabrication"),
+    "cu_c_brass":    ("gap",      "Brass production absent — alloy imported"),
+    "cu_c_bronze":   ("gap",      "Bronze production absent — alloy imported"),
+    "cu_p_cathode":  ("gap",      "Refined cathode entirely imported from DRC and China"),
+    "cu_p_wirerod":  ("gap",      "Wire rod imported — no domestic semi-fabrication"),
+    "cu_p_wire":     ("strong",   "Cable Corporation Ltd produces copper wire; domestic + regional market"),
+    "cu_p_cable":    ("strong",   "Cable Corporation Ltd ~65% domestic market share; electrification-driven demand. CRITICAL GAP: Phases I–IV entirely absent — USD 57.7m cable imports + USD 6.9m cathode imports. 2040 target: USD 300–500m cable market; Kilembe copper cathode + cobalt production."),
+    "cu_p_tube":     ("gap",      "Copper tube production absent in Uganda"),
+    "cu_p_sheet":    ("gap",      "Copper sheet absent — no local semi-fabrication"),
+    "cu_p_busbar":   ("gap",      "Busbar absent — imported from DRC/China"),
+    "cu_p_brass":    ("gap",      "Brass rod/fittings absent — all imported"),
+    "cu_p_bronze":   ("gap",      "Bronze absent — no local alloy production"),
+    "cu_p_fittings": ("gap",      "Copper fittings absent — all imported"),
+    "cu_p_alu_prof": ("gap",      "Aluminium extrusions absent — all imported"),
+    "cu_p_alu_sheet":("gap",      "Aluminium sheet absent — all imported"),
+    "cu_p_alu_cond": ("gap",      "ACSR conductor absent — all imported"),
+    "cu_p_zinc":     ("gap",      "Zinc sheet/anodes absent — all imported"),
+    "cu_p_lead":     ("gap",      "Lead products absent — all imported"),
+    "cu_p_solder":   ("gap",      "Solder absent — all imported"),
+
+    # ══════════════════════════════════════════════════════
+    # AUTOMOTIVE
+    # Phases: I Raw Materials→emerging  II Components→gap
+    #         III Assembly→emerging  IV Distribution→strong  V After-Market→strong
+    # Key gap: Components (Phase II) — local content almost zero. USD 31.7m parts imports.
+    # 2040 target: KMC 10,000 veh/yr; e-boda assembly at scale.
+    # ══════════════════════════════════════════════════════
+    "au_m_steel":    ("emerging", "Domestic long steel (rebar/sections) exists; flat steel for body panels absent"),
+    "au_m_alu":      ("gap",      "Aluminium alloy absent — all imported"),
+    "au_m_plastic":  ("emerging", "Domestic polymer converters active; resin 100% imported"),
+    "au_m_rubber":   ("gap",      "No synthetic rubber production in Uganda"),
+    "au_m_glass":    ("gap",      "Automotive glass absent — all imported"),
+    "au_m_copper":   ("emerging", "Cable Corporation wire available; wiring harness assembly absent"),
+    "au_m_chips":    ("gap",      "Semiconductors/ECUs entirely imported; no domestic production"),
+    "au_m_textile":  ("emerging", "Some upholstery textile available; foam locally produced"),
+    "au_m_paint":    ("emerging", "Some paint manufacturing in Uganda (Crown, Sadolin)"),
+    "au_m_cells":    ("gap",      "Li-ion battery cells entirely imported"),
+    "au_m_lead":     ("emerging", "Some lead-acid battery assembly locally"),
+    "au_e_elec":     ("emerging", "Grid power available; reliability constraints"),
+    "au_l_labour":   ("emerging", "Assembly skills at KMC; EV/mechatronics engineering skills scarce"),
+    "au_k_stamp":    ("gap",      "Stamping presses absent — body panels all CKD/imported"),
+    "au_k_robot":    ("gap",      "Robotic welding absent — CKD assembly is manual"),
+    "au_k_mould":    ("emerging", "Injection moulding exists in plastics sector; limited automotive use"),
+    "au_k_machine":  ("gap",      "CNC machining for automotive components absent"),
+    "au_c_biw":      ("gap",      "Body-in-white absent — all CKD/SKD; no panel stamping in Uganda"),
+    "au_c_engine":   ("gap",      "ICE engine production absent — all engines imported"),
+    "au_c_emotor":   ("gap",      "Electric drive motors absent — KMC sources motors externally"),
+    "au_c_trans":    ("gap",      "Transmissions absent — all imported"),
+    "au_c_chassis":  ("emerging", "Some chassis/frame fabrication for buses (Kampala/Jinja body builders)"),
+    "au_c_battery":  ("gap",      "EV battery packs absent — all sourced externally by KMC"),
+    "au_c_interior": ("emerging", "Some interior/upholstery local content; trim largely imported"),
+    "au_c_harness":  ("gap",      "Wiring harness assembly absent — all imported"),
+    "au_c_tyres":    ("gap",      "No tyre manufacturing in Uganda — all imported"),
+    "au_p_car":      ("gap",      "No domestic ICE passenger car production"),
+    "au_p_ev":       ("emerging", "KMC Kayoola EV bus — plant commissioned Sept 2025; ~2,500 vehicles/yr capacity. KEY GAP: Components (Phase II) absent — local content almost zero; USD 31.7m parts imports (HS 8708). 2040 target: KMC 10,000 veh/yr; regional EV-bus supplier."),
+    "au_p_hybrid":   ("gap",      "No hybrid vehicle production in Uganda"),
+    "au_p_pickup":   ("gap",      "No domestic pickup production"),
+    "au_p_truck":    ("gap",      "No domestic truck production"),
+    "au_p_bus":      ("emerging", "KMC bus production; Kampala/Jinja body builders on imported chassis"),
+    "au_p_motorcycle":("emerging","CKD motorcycle assembly (boda-boda market); USD 157m import opportunity"),
+    "au_p_threewheel":("gap",     "No three-wheeler production in Uganda"),
+    "au_p_tractor":  ("gap",      "No domestic tractor production"),
+    "au_p_trailer":  ("strong",   "Trailer/body fabrication active in Kampala and Jinja"),
+    "au_p_engine":   ("gap",      "Engines all imported — no domestic engine manufacturing"),
+    "au_p_parts":    ("strong",   "Large aftermarket — Ndeeba/Kisekka market; import-based but very active"),
+    "au_p_battery":  ("emerging", "Some lead-acid battery assembly; Li-ion all imported"),
+    "au_p_tyres":    ("gap",      "No tyre manufacturing in Uganda — all imported"),
+
+    # ══════════════════════════════════════════════════════
+    # TEXTILES & GARMENTS
+    # Phases: I Cotton Growing→strong  II Ginning→strong  III Spinning→emerging
+    #         IV Weaving/Knitting→gap  V Wet Processing & Finishing→gap  VI Garment Mfg→emerging
+    # Critical gap: Wet processing/finishing (Phase V) — blocks entire chain.
+    # 2040 target: Process ≥50% of lint domestically; ginnery utilisation 60%+.
+    # ══════════════════════════════════════════════════════
+    "tx_m_cotton":   ("strong",   "~116,000 bales (2023); smallholder base; surplus in good years"),
+    "tx_m_poly":     ("gap",      "Polyester fibre entirely imported"),
+    "tx_m_visc":     ("gap",      "Viscose/rayon entirely imported"),
+    "tx_m_wool":     ("gap",      "Wool not produced commercially in Uganda"),
+    "tx_m_dye":      ("gap",      "Synthetic dyes entirely imported — CRITICAL; blocks finishing step"),
+    "tx_m_trim":     ("gap",      "Trims, zips and buttons mostly imported"),
+    "tx_e_elec":     ("emerging", "Grid power available; reliability constraints for continuous mills"),
+    "tx_e_heat":     ("emerging", "Process steam/heat available at integrated mills"),
+    "tx_l_labour":   ("strong",   "~18,000 employment (Fine Spinners + outgrowers); skilled pool established"),
+    "tx_k_spin":     ("emerging", "Spinning capacity at Fine Spinners and Nytil; underutilised"),
+    "tx_k_loom":     ("gap",      "Weaving looms largely absent; fabric not produced domestically at scale"),
+    "tx_k_knit":     ("gap",      "Knitting machines largely absent"),
+    "tx_k_dye":      ("gap",      "Dyeing/finishing plant CRITICALLY ABSENT — single biggest gap in chain"),
+    "tx_k_sew":      ("emerging", "Sewing/cutting capacity at some Kampala garment makers"),
+    "tx_c_yarn":     ("emerging", "Fine Spinners + Nytil (limited); yarn produced at low volumes"),
+    "tx_c_woven":    ("gap",      "Grey woven fabric largely absent — weaving capacity missing"),
+    "tx_c_knit":     ("gap",      "Knitted fabric largely absent — knitting capacity minimal"),
+    "tx_c_finfab":   ("gap",      "Dyed & finished fabric ABSENT — wet processing/finishing missing; blocks garment chain"),
+    "tx_c_nonwoven": ("gap",      "Nonwoven fabric absent — all imported"),
+    "tx_p_yarn":     ("emerging", "Yarn produced at Fine Spinners + Nytil; limited volume. CRITICAL GAP: Wet processing & finishing absent — without dyeing/finishing Uganda cannot produce export-quality fabric or garments. 2040 target: ≥50% of lint processed domestically; ginnery utilisation 60%+."),
+    "tx_p_fabric":   ("gap",      "Finished fabric absent — wet processing/finishing critically missing"),
+    "tx_p_tshirt":   ("emerging", "Limited knitwear; ~90% of Uganda's lint exported raw"),
+    "tx_p_shirts":   ("emerging", "Some woven shirt production; fabric largely imported"),
+    "tx_p_trousers": ("emerging", "Limited trouser/denim production"),
+    "tx_p_dresses":  ("emerging", "Limited women's apparel"),
+    "tx_p_underwear":("emerging", "Some underwear/hosiery production"),
+    "tx_p_workwear": ("emerging", "Uniforms/workwear — some institutional demand served locally"),
+    "tx_p_home":     ("gap",      "Home textiles (linen, towels) largely absent"),
+    "tx_p_carpet":   ("gap",      "Carpets and rugs absent"),
+    "tx_p_technical":("gap",      "Technical textiles absent — all imported"),
+    "tx_p_bags":     ("emerging", "Woven PP sacks produced locally for cement/grain packaging"),
+    "tx_p_medical":  ("emerging", "Some medical/hygiene textiles produced locally"),
+
+    # ══════════════════════════════════════════════════════
+    # PHARMACEUTICALS
+    # Phases: I API & Excipients→gap  II Formulation & Mfg→strong
+    #         III Packaging→strong  IV Distribution→strong  V Dispensing→strong
+    # Key gap: API & excipients (Phase I) — near-total import dependence; India 58%.
+    # 2040 target: USD 0.9–1.2B market; import dependence <50%.
+    # ══════════════════════════════════════════════════════
+    "ph_m_inter":    ("gap",      "Chemical intermediates for API synthesis entirely imported"),
+    "ph_m_solvent":  ("gap",      "Pharma-grade solvents imported; India and China dominant"),
+    "ph_m_excip":    ("gap",      "Excipients (fillers, binders) mostly imported"),
+    "ph_m_bio":      ("gap",      "Biological substrates imported — no local cell-culture capacity"),
+    "ph_m_pack":     ("strong",   "Primary packaging linked to plastics chain; active domestic production"),
+    "ph_m_glass":    ("emerging", "Some glass vials available; most imported"),
+    "ph_e_elec":     ("emerging", "Clean-room HVAC needs consistent power; constraints at some facilities"),
+    "ph_l_labour":   ("strong",   "6 WHO-GMP facilities; +42% employment growth 2017–19 (UNIDO)"),
+    "ph_k_reactor":  ("gap",      "API synthesis reactors absent — no local API manufacturing"),
+    "ph_k_tablet":   ("strong",   "Tablet presses at QCIL and others; 1.2bn tabs/caps/yr"),
+    "ph_k_fill":     ("strong",   "Aseptic filling lines at QCIL; WHO-GMP prequalified"),
+    "ph_k_qc":       ("strong",   "QC lab instruments at 6 WHO-GMP aligned manufacturers"),
+    "ph_c_api":      ("gap",      "APIs near-totally imported — deepest structural risk; India 58% of medicine imports"),
+    "ph_c_form":     ("strong",   "Formulated blends made at QCIL, KPI, Rene and others; WHO-GMP capable"),
+    "ph_p_tablets":  ("strong",   "QCIL 1.2bn tabs/caps/yr; KPI, Rene and others active. KEY GAP: API & excipients (Phase I) — near-total import dependence is the deepest structural and supply-security risk. 2040 target: USD 0.9–1.2B market; cut import dependence to <50%."),
+    "ph_p_inject":   ("strong",   "Aseptic injectables at QCIL; WHO-GMP prequalified"),
+    "ph_p_syrups":   ("strong",   "Oral liquids produced at multiple manufacturers"),
+    "ph_p_ointment": ("strong",   "Topical preparations produced locally"),
+    "ph_p_iv":       ("emerging", "IV fluids at some manufacturers; limited volume"),
+    "ph_p_vaccine":  ("gap",      "No vaccine/biologics production in Uganda"),
+    "ph_p_antibiotic":("strong",  "Antibiotics produced at QCIL and others; WHO-GMP"),
+    "ph_p_antimal":  ("strong",   "Antimalarials — QCIL flagship (ACT); WHO-GMP prequalified"),
+    "ph_p_arv":      ("strong",   "ARVs — QCIL's core product; WHO/PEPFAR procurement; UGX 267bn revenue"),
+    "ph_p_otc":      ("strong",   "OTC analgesics produced locally by multiple manufacturers"),
+    "ph_p_supp":     ("emerging", "Some vitamins/supplements produced; limited range"),
+    "ph_p_vet":      ("emerging", "Some veterinary medicines produced locally"),
+    "ph_p_api":      ("gap",      "Bulk API production near zero — near-total import dependence"),
+    "ph_p_devices":  ("emerging", "Some medical consumables produced; syringes largely imported"),
+    "ph_p_diag":     ("gap",      "Diagnostic kits/reagents absent — all imported"),
+
+    # ══════════════════════════════════════════════════════
+    # PETROCHEMICALS & FERTILIZERS
+    # Phases: I Upstream Extraction→emerging  II Refining/Processing→gap
+    #         III Petrochemical Processing→gap  IV Blending & Formulation→gap  V Market→strong
+    # Critical gaps: Refinery not operational until ~2029; Sukulu phosphate stalled.
+    # 2040 target: 1.5–2m tonnes fertiliser demand; Kabalega park operational.
+    # ══════════════════════════════════════════════════════
+    "pc_m_crude":    ("emerging", "Crude oil reserves identified (Lake Albert); production pre-FID"),
+    "pc_m_gas":      ("emerging", "Associated gas from oil fields; pre-commercial production"),
+    "pc_m_naphtha":  ("gap",      "Naphtha absent — no refinery yet; Kabaale expected ~2029"),
+    "pc_m_phos":     ("gap",      "Sukulu phosphate plant stalled (2021); 100,000 tpa design unused"),
+    "pc_m_potash":   ("gap",      "No potash deposits in Uganda; all imported"),
+    "pc_m_sulphur":  ("gap",      "No domestic sulphur production; all imported"),
+    "pc_e_elec":     ("emerging", "Grid power available; reliability constraints for chemical plants"),
+    "pc_e_steam":    ("gap",      "Industrial process steam absent at commercial scale"),
+    "pc_l_labour":   ("gap",      "Chemical/process engineering skills scarce"),
+    "pc_k_crack":    ("gap",      "Steam cracker absent — no refinery/petrochemical complex yet"),
+    "pc_k_reform":   ("gap",      "Ammonia plant/reformer absent — green ammonia option planned"),
+    "pc_k_poly":     ("gap",      "Polymerisation reactors absent — Kabalega park future (~2029)"),
+    "pc_c_ethylene": ("gap",      "Ethylene absent — no domestic petrochemical processing"),
+    "pc_c_propylene":("gap",      "Propylene absent — no domestic petrochemical processing"),
+    "pc_c_btx":      ("gap",      "Aromatics (BTX) absent — no domestic petrochemical processing"),
+    "pc_c_ammonia":  ("gap",      "Ammonia absent — no domestic production; all imported"),
+    "pc_c_methanol": ("gap",      "Methanol absent — no domestic production"),
+    "pc_c_nitric":   ("gap",      "Nitric acid absent — no domestic production"),
+    "pc_c_sulphuric":("gap",      "Sulphuric acid absent — no domestic production"),
+    "pc_c_phosacid": ("gap",      "Phosphoric acid absent — Sukulu phosphate stalled"),
+    "pc_p_pe":       ("gap",      "PE resin absent — 100% imported; Kabalega park future (~2029). CRITICAL GAP: Refinery not operational until ~2029; Sukulu phosphate stalled. Uganda imports ~50,000 t of fertiliser vs ~1m t needed — a 950,000 t annual gap. 2040 target: 1.5–2m tonnes fertiliser/yr; Kabalega park operational supplying domestic resin."),
+    "pc_p_pp":       ("gap",      "PP resin absent — all imported"),
+    "pc_p_pvc":      ("gap",      "PVC absent — all imported"),
+    "pc_p_pet":      ("gap",      "PET absent — all imported"),
+    "pc_p_ps":       ("gap",      "PS/EPS absent — all imported"),
+    "pc_p_rubber":   ("gap",      "Synthetic rubber absent — all imported"),
+    "pc_p_solvent":  ("gap",      "Industrial solvents absent — all imported"),
+    "pc_p_methanol": ("gap",      "Methanol absent — all imported"),
+    "pc_p_urea":     ("gap",      "Urea absent — all imported; part of USD 32.1m fertiliser imports"),
+    "pc_p_can":      ("gap",      "CAN/ammonium nitrate absent — all imported"),
+    "pc_p_dap":      ("gap",      "DAP absent — imported from Saudi Arabia/Kenya"),
+    "pc_p_ssp":      ("gap",      "SSP absent — Sukulu phosphate stalled"),
+    "pc_p_npk":      ("gap",      "NPK compound fertilizer absent — all imported; 950,000 tonne annual supply gap"),
+    "pc_p_mop":      ("gap",      "Potassium fertilizer absent — all imported"),
+    "pc_p_ammonia":  ("gap",      "Merchant ammonia absent — all imported"),
+
+    # ══════════════════════════════════════════════════════
+    # SUGAR & CONFECTIONERY
+    # Phases: I Cane Growing→strong  II Milling→strong  III Refining→emerging
+    #         IV Downstream→gap  V Market→strong
+    # Key gap: Industrial sugar refining (Phase III) + downstream ethanol/co-gen (Phase IV).
+    # 2040 target: Downstream-dominated chain; domestic industrial sugar + ethanol + co-gen.
+    # ══════════════════════════════════════════════════════
+    "sg_m_cane":     ("strong",   "Structural surplus — ~822,000 t/yr; Kakira ~50% of national output"),
+    "sg_m_cocoa":    ("gap",      "Cocoa beans not produced commercially in Uganda — all imported"),
+    "sg_m_milk":     ("emerging", "Some milk solids/powder production; most imported"),
+    "sg_m_flav":     ("gap",      "Flavours, colours and additives mostly imported"),
+    "sg_m_pectin":   ("gap",      "Gelatin/pectin imported; no domestic production"),
+    "sg_m_fruit":    ("emerging", "Fruit pulp available from Uganda's agricultural base"),
+    "sg_e_elec":     ("emerging", "Bagasse co-generation potential largely unexploited"),
+    "sg_e_steam":    ("strong",   "Bagasse steam at sugar mills — abundant by-product of milling"),
+    "sg_l_labour":   ("strong",   "Large agricultural and mill labour force established at major mills"),
+    "sg_k_mill":     ("strong",   "Cane mills at Kakira, Kinyara, SCOUL, Mayuge — operational"),
+    "sg_k_centri":   ("strong",   "Centrifuges operational at all major mills"),
+    "sg_k_pack":     ("emerging", "Processing/packaging for confectionery emerging but limited"),
+    "sg_c_juice":    ("strong",   "Cane juice extraction operational at all major mills"),
+    "sg_c_raw":      ("strong",   "Raw/brown sugar — ~822,000 tpa; Uganda is net regional exporter"),
+    "sg_c_refined":  ("emerging", "Refined white sugar — Kinyara ~75,000 t industrial; gap for food/pharma-grade"),
+    "sg_c_molasses": ("strong",   "Molasses abundant by-product — largely exported raw or fed to animals"),
+    "sg_c_syrup":    ("emerging", "Glucose/sugar syrup produced but limited capacity"),
+    "sg_c_cocoa":    ("gap",      "Cocoa liquor/butter absent — no cocoa processing in Uganda"),
+    "sg_p_white":    ("emerging", "Industrial white sugar — some (Kinyara); USD 38.1m still imported despite surplus. KEY GAP: Industrial sugar refining + downstream ethanol/co-gen (Phase IV) under-exploited. 2040 target: Downstream-dominated; industrial sugar, ethanol, co-gen, confectionery."),
+    "sg_p_brown":    ("strong",   "Brown/raw sugar surplus — Uganda is net regional exporter"),
+    "sg_p_icing":    ("emerging", "Icing/specialty sugars — limited production"),
+    "sg_p_molasses": ("strong",   "Molasses abundant; largely exported raw or used as animal feed"),
+    "sg_p_ethanol":  ("gap",      "Ethanol from molasses largely unexploited — KEY downstream gap"),
+    "sg_p_hardcandy":("emerging", "Some hard-boiled sweets produced locally"),
+    "sg_p_toffee":   ("emerging", "Toffees/caramels produced at some confectioners"),
+    "sg_p_chocolate":("gap",      "Chocolate production minimal — no cocoa processing in Uganda"),
+    "sg_p_gums":     ("emerging", "Gums/jellies produced by some local confectioners"),
+    "sg_p_chewing":  ("emerging", "Some chewing gum production"),
+    "sg_p_biscuits": ("emerging", "Biscuits and cookies — some local manufacturers"),
+    "sg_p_bakery":   ("emerging", "Bakery confectionery — numerous local producers"),
+    "sg_p_softdrink":("strong",   "Sweetened beverages — significant domestic production (Coca-Cola, Pepsi, Century)"),
+    "sg_p_jam":      ("emerging", "Some jams/preserves produced locally"),
+
+    # ══════════════════════════════════════════════════════
+    # PLASTICS & PACKAGING
+    # Phases: I Resin/Feedstock→gap  II Conversion→strong  III Packaging & Products→strong
+    #         IV Use→strong  V Recycling→emerging
+    # Key gap: Resin feedstock (Phase I) — 100% imported; recycling under-scaled.
+    # 2040 target: Kabalega park → domestic resin; circularity strategy.
+    # ══════════════════════════════════════════════════════
+    "pl_m_pe":       ("gap",      "PE resin 100% imported; Kabalega petrochemical park future (~2029)"),
+    "pl_m_pp":       ("gap",      "PP resin 100% imported — no domestic polymer production"),
+    "pl_m_pvc":      ("gap",      "PVC resin 100% imported"),
+    "pl_m_pet":      ("gap",      "PET resin 100% imported"),
+    "pl_m_ps":       ("gap",      "PS/EPS resin 100% imported"),
+    "pl_m_paper":    ("emerging", "Some paper/paperboard locally produced; significant imports"),
+    "pl_m_foil":     ("gap",      "Aluminium foil absent — all imported"),
+    "pl_m_add":      ("gap",      "Masterbatch/additives mostly imported; limited local compounding"),
+    "pl_m_recyc":    ("emerging", "Recycled plastic — ~600 t/day waste; <40% collected; under-scaled"),
+    "pl_e_elec":     ("emerging", "Grid power for moulding/extrusion; reliability constraints"),
+    "pl_l_labour":   ("strong",   "Plastics manufacturing workforce established; 41 UNBS-certified firms"),
+    "pl_k_inj":      ("strong",   "Injection moulding operational — Nice House of Plastics, Nile Plastic, others"),
+    "pl_k_ext":      ("strong",   "Extruders operational — film, pipe, sheet production established"),
+    "pl_k_blow":     ("strong",   "Blow moulding for bottles and jerrycans — active domestic production"),
+    "pl_k_print":    ("emerging", "Flexographic printing/lamination — limited capacity"),
+    "pl_c_film":     ("strong",   "Plastic film/sheet produced domestically — established converters"),
+    "pl_c_preform":  ("strong",   "PET preforms produced domestically — bottle blowing active"),
+    "pl_p_bottles":  ("strong",   "PET bottles — significant domestic production for beverages. KEY GAP: Resin feedstock (Phase I) — 100% imported; ~150,000 t/yr all imported. Recycling severely under-scaled. 2040 target: Kabalega park domestic resin; circularity strategy — 37% plastic pollution cut by 2040."),
+    "pl_p_jerry":    ("strong",   "Jerrycans and drums — active domestic production"),
+    "pl_p_bags":     ("strong",   "Plastic bags/sacks — 41 UNBS-certified manufacturers"),
+    "pl_p_film":     ("strong",   "Packaging film — established domestic production"),
+    "pl_p_rigid":    ("strong",   "Rigid containers/tubs — active domestic production"),
+    "pl_p_caps":     ("strong",   "Caps and closures — domestic production active"),
+    "pl_p_pipes":    ("strong",   "PVC pipes and fittings — domestic production (Roofings, others)"),
+    "pl_p_house":    ("strong",   "Household plasticware — significant domestic production"),
+    "pl_p_crates":   ("strong",   "Crates and pallets — domestic production for logistics"),
+    "pl_p_woven":    ("strong",   "Woven PP sacks — domestic production for cement, sugar and grain packaging"),
+    "pl_p_foam":     ("emerging", "EPS foam — limited domestic production"),
+    "pl_p_corrug":   ("strong",   "Corrugated boxes — active domestic production for FMCG"),
+    "pl_p_flexible": ("strong",   "Flexible laminates/pouches — domestic production established"),
+    "pl_p_labels":   ("strong",   "Labels and printed packaging — domestic production active"),
+    "pl_p_furniture":("emerging", "Plastic furniture — some domestic production"),
+
+    # ══════════════════════════════════════════════════════
+    # CEMENT & BUILDING MATERIALS
+    # Phases: I Limestone Quarrying→strong  II Clinker Production→emerging
+    #         III Cement Grinding→strong  IV Building Materials→emerging  V Construction Market→strong
+    # Key gap: Clinker (Phase II) — >50% imported; USD 162.2m import bill (2024).
+    # 2040 target: >90% clinker self-sufficiency; dominant regional cement supplier.
+    # ══════════════════════════════════════════════════════
+    "cm_m_lime":     ("strong",   "Limestone quarries at Dura (Kamwenge), Tororo, Karamoja — established"),
+    "cm_m_clay":     ("strong",   "Clay/shale abundant; quarried alongside limestone deposits"),
+    "cm_m_gypsum":   ("emerging", "Gypsum deposits exist in Uganda; partly imported"),
+    "cm_m_sand":     ("strong",   "Sand and aggregates abundant — quarried across Uganda"),
+    "cm_m_pozz":     ("emerging", "Pozzolana available; slag from steel sector limited but growing"),
+    "cm_m_steel":    ("strong",   "Reinforcing steel (rebar) — domestic production strong; see Iron & Steel chain"),
+    "cm_m_fuel":     ("gap",      "Kiln fuel (coal) largely imported; alt-fuel opportunity (waste, biomass)"),
+    "cm_e_elec":     ("emerging", "Grid power for grinding; reliability constraints; 8–10¢/kWh"),
+    "cm_e_heat":     ("gap",      "Kiln thermal energy from imported coal — high cost constraint"),
+    "cm_l_labour":   ("strong",   "Quarry and cement plant workforce established at major operators"),
+    "cm_k_kiln":     ("emerging", ">50% clinker imported; domestic kilns at Tororo/Hima; 2 new plants under construction (USD 500m)"),
+    "cm_k_mill":     ("strong",   "Grinding mills at Tororo (3 Mtpa), Hima (2 Mtpa), Simba (1 Mtpa), Kampala (1 Mtpa)"),
+    "cm_k_crush":    ("strong",   "Crushers at established limestone quarries — operational"),
+    "cm_k_mix":      ("emerging", "Batching/moulding plant growing but largely artisanal scale"),
+    "cm_c_meal":     ("strong",   "Raw meal — ground at established limestone quarries"),
+    "cm_c_clinker":  ("emerging", ">50% imported (USD 162.2m, 2024); 2 new plants under construction (USD 500m total)"),
+    "cm_c_cement":   ("strong",   "Portland cement grinding — 7 Mtpa installed; Uganda is net cement exporter"),
+    "cm_c_agg":      ("strong",   "Crushed aggregate — abundant; active quarrying across Uganda"),
+    "cm_p_opc":      ("strong",   "OPC — Uganda grinds and exports; Tororo, Hima, Simba, Kampala active. KEY GAP: Clinker >50% imported — USD 162.2m (2024). Two new plants (USD 500m) under construction. 2040 target: >90% clinker self-sufficiency; Uganda as dominant regional cement supplier."),
+    "cm_p_ppc":      ("strong",   "Pozzolana/blended cement — strong; lower-carbon option growing"),
+    "cm_p_clinker":  ("emerging", "Clinker still >50% imported; new domestic plants under construction"),
+    "cm_p_white":    ("gap",      "White cement absent — all imported"),
+    "cm_p_rmc":      ("emerging", "Ready-mix concrete — growing but served by few operators"),
+    "cm_p_blocks":   ("emerging", "Concrete blocks and bricks — growing; mostly small-scale"),
+    "cm_p_pavers":   ("emerging", "Paving blocks/kerbs — growing urban demand; local producers"),
+    "cm_p_pipes":    ("emerging", "Concrete pipes — some production for drainage/sewerage"),
+    "cm_p_precast":  ("emerging", "Precast elements — limited; growing for infrastructure"),
+    "cm_p_rooftile": ("emerging", "Roofing tiles — some local production"),
+    "cm_p_fibre":    ("gap",      "Fibre-cement sheets absent — all imported"),
+    "cm_p_lime":     ("strong",   "Building lime — produced domestically alongside clinker"),
+    "cm_p_gypboard": ("gap",      "Gypsum plasterboard absent — all imported"),
+    "cm_p_mortar":   ("emerging", "Dry mortar/plaster — limited local production"),
+    "cm_p_tiles":    ("gap",      "Ceramic tiles absent — all imported; significant market opportunity"),
+    "cm_p_bricks":   ("emerging", "Clay bricks — traditional brick kilns; artisanal scale"),
+    "cm_p_glass":    ("gap",      "Flat glass absent — no float glass production in Uganda; all imported"),
+}
+
 # Each chain: {vc, nodes:{id:(label,ctype,name,hs,hsd,fn)}, products:{id:(name,hs,hsd,fn)}, edges:{id:[(up,w)]}}
 CHAINS = []
 
@@ -590,18 +932,22 @@ def run():
     for chain in CHAINS:
         vc = chain["vc"]
         for nid, (label, ctype, name, hs, hsd, fn) in chain["nodes"].items():
+            s, sn = STRENGTH.get(nid, (None, None))
             db.upsert_node(conn, id=nid, value_chain_id=vc, label=label, name=name,
                            component_type=ctype, function=fn,
                            hs_code=[hs] if hs else None,
                            hs_code_description=[hsd] if hsd else None,
-                           source_references=SRC)
+                           source_references=SRC,
+                           strength=s, strength_note=sn)
             n_nodes += 1
         for pid, (name, hs, hsd, fn) in chain["products"].items():
+            s, sn = STRENGTH.get(pid, (None, None))
             db.upsert_node(conn, id=pid, value_chain_id=vc, label="System", name=name,
                            component_type="other", function=fn,
                            hs_code=[hs] if hs else None,
                            hs_code_description=[hsd] if hsd else None,
-                           source_references=SRC)
+                           source_references=SRC,
+                           strength=s, strength_note=sn)
             n_products += 1
         for downstream, inputs in chain["edges"].items():
             for upstream, weight in inputs:

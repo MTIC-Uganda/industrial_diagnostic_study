@@ -24,6 +24,99 @@ import db
 VC = "Iron & Steel"
 SRC = ["valuechains.ai-style structured dataset; standard primary-steel process"]
 
+# Strength data from Jerome's sources-of-truth.html (Value Chain Maps tab).
+# Phase I Mining→gap, II Ironmaking→emerging, III Steelmaking→emerging,
+# IV Casting→emerging, V Rolling/Finishing→strong, VI Market→strong.
+# Flat steel (slab/HRC/CRC) is absent → gap.  Long products competitive → strong.
+IS_STRENGTH = {
+    # Raw materials
+    "m_ore_fines":   ("gap",      "Iron ore mining minimal — 1 commercial miner (SINO Minerals, ~300k tpa); Phase I gap"),
+    "m_ore_pellets": ("gap",      "Ore pelletising absent — fines not commercially pelletised in Uganda"),
+    "m_coke":        ("gap",      "Metallurgical coke absent — no coking coal in Uganda; all imported"),
+    "m_limestone":   ("strong",   "Limestone abundant — same deposits supplying the cement sector"),
+    "m_ferroalloys": ("gap",      "Ferroalloys all imported from South Africa and China"),
+    "m_scrap_hms":   ("emerging", "HMS scrap collection growing; informal market; infrastructure limited"),
+    "m_scrap_shred": ("emerging", "Shredded scrap available from local collection; limited scale"),
+    "m_zinc":        ("gap",      "No domestic zinc production; all imported"),
+    "m_nickel":      ("gap",      "Nickel absent — all imported"),
+    "m_chromium":    ("gap",      "Ferrochrome absent — all imported"),
+    "m_nbvti":       ("gap",      "Micro-alloys absent — all imported"),
+    "m_electrodes":  ("gap",      "Graphite electrodes absent — all imported"),
+    "m_natgas":      ("emerging", "Natural gas from Albertine basin; pre-commercial production"),
+    "m_tin":         ("gap",      "Tin absent — all imported"),
+    "m_paint":       ("emerging", "Some coating/paint systems produced locally (Crown, Sadolin)"),
+    "m_aluminium":   ("gap",      "Aluminium absent — all imported"),
+    # Energy, labour, plant
+    "e_electricity": ("emerging", "Hydro grid available; 8–10¢/kWh vs Kenya 5–7¢ — cost disadvantage"),
+    "e_heat":        ("emerging", "Rolling/reheating furnaces operational at Roofings, Steel & Tube"),
+    "l_labour":      ("emerging", "~2,500 direct workers; 68% of firms report technical skill shortage"),
+    "k_furnace":     ("emerging", "Induction furnaces and some EAF at Tembo, Abyssinia, Roofings"),
+    "k_mill":        ("strong",   "Rolling mills at Roofings Rolling Mills, Steel & Tube, Uganda Baati — operational"),
+    "k_press":       ("gap",      "Forging presses absent — no forging industry in Uganda"),
+    # Iron-making intermediates
+    "c_sinter":      ("gap",      "Sinter plant absent — no sintering of ore fines in Uganda"),
+    "c_pig":         ("gap",      "Pig iron absent — no blast furnace in Uganda"),
+    "c_dri":         ("emerging", "DRI/HBI — Tembo Steels ~350k tpa (Iganga/Lugazi) + Abyssinia ~30k tpa (Jinja)"),
+    # Steel-making + casting intermediates
+    "c_crude":       ("emerging", "Crude steel from induction/EAF; scrap + DRI based; ~513k tpa utilised"),
+    "c_slab":        ("gap",      "Steel slab absent — no flat steel casting in Uganda; USD 219.5m flat imports"),
+    "c_bloom":       ("emerging", "Blooms cast at some facilities; limited scale"),
+    "c_billet":      ("emerging", "Billets cast domestically at Tembo, Abyssinia and others; Phase IV emerging"),
+    "c_hrc":         ("gap",      "Hot-rolled coil absent — CRITICAL GAP; USD 219.5m flat steel imports (HS 7208)"),
+    "c_crc":         ("gap",      "Cold-rolled coil absent — all imported; flat steel entirely missing"),
+    "c_wire":        ("strong",   "Drawn wire produced domestically; feeds rebar, mesh and wire-rod products"),
+    # Technologies
+    "t_bf":          ("gap",      "Blast furnace absent — no hot-metal/pig-iron production in Uganda"),
+    "t_shaft":       ("emerging", "DRI shaft furnace — Tembo (MIDREX-style) and Abyssinia operational"),
+    "t_bof":         ("gap",      "BOF absent — all steelmaking from EAF/induction in Uganda"),
+    "t_eaf":         ("emerging", "EAF/induction — scrap + DRI; ~37 plants; Phase III emerging"),
+    "t_caster":      ("emerging", "Continuous casting — billet and bloom; partial domestic capacity"),
+    # Finished products (Phase V Rolling/Finishing)
+    "p_rebar":       ("strong",   "Rebar — Uganda's strongest product; net exporter USD 55.8m (2024); ~70% capacity used. CRITICAL GAP: Flat steel entirely absent — USD 219.5m imports annually (HS 7208). 2040 target: 5.5–8 Mtpa demand; domestic flat steel capacity via upstream investment."),
+    "p_wirerod":     ("strong",   "Wire rod — produced and exported regionally; strong domestic rolling capacity"),
+    "p_sections":    ("strong",   "Structural sections — active at Roofings Rolling Mills and Steel & Tube"),
+    "p_rails":       ("gap",      "Rails absent — no rail production in Uganda; all imported"),
+    "p_plate":       ("gap",      "Hot-rolled plate absent — flat steel entirely missing in Uganda"),
+    "p_galv":        ("emerging", "Galvanised sheet — Roofings Ltd and Uganda Baati active; imported coil coated locally"),
+    "p_electrical":  ("gap",      "Electrical steel absent — no GOES/NOES production in Uganda"),
+    "p_erw":         ("gap",      "ERW pipe absent — no pipe welding from domestic HRC"),
+    "p_seamless":    ("gap",      "Seamless OCTG absent — far upstream of current capability"),
+    "p_stainless":   ("gap",      "Stainless steel absent — no production in Uganda"),
+    "p_hsla":        ("gap",      "HSLA absent — domestic flat steel entirely missing"),
+    "p_crc":         ("gap",      "Cold-rolled coil absent — all imported"),
+    "p_tinplate":    ("gap",      "Tinplate absent — no tin-coated flat steel in Uganda"),
+    "p_prepaint":    ("emerging", "Pre-painted (PPGI) — Uganda Baati and Roofings active; imported coated coil processed"),
+    "p_mesh":        ("strong",   "Welded wire mesh — domestic production at several facilities"),
+    "p_forgings":    ("gap",      "Forged components absent — no forging industry in Uganda"),
+    "p_castings":    ("emerging", "Steel/iron castings — some foundry capacity; limited scale"),
+    "p_grinding":    ("gap",      "Grinding media absent — all imported from South Africa and China"),
+    # Extended product set
+    "p_merchant":    ("strong",   "Merchant bar — domestic long-product rolling active"),
+    "p_lightsec":    ("strong",   "Light sections — domestic rolling active; structural fabrication market"),
+    "p_sbq":         ("gap",      "Cold-drawn bright bar absent — precision engineering scarce"),
+    "p_piling":      ("gap",      "Sheet piling absent — all imported"),
+    "p_railfit":     ("gap",      "Railway fittings absent — all imported"),
+    "p_hrc":         ("gap",      "HRC absent — CRITICAL flat-steel gap; all imported"),
+    "p_alzinc":      ("gap",      "Al-Zn coated sheet absent — all imported"),
+    "p_alusteel":    ("gap",      "Aluminised sheet absent — all imported"),
+    "p_egalv":       ("gap",      "Electro-galvanised sheet absent — all imported"),
+    "p_eccs":        ("gap",      "ECCS/tin-free steel absent — all imported"),
+    "p_saw":         ("gap",      "SAW pipe absent — all imported"),
+    "p_hss":         ("gap",      "HSS hollow sections absent — all imported"),
+    "p_precision":   ("gap",      "Precision tube absent — all imported"),
+    "p_ss_long":     ("gap",      "Stainless long products absent — all imported"),
+    "p_ss_tube":     ("gap",      "Stainless tube absent — all imported"),
+    "p_tool":        ("gap",      "Tool steel absent — all imported"),
+    "p_spring":      ("gap",      "Spring steel absent — all imported"),
+    "p_bearing":     ("gap",      "Bearing steel absent — all imported"),
+    "p_wire":        ("strong",   "Steel wire — drawn and galvanised domestically; strong output"),
+    "p_nails":       ("strong",   "Nails — domestic production from drawn wire; active"),
+    "p_fasteners":   ("emerging", "Fasteners — limited domestic production; mostly imported"),
+    "p_rope":        ("emerging", "Wire rope — some domestic production; mostly imported"),
+    "p_fencing":     ("strong",   "Fencing — galvanised fencing produced domestically"),
+    "p_diron":       ("gap",      "Ductile/grey iron pipe absent — blast furnace required; all imported"),
+}
+
 
 # ── Shared upstream nodes (materials, intermediates, energy, labour, plant) ───
 # id: (label, component_type, name, hs_code, hs_desc, function)
@@ -218,19 +311,23 @@ def run():
 
     # Shared upstream nodes
     for nid, (label, ctype, name, hs, hsd, fn) in NODES.items():
+        s, sn = IS_STRENGTH.get(nid, (None, None))
         db.upsert_node(conn, id=nid, value_chain_id=VC, label=label, name=name,
                        component_type=ctype, function=fn,
                        hs_code=[hs] if hs else None,
                        hs_code_description=[hsd] if hsd else None,
-                       source_references=SRC)
+                       source_references=SRC,
+                       strength=s, strength_note=sn)
 
     # Finished-product roots
     for pid, (name, hs, hsd, fn) in PRODUCTS.items():
+        s, sn = IS_STRENGTH.get(pid, (None, None))
         db.upsert_node(conn, id=pid, value_chain_id=VC, label="System", name=name,
                        component_type="other", function=fn,
                        hs_code=[hs] if hs else None,
                        hs_code_description=[hsd] if hsd else None,
-                       source_references=SRC)
+                       source_references=SRC,
+                       strength=s, strength_note=sn)
 
     # Edges (start = upstream input, end = downstream product)
     n = 0

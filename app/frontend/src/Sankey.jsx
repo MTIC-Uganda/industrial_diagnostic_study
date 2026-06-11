@@ -21,6 +21,9 @@ const COLORS = {
 };
 
 function nodeColor(n) {
+  if (n.strength === 'strong')   return '#2e7d32';
+  if (n.strength === 'emerging') return '#f57f17';
+  if (n.strength === 'gap')      return '#c62828';
   return COLORS[n.label] || COLORS[n.componentType] || COLORS.other;
 }
 
@@ -82,6 +85,7 @@ export default function SankeyView({ graph, onNodeClick, selectedId }) {
       name: n.properties.name,
       label: n.labels[0],
       componentType: n.properties.component_type,
+      strength: n.properties.strength,
       raw: n,
     }));
     const idIndex = new Map(nodeList.map((n, i) => [n.id, i]));
