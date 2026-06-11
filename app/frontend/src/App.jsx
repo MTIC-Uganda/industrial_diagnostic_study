@@ -3,6 +3,7 @@ import { getRoots, getIncoming } from "./api.js";
 import SankeyView from "./Sankey.jsx";
 import NodeDetail from "./NodeDetail.jsx";
 import { useTour } from "./useTour.js";
+import coatOfArms from "../public/uganda_coat_of_arms.png";
 
 export default function App() {
   const [roots, setRoots] = useState([]);       // every product root, all chains
@@ -89,7 +90,7 @@ export default function App() {
       <header style={{ background: "#002b5b", color: "#fff", padding: "14px 22px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
           <img
-            src={`${import.meta.env.BASE_URL}uganda_coat_of_arms.png`}
+            src={coatOfArms}
             alt="Coat of arms of Uganda"
             style={{ height: 46, width: "auto", display: "block" }}
           />
