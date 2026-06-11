@@ -108,7 +108,7 @@ tr:hover td{background:#fafafa}
 
 /* FOOTER */
 footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-top:24px;border-top:1px solid var(--border)}
-.factory-label{background:#fff;border:1px solid #bbb;border-radius:4px;padding:2px 6px;font-size:11px;font-weight:600;color:#222;white-space:nowrap;box-shadow:0 1px 4px rgba(0,0,0,.18)}.factory-label::before{display:none}
+.factory-label{background:rgba(255,255,255,.97);border:1px solid rgba(0,0,0,.18);border-radius:4px;padding:3px 8px;font-size:11px;font-weight:600;color:#1a1a1a;white-space:nowrap;box-shadow:0 2px 6px rgba(0,0,0,.22);pointer-events:none}
 </style>
 </head>
 <body>
@@ -935,7 +935,7 @@ function initMap(){
     });
   }
 
-  // Build markers, grouped by chain for filtering
+  // Build markers grouped by chain
   const markersByChain={};
   FACTORIES.forEach(f=>{
     const col=CHAIN_COLORS[f.chain]||'#555';
@@ -947,14 +947,76 @@ function initMap(){
           <div style="font-size:11px;color:#444;margin-bottom:4px">📍 ${f.loc}</div>
           <hr style="margin:4px 0;border:none;border-top:1px solid #e0e0e0">
           <div style="font-size:11px;line-height:1.5;color:#333">${f.note}</div>
-        </div>`)
-      .bindTooltip(f.name,{permanent:false,direction:'right',className:'factory-label'})
+        </div>`,{closeOnClick:false,autoClose:false})
       .addTo(map);
+    m._fname=f.name; // store for rebinding
     if(!markersByChain[f.chain])markersByChain[f.chain]=[];
     markersByChain[f.chain].push(m);
   });
 
-  // ── Sidebar filter list ──
+  // ── Smart label placement ──────────────────────────────────────────────────
+  // Assigns permanent tooltips to a set of markers so labels spread outward
+  // from the cluster centroid. Within each compass quadrant, labels are
+  // staggered perpendicularly so they never stack on top of one another.
+  function showLabels(markers){
+    // Compute centroid of this chain's markers
+    let clat=0,clng=0;
+    markers.forEach(m=>{clat+=m.getLatLng().lat;clng+=m.getLatLng().lng;});
+    clat/=markers.length; clng/=markers.length;
+
+    // Assign a direction (right/left/top/bottom) per marker based on bearing
+    // from centroid so labels point away from the cluster centre.
+    const assigned=markers.map(m=>{
+      const ll=m.getLatLng();
+      const dlat=ll.lat-clat, dlng=ll.lng-clng;
+      const dir=Math.abs(dlng)>Math.abs(dlat)
+        ?(dlng>=0?'right':'left')
+        :(dlat>=0?'top':'bottom');
+      return {m,dir,dlat,dlng};
+    });
+
+    // Group by direction; within each group sort by perpendicular axis so
+    // we can stagger labels outward without overlap.
+    const byDir={right:[],left:[],top:[],bottom:[]};
+    assigned.forEach(a=>byDir[a.dir].push(a));
+
+    // Sort and assign staggered offsets (16 px step ≈ label height)
+    const STEP=17; // px between labels in same direction
+    const BASE=6;  // px gap between dot and nearest label edge
+
+    Object.entries(byDir).forEach(([dir,items])=>{
+      if(!items.length)return;
+      // Sort by the axis perpendicular to the label direction so nearby markers
+      // get consecutive slots (keeps visual order intuitive).
+      const byPerp=(dir==='right'||dir==='left')
+        ?(a,b)=>b.dlat-a.dlat   // top→bottom by latitude
+        :(a,b)=>a.dlng-b.dlng;  // left→right by longitude
+      items.sort(byPerp);
+
+      const half=(items.length-1)/2;
+      items.forEach(({m},i)=>{
+        const perp=Math.round((i-half)*STEP); // perpendicular shift in px
+        const offset=
+          dir==='right' ?[BASE, perp]:
+          dir==='left'  ?[-BASE,perp]:
+          dir==='top'   ?[perp,-BASE]:
+                         [perp, BASE];
+        m.unbindTooltip();
+        m.bindTooltip(m._fname,{
+          permanent:true,      // stays visible through hover and popup events
+          direction:dir,
+          className:'factory-label',
+          offset:offset
+        });
+      });
+    });
+  }
+
+  function clearLabels(){
+    Object.values(markersByChain).flat().forEach(m=>m.unbindTooltip());
+  }
+
+  // ── Sidebar filter list ───────────────────────────────────────────────────
   const list=document.getElementById('chain-filter-list');
 
   function setActive(row){
@@ -962,7 +1024,7 @@ function initMap(){
     row.classList.add('active');
   }
 
-  // "All" row
+  // "All" row — show every marker, no labels (89 names at once = too dense)
   const allRow=document.createElement('div');
   allRow.className='chain-filter-item active';
   allRow.innerHTML=`
@@ -970,7 +1032,8 @@ function initMap(){
     <span style="flex:1;font-size:13px;color:var(--text)">All Industries</span>
     <span class="chain-count-badge" style="background:#e3f2fd;color:var(--blue)">${FACTORIES.length}</span>`;
   allRow.onclick=()=>{
-    Object.values(markersByChain).flat().forEach(m=>{m.addTo(map);m.closeTooltip();});
+    clearLabels();
+    Object.values(markersByChain).flat().forEach(m=>m.addTo(map));
     map.setView([1.3,32.5],7);
     setActive(allRow);
   };
@@ -986,18 +1049,23 @@ function initMap(){
       <span style="flex:1;font-size:13px;color:var(--text)">${name}</span>
       <span class="chain-count-badge" style="background:${col}22;color:${col}">${markers.length}</span>`;
     row.onclick=()=>{
-      // Hide all + clear tooltips, then show this chain with name labels
-      Object.values(markersByChain).flat().forEach(m=>{map.removeLayer(m);m.closeTooltip();});
-      markers.forEach(m=>{m.addTo(map);m.openTooltip();});
-      if(markers.length){
-        map.fitBounds(L.featureGroup(markers).getBounds().pad(0.3));
-      }
+      // Hide all markers and clear labels first
+      clearLabels();
+      Object.values(markersByChain).flat().forEach(m=>map.removeLayer(m));
+      // Compute smart label positions for this chain
+      if(markers.length) showLabels(markers);
+      // Add markers to map (tooltips are now bound with permanent:true)
+      markers.forEach(m=>m.addTo(map));
+      // Zoom to fit this chain
+      if(markers.length)
+        map.fitBounds(L.featureGroup(markers).getBounds().pad(0.35));
       setActive(row);
     };
     list.appendChild(row);
   });
 
 }
+
 </script>
 </body>
 </html>
