@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MTIC Value Chain Explorer</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;height:100vh;display:flex;flex-direction:column;background:#f5f7fa;color:#222;font-size:13px}
+
+header{background:#002b5b;color:#fff;padding:10px 18px;display:flex;align-items:center;gap:12px;flex-shrink:0}
+header img{height:38px}
+.hd-title{font-size:16px;font-weight:700}
+.hd-sub{font-size:11px;opacity:.8;margin-top:2px}
+
+#controls{background:#fff;border-bottom:1px solid #e0e0e0;padding:9px 18px;display:flex;gap:20px;align-items:flex-end;flex-wrap:wrap;flex-shrink:0}
+.cg{display:flex;flex-direction:column;gap:2px}
+.cg label{font-size:11px;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:.3px}
+select{padding:5px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;min-width:190px;background:#fff}
+input[type=range]{width:110px;vertical-align:middle}
+.ctrl-hint{font-size:10px;color:#aaa}
+#stats{margin-left:auto;font-size:11px;color:#888;align-self:center}
+
+#main{display:flex;flex:1;overflow:hidden}
+#chart-wrap{flex:1;overflow:auto;padding:10px;position:relative;background:#f5f7fa}
+#tip{font-size:12px;color:#1565c0;background:#eef4fb;border:1px solid #cfe0f2;border-radius:5px;padding:7px 12px;margin-bottom:8px}
+#breadcrumb{font-size:12px;color:#555;margin-bottom:8px;min-height:20px;display:flex;flex-wrap:wrap;align-items:center;gap:4px}
+.crumb-btn{background:none;border:none;color:#1565c0;cursor:pointer;font-size:12px;padding:0}
+.crumb-btn:disabled{color:#002b5b;font-weight:700;cursor:default}
+.crumb-sep{color:#ccc}
+.nav-btn{border:1px solid #cfe0f2;background:#eef4fb;color:#1565c0;border-radius:4px;cursor:pointer;font-size:11px;padding:2px 8px;margin-left:6px}
+#sankey-svg{background:#fff;display:block;border-radius:6px}
+#loading{padding:40px;text-align:center;color:#888;font-size:14px}
+#err-msg{padding:16px;color:#c62828;font-size:13px;background:#ffebee;border-radius:6px;display:none}
+
+#detail{width:290px;flex-shrink:0;border-left:1px solid #e0e0e0;background:#fff;overflow-y:auto;padding:14px;display:none}
+.detail-close{float:right;background:none;border:none;font-size:20px;cursor:pointer;color:#aaa;line-height:1;padding:0 4px}
+.detail-close:hover{color:#333}
+#detail-name{font-size:14px;font-weight:700;color:#002b5b;margin-bottom:8px;padding-right:24px}
+.d-row{font-size:12px;margin-bottom:5px;line-height:1.4}
+.d-lbl{font-weight:600;color:#555}
+.s-badge{display:inline-block;padding:2px 10px;border-radius:10px;font-size:11px;font-weight:700;margin:3px 0 6px}
+
+#legend{padding:7px 18px;display:flex;flex-wrap:wrap;gap:14px;font-size:11px;color:#555;flex-shrink:0;background:#fff;border-top:1px solid #e0e0e0}
+.li{display:flex;align-items:center;gap:5px}
+.ls{width:11px;height:11px;border-radius:2px;display:inline-block;flex-shrink:0}
+</style>
+</head>
+<body>
+
+<header>
+  <img src="./uganda_coat_of_arms.png" alt="Uganda Coat of Arms" onerror="this.style.display='none'">
+  <div>
+    <div class="hd-title">MTIC Value Chain Explorer</div>
+    <div class="hd-sub">Interactive upstream decomposition — 9 priority value chains</div>
+  </div>
+</header>
+
+<div id="controls">
+  <div class="cg">
+    <label>Value chain</label>
+    <select id="chain-sel"></select>
+    <span class="ctrl-hint">Pick which sector to explore</span>
+  </div>
+  <div class="cg">
+    <label>Finished product</label>
+    <select id="prod-sel"></select>
+    <span class="ctrl-hint">Trace back to raw materials</span>
+  </div>
+  <div class="cg">
+    <label id="lbl-layers">Layers: 11</label>
+    <input type="range" id="sl-layers" min="1" max="11" value="11">
+    <span class="ctrl-hint">Steps upstream to show</span>
+  </div>
+  <div class="cg">
+    <label id="lbl-flow">Min flow: 0.3%</label>
+    <input type="range" id="sl-flow" min="0" max="10" step="0.1" value="0.3">
+    <span class="ctrl-hint">Hide flows smaller than this</span>
+  </div>
+  <div id="stats"></div>
+</div>
+
+<div id="main">
+  <div id="chart-wrap">
+    <div id="tip">💡 <strong>Tip:</strong> Click any block to <strong>drill into it</strong> — the chart re-roots and a details panel opens on the right. Flow width = cost share.</div>
+    <div id="breadcrumb"></div>
+    <div id="loading">Loading value chain data…</div>
+    <div id="err-msg"></div>
+    <svg id="sankey-svg" style="display:none"></svg>
+  </div>
+  <div id="detail">
+    <button class="detail-close" id="close-btn">×</button>
+    <div id="detail-name"></div>
+    <div id="detail-body"></div>
+  </div>
+</div>
+
+<div id="legend">
+  <div class="li"><span class="ls" style="background:#002b5b"></span>Finished product</div>
+  <div class="li"><span class="ls" style="background:#26a69a"></span>Technology type</div>
+  <div class="li"><span class="ls" style="background:#1565c0"></span>Component</div>
+  <div class="li"><span class="ls" style="background:#2e7d32"></span>Material</div>
+  <div class="li"><span class="ls" style="background:#f9a825"></span>Energy</div>
+  <div class="li"><span class="ls" style="background:#8e24aa"></span>Labour</div>
+  <div class="li"><span class="ls" style="background:#6d4c41"></span>Machinery</div>
+  <div class="li" style="border-left:1px solid #e0e0e0;padding-left:14px"><span class="ls" style="background:#2e7d32;border-radius:50%"></span>Strong</div>
+  <div class="li"><span class="ls" style="background:#f57f17;border-radius:50%"></span>Emerging</div>
+  <div class="li"><span class="ls" style="background:#c62828;border-radius:50%"></span>Gap</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/d3-sankey@0.12.3/dist/d3-sankey.min.js"></script>
+<script>
+// ─── Colour maps ────────────────────────────────────────────────────────────
+const COLORS={System:"#002b5b",Stage:"#00695c",Route:"#5c6bc0",TechnologyType:"#26a69a",
+  material:"#2e7d32",component:"#1565c0",energy:"#f9a825",labor:"#8e24aa",
+  machinery:"#6d4c41",additive:"#9e9e9e",other:"#8e8e8e"};
+const SCFG={
+  strong:  {bg:"#e8f5e9",col:"#2e7d32",lbl:"● Strong / Competitive"},
+  emerging:{bg:"#fff8e1",col:"#f57f17",lbl:"◐ Emerging / Limited"},
+  gap:     {bg:"#ffebee",col:"#c62828",lbl:"○ Gap / Absent"},
+};
+function nodeColor(n){
+  if(n.strength==='strong')  return'#2e7d32';
+  if(n.strength==='emerging')return'#f57f17';
+  if(n.strength==='gap')     return'#c62828';
+  return COLORS[n.label]||COLORS[n.componentType]||COLORS.other;
+}
+
+// ─── Data layer ─────────────────────────────────────────────────────────────
+let bundle=null;
+async function loadBundle(){
+  const r=await fetch('./graph-bundle.json');
+  if(!r.ok)throw new Error('Could not load graph-bundle.json (HTTP '+r.status+')');
+  const b=await r.json();
+  b._nodeById=new Map(b.nodes.map(n=>[n.id,n]));
+  bundle=b;
+}
+function getIncoming(nodeId,layers,minThr){
+  const root=bundle._nodeById.get(nodeId);
+  if(!root)return null;
+  const nodes=new Map([[nodeId,root]]);
+  const rels=new Map();
+  let frontier=[nodeId];
+  for(let i=0;i<layers&&frontier.length;i++){
+    const ends=new Set(frontier);const next=[];
+    for(const r of bundle.relationships){
+      if(!ends.has(r.end_node_id)||r.properties.weight<minThr)continue;
+      rels.set(r.id,r);
+      const sid=r.start_node_id;
+      if(!nodes.has(sid)){const n=bundle._nodeById.get(sid);if(n){nodes.set(sid,n);next.push(sid);}}
+    }
+    frontier=next;
+  }
+  const nl=[...nodes.values()],rl=[...rels.values()];
+  return{nodes:nl,relationships:rl,root_node_id:nodeId,total_nodes:nl.length,total_relationships:rl.length};
+}
+
+// ─── State ──────────────────────────────────────────────────────────────────
+let roots=[],path=[],graph=null,selectedId=null,hoveredId=null,layers=11,minPct=0.3;
+
+// ─── Adjacency for hover ────────────────────────────────────────────────────
+function adjacency(nodeId,links){
+  if(!nodeId)return null;
+  const nodeIds=new Set([nodeId]);const linkSet=new Set();
+  for(const l of links){
+    if(l.source.id===nodeId){linkSet.add(l);nodeIds.add(l.target.id);}
+    else if(l.target.id===nodeId){linkSet.add(l);nodeIds.add(l.source.id);}
+  }
+  return{nodeIds,linkSet};
+}
+
+// ─── Sankey layout ──────────────────────────────────────────────────────────
+const LMARGIN=170;
+function computeSankey(g,w){
+  if(!g||!g.nodes.length)return{nodes:[],links:[],h:560};
+  const nl=g.nodes.map(n=>({
+    id:n.id,name:n.properties.name,label:n.labels[0],
+    componentType:n.properties.component_type,strength:n.properties.strength,raw:n
+  }));
+  const idx=new Map(nl.map((n,i)=>[n.id,i]));
+  const ll=g.relationships
+    .filter(r=>idx.has(r.start_node_id)&&idx.has(r.end_node_id))
+    .map(r=>({source:idx.get(r.end_node_id),target:idx.get(r.start_node_id),
+               value:Math.max(r.properties.weight||0.001,0.001)}));
+  if(!ll.length)return{nodes:[],links:[],h:560};
+  const perCol={};
+  nl.forEach(n=>{const c=n.raw.properties.n_iteration??0;perCol[c]=(perCol[c]||0)+1;});
+  const h=Math.min(2200,Math.max(560,Math.max(...Object.values(perCol))*18+24));
+  const sk=d3Sankey.sankey().nodeWidth(14).nodePadding(9)
+    .nodeAlign(d3Sankey.sankeyLeft)
+    .extent([[8,8],[w-LMARGIN,h-8]]);
+  try{const res=sk({nodes:nl.map(d=>({...d})),links:ll.map(d=>({...d}))});res.h=h;return res;}
+  catch(e){return{nodes:[],links:[],h:560};}
+}
+
+// ─── Render ─────────────────────────────────────────────────────────────────
+function render(){
+  const svg=document.getElementById('sankey-svg');
+  const wrap=document.getElementById('chart-wrap');
+  const w=Math.max(800,wrap.clientWidth-24);
+  const{nodes,links,h}=computeSankey(graph,w);
+
+  svg.setAttribute('width',w);svg.setAttribute('height',h);
+  while(svg.firstChild)svg.removeChild(svg.firstChild);
+  if(!nodes.length){svg.style.display='none';return;}
+  svg.style.display='block';
+
+  const focus=adjacency(hoveredId,links);
+  const cr=w-LMARGIN;
+  const nOp=n=>n.id===selectedId||!focus?1:focus.nodeIds.has(n.id)?1:0.15;
+  const lOp=l=>!focus?0.35:focus.linkSet.has(l)?0.72:0.05;
+
+  // Links
+  const gL=document.createElementNS('http://www.w3.org/2000/svg','g');
+  links.forEach(l=>{
+    const p=document.createElementNS('http://www.w3.org/2000/svg','path');
+    p.setAttribute('d',d3Sankey.sankeyLinkHorizontal()(l));
+    p.setAttribute('fill','none');p.setAttribute('stroke',nodeColor(l.target));
+    p.setAttribute('stroke-opacity',lOp(l));p.setAttribute('stroke-width',Math.max(1,l.width));
+    p.style.transition='stroke-opacity .3s';
+    const t=document.createElementNS('http://www.w3.org/2000/svg','title');
+    t.textContent=`${l.source.name} → ${l.target.name}: ${(l.value*100).toFixed(1)}%`;
+    p.appendChild(t);gL.appendChild(p);
+  });
+  svg.appendChild(gL);
+
+  // Nodes
+  const gN=document.createElementNS('http://www.w3.org/2000/svg','g');
+  nodes.forEach(n=>{
+    const isSel=n.id===selectedId;
+    const right=n.x1>=cr-2||n.x0<40;
+    const g=document.createElementNS('http://www.w3.org/2000/svg','g');
+    g.style.cursor='pointer';g.style.opacity=nOp(n);g.style.transition='opacity .3s';
+
+    const rect=document.createElementNS('http://www.w3.org/2000/svg','rect');
+    rect.setAttribute('x',n.x0);rect.setAttribute('y',n.y0);
+    rect.setAttribute('width',n.x1-n.x0);rect.setAttribute('height',Math.max(1,n.y1-n.y0));
+    rect.setAttribute('fill',nodeColor(n));
+    rect.setAttribute('stroke',isSel?'#ff6f00':'none');
+    rect.setAttribute('stroke-width',isSel?4:0);
+
+    const txt=document.createElementNS('http://www.w3.org/2000/svg','text');
+    txt.setAttribute('x',right?n.x1+6:n.x0-6);
+    txt.setAttribute('y',(n.y0+n.y1)/2);txt.setAttribute('dy','0.35em');
+    txt.setAttribute('text-anchor',right?'start':'end');txt.setAttribute('font-size',10.5);
+    txt.setAttribute('font-weight',isSel?700:400);
+    txt.setAttribute('fill',isSel?'#b34700':'#222');txt.textContent=n.name;
+
+    const ti=document.createElementNS('http://www.w3.org/2000/svg','title');
+    ti.textContent=n.name+' ('+n.label+')';
+
+    g.appendChild(rect);g.appendChild(txt);g.appendChild(ti);
+    g.addEventListener('mouseenter',()=>{hoveredId=n.id;render();});
+    g.addEventListener('mouseleave',()=>{hoveredId=null;render();});
+    g.addEventListener('click',e=>{e.stopPropagation();clickNode(n);});
+    gN.appendChild(g);
+  });
+  svg.appendChild(gN);
+
+  svg.onclick=()=>{selectedId=null;closeDetail();render();};
+  document.getElementById('stats').textContent=
+    graph?graph.total_nodes+' nodes · '+graph.total_relationships+' flows':'';
+}
+
+// ─── Node click ─────────────────────────────────────────────────────────────
+function clickNode(n){
+  selectedId=n.id;showDetail(n.raw);
+  const curId=path[path.length-1]?.id;
+  if(n.id===curId){render();return;}
+  const hasUp=graph?.relationships?.some(r=>r.end_node_id===n.id);
+  if(!hasUp){render();return;}
+  path.push({id:n.id,name:n.raw.properties.name});
+  loadGraph(n.id);
+}
+function showDetail(node){
+  const p=node.properties;
+  document.getElementById('detail-name').textContent=p.name||node.id;
+  document.getElementById('detail').style.display='block';
+  document.getElementById('tip').style.display='none';
+  let html='';
+  if(p.strength&&SCFG[p.strength]){
+    const c=SCFG[p.strength];
+    html+=`<span class="s-badge" style="background:${c.bg};color:${c.col}">${c.lbl}</span>`;
+    if(p.strength_note)html+=`<div class="d-row" style="color:#555;margin-bottom:8px">${p.strength_note}</div>`;
+  }
+  if(node.labels?.[0])html+=`<div class="d-row"><span class="d-lbl">Type: </span>${node.labels[0]}</div>`;
+  if(p.component_type)html+=`<div class="d-row"><span class="d-lbl">Category: </span>${p.component_type}</div>`;
+  if(p.chain)html+=`<div class="d-row"><span class="d-lbl">Value chain: </span>${p.chain}</div>`;
+  if(p.synonyms?.length)html+=`<div class="d-row"><span class="d-lbl">Also known as: </span>${p.synonyms.join(', ')}</div>`;
+  if(p.hs_codes?.length)html+=`<div class="d-row"><span class="d-lbl">HS codes: </span>${p.hs_codes.join(', ')}</div>`;
+  if(p.production_volume)html+=`<div class="d-row"><span class="d-lbl">Production: </span>${p.production_volume}</div>`;
+  if(p.import_value_usd)html+=`<div class="d-row"><span class="d-lbl">Imports: </span>USD ${(p.import_value_usd/1e6).toFixed(1)}m</div>`;
+  if(p.export_value_usd)html+=`<div class="d-row"><span class="d-lbl">Exports: </span>USD ${(p.export_value_usd/1e6).toFixed(1)}m</div>`;
+  document.getElementById('detail-body').innerHTML=html||'<div class="d-row" style="color:#888">No additional data.</div>';
+}
+function closeDetail(){
+  document.getElementById('detail').style.display='none';
+  document.getElementById('tip').style.display='block';
+  selectedId=null;
+}
+
+// ─── Breadcrumb ─────────────────────────────────────────────────────────────
+function renderBC(){
+  const bc=document.getElementById('breadcrumb');
+  bc.innerHTML='';
+  path.forEach((crumb,i)=>{
+    if(i>0){const s=document.createElement('span');s.className='crumb-sep';s.textContent='›';bc.appendChild(s);}
+    const b=document.createElement('button');b.className='crumb-btn';b.textContent=crumb.name;b.disabled=i===path.length-1;
+    if(i<path.length-1)b.addEventListener('click',()=>{path=path.slice(0,i+1);closeDetail();loadGraph(crumb.id);});
+    bc.appendChild(b);
+  });
+  if(path.length>1){
+    const back=document.createElement('button');back.className='nav-btn';back.textContent='‹ back';
+    back.addEventListener('click',()=>{path=path.slice(0,-1);closeDetail();loadGraph(path[path.length-1].id);});
+    bc.appendChild(back);
+    const rst=document.createElement('button');rst.className='nav-btn';rst.textContent='✕ reset';
+    rst.addEventListener('click',()=>{path=[path[0]];closeDetail();loadGraph(path[0].id);});
+    bc.appendChild(rst);
+  }
+}
+
+// ─── Load & render ──────────────────────────────────────────────────────────
+function loadGraph(nodeId){
+  graph=getIncoming(nodeId,layers,minPct/100);
+  renderBC();render();
+}
+
+// ─── Selectors ──────────────────────────────────────────────────────────────
+function fillChains(){
+  const sel=document.getElementById('chain-sel');
+  [...new Set(roots.map(r=>r.source_db))].forEach(c=>{
+    const o=document.createElement('option');o.value=c;o.textContent=c;sel.appendChild(o);
+  });
+}
+function fillProducts(chain){
+  const sel=document.getElementById('prod-sel');sel.innerHTML='';
+  roots.filter(r=>r.source_db===chain).forEach(p=>{
+    const o=document.createElement('option');o.value=p.element_id;o.textContent=p.name;sel.appendChild(o);
+  });
+  return roots.find(r=>r.source_db===chain)||null;
+}
+
+// ─── Boot ────────────────────────────────────────────────────────────────────
+(async()=>{
+  try{
+    await loadBundle();
+    roots=bundle.roots||[];
+    if(!roots.length)throw new Error('No roots found in graph-bundle.json');
+
+    fillChains();
+    const first=roots[0];
+    document.getElementById('chain-sel').value=first.source_db;
+    fillProducts(first.source_db);
+    path=[{id:first.element_id,name:first.name}];
+    document.getElementById('loading').style.display='none';
+    loadGraph(first.element_id);
+
+    document.getElementById('chain-sel').addEventListener('change',e=>{
+      const p=fillProducts(e.target.value);
+      if(p){selectedId=null;closeDetail();path=[{id:p.element_id,name:p.name}];loadGraph(p.element_id);}
+    });
+    document.getElementById('prod-sel').addEventListener('change',e=>{
+      const r=roots.find(x=>x.element_id===e.target.value);
+      if(r){selectedId=null;closeDetail();path=[{id:r.element_id,name:r.name}];loadGraph(r.element_id);}
+    });
+    document.getElementById('sl-layers').addEventListener('input',e=>{
+      layers=+e.target.value;
+      document.getElementById('lbl-layers').textContent='Layers: '+layers;
+      loadGraph(path[path.length-1].id);
+    });
+    document.getElementById('sl-flow').addEventListener('input',e=>{
+      minPct=+e.target.value;
+      document.getElementById('lbl-flow').textContent='Min flow: '+minPct.toFixed(1)+'%';
+      loadGraph(path[path.length-1].id);
+    });
+    document.getElementById('close-btn').addEventListener('click',()=>{closeDetail();render();});
+    window.addEventListener('resize',()=>{if(graph)render();});
+
+  }catch(err){
+    document.getElementById('loading').style.display='none';
+    const el=document.getElementById('err-msg');
+    el.style.display='block';
+    el.innerHTML='⚠️ '+err.message+'<br><small style="color:#888">Make sure graph-bundle.json is in the same folder as this file and you are serving via http (not file://).</small>';
+  }
+})();
+</script>
+</body>
+</html>
