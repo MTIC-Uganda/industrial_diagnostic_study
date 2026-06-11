@@ -1,16 +1,10 @@
-# sources-of-truth.html served at root; React Sankey app built at /app/.
-# The dashboard iframes /app/ inside the Value Chain Maps tab.
-
+# Static file deploy — no build step required.
+# Drop these 4 files to Netlify (drag-and-drop):
+#   sources-of-truth.html  → served as index.html
+#   sankey.html            → iframed inside the Value Chain Maps tab
+#   graph-bundle.json      → loaded by sankey.html at runtime
+#   uganda_coat_of_arms.png
 [build]
   base    = "app"
-  command = "mkdir -p site/app && cp ../report/sources-of-truth.html site/index.html && cp ../report/uganda_coat_of_arms.png site/uganda_coat_of_arms.png && (cd frontend && npm install && npm run build) && cp -r frontend/dist/* site/app/"
+  command = "mkdir -p site && cp ../report/sources-of-truth.html site/index.html && cp ../report/sankey.html site/sankey.html && cp ../report/uganda_coat_of_arms.png site/uganda_coat_of_arms.png && cp ../app/frontend/public/graph-bundle.json site/graph-bundle.json"
   publish = "site"
-
-[build.environment]
-  VITE_BASE = "/app/"
-
-# Serve the React SPA for any /app/* path (handles asset requests + direct nav)
-[[redirects]]
-  from   = "/app/*"
-  to     = "/app/index.html"
-  status = 200
