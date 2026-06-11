@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Uganda Manufacturing — Sources of Truth | MTIC × UNIDO PCP</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV/XN/WPnI=" crossorigin=""></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Segoe UI',Arial,sans-serif;background:#f0f2f5;color:#1a1a2e;font-size:14px}
@@ -140,6 +142,7 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-t
   <button class="tab-btn active" onclick="showTab('overview')">🏭 Manufacturing Overview</button>
   <button class="tab-btn" onclick="showTab('maps')">🗺️ Value Chain Maps</button>
   <button class="tab-btn" onclick="showTab('status')">📊 Chain Status &amp; 2040 Projections</button>
+  <button class="tab-btn" onclick="showTab('locations')">📍 Industry Locations</button>
 </div>
 
 <!-- ═══════════════════════════════════════════════════════════════
@@ -255,6 +258,23 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-t
 
   <div class="chain-selector" id="status-selector"></div>
   <div id="status-display"></div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SECTION 4: INDUSTRY LOCATIONS MAP
+═══════════════════════════════════════════════════════════════ -->
+<div id="tab-locations" class="tab-content">
+
+  <div class="section-title">📍 Uganda Industry Locations</div>
+  <div class="section-sub">Interactive map of every active and under-construction manufacturing facility across the 9 priority value chains. Click any marker for details.</div>
+
+  <div id="industry-map" style="height:620px;border-radius:10px;border:1px solid var(--border);margin-bottom:16px;background:#e8edf2"></div>
+
+  <div class="card" style="padding:16px">
+    <div style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px">Value Chain Legend</div>
+    <div id="map-legend" style="display:flex;flex-wrap:wrap;gap:12px"></div>
+  </div>
 
 </div>
 
@@ -804,16 +824,118 @@ function renderStatusDetail(c){
 }
 
 // ═══════════════════ TAB SWITCHING ═══════════════════
+let _mapReady=false;
 function showTab(id){
   document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
   document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
   document.getElementById('tab-'+id).classList.add('active');
   event.target.classList.add('active');
+  if(id==='locations'&&!_mapReady){initMap();_mapReady=true;}
 }
 
 // ═══════════════════ INIT ═══════════════════
 renderMaps();
 renderStatus();
+
+// ═══════════════════ INDUSTRY LOCATIONS MAP ═══════════════════
+const CHAIN_COLORS={
+  'Iron & Steel':'#3949ab',
+  'Copper & Allied Metals':'#f9a825',
+  'Automotive':'#00897b',
+  'Textiles & Garments':'#8e24aa',
+  'Pharmaceuticals':'#2e7d32',
+  'Petrochemicals & Fertilizers':'#e64a19',
+  'Sugar & Confectionery':'#c62828',
+  'Plastics & Packaging':'#1565c0',
+  'Cement & Building Materials':'#6d4c41'
+};
+
+const FACTORIES=[
+  // ── Iron & Steel ──
+  {name:'Tembo Steels',chain:'Iron & Steel',lat:0.3830,lng:32.9170,loc:'Lugazi, Buikwe District',note:'DRI/EAF steelmaking; ~350,000 tpa installed capacity'},
+  {name:'Abyssinia Iron & Steel',chain:'Iron & Steel',lat:0.4480,lng:33.2040,loc:'Jinja',note:'DRI + induction furnace; ~30,000 tpa'},
+  {name:'Roofings Rolling Mills',chain:'Iron & Steel',lat:0.3170,lng:32.7200,loc:'Namanve Industrial Park, Kampala',note:'Hot rolling mill; rebar, angles, sections'},
+  {name:'Roofings Ltd',chain:'Iron & Steel',lat:0.2490,lng:32.5480,loc:'Lubowa, Wakiso District',note:'Galvanised roofing sheets and building products'},
+  {name:'Steel & Tube Industries',chain:'Iron & Steel',lat:0.3210,lng:32.7240,loc:'Namanve Industrial Park, Kampala',note:'Long steel — bars, rods, sections'},
+  {name:'Uganda Baati',chain:'Iron & Steel',lat:0.3080,lng:32.5890,loc:'Kampala',note:'Pre-painted and galvanised roofing sheets'},
+  {name:'Devki Steel Mill (under construction)',chain:'Iron & Steel',lat:0.3190,lng:32.7160,loc:'Namanve Industrial Park, Kampala',note:'USD 500m integrated steel mill; groundbreaking Nov 2025'},
+  {name:'SINO Minerals — Iron Ore',chain:'Iron & Steel',lat:-1.2540,lng:29.9880,loc:'Kabale District',note:'Iron ore mining; ~300,000 tpa commercial target'},
+  // ── Copper & Allied Metals ──
+  {name:'Cable Corporation Ltd (Mehta Group)',chain:'Copper & Allied Metals',lat:0.4440,lng:33.1960,loc:'Jinja',note:'Insulated wire & cable; ~65% domestic market share; est. 1968'},
+  {name:'East African Cables Uganda',chain:'Copper & Allied Metals',lat:0.3170,lng:32.7120,loc:'Namanve, Kampala',note:'Power cable and conductor manufacturer'},
+  {name:'Kilembe Copper Mine',chain:'Copper & Allied Metals',lat:0.1300,lng:30.0380,loc:'Kilembe, Kasese District',note:'Dormant since 1980s; PSA signed Mar 2025 (Sarrai Group + Nile Fibreboard); >6.5m t copper ore + 5.5m t cobalt'},
+  // ── Automotive ──
+  {name:'Kiira Motors Corporation (KMC)',chain:'Automotive',lat:0.4480,lng:33.2100,loc:'Kiira Vehicle Plant, Jinja',note:'EV bus & vehicle assembly; commissioned Sept 2025; ~2,500 veh/yr capacity'},
+  {name:'Bus / Truck Body Fabricators',chain:'Automotive',lat:0.3200,lng:32.5800,loc:'Kampala / Jinja Industrial Area',note:'Body fabrication on imported chassis; active cluster'},
+  {name:'After-Market Parts Cluster (Ndeeba/Kisekka)',chain:'Automotive',lat:0.3060,lng:32.5630,loc:'Ndeeba / Kisekka Market, Kampala',note:'Large informal spare-parts and vehicle-service cluster'},
+  // ── Textiles & Garments ──
+  {name:'Southern Range Nyanza (Nytil)',chain:'Textiles & Garments',lat:0.4450,lng:33.1970,loc:'Jinja',note:'Integrated spinning and weaving mill'},
+  {name:'Fine Spinners Ltd',chain:'Textiles & Garments',lat:0.2990,lng:32.6330,loc:'Luzira, Kampala',note:'~USD 50m turnover; ~18,000 employment incl. outgrowers'},
+  {name:'Lira Spinning Facility',chain:'Textiles & Garments',lat:2.2490,lng:32.9000,loc:'Lira',note:'New spinning investment under cotton-development programme'},
+  // ── Pharmaceuticals ──
+  {name:'QCIL — Cipla Quality Chemical',chain:'Pharmaceuticals',lat:0.3160,lng:32.7220,loc:'Namanve Industrial Park, Kampala',note:'WHO-GMP prequalified; ARVs, antimalarials, NCDs; UGX 267bn revenue; 1.2bn tabs/caps/yr'},
+  {name:'Kampala Pharmaceutical Industries (KPI)',chain:'Pharmaceuticals',lat:0.3130,lng:32.5910,loc:'Kampala',note:'Pharmaceutical formulation manufacturer'},
+  {name:'Rene Industries',chain:'Pharmaceuticals',lat:0.3110,lng:32.5840,loc:'Kampala',note:'Pharmaceutical formulation manufacturer'},
+  {name:'Abacus Pharma',chain:'Pharmaceuticals',lat:0.3150,lng:32.5960,loc:'Kampala',note:'Pharmaceutical formulation manufacturer'},
+  // ── Petrochemicals & Fertilizers ──
+  {name:'Kabaale Refinery (under construction)',chain:'Petrochemicals & Fertilizers',lat:1.4200,lng:31.3500,loc:'Kabaale, Hoima District',note:'60,000 bpd; ~USD 4bn; Alpha MBM + UNOC (~40%); expected ops ~2029–30'},
+  {name:'Sukulu / Osukuru Phosphate Plant',chain:'Petrochemicals & Fertilizers',lat:0.6950,lng:34.1520,loc:'Tororo',note:'100,000 tpa design; stalled since 2021 (Guangzhou Dongsong Energy)'},
+  // ── Sugar & Confectionery ──
+  {name:'Kakira Sugar Works',chain:'Sugar & Confectionery',lat:0.4170,lng:33.2850,loc:'Kakira, Jinja District',note:'~50% of national output; crushing >2m t cane/yr (Mehta Group)'},
+  {name:'Kinyara Sugar',chain:'Sugar & Confectionery',lat:1.6830,lng:31.7170,loc:'Kinyara, Masindi District',note:'Industrial-sugar refinery; ~75,000 t (2023)'},
+  {name:'SCOUL — Sugar Corporation of Uganda',chain:'Sugar & Confectionery',lat:0.3850,lng:32.9210,loc:'Lugazi, Buikwe District',note:'Sugar manufacturer; central Uganda'},
+  {name:'Mayuge Sugar',chain:'Sugar & Confectionery',lat:0.4580,lng:33.4840,loc:'Mayuge District',note:'Sugar manufacturer; eastern Uganda'},
+  // ── Plastics & Packaging ──
+  {name:'Nice House of Plastics',chain:'Plastics & Packaging',lat:0.3180,lng:32.7180,loc:'Namanve Industrial Park, Kampala',note:'Largest plastic converter in Uganda (est. 1970)'},
+  {name:'Nile Plastic Industries',chain:'Plastics & Packaging',lat:0.3150,lng:32.7110,loc:'Kampala',note:'Film, bags and container manufacturer'},
+  {name:'Quality Plastics',chain:'Plastics & Packaging',lat:0.3530,lng:32.7520,loc:'Mukono',note:'Growing recycler; PET/HDPE flake and pellet'},
+  // ── Cement & Building Materials ──
+  {name:'Tororo Cement',chain:'Cement & Building Materials',lat:0.6920,lng:34.1750,loc:'Tororo',note:'~3.0 Mtpa; largest cement grinder in Uganda'},
+  {name:'Hima Cement',chain:'Cement & Building Materials',lat:0.3180,lng:30.1330,loc:'Hima, Kasese District',note:'~2.0 Mtpa; owns Dura limestone quarry (Kamwenge)'},
+  {name:'Dura Limestone Quarry (Hima Cement)',chain:'Cement & Building Materials',lat:0.1830,lng:30.4500,loc:'Kamwenge District',note:"Hima Cement's limestone source; reserves to ~2036"},
+  {name:'Simba Cement',chain:'Cement & Building Materials',lat:0.3220,lng:32.7170,loc:'Namanve, Kampala',note:'~1.0 Mtpa cement grinding'},
+  {name:'Kampala Cement',chain:'Cement & Building Materials',lat:0.3260,lng:32.7260,loc:'Namanve, Kampala',note:'~1.0 Mtpa cement grinding'},
+  {name:'NE Uganda Clinker Plant (under construction)',chain:'Cement & Building Materials',lat:2.5000,lng:34.0000,loc:'Northeast Uganda',note:'USD 300m; >6,000 t/day clinker'},
+  {name:'Buikwe Clinker Plant — West International (under construction)',chain:'Cement & Building Materials',lat:0.3520,lng:33.0030,loc:'Buikwe District',note:'USD 200m; ~4,000 t/day (2025)'}
+];
+
+function initMap(){
+  const map=L.map('industry-map').setView([1.3,32.5],7);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
+    attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    maxZoom:18
+  }).addTo(map);
+
+  function mkIcon(color){
+    return L.divIcon({
+      className:'',
+      html:`<div style="width:14px;height:14px;border-radius:50%;background:${color};border:2.5px solid #fff;box-shadow:0 1px 5px rgba(0,0,0,.55)"></div>`,
+      iconSize:[14,14],iconAnchor:[7,7],popupAnchor:[0,-9]
+    });
+  }
+
+  FACTORIES.forEach(f=>{
+    const col=CHAIN_COLORS[f.chain]||'#555';
+    L.marker([f.lat,f.lng],{icon:mkIcon(col)})
+      .bindPopup(
+        `<div style="min-width:220px">
+          <div style="font-weight:700;font-size:13px;color:${col};margin-bottom:2px">${f.name}</div>
+          <div style="font-size:11px;color:#555;margin-bottom:4px">${f.chain}</div>
+          <div style="font-size:11px;color:#444;margin-bottom:4px">📍 ${f.loc}</div>
+          <hr style="margin:4px 0;border:none;border-top:1px solid #e0e0e0">
+          <div style="font-size:11px;line-height:1.5;color:#333">${f.note}</div>
+        </div>`)
+      .addTo(map);
+  });
+
+  const leg=document.getElementById('map-legend');
+  leg.innerHTML=Object.entries(CHAIN_COLORS).map(([name,col])=>
+    `<div style="display:flex;align-items:center;gap:6px;font-size:12px;white-space:nowrap">
+      <div style="width:12px;height:12px;border-radius:50%;background:${col};flex-shrink:0;border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.4)"></div>
+      <span>${name}</span>
+    </div>`
+  ).join('');
+}
 </script>
 </body>
 </html>
