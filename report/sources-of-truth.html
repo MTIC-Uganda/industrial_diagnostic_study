@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -827,35 +827,85 @@ const FACTORIES=[
   {name:'Uganda Baati',chain:'Iron & Steel',lat:0.3080,lng:32.5890,loc:'Kampala',note:'Pre-painted and galvanised roofing sheets'},
   {name:'Devki Steel Mill (under construction)',chain:'Iron & Steel',lat:0.3190,lng:32.7160,loc:'Namanve Industrial Park, Kampala',note:'USD 500m integrated steel mill; groundbreaking Nov 2025'},
   {name:'SINO Minerals — Iron Ore',chain:'Iron & Steel',lat:-1.2540,lng:29.9880,loc:'Kabale District',note:'Iron ore mining; ~300,000 tpa commercial target'},
+  {name:'MM Integrated Steel Mills (MMI Steels)',chain:'Iron & Steel',lat:0.4260,lng:33.2200,loc:'Masese/Walukuba, Jinja',note:'Roofing sheets, iron bars, wire; medium-scale rolling mill'},
+  {name:'Steel Rolling Mills Ltd (Alam Group)',chain:'Iron & Steel',lat:0.4230,lng:33.2160,loc:'Masese Road, Jinja',note:'Bars and rebar; distinct from Steel & Tube Industries (Namanve)'},
+  {name:'Pramukh Steel Ltd',chain:'Iron & Steel',lat:0.4180,lng:33.1830,loc:'Njeru, Buikwe District',note:'Bars, angles, steel sections'},
+  {name:'Yogi Steels Ltd',chain:'Iron & Steel',lat:0.4160,lng:33.1810,loc:'Njeru, Buikwe District',note:'Steel products manufacturer'},
+  {name:'MPower Steel Company Ltd',chain:'Iron & Steel',lat:0.3420,lng:32.6950,loc:'Kira Municipality / Namanve area',note:'Roofing sheets, steel fabrication'},
+  {name:'Starfly Steel (Uganda) Co. Ltd',chain:'Iron & Steel',lat:0.3500,lng:32.7100,loc:'Seeta, Mukono District',note:'Iron sheets, steel products (Plot 30 Kyaggwe Block 110)'},
+  {name:'Elgon Steel Uganda Ltd (under construction)',chain:'Iron & Steel',lat:1.0840,lng:34.1780,loc:'Sino-Uganda Mbale Industrial Park',note:'Steel plant under construction in Mbale Park'},
+  {name:'BM Investments Ltd',chain:'Iron & Steel',lat:-0.6050,lng:30.6620,loc:'Mbarara',note:'Wire nails, binding wire; also has Kampala operations'},
+  {name:'CMIC Steel Plant',chain:'Iron & Steel',lat:-0.6200,lng:30.6500,loc:'Mbarara District',note:'China Machine Building International; commissioned ~2014'},
+  {name:'Unisteel Investments Uganda Ltd',chain:'Iron & Steel',lat:1.0770,lng:34.1720,loc:'Sino-Uganda Mbale Industrial Park',note:'Steel products manufacturer in Mbale Park'},
+  {name:'ZhongGang Metal R&D Manufacturing',chain:'Iron & Steel',lat:1.0810,lng:34.1760,loc:'Sino-Uganda Mbale Industrial Park',note:'Metal manufacturing and R&D in Mbale Park'},
+  {name:'Tembo Steels — Iganga Plant',chain:'Iron & Steel',lat:0.6091,lng:33.4685,loc:'Iganga District',note:'Second Tembo Steels plant; separate from Lugazi main plant'},
   // ── Copper & Allied Metals ──
   {name:'Cable Corporation Ltd (Mehta Group)',chain:'Copper & Allied Metals',lat:0.4440,lng:33.1960,loc:'Jinja',note:'Insulated wire & cable; ~65% domestic market share; est. 1968'},
   {name:'East African Cables Uganda',chain:'Copper & Allied Metals',lat:0.3170,lng:32.7120,loc:'Namanve, Kampala',note:'Power cable and conductor manufacturer'},
   {name:'Kilembe Copper Mine',chain:'Copper & Allied Metals',lat:0.1300,lng:30.0380,loc:'Kilembe, Kasese District',note:'Dormant since 1980s; PSA signed Mar 2025 (Sarrai Group + Nile Fibreboard); >6.5m t copper ore + 5.5m t cobalt'},
+  {name:'Orion Transformers & Electrics Ltd',chain:'Copper & Allied Metals',lat:0.3200,lng:32.7290,loc:'Namanve Industrial Park',note:'Only transformer manufacturer in East Africa'},
+  {name:'Steema Transformers & Electricals',chain:'Copper & Allied Metals',lat:0.3230,lng:32.7310,loc:'Namanve Industrial Park',note:'Power transformers and switchgear'},
+  {name:'Total Cables (U) Ltd',chain:'Copper & Allied Metals',lat:0.3240,lng:32.7150,loc:'Namanve Industrial Park area',note:'Copper wire, power cables, conductors (est. 2018)'},
   // ── Automotive ──
   {name:'Kiira Motors Corporation (KMC)',chain:'Automotive',lat:0.4480,lng:33.2100,loc:'Kiira Vehicle Plant, Jinja',note:'EV bus & vehicle assembly; commissioned Sept 2025; ~2,500 veh/yr capacity'},
   {name:'Bus / Truck Body Fabricators',chain:'Automotive',lat:0.3200,lng:32.5800,loc:'Kampala / Jinja Industrial Area',note:'Body fabrication on imported chassis; active cluster'},
   {name:'After-Market Parts Cluster (Ndeeba/Kisekka)',chain:'Automotive',lat:0.3060,lng:32.5630,loc:'Ndeeba / Kisekka Market, Kampala',note:'Large informal spare-parts and vehicle-service cluster'},
+  {name:'Zembo Electric Motorcycles',chain:'Automotive',lat:0.3476,lng:32.6199,loc:'Ntinda, Kampala',note:'Local assembly of e-motorcycles + battery-swap infrastructure'},
+  {name:'Gogo Electric',chain:'Automotive',lat:0.3490,lng:32.6220,loc:'Ntinda Kigowa Road, Kampala',note:'Designs and assembles e-motorcycles & Li-ion battery packs'},
+  {name:'Spiro (under construction)',chain:'Automotive',lat:0.3110,lng:32.5770,loc:'Kampala',note:'E-motorcycle assembly plant; 50,000 unit capacity'},
+  {name:'Hercules Automobile Manufacturing (under construction)',chain:'Automotive',lat:1.0850,lng:34.1800,loc:'Sino-Uganda Mbale Industrial Park',note:'Vehicle manufacturing under construction in Mbale Park'},
+  {name:'Uganda Batteries Ltd (UBL)',chain:'Automotive',lat:0.3160,lng:32.6090,loc:'Bugolobi, Kampala',note:'Lead-acid automotive & solar batteries; est. 1967'},
   // ── Textiles & Garments ──
   {name:'Southern Range Nyanza (Nytil)',chain:'Textiles & Garments',lat:0.4450,lng:33.1970,loc:'Jinja',note:'Integrated spinning and weaving mill'},
   {name:'Fine Spinners Ltd',chain:'Textiles & Garments',lat:0.2990,lng:32.6330,loc:'Luzira, Kampala',note:'~USD 50m turnover; ~18,000 employment incl. outgrowers'},
   {name:'Lira Spinning Facility',chain:'Textiles & Garments',lat:2.2490,lng:32.9000,loc:'Lira',note:'New spinning investment under cotton-development programme'},
+  {name:'Sunbelt Textiles Company Ltd',chain:'Textiles & Garments',lat:0.4260,lng:33.2140,loc:'Walukuba-Masese Road, Jinja',note:'Bed sheets, curtains; USD 18m plant'},
+  {name:'Sigma Knitting Industries Ltd',chain:'Textiles & Garments',lat:0.4270,lng:33.2020,loc:'Jinja',note:'Uniforms, socks; industrial knitting'},
+  {name:'Nice Textiles Uganda Ltd',chain:'Textiles & Garments',lat:1.0800,lng:34.1740,loc:'Sino-Uganda Mbale Industrial Park',note:'Newly commissioned 2025; integrated textiles'},
+  {name:'Xinlong Textile & Garment Technology',chain:'Textiles & Garments',lat:1.0760,lng:34.1710,loc:'Sino-Uganda Mbale Industrial Park',note:'Textile and garment manufacturing in Mbale Park'},
+  {name:'Wan Way Textile & Garment Manufacturing',chain:'Textiles & Garments',lat:1.0790,lng:34.1730,loc:'Sino-Uganda Mbale Industrial Park',note:'Garment manufacturing in Mbale Park'},
+  {name:'Grace Textile International Investment',chain:'Textiles & Garments',lat:1.0820,lng:34.1760,loc:'Sino-Uganda Mbale Industrial Park',note:'Textile manufacturing in Mbale Park'},
+  {name:'Hang Da Textile Co. Ltd',chain:'Textiles & Garments',lat:1.0830,lng:34.1790,loc:'Sino-Uganda Mbale Industrial Park',note:'Textile manufacturing in Mbale Park'},
+  {name:'Camry Clothes Ltd',chain:'Textiles & Garments',lat:1.0750,lng:34.1700,loc:'Sino-Uganda Mbale Industrial Park',note:'Garment manufacturing in Mbale Park'},
+  {name:'Leather Industries of Uganda (LIU)',chain:'Textiles & Garments',lat:0.4150,lng:33.2060,loc:'Fishermans Point, Jinja',note:'Wet-blue bovine leather tannery; est. 1995 (AKDN/IPS Group)'},
+  {name:'Leather Works Limited',chain:'Textiles & Garments',lat:0.4290,lng:33.2050,loc:'Jinja',note:'Leather tannery and processing'},
+  {name:'Kawumu Tannery',chain:'Textiles & Garments',lat:0.6760,lng:32.4320,loc:'Kawumu village, Luweero District',note:'UGX 12bn government tannery; 10 t hides/day; shoes & leather goods'},
   // ── Pharmaceuticals ──
   {name:'QCIL — Cipla Quality Chemical',chain:'Pharmaceuticals',lat:0.3160,lng:32.7220,loc:'Namanve Industrial Park, Kampala',note:'WHO-GMP prequalified; ARVs, antimalarials, NCDs; UGX 267bn revenue; 1.2bn tabs/caps/yr'},
   {name:'Kampala Pharmaceutical Industries (KPI)',chain:'Pharmaceuticals',lat:0.3130,lng:32.5910,loc:'Kampala',note:'Pharmaceutical formulation manufacturer'},
   {name:'Rene Industries',chain:'Pharmaceuticals',lat:0.3110,lng:32.5840,loc:'Kampala',note:'Pharmaceutical formulation manufacturer'},
   {name:'Abacus Pharma',chain:'Pharmaceuticals',lat:0.3150,lng:32.5960,loc:'Kampala',note:'Pharmaceutical formulation manufacturer'},
+  {name:'Surgipharm Uganda Ltd',chain:'Pharmaceuticals',lat:0.3180,lng:32.5800,loc:'Kampala',note:'Pharmaceutical manufacturing and distribution'},
+  {name:'Pyramid Pharma Uganda',chain:'Pharmaceuticals',lat:0.3100,lng:32.5870,loc:'Kampala',note:'Generic medicines manufacturer; commenced ops 2014'},
+  {name:'Mu Pharma Co. SMC Ltd',chain:'Pharmaceuticals',lat:0.3300,lng:32.5730,loc:'Bombo Road, Kampala',note:'Pharmaceutical manufacturing'},
   // ── Petrochemicals & Fertilizers ──
   {name:'Kabaale Refinery (under construction)',chain:'Petrochemicals & Fertilizers',lat:1.4200,lng:31.3500,loc:'Kabaale, Hoima District',note:'60,000 bpd; ~USD 4bn; Alpha MBM + UNOC (~40%); expected ops ~2029–30'},
   {name:'Sukulu / Osukuru Phosphate Plant',chain:'Petrochemicals & Fertilizers',lat:0.6950,lng:34.1520,loc:'Tororo',note:'100,000 tpa design; stalled since 2021 (Guangzhou Dongsong Energy)'},
+  {name:'Vivo Energy — LPG Filling Plant Mbale',chain:'Petrochemicals & Fertilizers',lat:1.0890,lng:34.1820,loc:'Mbale City',note:'Shell Gas; commissioned Jan 2026; expands LPG access in eastern Uganda'},
+  {name:'Vivo Energy / UNOC — Kabalega LPG Hub (under construction)',chain:'Petrochemicals & Fertilizers',lat:1.4350,lng:31.3550,loc:'Kabalega Industrial Park, Hoima',note:'LPG storage hub; signed Jul 2025'},
+  {name:'Kansai Plascon Uganda Ltd',chain:'Petrochemicals & Fertilizers',lat:0.3280,lng:32.7190,loc:'Namanve Industrial Park',note:'Paint manufacturing; anti-malaria paints among products'},
+  {name:'Sadolin / Crown Paints East Africa',chain:'Petrochemicals & Fertilizers',lat:0.3310,lng:32.7210,loc:'Namanve Industrial Park',note:'Paint manufacturing and distribution'},
   // ── Sugar & Confectionery ──
   {name:'Kakira Sugar Works',chain:'Sugar & Confectionery',lat:0.4170,lng:33.2850,loc:'Kakira, Jinja District',note:'~50% of national output; crushing >2m t cane/yr (Mehta Group)'},
   {name:'Kinyara Sugar',chain:'Sugar & Confectionery',lat:1.6830,lng:31.7170,loc:'Kinyara, Masindi District',note:'Industrial-sugar refinery; ~75,000 t (2023)'},
   {name:'SCOUL — Sugar Corporation of Uganda',chain:'Sugar & Confectionery',lat:0.3850,lng:32.9210,loc:'Lugazi, Buikwe District',note:'Sugar manufacturer; central Uganda'},
   {name:'Mayuge Sugar',chain:'Sugar & Confectionery',lat:0.4580,lng:33.4840,loc:'Mayuge District',note:'Sugar manufacturer; eastern Uganda'},
+  {name:'Hoima Sugar Ltd',chain:'Sugar & Confectionery',lat:1.2525,lng:31.1933,loc:'Kiswaza, Kikuube District',note:'1,500 TCD capacity; est. 2016 (Rai Holdings)'},
+  {name:'GM Sugar Uganda Ltd',chain:'Sugar & Confectionery',lat:0.4270,lng:33.1810,loc:'Nakibizzi, Njeru, Buikwe District',note:'1,250 TCD; operational'},
+  {name:'Bugiri Sugar Factory (under construction)',chain:'Sugar & Confectionery',lat:0.5700,lng:33.7420,loc:'Bugubo Village, Bugiri District',note:'Under construction'},
+  {name:'Busoga Sugar Processing Factory',chain:'Sugar & Confectionery',lat:0.8241,lng:33.3325,loc:'Luuka District',note:'Brown sugar; 1,250 TCD (UDC-linked)'},
+  {name:'Victoria Sugar Ltd',chain:'Sugar & Confectionery',lat:0.8330,lng:32.4740,loc:'Luweero District',note:'3,000 TCD; commissioned Dec 2025 by Museveni; 15 MW co-generation'},
+  {name:'Tian Tang Group Ltd',chain:'Sugar & Confectionery',lat:0.3070,lng:32.7820,loc:'Kasenge/Mbalala, Mukono District',note:'Chinese diversified group; sugar/confectionery; anchor investor'},
+  {name:'Ntake Bakery & Company Ltd',chain:'Sugar & Confectionery',lat:0.2967,lng:32.5520,loc:'Nalukolongo, Kampala',note:'Bakery, confectionery, wheat flour milling, edible oil, soap; est. 45+ years'},
   // ── Plastics & Packaging ──
   {name:'Nice House of Plastics',chain:'Plastics & Packaging',lat:0.3180,lng:32.7180,loc:'Namanve Industrial Park, Kampala',note:'Largest plastic converter in Uganda (est. 1970)'},
   {name:'Nile Plastic Industries',chain:'Plastics & Packaging',lat:0.3150,lng:32.7110,loc:'Kampala',note:'Film, bags and container manufacturer'},
   {name:'Quality Plastics',chain:'Plastics & Packaging',lat:0.3530,lng:32.7520,loc:'Mukono',note:'Growing recycler; PET/HDPE flake and pellet'},
+  {name:'Luuka Plastics Ltd',chain:'Plastics & Packaging',lat:0.3680,lng:32.5760,loc:'Kawempe, Kampala (also Namanve & Matugga)',note:'Flexible packaging; multiple plants'},
+  {name:'Acacia Plastics (Acacia Foundation Ltd)',chain:'Plastics & Packaging',lat:0.4800,lng:32.6300,loc:'Matugga, Wakiso District',note:'PET bottles, preforms, packaging (Plot 1628 Matugga)'},
+  {name:'Victoria Nile Plastics Ltd',chain:'Plastics & Packaging',lat:0.4290,lng:33.2010,loc:'Jinja',note:'Plastics manufacturer, Jinja industrial area'},
+  {name:'East African Packaging Solutions (EAPS)',chain:'Plastics & Packaging',lat:0.4280,lng:33.1820,loc:'Njeru Town, Jinja / Buikwe District',note:'Corrugated cartons, egg trays, kraft paper'},
+  {name:'Fafa Glass Industries Ltd',chain:'Plastics & Packaging',lat:1.0860,lng:34.1810,loc:'Sino-Uganda Mbale Industrial Park',note:'Glass products manufacturer in Mbale Park'},
   // ── Cement & Building Materials ──
   {name:'Tororo Cement',chain:'Cement & Building Materials',lat:0.6920,lng:34.1750,loc:'Tororo',note:'~3.0 Mtpa; largest cement grinder in Uganda'},
   {name:'Hima Cement',chain:'Cement & Building Materials',lat:0.3180,lng:30.1330,loc:'Hima, Kasese District',note:'~2.0 Mtpa; owns Dura limestone quarry (Kamwenge)'},
@@ -863,7 +913,9 @@ const FACTORIES=[
   {name:'Simba Cement',chain:'Cement & Building Materials',lat:0.3220,lng:32.7170,loc:'Namanve, Kampala',note:'~1.0 Mtpa cement grinding'},
   {name:'Kampala Cement',chain:'Cement & Building Materials',lat:0.3260,lng:32.7260,loc:'Namanve, Kampala',note:'~1.0 Mtpa cement grinding'},
   {name:'NE Uganda Clinker Plant (under construction)',chain:'Cement & Building Materials',lat:2.5000,lng:34.0000,loc:'Northeast Uganda',note:'USD 300m; >6,000 t/day clinker'},
-  {name:'Buikwe Clinker Plant — West International (under construction)',chain:'Cement & Building Materials',lat:0.3520,lng:33.0030,loc:'Buikwe District',note:'USD 200m; ~4,000 t/day (2025)'}
+  {name:'Buikwe Clinker Plant — West International (under construction)',chain:'Cement & Building Materials',lat:0.3520,lng:33.0030,loc:'Buikwe District',note:'USD 200m; ~4,000 t/day (2025)'},
+  {name:'Goodwill Uganda Ceramic Co. Ltd',chain:'Cement & Building Materials',lat:0.8320,lng:32.0820,loc:'Liao Shen Industrial Park, Kapeeka, Nakaseke District',note:'Ceramic wall/floor tiles; USD 30m plant; 40,000 m²/day capacity; est. 2017'},
+  {name:'Hua Hui International Ltd',chain:'Cement & Building Materials',lat:0.8340,lng:32.0840,loc:'Liao Shen Industrial Park, Kapeeka, Nakaseke District',note:'Ceramics manufacturer in Kapeeka/Liao Shen Industrial Park'}
 ];
 
 function initMap(){
