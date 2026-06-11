@@ -2,5 +2,5 @@
 # No Node.js build required — copies the static HTML file directly.
 [build]
   base    = "app"
-  command = "mkdir -p site && cp ../report/sources-of-truth.html site/index.html && cp ../app/frontend/public/uganda_coat_of_arms.png site/uganda_coat_of_arms.png"
+  command = "mkdir -p site && cp ../report/sources-of-truth.html site/index.html && cp ../report/uganda_coat_of_arms.png site/uganda_coat_of_arms.png"
   publish = "site"
