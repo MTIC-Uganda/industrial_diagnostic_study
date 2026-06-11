@@ -74,25 +74,6 @@ tr:hover td{background:#fafafa}
 .chain-btn{padding:8px 16px;border:2px solid var(--border);border-radius:20px;background:#fff;cursor:pointer;font-size:13px;font-weight:600;color:var(--muted);transition:all .2s}
 .chain-btn:hover,.chain-btn.active{border-color:var(--blue);background:var(--blue);color:#fff}
 
-/* VALUE CHAIN MAP */
-.vc-map{background:#fff;border-radius:10px;padding:24px;box-shadow:0 1px 6px rgba(0,0,0,.08);border:1px solid var(--border);overflow-x:auto;margin-bottom:20px}
-.vc-map h3{font-size:16px;font-weight:700;color:var(--blue);margin-bottom:6px}
-.vc-map .desc{font-size:12px;color:var(--muted);margin-bottom:20px}
-.vc-flow{display:flex;align-items:stretch;gap:0;min-width:600px}
-.vc-phase{flex:1;display:flex;flex-direction:column;position:relative}
-.vc-phase:not(:last-child)::after{content:'▶';position:absolute;right:-12px;top:50%;transform:translateY(-50%);font-size:16px;color:#bdbdbd;z-index:2}
-.phase-box{border-radius:8px;padding:12px 10px;text-align:center;flex:1;display:flex;flex-direction:column;justify-content:center;margin:0 6px;min-height:110px;border:2px solid transparent;transition:all .2s;cursor:default}
-.phase-box:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.15)}
-.phase-strong{background:#e8f5e9;border-color:#43a047;color:#1b5e20}
-.phase-emerging{background:#fff8e1;border-color:#f9a825;color:#e65100}
-.phase-gap{background:#ffebee;border-color:#e57373;color:#b71c1c}
-.phase-name{font-weight:700;font-size:12px;margin-bottom:4px;text-transform:uppercase;letter-spacing:.3px}
-.phase-label{font-size:11px;opacity:.85;line-height:1.3}
-.phase-stat{font-size:10px;margin-top:6px;font-weight:600;padding:2px 6px;background:rgba(255,255,255,.6);border-radius:4px}
-.vc-legend{display:flex;gap:16px;margin-top:12px;font-size:11px;align-items:center}
-.vc-legend-item{display:flex;align-items:center;gap:6px}
-.vc-legend-box{width:14px;height:14px;border-radius:3px;border:2px solid transparent}
-
 /* CHAIN DETAIL */
 .chain-detail{display:none}
 .chain-detail.active{display:block}
@@ -242,14 +223,11 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-t
 <!-- ═══════════════════════════════════════════════════════════════
      SECTION 2: VALUE CHAIN MAPS
 ═══════════════════════════════════════════════════════════════ -->
-<div id="tab-maps" class="tab-content">
-
-  <div class="section-title">🗺️ Value Chain Maps — All 9 Priority Chains</div>
-  <div class="section-sub">Colour coding: <span style="color:#2e7d32;font-weight:700">■ Green = Uganda strong/competitive</span> &nbsp; <span style="color:#f57f17;font-weight:700">■ Yellow = Emerging/limited</span> &nbsp; <span style="color:#c62828;font-weight:700">■ Red = Gap/absent in Uganda</span></div>
-
-  <div class="chain-selector" id="map-selector"></div>
-  <div id="map-display"></div>
-
+<div id="tab-maps" class="tab-content" style="padding:0;overflow:hidden">
+  <iframe src="/app/"
+    style="width:100%;height:calc(100vh - 118px);min-height:680px;border:none;display:block"
+    title="Uganda Value Chain Explorer — Interactive Sankey">
+  </iframe>
 </div>
 
 <!-- ═══════════════════════════════════════════════════════════════
@@ -710,55 +688,6 @@ const chains = [
   }
 ];
 
-// ═══════════════════ RENDER VALUE CHAIN MAPS ═══════════════════
-function renderMaps(){
-  const sel = document.getElementById('map-selector');
-  const disp = document.getElementById('map-display');
-  chains.forEach((c,i)=>{
-    const btn = document.createElement('button');
-    btn.className='chain-btn'+(i===0?' active':'');
-    btn.textContent=c.name;
-    btn.onclick=()=>{
-      document.querySelectorAll('#map-selector .chain-btn').forEach(b=>b.classList.remove('active'));
-      btn.classList.add('active');
-      renderMapDetail(c);
-    };
-    sel.appendChild(btn);
-  });
-  renderMapDetail(chains[0]);
-}
-
-function strengthClass(s){return s==='strong'?'phase-strong':s==='emerging'?'phase-emerging':'phase-gap';}
-
-function renderMapDetail(c){
-  const m=c.map;
-  const phases=m.phases.map(p=>`
-    <div class="vc-phase">
-      <div class="phase-box ${strengthClass(p.strength)}">
-        <div class="phase-name">${p.name}</div>
-        <div class="phase-label">${p.label.replace(/\n/g,'<br>')}</div>
-        <div class="phase-stat">${p.stat}</div>
-      </div>
-    </div>
-  `).join('');
-
-  document.getElementById('map-display').innerHTML=`
-    <div class="vc-map">
-      <h3>${m.title}</h3>
-      <p class="desc">${m.desc}</p>
-      <div class="vc-flow">${phases}</div>
-      <div class="vc-legend">
-        <div class="vc-legend-item"><div class="vc-legend-box" style="background:#e8f5e9;border-color:#43a047"></div> Strong / Competitive</div>
-        <div class="vc-legend-item"><div class="vc-legend-box" style="background:#fff8e1;border-color:#f9a825"></div> Emerging / Limited</div>
-        <div class="vc-legend-item"><div class="vc-legend-box" style="background:#ffebee;border-color:#e57373"></div> Gap / Absent</div>
-      </div>
-    </div>
-    <div class="card" style="background:#fff3e0;border-left:4px solid #f57f17">
-      <strong style="color:#e65100">⚠️ Critical Gap:</strong> <span style="font-size:13px">${m.gap}</span>
-    </div>
-  `;
-}
-
 // ═══════════════════ RENDER CHAIN STATUS ═══════════════════
 function renderStatus(){
   const sel = document.getElementById('status-selector');
@@ -873,7 +802,6 @@ function showTab(id){
 }
 
 // ═══════════════════ INIT ═══════════════════
-renderMaps();
 renderStatus();
 
 // ═══════════════════ INDUSTRY LOCATIONS MAP ═══════════════════

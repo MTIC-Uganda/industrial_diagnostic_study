@@ -1,6 +1,7 @@
-# Serves Jerome's sources-of-truth dashboard at the production URL.
-# No Node.js build required — copies the static HTML file directly.
+# Serves Jerome's sources-of-truth dashboard at the root URL, and the
+# React Sankey app at /app/. The dashboard iframes the app in the
+# Value Chain Maps tab.
 [build]
   base    = "app"
-  command = "mkdir -p site && cp ../report/sources-of-truth.html site/index.html && cp ../report/uganda_coat_of_arms.png site/uganda_coat_of_arms.png"
+  command = "mkdir -p site site/app && cp ../report/sources-of-truth.html site/index.html && cp ../report/uganda_coat_of_arms.png site/uganda_coat_of_arms.png && cd frontend && npm install && VITE_BASE=/app/ npm run build && cp -r dist/* ../site/app/"
   publish = "site"
