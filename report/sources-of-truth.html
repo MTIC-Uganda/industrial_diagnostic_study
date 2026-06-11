@@ -935,9 +935,6 @@ function initMap(){
     });
   }
 
-  // Build markers grouped by chain.
-  // No autoClose so switching chains doesn't leave ghost popups;
-  // but one-popup-at-a-time is handled by Leaflet's default (autoClose:true).
   const markersByChain={};
   FACTORIES.forEach(f=>{
     const col=CHAIN_COLORS[f.chain]||'#555';
@@ -957,46 +954,75 @@ function initMap(){
   });
 
   // ── Label placement ────────────────────────────────────────────────────────
-  // Splits markers at the median longitude: markers right of the median get
-  // their label on the right, markers left get it on the left.  Within each
-  // side, markers are sorted north→south and staggered 18 px vertically so no
-  // two labels in the same column ever overlap, even in dense industrial parks.
+  // Rules:
+  //  1. Direction: western-edge markers (lng<31.5) → label right (more map space
+  //     to the east); eastern-edge markers (lng>34.0) → label left; all others
+  //     split at the median longitude of the current chain.
+  //  2. Stagger: only applied within clusters — groups of markers within 0.06°
+  //     (~6 km) of each other in the same direction group.  Isolated markers
+  //     (no near neighbour) get zero vertical shift, so their label sits cleanly
+  //     next to their dot regardless of how many markers the chain has overall.
   function showLabels(markers){
     if(!markers.length) return;
 
-    // Median longitude as the left/right split point
-    const lngs=[...markers].map(m=>m.getLatLng().lng).sort((a,b)=>a-b);
-    const medLng=lngs[Math.floor(lngs.length/2)];
+    const CLUSTER_DIST=0.06; // degrees — captures same-park factories
+    const STEP=18;            // px between label centres in a cluster
+    const BASE=7;             // px gap: dot edge → label edge
 
-    const right=[], left=[];
-    markers.forEach(m=>{
-      const ll=m.getLatLng();
-      (ll.lng>=medLng ? right : left).push({m, lat:ll.lat});
+    const lls=markers.map(m=>m.getLatLng());
+
+    // Median longitude as the default left/right split
+    const sortedLng=[...lls].map(l=>l.lng).sort((a,b)=>a-b);
+    const medLng=sortedLng[Math.floor(sortedLng.length/2)];
+
+    // Per-marker direction
+    const dirs=lls.map(ll=>
+      ll.lng<31.5 ? 'right' :   // near western border → label eastward
+      ll.lng>34.0 ? 'left'  :   // near eastern border → label westward
+      ll.lng>=medLng ? 'right' : 'left'
+    );
+
+    // Greedy single-linkage cluster detection within each direction group.
+    // Only markers that are geographically close AND share the same label
+    // direction are merged into a cluster.
+    const clusterOf=new Array(markers.length).fill(-1);
+    let nc=0;
+    markers.forEach((_,i)=>{
+      if(clusterOf[i]!==-1) return;
+      clusterOf[i]=nc;
+      markers.forEach((_,j)=>{
+        if(j<=i || dirs[j]!==dirs[i] || clusterOf[j]!==-1) return;
+        if(Math.hypot(lls[i].lat-lls[j].lat, lls[i].lng-lls[j].lng)<CLUSTER_DIST)
+          clusterOf[j]=nc;
+      });
+      nc++;
     });
 
-    // Sort each side north→south (largest lat first)
-    right.sort((a,b)=>b.lat-a.lat);
-    left.sort((a,b)=>b.lat-a.lat);
-
-    const STEP=18; // px between label centres — matches label height
-    const BASE=7;  // px gap: dot edge → label edge
-
-    function bind(items, dir){
-      const half=(items.length-1)/2;
-      items.forEach(({m},i)=>{
-        const shift=Math.round((i-half)*STEP);
-        m.unbindTooltip();
-        m.bindTooltip(m._fname,{
-          permanent:true,
-          direction:dir,
-          className:'factory-label',
-          offset: dir==='right' ? [BASE,shift] : [-BASE,shift]
-        });
+    // Compute vertical stagger only for clusters of 2+ markers.
+    // Isolated markers keep shift=0 — label appears right next to the dot.
+    const shifts=new Array(markers.length).fill(0);
+    for(let c=0;c<nc;c++){
+      const members=markers.map((_,i)=>i).filter(i=>clusterOf[i]===c);
+      if(members.length<2) continue;
+      // Sort north→south so stacked labels read top-to-bottom in geographic order
+      members.sort((a,b)=>lls[b].lat-lls[a].lat);
+      const half=(members.length-1)/2;
+      members.forEach((idx,rank)=>{
+        shifts[idx]=Math.round((rank-half)*STEP);
       });
     }
 
-    bind(right,'right');
-    bind(left,'left');
+    // Bind permanent tooltips with computed direction + stagger
+    markers.forEach((m,i)=>{
+      const d=dirs[i], s=shifts[i];
+      m.unbindTooltip();
+      m.bindTooltip(m._fname,{
+        permanent:true,
+        direction:d,
+        className:'factory-label',
+        offset:d==='right'?[BASE,s]:[-BASE,s]
+      });
+    });
   }
 
   function clearLabels(){
@@ -1005,7 +1031,6 @@ function initMap(){
 
   // ── Sidebar ────────────────────────────────────────────────────────────────
   const list=document.getElementById('chain-filter-list');
-
   function setActive(row){
     document.querySelectorAll('.chain-filter-item').forEach(r=>r.classList.remove('active'));
     row.classList.add('active');
@@ -1046,7 +1071,6 @@ function initMap(){
     };
     list.appendChild(row);
   });
-
 }
 
 </script>
