@@ -115,6 +115,11 @@ tr:hover td{background:#fafafa}
 .priority-num{background:var(--blue);color:#fff;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;margin-top:1px}
 .proj-card{background:linear-gradient(135deg,#1b5e20,#388e3c);color:#fff;border-radius:10px;padding:20px;margin-top:4px}
 .proj-card h4{font-size:13px;font-weight:700;margin-bottom:12px;opacity:.9}
+.chain-filter-item{display:flex;align-items:center;gap:10px;padding:12px 16px;cursor:pointer;border-bottom:1px solid var(--border);transition:background .15s}
+.chain-filter-item:hover{background:#f5f5f5}
+.chain-filter-item.active{background:#e3f2fd}
+.chain-filter-item:last-child{border-bottom:none}
+.chain-count-badge{font-size:11px;font-weight:700;padding:2px 9px;border-radius:10px;flex-shrink:0}
 .proj-row{display:flex;justify-content:space-between;font-size:13px;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.15)}
 .proj-row:last-child{border-bottom:none}
 .proj-val{font-weight:700;font-size:15px}
@@ -265,13 +270,26 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-t
 <div id="tab-locations" class="tab-content">
 
   <div class="section-title">📍 Uganda Industry Locations</div>
-  <div class="section-sub">Interactive map of every active and under-construction manufacturing facility across the 9 priority value chains. Click any marker for details.</div>
+  <div class="section-sub">All active and under-construction manufacturing facilities across the 9 priority value chains. Click a chain in the sidebar to filter the map.</div>
 
-  <div id="industry-map" style="height:620px;border-radius:10px;border:1px solid var(--border);margin-bottom:16px;background:#e8edf2"></div>
+  <div style="display:flex;gap:20px;align-items:flex-start;margin-top:12px">
 
-  <div class="card" style="padding:16px">
-    <div style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px">Value Chain Legend</div>
-    <div id="map-legend" style="display:flex;flex-wrap:wrap;gap:12px"></div>
+    <!-- ── Sidebar ── -->
+    <div style="width:248px;flex-shrink:0">
+      <div style="background:#fff;border-radius:10px;border:1px solid var(--border);overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.07)">
+        <div style="background:var(--blue);color:#fff;padding:14px 18px;font-size:12px;font-weight:700;letter-spacing:.7px;text-transform:uppercase">Value Chains</div>
+        <div id="chain-filter-list"></div>
+      </div>
+    </div>
+
+    <!-- ── Map + legend ── -->
+    <div style="flex:1;min-width:0">
+      <div id="industry-map" style="height:580px;border-radius:10px;border:1px solid var(--border);margin-bottom:12px;background:#e8edf2"></div>
+      <div class="card" style="padding:14px">
+        <div id="map-legend" style="display:flex;flex-wrap:wrap;gap:10px"></div>
+      </div>
+    </div>
+
   </div>
 
 </div>
@@ -938,9 +956,11 @@ function initMap(){
     });
   }
 
+  // Build markers, grouped by chain for filtering
+  const markersByChain={};
   FACTORIES.forEach(f=>{
     const col=CHAIN_COLORS[f.chain]||'#555';
-    L.marker([f.lat,f.lng],{icon:mkIcon(col)})
+    const m=L.marker([f.lat,f.lng],{icon:mkIcon(col)})
       .bindPopup(
         `<div style="min-width:220px">
           <div style="font-weight:700;font-size:13px;color:${col};margin-bottom:2px">${f.name}</div>
@@ -950,15 +970,62 @@ function initMap(){
           <div style="font-size:11px;line-height:1.5;color:#333">${f.note}</div>
         </div>`)
       .addTo(map);
+    if(!markersByChain[f.chain])markersByChain[f.chain]=[];
+    markersByChain[f.chain].push(m);
   });
 
-  const leg=document.getElementById('map-legend');
-  leg.innerHTML=Object.entries(CHAIN_COLORS).map(([name,col])=>
-    `<div style="display:flex;align-items:center;gap:6px;font-size:12px;white-space:nowrap">
-      <div style="width:12px;height:12px;border-radius:50%;background:${col};flex-shrink:0;border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.4)"></div>
-      <span>${name}</span>
-    </div>`
-  ).join('');
+  // ── Sidebar filter list ──
+  const list=document.getElementById('chain-filter-list');
+
+  function setActive(row){
+    document.querySelectorAll('.chain-filter-item').forEach(r=>r.classList.remove('active'));
+    row.classList.add('active');
+  }
+
+  // "All" row
+  const allRow=document.createElement('div');
+  allRow.className='chain-filter-item active';
+  allRow.innerHTML=`
+    <div style="width:12px;height:12px;border-radius:50%;background:#546e7a;flex-shrink:0"></div>
+    <span style="flex:1;font-size:13px;color:var(--text)">All Industries</span>
+    <span class="chain-count-badge" style="background:#e3f2fd;color:var(--blue)">${FACTORIES.length}</span>`;
+  allRow.onclick=()=>{
+    Object.values(markersByChain).flat().forEach(m=>m.addTo(map));
+    map.setView([1.3,32.5],7);
+    setActive(allRow);
+  };
+  list.appendChild(allRow);
+
+  // One row per chain
+  Object.entries(CHAIN_COLORS).forEach(([name,col])=>{
+    const markers=markersByChain[name]||[];
+    const row=document.createElement('div');
+    row.className='chain-filter-item';
+    row.innerHTML=`
+      <div style="width:12px;height:12px;border-radius:50%;background:${col};flex-shrink:0"></div>
+      <span style="flex:1;font-size:13px;color:var(--text)">${name}</span>
+      <span class="chain-count-badge" style="background:${col}22;color:${col}">${markers.length}</span>`;
+    row.onclick=()=>{
+      // Hide all, show only this chain
+      Object.entries(markersByChain).forEach(([chain,ms])=>{
+        ms.forEach(m=>chain===name ? m.addTo(map) : map.removeLayer(m));
+      });
+      if(markers.length){
+        map.fitBounds(L.featureGroup(markers).getBounds().pad(0.3));
+      }
+      setActive(row);
+    };
+    list.appendChild(row);
+  });
+
+  // Legend below map
+  document.getElementById('map-legend').innerHTML=
+    Object.entries(CHAIN_COLORS).map(([name,col])=>
+      `<div style="display:flex;align-items:center;gap:6px;font-size:12px;white-space:nowrap">
+        <div style="width:11px;height:11px;border-radius:50%;background:${col};flex-shrink:0"></div>
+        <span>${name}</span>
+      </div>`
+    ).join('');
 }
 </script>
 </body>
