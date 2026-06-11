@@ -199,8 +199,10 @@ function computeSankey(g,w){
   catch(e){return{nodes:[],links:[],h:560};}
 }
 
+let _lock=false;
 // ─── Render ─────────────────────────────────────────────────────────────────
 function render(){
+  _lock=true;
   const svg=document.getElementById('sankey-svg');
   const wrap=document.getElementById('chart-wrap');
   const w=Math.max(800,wrap.clientWidth-24);
@@ -256,14 +258,13 @@ function render(){
     ti.textContent=n.name+' ('+n.label+')';
 
     g.appendChild(rect);g.appendChild(txt);g.appendChild(ti);
-    g.addEventListener('mouseenter',()=>{hoveredId=n.id;render();});
-    g.addEventListener('mouseleave',()=>{hoveredId=null;render();});
-    g.addEventListener('click',e=>{e.stopPropagation();clickNode(n);});
+    g.addEventListener('mouseenter',()=>{if(_lock)return;hoveredId=n.id;render();});
+    g.addEventListener('mouseleave',()=>{if(_lock)return;hoveredId=null;render();});
+    g.addEventListener('click',()=>{clickNode(n);});
     gN.appendChild(g);
   });
   svg.appendChild(gN);
-
-  svg.onclick=()=>{selectedId=null;closeDetail();render();};
+  requestAnimationFrame(()=>{_lock=false;});
   document.getElementById('stats').textContent=
     graph?graph.total_nodes+' nodes · '+graph.total_relationships+' flows':'';
 }
@@ -364,6 +365,12 @@ function fillProducts(chain){
     path=[{id:first.element_id,name:first.name}];
     document.getElementById('loading').style.display='none';
     loadGraph(first.element_id);
+    // Background click clears selection — only fires when clicking empty SVG or a link path,
+    // never when clicking a node rect/text (those have their own handler above).
+    document.getElementById('sankey-svg').addEventListener('click',e=>{
+      const tag=(e.target.tagName||'').toLowerCase();
+      if(tag==='svg'||tag==='path'){selectedId=null;closeDetail();render();}
+    });
 
     document.getElementById('chain-sel').addEventListener('change',e=>{
       const p=fillProducts(e.target.value);
