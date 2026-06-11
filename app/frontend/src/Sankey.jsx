@@ -21,9 +21,6 @@ const COLORS = {
 };
 
 function nodeColor(n) {
-  if (n.strength === 'strong')   return '#2e7d32';
-  if (n.strength === 'emerging') return '#f57f17';
-  if (n.strength === 'gap')      return '#c62828';
   return COLORS[n.label] || COLORS[n.componentType] || COLORS.other;
 }
 
