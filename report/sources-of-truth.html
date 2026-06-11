@@ -284,10 +284,7 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-t
 
     <!-- ── Map + legend ── -->
     <div style="flex:1;min-width:0">
-      <div id="industry-map" style="height:580px;border-radius:10px;border:1px solid var(--border);margin-bottom:12px;background:#e8edf2"></div>
-      <div class="card" style="padding:14px">
-        <div id="map-legend" style="display:flex;flex-wrap:wrap;gap:10px"></div>
-      </div>
+      <div id="industry-map" style="height:580px;border-radius:10px;border:1px solid var(--border);background:#e8edf2"></div>
     </div>
 
   </div>
@@ -1018,14 +1015,6 @@ function initMap(){
     list.appendChild(row);
   });
 
-  // Legend below map
-  document.getElementById('map-legend').innerHTML=
-    Object.entries(CHAIN_COLORS).map(([name,col])=>
-      `<div style="display:flex;align-items:center;gap:6px;font-size:12px;white-space:nowrap">
-        <div style="width:11px;height:11px;border-radius:50%;background:${col};flex-shrink:0"></div>
-        <span>${name}</span>
-      </div>`
-    ).join('');
 }
 </script>
 </body>
