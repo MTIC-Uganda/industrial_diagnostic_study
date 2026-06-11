@@ -1,10 +1,6 @@
-# Netlify build config. Serves the static frontend (runs off the committed
-# graph-bundle.json — no backend). Hosted at the site root, so VITE_BASE=/.
+# Serves Jerome's sources-of-truth dashboard at the production URL.
+# No Node.js build required — copies the static HTML file directly.
 [build]
-  base = "app/frontend"
-  command = "npm run build"
-  publish = "dist"
-
-[build.environment]
-  VITE_BASE = "/"
-  NODE_VERSION = "20"
+  base    = "app"
+  command = "mkdir -p site && cp ../report/sources-of-truth.html site/index.html"
+  publish = "site"

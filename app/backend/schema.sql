@@ -27,7 +27,11 @@ CREATE TABLE IF NOT EXISTS nodes (
     source_references   TEXT,                    -- JSON array
 
     -- MTIC-specific: live trade data pulled from ITC TradeMap
-    trademap_data   TEXT                         -- JSON: {exports:[...], imports:[...], source}
+    trademap_data   TEXT,                        -- JSON: {exports:[...], imports:[...], source}
+
+    -- Uganda's current position in the value chain (from Jerome's sources-of-truth)
+    strength        TEXT,                        -- 'strong' | 'emerging' | 'gap' | NULL
+    strength_note   TEXT                         -- short explanation of the strength rating
 );
 
 -- A directed, weighted edge: start (upstream input) -> end (downstream product).
