@@ -109,6 +109,18 @@ tr:hover td{background:#fafafa}
 /* FOOTER */
 footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-top:24px;border-top:1px solid var(--border)}
 .factory-label{background:rgba(255,255,255,.97);border:1px solid rgba(0,0,0,.18);border-radius:4px;padding:3px 8px;font-size:11px;font-weight:600;color:#1a1a1a;white-space:nowrap;box-shadow:0 2px 6px rgba(0,0,0,.22);pointer-events:none}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media print{
+  body{background:#fff}
+  .site-header{background:#1565c0!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .tab-bar{display:none!important}
+  .tab-content{display:none!important;padding:16px 20px}
+  .tab-content.active{display:block!important}
+  #tab-locations{display:none!important}
+  footer{display:none}
+  .card{box-shadow:none;border:1px solid #ddd}
+  button{display:none!important}
+}
 </style>
 </head>
 <body>
@@ -121,7 +133,10 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-t
       <div class="sub">Ministry of Trade, Industry &amp; Cooperatives &nbsp;×&nbsp; UNIDO Programme for Country Partnership &nbsp;|&nbsp; Updated June 2026</div>
     </div>
   </div>
-  <div class="badge">TENFOLD GROWTH FRAMEWORK</div>
+  <div style="display:flex;align-items:center;gap:10px">
+    <button onclick="window.print()" style="background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.4);border-radius:6px;padding:7px 16px;font-size:12px;font-weight:600;cursor:pointer;transition:background .2s" onmouseover="this.style.background='rgba(255,255,255,.25)'" onmouseout="this.style.background='rgba(255,255,255,.15)'">🖨️ Print / Export</button>
+    <div class="badge">TENFOLD GROWTH FRAMEWORK</div>
+  </div>
 </div>
 
 <div class="tab-bar">
@@ -252,6 +267,13 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-t
   <div class="section-title">📍 Uganda Industry Locations</div>
   <div class="section-sub">All active and under-construction manufacturing facilities across the 9 priority value chains. Click a chain in the sidebar to filter the map.</div>
 
+  <div style="margin-bottom:12px;display:flex;gap:8px">
+    <input id="factory-search" list="factory-names" type="search" placeholder="🔍 Search factories by name…" autocomplete="off"
+      style="flex:1;padding:9px 14px;border:1px solid var(--border);border-radius:8px;font-size:13px;outline:none;transition:border-color .2s"
+      onfocus="this.style.borderColor='var(--blue)'" onblur="this.style.borderColor='var(--border)'">
+    <datalist id="factory-names"></datalist>
+  </div>
+
   <div style="display:flex;gap:20px;align-items:flex-start;margin-top:12px">
 
     <!-- ── Sidebar ── -->
@@ -259,12 +281,18 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-t
       <div style="background:#fff;border-radius:10px;border:1px solid var(--border);overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.07)">
         <div style="background:var(--blue);color:#fff;padding:14px 18px;font-size:12px;font-weight:700;letter-spacing:.7px;text-transform:uppercase">Value Chains Legend</div>
         <div id="chain-filter-list"></div>
+        <div id="map-chain-stats" style="margin-top:12px;background:#fff;border-radius:8px;border:1px solid var(--border);padding:14px;display:none;font-size:12px"></div>
       </div>
     </div>
 
     <!-- ── Map + legend ── -->
     <div style="flex:1;min-width:0">
-      <div id="industry-map" style="height:580px;border-radius:10px;border:1px solid var(--border);background:#e8edf2"></div>
+      <div id="industry-map" style="height:580px;border-radius:10px;border:1px solid var(--border);background:#e8edf2;position:relative">
+        <div id="map-spinner" style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;color:#666;font-size:13px;z-index:10">
+          <div style="width:38px;height:38px;border:4px solid #dde;border-top-color:#1565c0;border-radius:50%;animation:spin .9s linear infinite"></div>
+          Loading map…
+        </div>
+      </div>
     </div>
 
   </div>
@@ -711,12 +739,11 @@ const colorMap={blue:'',green:'green',amber:'amber',red:'red'};
 
 function renderStatusDetail(c){
   const s=c.status;
-  const statCards=s.current.map(item=>`
-    <div class="stat-box ${colorMap[item.color]||''}">
-      <h4>${item.label}</h4>
-      <p>${item.value}</p>
-    </div>
-  `).join('');
+  const statCards=s.current.map(item=>{
+    const pct=(item.value.match(/\((\d+(?:\.\d+)?)%\)/)||[])[1];
+    const bar=pct?`<div style="margin-top:8px;background:#e8eaf6;border-radius:4px;height:7px;overflow:hidden"><div style="width:${Math.min(parseFloat(pct),100)}%;height:100%;border-radius:4px;background:${item.color==='green'?'#2e7d32':item.color==='amber'?'#f57f17':item.color==='red'?'#c62828':'#1565c0'}"></div></div>`:'';
+    return `<div class="stat-box ${colorMap[item.color]||''}"><h4>${item.label}</h4><p>${item.value}</p>${bar}</div>`;
+  }).join('');
 
   const companies=s.companies.map(co=>`<span class="company-chip">${co}</span>`).join('');
 
@@ -772,18 +799,23 @@ let _mapReady=false;
 let _leafletMap=null;
 
 function _loadLeaflet(cb){
-  if(window.L){cb();return;}
-  const link=document.createElement('link');
-  link.rel='stylesheet';
-  link.href='https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
-  document.head.appendChild(link);
+  if(window.L&&window.L.markerClusterGroup){cb();return;}
+  function loadMC(done){
+    const s=document.createElement('script');
+    s.src='https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js';
+    s.onload=done;document.head.appendChild(s);
+    ['https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css',
+     'https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css'].forEach(href=>{
+      const l=document.createElement('link');l.rel='stylesheet';l.href=href;document.head.appendChild(l);
+    });
+  }
+  if(window.L){loadMC(cb);return;}
+  const link=document.createElement('link');link.rel='stylesheet';
+  link.href='https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';document.head.appendChild(link);
   const scr=document.createElement('script');
   scr.src='https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
-  scr.onload=cb;
-  scr.onerror=()=>{
-    document.getElementById('industry-map').innerHTML=
-      '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#666;font-size:14px">⚠️ Map could not load — check your internet connection and refresh.</div>';
-  };
+  scr.onload=()=>loadMC(cb);
+  scr.onerror=()=>{document.getElementById('industry-map').innerHTML='<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#666;font-size:14px">⚠️ Map could not load — check your internet connection and refresh.</div>';};
   document.head.appendChild(scr);
 }
 
@@ -794,6 +826,7 @@ function showTab(id){
   });
   document.getElementById('tab-'+id).classList.add('active');
   try{ localStorage.setItem('mtic_activeTab',id); }catch(e){}
+  try{history.replaceState(null,'','#'+id);}catch(e){}
   if(id==='locations'){
     if(!_mapReady){
       _mapReady=true;
@@ -809,10 +842,13 @@ renderStatus();
 // Restore the last-visited tab so a refresh keeps you where you were.
 (function(){
   try{
-    const saved=localStorage.getItem('mtic_activeTab');
-    if(saved && document.getElementById('tab-'+saved)) showTab(saved);
+    const hash=location.hash.slice(1);
+    const saved=hash||(localStorage.getItem('mtic_activeTab'));
+    if(saved&&document.getElementById('tab-'+saved)) showTab(saved);
+    window.addEventListener('hashchange',()=>{const h=location.hash.slice(1);if(h&&document.getElementById('tab-'+h))showTab(h);});
   }catch(e){}
 })();
+(function(){const dl=document.getElementById('factory-names');if(dl)FACTORIES.forEach(f=>{const o=document.createElement('option');o.value=f.name;dl.appendChild(o);});})();
 
 // ═══════════════════ INDUSTRY LOCATIONS MAP ═══════════════════
 const CHAIN_COLORS={
@@ -1641,6 +1677,7 @@ const FACTORIES=[
 ];
 
 function initMap(){
+  const _spin=document.getElementById('map-spinner');if(_spin)_spin.remove();
   _leafletMap=L.map('industry-map').setView([1.3,32.5],7);
   const map=_leafletMap;
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
@@ -1685,12 +1722,26 @@ function initMap(){
             ${f.ownership!=='—'?`<tr><td style="color:#888;padding:2px 8px 2px 0;white-space:nowrap;vertical-align:top">Ownership</td><td style="color:#222;padding:2px 0">${f.ownership}</td></tr>`:''}
             ${f.exports!=='—'?`<tr><td style="color:#888;padding:2px 8px 2px 0;white-space:nowrap;vertical-align:top">Exports</td><td style="color:#222;padding:2px 0">${f.exports}</td></tr>`:''}
           </table>
-        </div>`)
-      .addTo(map);
+        </div>`);
     m._fname=f.name; m._col=col;
     if(!markersByChain[f.chain])markersByChain[f.chain]=[];
     markersByChain[f.chain].push(m);
   });
+
+  // ── Marker clustering (All Industries view) ──────────────────────────────
+  const clusterGroup=L.markerClusterGroup({
+    maxClusterRadius:70,spiderfyOnMaxZoom:true,showCoverageOnHover:false,
+    iconCreateFunction:cluster=>{
+      const n=cluster.getChildCount();
+      const size=n<10?32:n<30?38:44;
+      return L.divIcon({
+        html:`<div style="background:#1565c0;color:#fff;border-radius:50%;width:${size}px;height:${size}px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:${n<10?13:12}px;border:2.5px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.4)">${n}</div>`,
+        iconSize:[size,size],iconAnchor:[size/2,size/2],className:''
+      });
+    }
+  });
+  Object.values(markersByChain).flat().forEach(m=>clusterGroup.addLayer(m));
+  map.addLayer(clusterGroup);
 
   // ── Label placement ─────────────────────────────────────────────────────────
   // SVG overlay labels with leader lines + greedy collision-avoidance.
@@ -1961,6 +2012,27 @@ function initMap(){
     });
   });
 
+  function updateStats(chainName,col,chainMarkers){
+    const panel=document.getElementById('map-chain-stats');
+    if(!panel)return;
+    if(!chainName){panel.style.display='none';return;}
+    const cf=FACTORIES.filter(f=>f.chain===chainName);
+    const emps=cf.map(f=>parseInt((f.employees||'').replace(/[^0-9]/g,''))).filter(n=>!isNaN(n)&&n>0);
+    panel.style.display='block';
+    panel.innerHTML=`
+      <div style="font-weight:700;color:${col};margin-bottom:8px;font-size:13px">${chainName}</div>
+      <div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="color:#666">Facilities</span><strong>${cf.length}</strong></div>
+      ${emps.length?`<div style="display:flex;justify-content:space-between;margin-bottom:8px"><span style="color:#666">Employees (reported)</span><strong>&gt;${emps.reduce((a,b)=>a+b,0).toLocaleString()}</strong></div>`:''}
+      <div style="line-height:2">${cf.map((f,i)=>`<span data-fi="${i}" style="display:inline-block;background:${col}18;color:${col};border-radius:10px;padding:1px 8px;margin:1px;font-weight:600;cursor:pointer">${f.name}</span>`).join('')}</div>`;
+    panel.querySelectorAll('[data-fi]').forEach(chip=>{
+      const fi=parseInt(chip.dataset.fi);
+      chip.addEventListener('click',()=>{
+        const marker=chainMarkers.find(m=>m._fname===cf[fi].name);
+        if(marker){map.setView([cf[fi].lat,cf[fi].lng],Math.max(map.getZoom(),12));marker.openPopup();}
+      });
+    });
+  }
+
   // ── Sidebar ────────────────────────────────────────────────────────────────
   const list=document.getElementById('chain-filter-list');
   function setActive(row){
@@ -1977,8 +2049,10 @@ function initMap(){
   allRow.onclick=()=>{
     clearLabels();
     map.closePopup();
-    Object.values(markersByChain).flat().forEach(m=>m.addTo(map));
+    Object.values(markersByChain).flat().forEach(m=>{if(map.hasLayer(m))map.removeLayer(m);});
+    if(!map.hasLayer(clusterGroup))map.addLayer(clusterGroup);
     map.setView([1.3,32.5],7);
+    updateStats(null);
     setActive(allRow);
   };
   list.appendChild(allRow);
@@ -1994,14 +2068,36 @@ function initMap(){
     row.onclick=()=>{
       clearLabels();
       map.closePopup();
-      Object.values(markersByChain).flat().forEach(m=>map.removeLayer(m));
-      if(markers.length) showLabels(markers);
+      if(map.hasLayer(clusterGroup))map.removeLayer(clusterGroup);
+      Object.values(markersByChain).flat().forEach(m=>{if(map.hasLayer(m))map.removeLayer(m);});
+      if(markers.length)showLabels(markers);
       markers.forEach(m=>m.addTo(map));
-      if(markers.length)
-        map.fitBounds(L.featureGroup(markers).getBounds().pad(0.35));
+      if(markers.length)map.fitBounds(L.featureGroup(markers).getBounds().pad(0.35));
+      updateStats(name,col,markers);
       setActive(row);
     };
     list.appendChild(row);
+  });
+
+  document.getElementById('factory-search').addEventListener('change',function(){
+    const q=this.value.trim();
+    const f=FACTORIES.find(f=>f.name===q);
+    if(!f){this.value='';return;}
+    const fmarkers=markersByChain[f.chain]||[];
+    const marker=fmarkers.find(m=>m._fname===f.name);
+    if(!marker){this.value='';return;}
+    this.value='';
+    if(map.hasLayer(clusterGroup)){
+      clusterGroup.zoomToShowLayer(marker,()=>setTimeout(()=>marker.openPopup(),200));
+    } else {
+      // Switch to all-industries so cluster reveals the marker
+      allRow.click();
+      setTimeout(()=>clusterGroup.zoomToShowLayer(marker,()=>setTimeout(()=>marker.openPopup(),200)),150);
+    }
+  });
+
+  document.addEventListener('keydown',function(e){
+    if(e.key==='Escape'){map.closePopup();}
   });
 }
 
