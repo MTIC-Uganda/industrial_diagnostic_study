@@ -73,7 +73,8 @@ jobs:
 
       - name: Build
         run: |
-          cd app/frontend && VITE_BASE=/ npm run build
+          REPO="$GITHUB_WORKSPACE"
+          cd app/frontend && VITE_BASE=/ npm run build && cd "$REPO"
           # Vite outputs to report/sankey-dist/ and copies to report/sankey.html.
           # Bundle the two files the server needs into site/:
           #   index.html  = the main dashboard (sources-of-truth.html)
