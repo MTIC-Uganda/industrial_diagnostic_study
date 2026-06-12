@@ -1648,6 +1648,16 @@ function initMap(){
     maxZoom:18
   }).addTo(map);
 
+  // Custom pane for SVG label overlay.
+  // MUST live inside .leaflet-map-pane so its z-index is compared against
+  // the other Leaflet panes (markers=600, tooltip=650, popup=700) within the
+  // same stacking context.  Appending the SVG directly to the map container
+  // puts it OUTSIDE that stacking context, so it always paints above everything
+  // regardless of z-index — that is why the popup appeared behind the labels.
+  const _svgPane=map.createPane('labelSvgPane');
+  _svgPane.style.zIndex=690;
+  _svgPane.style.pointerEvents='none';
+
   function mkIcon(color){
     return L.divIcon({
       className:'',
@@ -1787,7 +1797,8 @@ function initMap(){
     const NS='http://www.w3.org/2000/svg';
     const svg=document.createElementNS(NS,'svg');
     svg.setAttribute('width',W); svg.setAttribute('height',H);
-    svg.style.cssText='position:absolute;top:0;left:0;pointer-events:none;z-index:690';
+    // No z-index here — the containing _svgPane (z-index 690) handles stacking.
+    svg.style.cssText='position:absolute;top:0;left:0;pointer-events:none;';
 
     labels.forEach(l=>{
       if(l.x===null) return;
@@ -1840,7 +1851,7 @@ function initMap(){
       svg.appendChild(g);
     });
 
-    ctr.appendChild(svg);
+    _svgPane.appendChild(svg);
     _labelSVG=svg;
   }
 
