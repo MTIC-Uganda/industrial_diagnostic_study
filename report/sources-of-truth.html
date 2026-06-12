@@ -848,7 +848,7 @@ renderStatus();
     window.addEventListener('hashchange',()=>{const h=location.hash.slice(1);if(h&&document.getElementById('tab-'+h))showTab(h);});
   }catch(e){}
 })();
-(function(){const dl=document.getElementById('factory-names');if(dl)FACTORIES.forEach(f=>{const o=document.createElement('option');o.value=f.name;dl.appendChild(o);});})();
+// factory-names datalist is populated inside initMap() after FACTORIES is defined
 
 // ═══════════════════ INDUSTRY LOCATIONS MAP ═══════════════════
 const CHAIN_COLORS={
@@ -1685,6 +1685,9 @@ function initMap(){
       el.innerHTML='<div style="padding:20px;color:#c00;font-size:12px;font-family:monospace">Map JS error (line '+line+'): '+msg+'</div>';
   };
   const _spin=document.getElementById('map-spinner');if(_spin)_spin.remove();
+  // Populate factory search datalist (FACTORIES is defined by this point)
+  const _dl=document.getElementById('factory-names');
+  if(_dl&&!_dl.hasChildNodes())FACTORIES.forEach(f=>{const o=document.createElement('option');o.value=f.name;_dl.appendChild(o);});
   _leafletMap=L.map('industry-map').setView([1.3,32.5],7);
   const map=_leafletMap;
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
