@@ -1681,7 +1681,7 @@ function initMap(){
   // dense clusters fan outward at larger radii. Leader lines connect each label
   // box back to its dot. Redrawn on every map move/zoom.
 
-  let _labelSVG=null, _labelMarkers=[], _redrawTimer=null, _moveAttached=false;
+  let _labelSVG=null, _labelMarkers=[], _labelBoxes=[], _redrawTimer=null, _moveAttached=false;
 
   // Accurate text-width via hidden canvas (avoids rough per-char estimate)
   const _tc=document.createElement('canvas');
@@ -1764,6 +1764,9 @@ function initMap(){
       }
     });
 
+    // Save bounding boxes for popup collision avoidance (refreshed every redraw)
+    _labelBoxes=labels.filter(l=>l.x!==null).map(l=>({x:l.x-l.w/2,y:l.y-l.h/2,w:l.w,h:l.h}));
+
     // ── Build SVG ──────────────────────────────────────────────────────────
     const NS='http://www.w3.org/2000/svg';
     const svg=document.createElementNS(NS,'svg');
@@ -1839,9 +1842,60 @@ function initMap(){
 
   function clearLabels(){
     _labelMarkers=[];
+    _labelBoxes=[];
     if(_labelSVG){ _labelSVG.remove(); _labelSVG=null; }
     Object.values(markersByChain).flat().forEach(m=>m.unbindTooltip());
   }
+
+  // ── Popup collision avoidance ──────────────────────────────────────────────
+  // On popupopen: wait one frame (so the popup is fully rendered and has a real
+  // bounding rect), then check whether it overlaps any label box or any visible
+  // dot.  If it does, try 8 directions × 5 step sizes and move the popup to the
+  // first clear position via popup.options.offset + popup.update().
+  // On popupclose: reset the offset so the NEXT open always starts from [0,0].
+  map.on('popupclose', e=>{ e.popup.options.offset=[0,0]; });
+  map.on('popupopen', e=>{
+    const popup=e.popup, src=popup._source;
+    if(!src) return;
+    requestAnimationFrame(()=>{
+      const el=popup.getElement();
+      if(!el) return;
+      const ctr=map.getContainer();
+      const W=ctr.offsetWidth, H=ctr.offsetHeight;
+      const mapRect=ctr.getBoundingClientRect();
+      const r=el.getBoundingClientRect();
+      const px=r.left-mapRect.left, py=r.top-mapRect.top;
+      const pw=r.width, ph=r.height;
+      const GAP=8, DOT_R=16;
+      const allDots=Object.values(markersByChain).flat().filter(m=>map.hasLayer(m));
+      function hits(bx,by){
+        if(bx<GAP||by<GAP||bx+pw>W-GAP||by+ph>H-GAP) return true;
+        if(_labelBoxes.some(b=>
+          !(bx+pw<b.x-GAP||bx>b.x+b.w+GAP||by+ph<b.y-GAP||by>b.y+b.h+GAP)
+        )) return true;
+        if(allDots.some(m=>{
+          if(m===src) return false;
+          const p=map.latLngToContainerPoint(m.getLatLng());
+          const dx=Math.max(0,Math.abs(p.x-(bx+pw/2))-pw/2);
+          const dy=Math.max(0,Math.abs(p.y-(by+ph/2))-ph/2);
+          return dx*dx+dy*dy<DOT_R*DOT_R;
+        })) return true;
+        return false;
+      }
+      if(!hits(px,py)) return;
+      const dirs=[[0,-1],[1,-1],[1,0],[1,1],[0,1],[-1,1],[-1,0],[-1,-1]];
+      const steps=[30,60,100,150,220];
+      let ox=0,oy=0,found=false;
+      outer:for(const s of steps){
+        for(const [dx,dy] of dirs){
+          const mag=Math.hypot(dx,dy);
+          const nx=dx/mag*s, ny=dy/mag*s;
+          if(!hits(px+nx,py+ny)){ox=nx;oy=ny;found=true;break outer;}
+        }
+      }
+      if(found){ popup.options.offset=[ox,oy]; popup.update(); }
+    });
+  });
 
   // ── Sidebar ────────────────────────────────────────────────────────────────
   const list=document.getElementById('chain-filter-list');
