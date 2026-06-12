@@ -1797,8 +1797,15 @@ function initMap(){
     const NS='http://www.w3.org/2000/svg';
     const svg=document.createElementNS(NS,'svg');
     svg.setAttribute('width',W); svg.setAttribute('height',H);
-    // No z-index here — the containing _svgPane (z-index 690) handles stacking.
-    svg.style.cssText='position:absolute;top:0;left:0;pointer-events:none;';
+    // The custom pane is inside .leaflet-map-pane which carries a CSS
+    // translate for smooth panning.  Our dot positions come from
+    // latLngToContainerPoint (container-space), so we apply the INVERSE
+    // of the pane transform to the SVG element so coordinates stay correct.
+    const _cpt=map.latLngToContainerPoint(map.getCenter());
+    const _lpt=map.latLngToLayerPoint(map.getCenter());
+    const _px=_cpt.x-_lpt.x, _py=_cpt.y-_lpt.y;
+    svg.style.cssText='position:absolute;top:0;left:0;pointer-events:none;'
+      +'transform:translate('+(-_px)+'px,'+(-_py)+'px);';
 
     labels.forEach(l=>{
       if(l.x===null) return;
