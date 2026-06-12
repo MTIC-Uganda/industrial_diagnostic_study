@@ -1668,7 +1668,7 @@ function initMap(){
           </table>
         </div>`)
       .addTo(map);
-    m._fname=f.name;
+    m._fname=f.name; m._col=col;
     if(!markersByChain[f.chain])markersByChain[f.chain]=[];
     markersByChain[f.chain].push(m);
   });
@@ -1711,14 +1711,15 @@ function initMap(){
     // All dots in container pixel space
     const dots=_labelMarkers.map(m=>{
       const p=map.latLngToContainerPoint(m.getLatLng());
-      return {x:p.x, y:p.y, name:m._fname};
+      return {x:p.x, y:p.y, name:m._fname, col:m._col||'#546e7a', marker:m};
     });
 
     const LH=21;   // label box height (px)
     const DOT_R=11; // effective collision radius (14px dot + 2px border, halved + 1)
 
     const labels=dots.map(d=>({
-      dotX:d.x, dotY:d.y, name:d.name, w:_tw(d.name), h:LH, x:null, y:null
+      dotX:d.x, dotY:d.y, name:d.name, w:_tw(d.name), h:LH, x:null, y:null,
+      col:d.col, marker:d.marker
     }));
 
     // Process least-crowded dots first so they claim natural near positions;
@@ -1777,7 +1778,7 @@ function initMap(){
       const ny=Math.max(l.y-l.h/2,Math.min(l.y+l.h/2,l.dotY));
       const ld=Math.hypot(nx-l.dotX,ny-l.dotY);
 
-      // Draw leader line from dot-edge to label-box-edge
+      // Draw leader line from dot-edge to label-box-edge (chain colour, clearly visible)
       if(ld>DOT_R+4){
         const t1=DOT_R/ld, t2=(ld-2)/ld; // start at dot edge, stop 2px from box
         const line=document.createElementNS(NS,'line');
@@ -1785,10 +1786,17 @@ function initMap(){
         line.setAttribute('y1',l.dotY+(ny-l.dotY)*t1);
         line.setAttribute('x2',l.dotX+(nx-l.dotX)*t2);
         line.setAttribute('y2',l.dotY+(ny-l.dotY)*t2);
-        line.setAttribute('stroke','#aaa');
-        line.setAttribute('stroke-width','1');
+        line.setAttribute('stroke',l.col);
+        line.setAttribute('stroke-width','2');
+        line.setAttribute('stroke-linecap','round');
         svg.appendChild(line);
       }
+
+      // Clickable label group — pointer-events:all overrides the SVG's pointer-events:none
+      const g=document.createElementNS(NS,'g');
+      g.style.pointerEvents='all';
+      g.style.cursor='pointer';
+      g.addEventListener('click',e=>{ e.stopPropagation(); l.marker.openPopup(); });
 
       // Label box
       const rect=document.createElementNS(NS,'rect');
@@ -1796,9 +1804,9 @@ function initMap(){
       rect.setAttribute('width',l.w);    rect.setAttribute('height',l.h);
       rect.setAttribute('rx','4');       rect.setAttribute('ry','4');
       rect.setAttribute('fill','rgba(255,255,255,0.97)');
-      rect.setAttribute('stroke','rgba(0,0,0,0.2)');
-      rect.setAttribute('stroke-width','1');
-      svg.appendChild(rect);
+      rect.setAttribute('stroke',l.col);
+      rect.setAttribute('stroke-width','1.2');
+      g.appendChild(rect);
 
       // Label text
       const text=document.createElementNS(NS,'text');
@@ -1809,7 +1817,8 @@ function initMap(){
       text.setAttribute('font-family','"Segoe UI",system-ui,sans-serif');
       text.setAttribute('fill','#1a1a1a');
       text.textContent=l.name;
-      svg.appendChild(text);
+      g.appendChild(text);
+      svg.appendChild(g);
     });
 
     ctr.appendChild(svg);
