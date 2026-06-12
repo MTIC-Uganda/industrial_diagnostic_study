@@ -803,7 +803,7 @@ function _loadLeaflet(cb){
   function loadMC(done){
     const s=document.createElement('script');
     s.src='https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js';
-    s.onload=done;document.head.appendChild(s);
+    s.onload=done;s.onerror=done;document.head.appendChild(s);
     ['https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css',
      'https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css'].forEach(href=>{
       const l=document.createElement('link');l.rel='stylesheet';l.href=href;document.head.appendChild(l);
@@ -1729,19 +1729,25 @@ function initMap(){
   });
 
   // ── Marker clustering (All Industries view) ──────────────────────────────
-  const clusterGroup=L.markerClusterGroup({
-    maxClusterRadius:70,spiderfyOnMaxZoom:true,showCoverageOnHover:false,
-    iconCreateFunction:cluster=>{
-      const n=cluster.getChildCount();
-      const size=n<10?32:n<30?38:44;
-      return L.divIcon({
-        html:`<div style="background:#1565c0;color:#fff;border-radius:50%;width:${size}px;height:${size}px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:${n<10?13:12}px;border:2.5px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.4)">${n}</div>`,
-        iconSize:[size,size],iconAnchor:[size/2,size/2],className:''
-      });
-    }
-  });
-  Object.values(markersByChain).flat().forEach(m=>clusterGroup.addLayer(m));
-  map.addLayer(clusterGroup);
+  let clusterGroup=null;
+  if(typeof L.markerClusterGroup==='function'){
+    clusterGroup=L.markerClusterGroup({
+      maxClusterRadius:70,spiderfyOnMaxZoom:true,showCoverageOnHover:false,
+      iconCreateFunction:cluster=>{
+        const n=cluster.getChildCount();
+        const size=n<10?32:n<30?38:44;
+        return L.divIcon({
+          html:`<div style="background:#1565c0;color:#fff;border-radius:50%;width:${size}px;height:${size}px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:${n<10?13:12}px;border:2.5px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.4)">${n}</div>`,
+          iconSize:[size,size],iconAnchor:[size/2,size/2],className:''
+        });
+      }
+    });
+    Object.values(markersByChain).flat().forEach(m=>clusterGroup.addLayer(m));
+    map.addLayer(clusterGroup);
+  } else {
+    // Fallback: markercluster unavailable — add all markers directly
+    Object.values(markersByChain).flat().forEach(m=>m.addTo(map));
+  }
 
   // ── Label placement ─────────────────────────────────────────────────────────
   // SVG overlay labels with leader lines + greedy collision-avoidance.
@@ -2050,7 +2056,8 @@ function initMap(){
     clearLabels();
     map.closePopup();
     Object.values(markersByChain).flat().forEach(m=>{if(map.hasLayer(m))map.removeLayer(m);});
-    if(!map.hasLayer(clusterGroup))map.addLayer(clusterGroup);
+    if(clusterGroup){if(!map.hasLayer(clusterGroup))map.addLayer(clusterGroup);}
+    else{Object.values(markersByChain).flat().forEach(m=>m.addTo(map));}
     map.setView([1.3,32.5],7);
     updateStats(null);
     setActive(allRow);
@@ -2068,7 +2075,7 @@ function initMap(){
     row.onclick=()=>{
       clearLabels();
       map.closePopup();
-      if(map.hasLayer(clusterGroup))map.removeLayer(clusterGroup);
+      if(clusterGroup&&map.hasLayer(clusterGroup))map.removeLayer(clusterGroup);
       Object.values(markersByChain).flat().forEach(m=>{if(map.hasLayer(m))map.removeLayer(m);});
       if(markers.length)showLabels(markers);
       markers.forEach(m=>m.addTo(map));
@@ -2087,12 +2094,13 @@ function initMap(){
     const marker=fmarkers.find(m=>m._fname===f.name);
     if(!marker){this.value='';return;}
     this.value='';
-    if(map.hasLayer(clusterGroup)){
+    if(clusterGroup&&map.hasLayer(clusterGroup)){
       clusterGroup.zoomToShowLayer(marker,()=>setTimeout(()=>marker.openPopup(),200));
-    } else {
-      // Switch to all-industries so cluster reveals the marker
+    } else if(clusterGroup){
       allRow.click();
       setTimeout(()=>clusterGroup.zoomToShowLayer(marker,()=>setTimeout(()=>marker.openPopup(),200)),150);
+    } else {
+      map.setView([f.lat,f.lng],Math.max(map.getZoom(),12));marker.openPopup();
     }
   });
 
