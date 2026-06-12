@@ -1673,79 +1673,164 @@ function initMap(){
     markersByChain[f.chain].push(m);
   });
 
-  // ── Label placement ────────────────────────────────────────────────────────
-  // Rules:
-  //  1. Direction: western-edge markers (lng<31.5) → label right (more map space
-  //     to the east); eastern-edge markers (lng>34.0) → label left; all others
-  //     split at the median longitude of the current chain.
-  //  2. Stagger: only applied within clusters — groups of markers within 0.06°
-  //     (~6 km) of each other in the same direction group.  Isolated markers
-  //     (no near neighbour) get zero vertical shift, so their label sits cleanly
-  //     next to their dot regardless of how many markers the chain has overall.
-  function showLabels(markers){
-    if(!markers.length) return;
+  // ── Label placement ─────────────────────────────────────────────────────────
+  // SVG overlay labels with leader lines + greedy collision-avoidance.
+  // For each marker we try candidate positions (16 angles × 5 distances, in
+  // pixel space). The first position that does not overlap any dot or any
+  // already-placed label is accepted. Isolated dots naturally land close in;
+  // dense clusters fan outward at larger radii. Leader lines connect each label
+  // box back to its dot. Redrawn on every map move/zoom.
 
-    const CLUSTER_DIST=0.06; // degrees — captures same-park factories
-    const STEP=18;            // px between label centres in a cluster
-    const BASE=7;             // px gap: dot edge → label edge
+  let _labelSVG=null, _labelMarkers=[], _redrawTimer=null, _moveAttached=false;
 
-    const lls=markers.map(m=>m.getLatLng());
+  // Accurate text-width via hidden canvas (avoids rough per-char estimate)
+  const _tc=document.createElement('canvas');
+  const _tx=_tc.getContext('2d');
+  _tx.font='600 11px "Segoe UI",system-ui,sans-serif';
+  function _tw(s){ return Math.ceil(_tx.measureText(s).width)+18; }
 
-    // Median longitude as the default left/right split
-    const sortedLng=[...lls].map(l=>l.lng).sort((a,b)=>a-b);
-    const medLng=sortedLng[Math.floor(sortedLng.length/2)];
+  // AABB-vs-AABB overlap test (centres + half-sizes, optional padding)
+  function _bbOvlp(ax,ay,aw,ah, bx,by,bw,bh, p){
+    p=p||0;
+    return Math.abs(ax-bx)<(aw+bw)/2+p && Math.abs(ay-by)<(ah+bh)/2+p;
+  }
+  // AABB-vs-circle overlap (box given by centre + size, circle by centre + radius)
+  function _bbCirc(bx,by,bw,bh, cx,cy,r){
+    const dx=Math.max(0,Math.abs(cx-bx)-bw/2);
+    const dy=Math.max(0,Math.abs(cy-by)-bh/2);
+    return dx*dx+dy*dy<=r*r;
+  }
 
-    // Per-marker direction
-    const dirs=lls.map(ll=>
-      ll.lng<31.5 ? 'right' :   // near western border → label eastward
-      ll.lng>34.0 ? 'left'  :   // near eastern border → label westward
-      ll.lng>=medLng ? 'right' : 'left'
+  function _drawLabels(){
+    if(_labelSVG){ _labelSVG.remove(); _labelSVG=null; }
+    if(!_labelMarkers.length) return;
+
+    const ctr=map.getContainer();
+    const W=ctr.offsetWidth, H=ctr.offsetHeight;
+
+    // All dots in container pixel space
+    const dots=_labelMarkers.map(m=>{
+      const p=map.latLngToContainerPoint(m.getLatLng());
+      return {x:p.x, y:p.y, name:m._fname};
+    });
+
+    const LH=21;   // label box height (px)
+    const DOT_R=11; // effective collision radius (14px dot + 2px border, halved + 1)
+
+    const labels=dots.map(d=>({
+      dotX:d.x, dotY:d.y, name:d.name, w:_tw(d.name), h:LH, x:null, y:null
+    }));
+
+    // Process least-crowded dots first so they claim natural near positions;
+    // densely packed dots then fill gaps at larger distances.
+    const crowd=dots.map((d,i)=>
+      dots.reduce((n,d2,j)=>n+(j!==i&&Math.hypot(d.x-d2.x,d.y-d2.y)<100?1:0),0)
     );
+    const order=[...labels.keys()].sort((a,b)=>crowd[a]-crowd[b]);
 
-    // Greedy single-linkage cluster detection within each direction group.
-    // Only markers that are geographically close AND share the same label
-    // direction are merged into a cluster.
-    const clusterOf=new Array(markers.length).fill(-1);
-    let nc=0;
-    markers.forEach((_,i)=>{
-      if(clusterOf[i]!==-1) return;
-      clusterOf[i]=nc;
-      markers.forEach((_,j)=>{
-        if(j<=i || dirs[j]!==dirs[i] || clusterOf[j]!==-1) return;
-        if(Math.hypot(lls[i].lat-lls[j].lat, lls[i].lng-lls[j].lng)<CLUSTER_DIST)
-          clusterOf[j]=nc;
-      });
-      nc++;
+    // Median screen-X: dots left of median prefer labels to the right, and vice versa
+    const medX=[...dots.map(d=>d.x)].sort((a,b)=>a-b)[Math.floor(dots.length/2)];
+    const toR=d=>d*Math.PI/180;
+
+    // Candidate angles — right-preferred fan starts at 0° (east);
+    // left-preferred fan starts at 180° (west).
+    const ANGLES_R=[0,-22,22,-45,45,-70,70,-95,95,-120,120,-148,148,165,180,-165].map(toR);
+    const ANGLES_L=[180,158,-158,135,-135,110,-110,85,-85,60,-60,35,-35,15,-15,0].map(toR);
+    const DISTS=[32,52,74,100,130];
+
+    order.forEach(i=>{
+      const l=labels[i];
+      const angles=l.dotX<=medX?ANGLES_R:ANGLES_L;
+      let placed=false;
+      outer:
+      for(const dist of DISTS){
+        for(const ang of angles){
+          const cx=l.dotX+Math.cos(ang)*dist;
+          const cy=l.dotY+Math.sin(ang)*dist;
+          // Must be within viewport
+          if(cx-l.w/2<4||cx+l.w/2>W-4) continue;
+          if(cy-l.h/2<4||cy+l.h/2>H-4) continue;
+          // Must not overlap any dot
+          if(dots.some(d=>_bbCirc(cx,cy,l.w,l.h,d.x,d.y,DOT_R))) continue;
+          // Must not overlap any already-placed label (3 px padding between boxes)
+          if(labels.some((l2,j)=>j!==i&&l2.x!==null&&
+              _bbOvlp(cx,cy,l.w,l.h,l2.x,l2.y,l2.w,l2.h,3))) continue;
+          l.x=cx; l.y=cy; placed=true; break outer;
+        }
+      }
+      if(!placed){ // last resort: stack right-of-dot even if it overlaps
+        l.x=Math.min(l.dotX+140,W-l.w/2-4); l.y=l.dotY;
+      }
     });
 
-    // Compute vertical stagger only for clusters of 2+ markers.
-    // Isolated markers keep shift=0 — label appears right next to the dot.
-    const shifts=new Array(markers.length).fill(0);
-    for(let c=0;c<nc;c++){
-      const members=markers.map((_,i)=>i).filter(i=>clusterOf[i]===c);
-      if(members.length<2) continue;
-      // Sort north→south so stacked labels read top-to-bottom in geographic order
-      members.sort((a,b)=>lls[b].lat-lls[a].lat);
-      const half=(members.length-1)/2;
-      members.forEach((idx,rank)=>{
-        shifts[idx]=Math.round((rank-half)*STEP);
+    // ── Build SVG ──────────────────────────────────────────────────────────
+    const NS='http://www.w3.org/2000/svg';
+    const svg=document.createElementNS(NS,'svg');
+    svg.setAttribute('width',W); svg.setAttribute('height',H);
+    svg.style.cssText='position:absolute;top:0;left:0;pointer-events:none;z-index:700';
+
+    labels.forEach(l=>{
+      if(l.x===null) return;
+
+      // Nearest point on label box to the dot centre (used for line endpoint)
+      const nx=Math.max(l.x-l.w/2,Math.min(l.x+l.w/2,l.dotX));
+      const ny=Math.max(l.y-l.h/2,Math.min(l.y+l.h/2,l.dotY));
+      const ld=Math.hypot(nx-l.dotX,ny-l.dotY);
+
+      // Draw leader line from dot-edge to label-box-edge
+      if(ld>DOT_R+4){
+        const t1=DOT_R/ld, t2=(ld-2)/ld; // start at dot edge, stop 2px from box
+        const line=document.createElementNS(NS,'line');
+        line.setAttribute('x1',l.dotX+(nx-l.dotX)*t1);
+        line.setAttribute('y1',l.dotY+(ny-l.dotY)*t1);
+        line.setAttribute('x2',l.dotX+(nx-l.dotX)*t2);
+        line.setAttribute('y2',l.dotY+(ny-l.dotY)*t2);
+        line.setAttribute('stroke','#aaa');
+        line.setAttribute('stroke-width','1');
+        svg.appendChild(line);
+      }
+
+      // Label box
+      const rect=document.createElementNS(NS,'rect');
+      rect.setAttribute('x',l.x-l.w/2); rect.setAttribute('y',l.y-l.h/2);
+      rect.setAttribute('width',l.w);    rect.setAttribute('height',l.h);
+      rect.setAttribute('rx','4');       rect.setAttribute('ry','4');
+      rect.setAttribute('fill','rgba(255,255,255,0.97)');
+      rect.setAttribute('stroke','rgba(0,0,0,0.2)');
+      rect.setAttribute('stroke-width','1');
+      svg.appendChild(rect);
+
+      // Label text
+      const text=document.createElementNS(NS,'text');
+      text.setAttribute('x',l.x); text.setAttribute('y',l.y+4);
+      text.setAttribute('text-anchor','middle');
+      text.setAttribute('font-size','11');
+      text.setAttribute('font-weight','600');
+      text.setAttribute('font-family','"Segoe UI",system-ui,sans-serif');
+      text.setAttribute('fill','#1a1a1a');
+      text.textContent=l.name;
+      svg.appendChild(text);
+    });
+
+    ctr.appendChild(svg);
+    _labelSVG=svg;
+  }
+
+  function showLabels(markers){
+    _labelMarkers=markers;
+    _drawLabels();
+    if(!_moveAttached){
+      map.on('zoomend moveend resize',()=>{
+        clearTimeout(_redrawTimer);
+        _redrawTimer=setTimeout(_drawLabels,60);
       });
+      _moveAttached=true;
     }
-
-    // Bind permanent tooltips with computed direction + stagger
-    markers.forEach((m,i)=>{
-      const d=dirs[i], s=shifts[i];
-      m.unbindTooltip();
-      m.bindTooltip(m._fname,{
-        permanent:true,
-        direction:d,
-        className:'factory-label',
-        offset:d==='right'?[BASE,s]:[-BASE,s]
-      });
-    });
   }
 
   function clearLabels(){
+    _labelMarkers=[];
+    if(_labelSVG){ _labelSVG.remove(); _labelSVG=null; }
     Object.values(markersByChain).flat().forEach(m=>m.unbindTooltip());
   }
 
