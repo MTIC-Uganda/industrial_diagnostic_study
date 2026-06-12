@@ -1,8 +1,9 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { getRoots, getIncoming } from "./api.js";
 import SankeyView from "./Sankey.jsx";
 import NodeDetail from "./NodeDetail.jsx";
 import { useTour } from "./useTour.js";
+import coatOfArms from "../public/uganda_coat_of_arms.png";
 
 export default function App() {
   const [roots, setRoots] = useState([]);       // every product root, all chains
@@ -15,6 +16,23 @@ export default function App() {
   const [loading, setLoading] = useState(false);
   const [tourActive, setTourActive] = useState(false); // true while the tour is running
   const { startTour } = useTour(setTourActive); // onboarding tour (auto-launches on first visit)
+
+  // Track the scroll container's dimensions so the Sankey always fills available space.
+  // Observing the container (not the SVG itself) means NodeDetail opening/closing
+  // immediately gives the Sankey its new correct width + height.
+  const scrollRef = useRef(null);
+  const [scrollDims, setScrollDims] = useState({ w: 1200, h: 640 });
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const ro = new ResizeObserver((entries) => {
+      const { width, height } = entries[0].contentRect;
+      if (width > 0 && height > 0)
+        setScrollDims({ w: Math.floor(width), h: Math.floor(height) });
+    });
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
 
   useEffect(() => {
     getRoots().then((rs) => {
@@ -89,7 +107,7 @@ export default function App() {
       <header style={{ background: "#002b5b", color: "#fff", padding: "14px 22px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
           <img
-            src={`${import.meta.env.BASE_URL}uganda_coat_of_arms.png`}
+            src={coatOfArms}
             alt="Coat of arms of Uganda"
             style={{ height: 46, width: "auto", display: "block" }}
           />
@@ -133,7 +151,7 @@ export default function App() {
       </div>
 
       <div style={{ display: "flex", flex: 1, overflow: "hidden" }}>
-        <div id="tour-scroll" style={{ flex: 1, overflow: "auto", padding: 12 }}>
+        <div id="tour-scroll" ref={scrollRef} style={{ flex: 1, overflow: "auto", padding: 12, minWidth: 0 }}>
           <div id="tour-breadcrumb" style={{ marginBottom: 10 }}>
             <div style={{ fontSize: 17, fontWeight: 700, color: "#002b5b" }}>
               {currentRoot ? currentRoot.name : "—"}
@@ -147,10 +165,16 @@ export default function App() {
             </div>
           )}
           <div id="tour-diagram">
-            <SankeyView graph={graph} onNodeClick={handleNodeClick} selectedId={selected?.id} />
+            <SankeyView
+              graph={graph}
+              onNodeClick={handleNodeClick}
+              selectedId={selected?.id}
+              containerW={scrollDims.w}
+              containerH={scrollDims.h}
+              hasPanel={!!selected}
+            />
           </div>
           <Legend />
-          <UgandaBand />
         </div>
         {selected && <NodeDetail node={selected} onClose={() => setSelected(null)} />}
       </div>

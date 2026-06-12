@@ -2,13 +2,19 @@
 // JSON snapshot (public/graph-bundle.json) — no backend required. getRoots() and
 // getIncoming() reproduce the live API (backend/main.py + db.py) in-memory, so
 // the UI behaves identically whether served statically or from FastAPI.
+//
+// The JSON is imported statically so Vite bundles it into the JS chunk at build
+// time — this makes the output a single self-contained HTML file with no runtime
+// network dependency.
+
+import rawBundle from "../public/graph-bundle.json";
 
 let _bundle = null;
 
-async function bundle() {
+function bundle() {
   if (!_bundle) {
-    const r = await fetch(`${import.meta.env.BASE_URL}graph-bundle.json`);
-    const b = await r.json();
+    // Shallow-clone so we can attach the Map without mutating the imported object
+    const b = Object.assign({}, rawBundle);
     b._nodeById = new Map(b.nodes.map((n) => [n.id, n]));
     _bundle = b;
   }
@@ -16,14 +22,13 @@ async function bundle() {
 }
 
 export async function getRoots() {
-  const b = await bundle();
-  return b.roots || [];
+  return bundle().roots || [];
 }
 
 // Breadth-first upstream walk from nodeId, keeping edges with weight >= threshold,
 // up to `layers` iterations — mirrors db.get_incoming().
 export async function getIncoming(nodeId, layers = 4, minThreshold = 0.003) {
-  const b = await bundle();
+  const b = bundle();
   const root = b._nodeById.get(nodeId);
   if (!root) return null;
 

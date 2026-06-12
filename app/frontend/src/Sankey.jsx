@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useRef, useEffect } from "react";
+import React, { useMemo, useState } from "react";
 import { sankey, sankeyLinkHorizontal, sankeyLeft } from "d3-sankey";
 
 const LABEL_MARGIN = 170; // room on the right for the last column's labels
@@ -21,9 +21,6 @@ const COLORS = {
 };
 
 function nodeColor(n) {
-  if (n.strength === 'strong')   return '#2e7d32';
-  if (n.strength === 'emerging') return '#f57f17';
-  if (n.strength === 'gap')      return '#c62828';
   return COLORS[n.label] || COLORS[n.componentType] || COLORS.other;
 }
 
@@ -46,36 +43,32 @@ function adjacency(nodeId, links) {
   return { nodeIds, linkSet };
 }
 
-export default function SankeyView({ graph, onNodeClick, selectedId }) {
+// Overhead (px) consumed by breadcrumb, tip, legend, and flag band above/below the SVG.
+// With the detail panel open the tip is hidden, saving ~66px; use 200 as a safe ceiling.
+const OVERHEAD = 200;
+
+export default function SankeyView({ graph, onNodeClick, selectedId, containerW = 1200, containerH = 640, hasPanel = false }) {
   const [hovered, setHovered] = useState(null);
 
-  // Fill the available container width; each product's decomposition is a small
-  // tree, so it fits without horizontal scrolling.
-  const wrapRef = useRef(null);
-  const [width, setWidth] = useState(1200);
-  useEffect(() => {
-    const el = wrapRef.current;
-    if (!el) return;
-    const ro = new ResizeObserver((entries) => {
-      const w = Math.floor(entries[0].contentRect.width);
-      if (w > 0) setWidth(Math.max(720, w));
-    });
-    ro.observe(el);
-    return () => ro.disconnect();
-  }, []);
+  // Width = full content width of the scroll container (already excludes padding).
+  const width = Math.max(320, containerW);
 
-  // Height scales with the busiest column so its nodes don't get crushed into
-  // an unreadable vertical stack (n_iteration = the node's column/depth).
+  // Height: fill the scroll container vertically so the chart uses the screen.
+  // The node-count formula gives the minimum legible height; the container height
+  // (minus overhead for controls above/below) gives the fill target on large screens.
   const height = useMemo(() => {
-    if (!graph || !graph.nodes.length) return 560;
+    const overhead = hasPanel ? OVERHEAD - 60 : OVERHEAD; // tip is hidden when panel is open
+    const fillH = Math.max(0, containerH - overhead);
+    if (!graph || !graph.nodes.length) return Math.max(fillH, 400);
     const perCol = {};
     for (const n of graph.nodes) {
       const c = n.properties.n_iteration ?? 0;
       perCol[c] = (perCol[c] || 0) + 1;
     }
     const maxCol = Math.max(...Object.values(perCol));
-    return Math.min(2200, Math.max(560, maxCol * 18 + 24));
-  }, [graph]);
+    const contentH = maxCol * 20 + 24; // 20px per node, slight increase for breathing room
+    return Math.min(2400, Math.max(fillH, contentH));
+  }, [graph, containerH, hasPanel]);
 
   const { nodes, links } = useMemo(() => {
     if (!graph || !graph.nodes.length) return { nodes: [], links: [] };
@@ -147,7 +140,7 @@ export default function SankeyView({ graph, onNodeClick, selectedId }) {
   const contentRight = width - LABEL_MARGIN;
 
   return (
-    <div ref={wrapRef} style={{ width: "100%" }}>
+    <>
       {/* Click on empty canvas clears the selection (and un-dims the chart). */}
       <svg
         width={width}
@@ -216,9 +209,8 @@ export default function SankeyView({ graph, onNodeClick, selectedId }) {
             </g>
           );
         })}
-        ))}
       </g>
       </svg>
-    </div>
+    </>
   );
 }
