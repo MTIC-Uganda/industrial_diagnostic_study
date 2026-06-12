@@ -2026,7 +2026,7 @@ function initMap(){
 
     requestAnimationFrame(()=>{
       // Check immediately if the map is already stable (no autoPan in flight)
-      if(!map.isMoving()) avoidCollision();
+      if(!map._moving&&!map._zooming) avoidCollision();
       // Always re-check after any autoPan completes
       _popupPanFn=()=>{requestAnimationFrame(avoidCollision);_popupPanFn=null;};
       map.once('moveend',_popupPanFn);
