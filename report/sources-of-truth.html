@@ -1677,6 +1677,13 @@ const FACTORIES=[
 ];
 
 function initMap(){
+  // Catch any unexpected runtime error and display it inside the map container
+  // so the problem is always visible (remove this block once map is stable)
+  window.onerror=function(msg,_src,line){
+    const el=document.getElementById('industry-map');
+    if(el&&!el.querySelector('.leaflet-container'))
+      el.innerHTML='<div style="padding:20px;color:#c00;font-size:12px;font-family:monospace">Map JS error (line '+line+'): '+msg+'</div>';
+  };
   const _spin=document.getElementById('map-spinner');if(_spin)_spin.remove();
   _leafletMap=L.map('industry-map').setView([1.3,32.5],7);
   const map=_leafletMap;
@@ -1730,23 +1737,28 @@ function initMap(){
 
   // ── Marker clustering (All Industries view) ──────────────────────────────
   let clusterGroup=null;
-  if(typeof L.markerClusterGroup==='function'){
-    clusterGroup=L.markerClusterGroup({
-      maxClusterRadius:70,spiderfyOnMaxZoom:true,showCoverageOnHover:false,
-      iconCreateFunction:cluster=>{
-        const n=cluster.getChildCount();
-        const size=n<10?32:n<30?38:44;
-        return L.divIcon({
-          html:`<div style="background:#1565c0;color:#fff;border-radius:50%;width:${size}px;height:${size}px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:${n<10?13:12}px;border:2.5px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.4)">${n}</div>`,
-          iconSize:[size,size],iconAnchor:[size/2,size/2],className:''
-        });
-      }
-    });
-    Object.values(markersByChain).flat().forEach(m=>clusterGroup.addLayer(m));
-    map.addLayer(clusterGroup);
-  } else {
-    // Fallback: markercluster unavailable — add all markers directly
-    Object.values(markersByChain).flat().forEach(m=>m.addTo(map));
+  try{
+    if(typeof L.markerClusterGroup==='function'){
+      clusterGroup=L.markerClusterGroup({
+        maxClusterRadius:70,spiderfyOnMaxZoom:true,showCoverageOnHover:false,
+        iconCreateFunction:cluster=>{
+          const n=cluster.getChildCount();
+          const size=n<10?32:n<30?38:44;
+          return L.divIcon({
+            html:`<div style="background:#1565c0;color:#fff;border-radius:50%;width:${size}px;height:${size}px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:${n<10?13:12}px;border:2.5px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.4)">${n}</div>`,
+            iconSize:[size,size],iconAnchor:[size/2,size/2],className:''
+          });
+        }
+      });
+      Object.values(markersByChain).flat().forEach(m=>clusterGroup.addLayer(m));
+      map.addLayer(clusterGroup);
+    } else {
+      Object.values(markersByChain).flat().forEach(m=>m.addTo(map));
+    }
+  }catch(e){
+    console.error('markerClusterGroup failed, falling back to direct markers:',e);
+    clusterGroup=null;
+    try{Object.values(markersByChain).flat().forEach(m=>m.addTo(map));}catch(e2){}
   }
 
   // ── Label placement ─────────────────────────────────────────────────────────
