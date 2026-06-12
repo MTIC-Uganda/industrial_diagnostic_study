@@ -1955,84 +1955,29 @@ function initMap(){
     Object.values(markersByChain).flat().forEach(m=>m.unbindTooltip());
   }
 
-  // ── Popup collision avoidance ──────────────────────────────────────────────
-  // Root cause of the previous failure: _labelBoxes stored absolute container
-  // pixels.  Leaflet's autoPan fires AFTER popupopen, shifting everything.  By
-  // the time the rAF ran, the popup's getBoundingClientRect was post-pan while
-  // _labelBoxes was pre-pan — different coordinate systems → wrong result.
-  //
-  // Fix: store labels as OFFSETS from their dot's lat/lng → container point
-  // (_labelItems, set in _drawLabels).  Then recompute all positions in real-time
-  // via latLngToContainerPoint so pan never makes them stale.  Also wait for any
-  // Leaflet autoPan to finish (moveend) before doing the final position check.
-  let _popupPanFn=null;
-  map.on('popupclose',e=>{
-    e.popup.options.offset=[0,0];
-    if(_popupPanFn){map.off('moveend',_popupPanFn);_popupPanFn=null;}
-  });
+  // ── Popup: open above dot, pan to centre the popup on screen ─────────────
   map.on('popupopen',e=>{
-    const popup=e.popup, src=popup._source;
+    const src=e.popup._source;
     if(!src) return;
-    if(_popupPanFn){map.off('moveend',_popupPanFn);_popupPanFn=null;}
-
-    function avoidCollision(){
-      if(!popup.isOpen()) return;
-      const el=popup.getElement();
-      if(!el) return;
-      const ctr=map.getContainer();
-      const W=ctr.offsetWidth, H=ctr.offsetHeight;
-      const mapRect=ctr.getBoundingClientRect();
-      const r=el.getBoundingClientRect();
-      const px=r.left-mapRect.left, py=r.top-mapRect.top;
-      const pw=r.width, ph=r.height;
-      const GAP=10, DOT_R=16;
-      const allDots=Object.values(markersByChain).flat().filter(m=>map.hasLayer(m));
-
-      function hits(bx,by){
-        if(bx<GAP||by<GAP||bx+pw>W-GAP||by+ph>H-GAP) return true;
-        // Labels: recompute from lat/lng each time — immune to pan drift
-        if(_labelItems.some(item=>{
-          const dp=map.latLngToContainerPoint(item.marker.getLatLng());
-          const lx=dp.x+item.dx, ly=dp.y+item.dy;
-          return !(bx+pw<lx-GAP||bx>lx+item.w+GAP||by+ph<ly-GAP||by>ly+item.h+GAP);
-        })) return true;
-        // Dots: also recomputed live
-        if(allDots.some(m=>{
-          if(m===src) return false;
-          const p=map.latLngToContainerPoint(m.getLatLng());
-          const dx=Math.max(0,Math.abs(p.x-(bx+pw/2))-pw/2);
-          const dy=Math.max(0,Math.abs(p.y-(by+ph/2))-ph/2);
-          return dx*dx+dy*dy<DOT_R*DOT_R;
-        })) return true;
-        return false;
-      }
-
-      if(!hits(px,py)) return;
-      // 16 directions × 6 step sizes — more candidates for dense clusters
-      const dirs=Array.from({length:16},(_,i)=>{
-        const a=i*Math.PI/8; return [Math.cos(a),Math.sin(a)];
-      });
-      const steps=[40,80,130,200,300,450];
-      let ox=0,oy=0,found=false;
-      outer:for(const s of steps){
-        for(const [dx,dy] of dirs){
-          if(!hits(px+dx*s,py+dy*s)){ox=dx*s;oy=dy*s;found=true;break outer;}
-        }
-      }
-      if(found){
-        const prev=popup.options.offset||[0,0];
-        popup.options.offset=[prev[0]+ox,prev[1]+oy];
-        popup.update();
-      }
-    }
-
-    requestAnimationFrame(()=>{
-      // Check immediately if the map is already stable (no autoPan in flight)
-      if(!map._moving&&!map._zooming) avoidCollision();
-      // Always re-check after any autoPan completes
-      _popupPanFn=()=>{requestAnimationFrame(avoidCollision);_popupPanFn=null;};
-      map.once('moveend',_popupPanFn);
+    // After Leaflet's own autoPan settles, centre the map on the marker so the
+    // popup (which opens directly above the dot) lands roughly in the middle of
+    // the viewport.  We nudge the target lat/lng upward by half the popup height
+    // in pixels so the popup itself (not just the dot) is vertically centred.
+    map.once('moveend',()=>{
+      const el=e.popup.getElement();
+      const ph=el?el.offsetHeight:120;
+      const dp=map.latLngToContainerPoint(src.getLatLng());
+      const target=map.containerPointToLatLng([dp.x, dp.y-(ph/2+14)]);
+      map.panTo(target,{animate:true,duration:0.35});
     });
+    // If autoPan won't fire (map already centred), trigger the nudge directly
+    if(!map._moving&&!map._zooming){
+      const el=e.popup.getElement();
+      const ph=el?el.offsetHeight:120;
+      const dp=map.latLngToContainerPoint(src.getLatLng());
+      const target=map.containerPointToLatLng([dp.x, dp.y-(ph/2+14)]);
+      map.panTo(target,{animate:true,duration:0.35});
+    }
   });
 
   function updateStats(chainName,col,chainMarkers){
