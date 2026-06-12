@@ -1690,7 +1690,7 @@ function initMap(){
   // dense clusters fan outward at larger radii. Leader lines connect each label
   // box back to its dot. Redrawn on every map move/zoom.
 
-  let _labelSVG=null, _labelMarkers=[], _labelBoxes=[], _redrawTimer=null, _moveAttached=false;
+  let _labelSVG=null, _labelMarkers=[], _labelItems=[], _redrawTimer=null, _moveAttached=false;
 
   // Accurate text-width via hidden canvas (avoids rough per-char estimate)
   const _tc=document.createElement('canvas');
@@ -1773,8 +1773,15 @@ function initMap(){
       }
     });
 
-    // Save bounding boxes for popup collision avoidance (refreshed every redraw)
-    _labelBoxes=labels.filter(l=>l.x!==null).map(l=>({x:l.x-l.w/2,y:l.y-l.h/2,w:l.w,h:l.h}));
+    // Save label positions as OFFSETS from each dot's container point.
+    // Offsets are stable across map pans (pan shifts dots and labels by same delta),
+    // so they can be recomputed in real-time via latLngToContainerPoint(marker).
+    _labelItems=labels.filter(l=>l.x!==null).map(l=>({
+      marker:l.marker,
+      dx:(l.x-l.w/2)-l.dotX, // left edge offset from dot centre X
+      dy:(l.y-l.h/2)-l.dotY, // top edge offset from dot centre Y
+      w:l.w, h:l.h
+    }));
 
     // ── Build SVG ──────────────────────────────────────────────────────────
     const NS='http://www.w3.org/2000/svg';
@@ -1851,22 +1858,33 @@ function initMap(){
 
   function clearLabels(){
     _labelMarkers=[];
-    _labelBoxes=[];
+    _labelItems=[];
     if(_labelSVG){ _labelSVG.remove(); _labelSVG=null; }
     Object.values(markersByChain).flat().forEach(m=>m.unbindTooltip());
   }
 
   // ── Popup collision avoidance ──────────────────────────────────────────────
-  // On popupopen: wait one frame (so the popup is fully rendered and has a real
-  // bounding rect), then check whether it overlaps any label box or any visible
-  // dot.  If it does, try 8 directions × 5 step sizes and move the popup to the
-  // first clear position via popup.options.offset + popup.update().
-  // On popupclose: reset the offset so the NEXT open always starts from [0,0].
-  map.on('popupclose', e=>{ e.popup.options.offset=[0,0]; });
-  map.on('popupopen', e=>{
+  // Root cause of the previous failure: _labelBoxes stored absolute container
+  // pixels.  Leaflet's autoPan fires AFTER popupopen, shifting everything.  By
+  // the time the rAF ran, the popup's getBoundingClientRect was post-pan while
+  // _labelBoxes was pre-pan — different coordinate systems → wrong result.
+  //
+  // Fix: store labels as OFFSETS from their dot's lat/lng → container point
+  // (_labelItems, set in _drawLabels).  Then recompute all positions in real-time
+  // via latLngToContainerPoint so pan never makes them stale.  Also wait for any
+  // Leaflet autoPan to finish (moveend) before doing the final position check.
+  let _popupPanFn=null;
+  map.on('popupclose',e=>{
+    e.popup.options.offset=[0,0];
+    if(_popupPanFn){map.off('moveend',_popupPanFn);_popupPanFn=null;}
+  });
+  map.on('popupopen',e=>{
     const popup=e.popup, src=popup._source;
     if(!src) return;
-    requestAnimationFrame(()=>{
+    if(_popupPanFn){map.off('moveend',_popupPanFn);_popupPanFn=null;}
+
+    function avoidCollision(){
+      if(!popup.isOpen()) return;
       const el=popup.getElement();
       if(!el) return;
       const ctr=map.getContainer();
@@ -1875,13 +1893,18 @@ function initMap(){
       const r=el.getBoundingClientRect();
       const px=r.left-mapRect.left, py=r.top-mapRect.top;
       const pw=r.width, ph=r.height;
-      const GAP=8, DOT_R=16;
+      const GAP=10, DOT_R=16;
       const allDots=Object.values(markersByChain).flat().filter(m=>map.hasLayer(m));
+
       function hits(bx,by){
         if(bx<GAP||by<GAP||bx+pw>W-GAP||by+ph>H-GAP) return true;
-        if(_labelBoxes.some(b=>
-          !(bx+pw<b.x-GAP||bx>b.x+b.w+GAP||by+ph<b.y-GAP||by>b.y+b.h+GAP)
-        )) return true;
+        // Labels: recompute from lat/lng each time — immune to pan drift
+        if(_labelItems.some(item=>{
+          const dp=map.latLngToContainerPoint(item.marker.getLatLng());
+          const lx=dp.x+item.dx, ly=dp.y+item.dy;
+          return !(bx+pw<lx-GAP||bx>lx+item.w+GAP||by+ph<ly-GAP||by>ly+item.h+GAP);
+        })) return true;
+        // Dots: also recomputed live
         if(allDots.some(m=>{
           if(m===src) return false;
           const p=map.latLngToContainerPoint(m.getLatLng());
@@ -1891,18 +1914,32 @@ function initMap(){
         })) return true;
         return false;
       }
+
       if(!hits(px,py)) return;
-      const dirs=[[0,-1],[1,-1],[1,0],[1,1],[0,1],[-1,1],[-1,0],[-1,-1]];
-      const steps=[30,60,100,150,220];
+      // 16 directions × 6 step sizes — more candidates for dense clusters
+      const dirs=Array.from({length:16},(_,i)=>{
+        const a=i*Math.PI/8; return [Math.cos(a),Math.sin(a)];
+      });
+      const steps=[40,80,130,200,300,450];
       let ox=0,oy=0,found=false;
       outer:for(const s of steps){
         for(const [dx,dy] of dirs){
-          const mag=Math.hypot(dx,dy);
-          const nx=dx/mag*s, ny=dy/mag*s;
-          if(!hits(px+nx,py+ny)){ox=nx;oy=ny;found=true;break outer;}
+          if(!hits(px+dx*s,py+dy*s)){ox=dx*s;oy=dy*s;found=true;break outer;}
         }
       }
-      if(found){ popup.options.offset=[ox,oy]; popup.update(); }
+      if(found){
+        const prev=popup.options.offset||[0,0];
+        popup.options.offset=[prev[0]+ox,prev[1]+oy];
+        popup.update();
+      }
+    }
+
+    requestAnimationFrame(()=>{
+      // Check immediately if the map is already stable (no autoPan in flight)
+      if(!map.isMoving()) avoidCollision();
+      // Always re-check after any autoPan completes
+      _popupPanFn=()=>{requestAnimationFrame(avoidCollision);_popupPanFn=null;};
+      map.once('moveend',_popupPanFn);
     });
   });
 
