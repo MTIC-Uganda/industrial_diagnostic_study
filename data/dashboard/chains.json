@@ -1,0 +1,1359 @@
+[
+  {
+    "id": "iron-steel",
+    "name": "Iron & Steel",
+    "map": {
+      "title": "Iron & Steel Value Chain",
+      "desc": "From iron ore mining through ironmaking, steelmaking, rolling and finishing to market. Uganda holds 350 million tonnes of high-grade hematite ore (60–65% Fe) — but operates almost entirely in downstream rolling.",
+      "phases": [
+        {
+          "name": "Phase I",
+          "label": "Mining &\nBeneficiation",
+          "detail": "Iron ore → concentrate",
+          "strength": "gap",
+          "stat": "1 commercial miner (SINO Minerals, 300k tpa)"
+        },
+        {
+          "name": "Phase II",
+          "label": "Ironmaking\n(DRI/Sponge)",
+          "detail": "Ore → sponge iron",
+          "strength": "emerging",
+          "stat": "2 plants: Tembo 350k + Abyssinia 30k tpa"
+        },
+        {
+          "name": "Phase III",
+          "label": "Steelmaking",
+          "detail": "Sponge/scrap → crude steel",
+          "strength": "emerging",
+          "stat": "Induction furnace; scrap-based"
+        },
+        {
+          "name": "Phase IV",
+          "label": "Continuous Casting",
+          "detail": "Liquid steel → billets/blooms",
+          "strength": "emerging",
+          "stat": "Partial — some domestic billet"
+        },
+        {
+          "name": "Phase V",
+          "label": "Rolling &\nFinishing",
+          "detail": "Billets → long/flat/wire products",
+          "strength": "strong",
+          "stat": "~70% of installed capacity; rebar net exporter"
+        },
+        {
+          "name": "Phase VI",
+          "label": "Market",
+          "detail": "Domestic + regional export",
+          "strength": "strong",
+          "stat": "EAC + DRC + S.Sudan export"
+        }
+      ],
+      "gap": "CRITICAL GAP: Flat steel entirely absent. USD 219.5m imports annually (HS 7208). No hot-rolled coil capacity in Uganda."
+    },
+    "status": {
+      "current": [
+        {
+          "label": "Installed Capacity",
+          "value": "1.68 Mtpa (all phases)",
+          "color": "blue"
+        },
+        {
+          "label": "Capacity Utilised",
+          "value": "513,364 tpa (30.5%)",
+          "color": "amber"
+        },
+        {
+          "label": "Active Plants",
+          "value": "~37 plants; 40 firms",
+          "color": "blue"
+        },
+        {
+          "label": "Iron Ore Reserves",
+          "value": "~350 million tonnes (hematite 60–65% Fe)",
+          "color": "green"
+        },
+        {
+          "label": "Annual Imports",
+          "value": "USD 527m total; USD 219.5m flat steel",
+          "color": "red"
+        },
+        {
+          "label": "Annual Exports",
+          "value": "USD 55.8m rebar + sections (regional)",
+          "color": "green"
+        },
+        {
+          "label": "Employment",
+          "value": "~2,500 direct; large indirect",
+          "color": "blue"
+        },
+        {
+          "label": "Sector Investment",
+          "value": ">USD 1 billion (private)",
+          "color": "green"
+        }
+      ],
+      "companies": [
+        "Tembo Steels (Iganga/Lugazi)",
+        "Abyssinia Iron & Steel (Jinja)",
+        "Roofings Ltd (Lubowa)",
+        "Roofings Rolling Mills (Namanve)",
+        "Steel & Tube Industries (Namanve)",
+        "Uganda Baati (Kampala)",
+        "Devki Group (USD 500m — groundbreaking Nov 2025)",
+        "SINO Minerals (Kabale — iron ore)"
+      ],
+      "constraints": [
+        {
+          "label": "Upstream feedstock gap — no commercial ironmaking from domestic ore",
+          "w": "w5"
+        },
+        {
+          "label": "Electricity reliability & cost (8–10¢/kWh vs Kenya 5–7¢)",
+          "w": "w5"
+        },
+        {
+          "label": "Import competition — flat steel (USD 219.5m) wholly imported",
+          "w": "w4"
+        },
+        {
+          "label": "Capital cost (18–23% interest vs Kenya 13–17%)",
+          "w": "w4"
+        },
+        {
+          "label": "Tax policy inconsistency (CPC letters, VAT on coal)",
+          "w": "w3"
+        },
+        {
+          "label": "Logistics (USD 0.08–0.12/tonne-km; no rail to ore)",
+          "w": "w3"
+        },
+        {
+          "label": "Skills gap (~68% firms struggle to find technical skills)",
+          "w": "w3"
+        },
+        {
+          "label": "Standards enforcement (UNBS lab not yet equipped)",
+          "w": "w3"
+        }
+      ],
+      "priorities": [
+        "Sponge iron / DRI anchored on domestic ore — missing midstream; unlocks the entire chain",
+        "Flat steel production — largest import line USD 219.5m; NO domestic production; biggest import-substitution prize",
+        "Long products (rebar/sections) — already competitive, exporting ~USD 55.8m; defend and scale",
+        "Iron ore mining & beneficiation — enabling upstream step; 1,000,000 tpa commercial mine needed"
+      ],
+      "proj": {
+        "title": "2040 Tenfold Projection",
+        "rows": [
+          {
+            "label": "Per capita steel consumption",
+            "current": "~20–25 kg/yr",
+            "target": "~90–130 kg/yr (population ~60m+)"
+          },
+          {
+            "label": "Annual steel demand",
+            "current": "~1 Mtpa",
+            "target": "5.5–8 Mtpa"
+          },
+          {
+            "label": "Flat steel production",
+            "current": "Zero",
+            "target": "Domestic production via upstream investment"
+          },
+          {
+            "label": "Export position",
+            "current": "Regional rebar (~$55.8m)",
+            "target": "EAC integrated steel supplier"
+          },
+          {
+            "label": "Iron ore mined",
+            "current": "~300,000 tpa (SINO Minerals)",
+            "target": "≥1,000,000 tpa commercial operation"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "copper",
+    "name": "Copper & Allied Metals",
+    "map": {
+      "title": "Copper & Allied Metals Value Chain",
+      "desc": "From copper ore mining at Kilembe through smelting, refining, and semi-fabrication to insulated wire & cable. Kilembe (dormant since 1980s) holds >6.5m tonnes of copper ore. A production-sharing agreement was signed March 2025.",
+      "phases": [
+        {
+          "name": "Phase I",
+          "label": "Mining &\nConcentration",
+          "detail": "Copper ore → concentrate",
+          "strength": "gap",
+          "stat": "Kilembe dormant since 1980s; PSA signed Mar 2025"
+        },
+        {
+          "name": "Phase II",
+          "label": "Smelting",
+          "detail": "Concentrate → blister copper",
+          "strength": "gap",
+          "stat": "Absent — no smelter in Uganda"
+        },
+        {
+          "name": "Phase III",
+          "label": "Refining",
+          "detail": "Blister → refined cathode HS7403",
+          "strength": "gap",
+          "stat": "All cathode imported; DRC + China"
+        },
+        {
+          "name": "Phase IV",
+          "label": "Semi-fabrication",
+          "detail": "Cathode → wire rod HS7408",
+          "strength": "gap",
+          "stat": "Wire rod imported; largely from China"
+        },
+        {
+          "name": "Phase V",
+          "label": "Fabrication",
+          "detail": "Rod → insulated wire & cable HS8544",
+          "strength": "strong",
+          "stat": "Cable Corporation Ltd ~65% market share"
+        },
+        {
+          "name": "Phase VI",
+          "label": "Market",
+          "detail": "Domestic electrification + regional",
+          "strength": "strong",
+          "stat": "Grid access 25.3% → universal; growing demand"
+        }
+      ],
+      "gap": "CRITICAL GAP: Phases I–IV entirely absent. USD 57.7m cable imports (HS 8544) + USD 6.9m cathode imports. Raw ore potential untapped since 1980s."
+    },
+    "status": {
+      "current": [
+        {
+          "label": "Kilembe Copper Reserves",
+          "value": ">6.5 million tonnes ore at 1.77% Cu",
+          "color": "green"
+        },
+        {
+          "label": "Kilembe Cobalt",
+          "value": "~5.5 million tonnes at 0.17% Co (battery mineral)",
+          "color": "green"
+        },
+        {
+          "label": "Mine Status",
+          "value": "Dormant since 1980s; PSA signed 3 March 2025 (Sarrai Group + Nile Fibreboard)",
+          "color": "amber"
+        },
+        {
+          "label": "Cable Market",
+          "value": "Cable Corporation Ltd ~65% domestic share",
+          "color": "blue"
+        },
+        {
+          "label": "Cable Imports",
+          "value": "USD 57.7m (HS 8544, 2024) — rising fast",
+          "color": "red"
+        },
+        {
+          "label": "Cathode Imports",
+          "value": "USD 6.9m (HS 7403, 2024) — up from USD 444k in 2020",
+          "color": "red"
+        },
+        {
+          "label": "Grid Access",
+          "value": "25.3% (UBOS 2024); rural only 9.1%",
+          "color": "amber"
+        }
+      ],
+      "companies": [
+        "Cable Corporation Ltd (Mehta Group — est. 1968; building wire, power cables, conductors)",
+        "East African Cables (Uganda)",
+        "Sarrai Group + Nile Fibreboard Ltd (Kilembe PSA investors — signed 3 Mar 2025)"
+      ],
+      "constraints": [
+        {
+          "label": "Dormant midstream — Kilembe idle since 1980s; all cathode/rod imported",
+          "w": "w5"
+        },
+        {
+          "label": "Capital & long lead time — mine redevelopment multi-year and capital-intensive",
+          "w": "w5"
+        },
+        {
+          "label": "Energy reliability — electro-refining is power-intensive and continuous",
+          "w": "w4"
+        },
+        {
+          "label": "Logistics / Kasese access — landlocked 18–20% of sale price; Kilembe upgrades needed",
+          "w": "w3"
+        },
+        {
+          "label": "Historic tailings & environmental liability — acid-mine-drainage risk",
+          "w": "w3"
+        },
+        {
+          "label": "Standards & substandard cable imports — safety-critical enforcement gap",
+          "w": "w3"
+        },
+        {
+          "label": "Skills — mining/metallurgical skills scarce after decades of dormancy",
+          "w": "w3"
+        }
+      ],
+      "priorities": [
+        "Insulated wire & cable — expand Cable Corporation-led industry; capture USD 57.7m import market + electrification-driven growth",
+        "Kilembe copper cathode & cobalt — execute 2025 PSA; domestic cable feedstock + cobalt as battery-mineral export",
+        "Copper wire rod semi-fabrication — integrate midstream between cathode and cable domestically"
+      ],
+      "proj": {
+        "title": "2040 Tenfold Projection",
+        "rows": [
+          {
+            "label": "Domestic cable market",
+            "current": "~USD 57.7m imports + Cable Corp production",
+            "target": "USD 300–500m+ per year"
+          },
+          {
+            "label": "Kilembe status",
+            "current": "Dormant (PSA signed 2025)",
+            "target": "Operating copper cathode + cobalt production"
+          },
+          {
+            "label": "Grid access",
+            "current": "25.3%",
+            "target": "Universal / near-universal"
+          },
+          {
+            "label": "Cobalt positioning",
+            "current": "Untapped",
+            "target": "High-value battery-mineral export alongside copper cathode"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "automotive",
+    "name": "Automotives",
+    "map": {
+      "title": "Automotive Value Chain",
+      "desc": "From raw materials (steel, copper, plastics) through component manufacture, vehicle assembly, and distribution to the after-market. Kiira Motors Corporation (KMC) plant commissioned 27 September 2025 in Jinja.",
+      "phases": [
+        {
+          "name": "Phase I",
+          "label": "Raw Materials",
+          "detail": "Steel, copper, aluminium, rubber, plastics",
+          "strength": "emerging",
+          "stat": "Steel (Ch.4) + Copper (Ch.5) maturing"
+        },
+        {
+          "name": "Phase II",
+          "label": "Components",
+          "detail": "Body panels, seats, wiring, batteries, tyres",
+          "strength": "gap",
+          "stat": "Largely imported; CKD/SKD kits"
+        },
+        {
+          "name": "Phase III",
+          "label": "Assembly",
+          "detail": "Vehicles, buses, motorcycles",
+          "strength": "emerging",
+          "stat": "KMC Jinja (Sept 2025); CKD motorcycle assembly"
+        },
+        {
+          "name": "Phase IV",
+          "label": "Distribution & Sales",
+          "detail": "New + used vehicle market",
+          "strength": "strong",
+          "stat": "USD 298.4m car imports (2024); 48,700 used/yr"
+        },
+        {
+          "name": "Phase V",
+          "label": "After-Market",
+          "detail": "Spare parts, service, repair",
+          "strength": "strong",
+          "stat": "Ndeeba/Kisekka market; large informal cluster"
+        }
+      ],
+      "gap": "KEY GAP: Components (Phase II) — Uganda assembles but does not manufacture components. Local content almost zero. USD 31.7m parts imports alone (HS 8708)."
+    },
+    "status": {
+      "current": [
+        {
+          "label": "KMC Plant",
+          "value": "Kiira Vehicle Plant, Jinja — commissioned 27 Sept 2025",
+          "color": "green"
+        },
+        {
+          "label": "KMC Capacity",
+          "value": "~2,500 vehicles/year (targeting 10,000 medium-term)",
+          "color": "blue"
+        },
+        {
+          "label": "Used Vehicle Imports",
+          "value": "~48,700 vehicles/year",
+          "color": "amber"
+        },
+        {
+          "label": "Total Vehicle Import Bill",
+          "value": ">USD 650 million/year (all categories)",
+          "color": "red"
+        },
+        {
+          "label": "Motor Cars (HS 8703)",
+          "value": "USD 298.4m (2024); Japan 85% dominant",
+          "color": "red"
+        },
+        {
+          "label": "Motorcycles (HS 8711)",
+          "value": "USD 157.1m (2024) — boda-boda market",
+          "color": "amber"
+        },
+        {
+          "label": "KMC Steel Demand",
+          "value": "~37,300 tonnes of steel for bus frames by 2027/28 (~USD 75m)",
+          "color": "blue"
+        },
+        {
+          "label": "Financing Gap",
+          "value": "~UGX 50 billion gap for KMC FY2025/26 scale-up",
+          "color": "amber"
+        }
+      ],
+      "companies": [
+        "Kiira Motors Corporation (KMC) — Jinja; state-anchored; Kayoola EV buses; plant commissioned Sept 2025",
+        "Bajaj / TVS assemblers — CKD/SKD motorcycle assembly (boda-boda market)",
+        "Bus/truck body fabricators — Kampala/Jinja; bodies on imported chassis",
+        "After-market parts cluster — Ndeeba/Kisekka; large import-based spare parts trade"
+      ],
+      "constraints": [
+        {
+          "label": "Finance/capital for KMC scale-up (~UGX 50bn FY2025/26 gap)",
+          "w": "w5"
+        },
+        {
+          "label": "Shallow local content — CKD/SKD kit dependence; domestic components almost zero",
+          "w": "w4"
+        },
+        {
+          "label": "Used-import competition — no age-limit or taxation policy to direct demand to domestic assembly",
+          "w": "w4"
+        },
+        {
+          "label": "Technology & tooling — assembly established but component manufacture absent",
+          "w": "w3"
+        },
+        {
+          "label": "Skills — automotive/mechatronics and EV skills scarce",
+          "w": "w3"
+        },
+        {
+          "label": "Logistics — landlocked raises CKD-kit costs (~18–20% of sale price)",
+          "w": "w3"
+        },
+        {
+          "label": "Standards & homologation — vehicle standards and age limits shape market",
+          "w": "w2"
+        }
+      ],
+      "priorities": [
+        "Buses and electric buses (KMC anchor) — leverage new plant, EV differentiator, government fleet procurement",
+        "Motorcycle assembly (CKD → e-boda) — largest-volume mobility market (USD 157m imports); feasible, job-rich",
+        "Spare parts & component localisation — builds local content; supplies assembly + large after-market; deepens steel/copper/plastics links"
+      ],
+      "proj": {
+        "title": "2040 Tenfold Projection",
+        "rows": [
+          {
+            "label": "KMC annual output",
+            "current": "2,500 vehicles/yr",
+            "target": "10,000+ vehicles/yr; regional EV-bus supplier"
+          },
+          {
+            "label": "Motorcycle market",
+            "current": "USD 157m imports",
+            "target": "Majority assembled locally; e-boda transition"
+          },
+          {
+            "label": "Local content",
+            "current": "~Near zero",
+            "target": "Domestic steel, copper, plastics inputs significantly localised"
+          },
+          {
+            "label": "Vehicle import bill",
+            "current": ">USD 650m/yr",
+            "target": "Significantly reduced via domestic assembly + used-import policy"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "textiles",
+    "name": "Textiles & Garments",
+    "map": {
+      "title": "Textiles & Garments Value Chain",
+      "desc": "From cotton growing through ginning, spinning, weaving, finishing and garment manufacture to market. Uganda has 39 ginneries with ~1 million bale annual capacity — running at only ~10%.",
+      "phases": [
+        {
+          "name": "Phase I",
+          "label": "Cotton Growing",
+          "detail": "Seed cotton → raw cotton",
+          "strength": "strong",
+          "stat": "Smallholder base; ~116,000 bales (2023)"
+        },
+        {
+          "name": "Phase II",
+          "label": "Ginning",
+          "detail": "Seed cotton → lint + cottonseed",
+          "strength": "strong",
+          "stat": "39 ginneries; ~1m bale capacity; only 10% used"
+        },
+        {
+          "name": "Phase III",
+          "label": "Spinning",
+          "detail": "Lint → yarn",
+          "strength": "emerging",
+          "stat": "Fine Spinners + Nytil (limited)"
+        },
+        {
+          "name": "Phase IV",
+          "label": "Weaving/Knitting",
+          "detail": "Yarn → fabric",
+          "strength": "gap",
+          "stat": "Largely absent"
+        },
+        {
+          "name": "Phase V",
+          "label": "Wet Processing\n& Finishing",
+          "detail": "Grey fabric → dyed/finished fabric",
+          "strength": "gap",
+          "stat": "CRITICAL MISSING STEP — blocks whole chain"
+        },
+        {
+          "name": "Phase VI",
+          "label": "Garment Mfg",
+          "detail": "Fabric → apparel, uniforms, home textiles",
+          "strength": "emerging",
+          "stat": "Limited; ~90% of lint exported raw"
+        }
+      ],
+      "gap": "CRITICAL GAP: Wet processing & finishing (Phase V) — without dyeing and finishing, Uganda cannot produce export-quality fabric or garments. This single gap blocks the entire chain."
+    },
+    "status": {
+      "current": [
+        {
+          "label": "Cotton Output",
+          "value": "~116,000 bales (2023); up to 250,000 in good years",
+          "color": "blue"
+        },
+        {
+          "label": "Ginneries",
+          "value": "39 ginneries; ~1 million bale annual capacity at ~10% use",
+          "color": "amber"
+        },
+        {
+          "label": "Integrated Mills",
+          "value": "2 mills (Nytil + Fine Spinners); ~USD 50m combined turnover",
+          "color": "blue"
+        },
+        {
+          "label": "Raw Lint Exported",
+          "value": "~90% — exported raw at <USD 1/kg",
+          "color": "red"
+        },
+        {
+          "label": "Cotton Lint Exports",
+          "value": "USD 11.3m (HS 5201, 2024) — Bangladesh, Pakistan, UAE",
+          "color": "amber"
+        },
+        {
+          "label": "Employment",
+          "value": "~18,000 (Fine Spinners + outgrowers)",
+          "color": "green"
+        }
+      ],
+      "companies": [
+        "Southern Range Nyanza (Nytil) — one of two integrated mills",
+        "Fine Spinners Ltd — integrated; ~USD 50m turnover; ~18,000 employment incl. outgrowers",
+        "Lira Spinning Facility — new investment under cotton-development programme"
+      ],
+      "constraints": [
+        {
+          "label": "Wet-processing/finishing gap — dyeing/finishing absent; blocks garment scale-up",
+          "w": "w5"
+        },
+        {
+          "label": "Used-clothing (mivumba) competition — directly undercuts domestic garments",
+          "w": "w4"
+        },
+        {
+          "label": "Cotton output volatility & low yields — only 10% of ginnery capacity used",
+          "w": "w4"
+        },
+        {
+          "label": "Capital for spinning/weaving — long-term finance scarce and costly",
+          "w": "w4"
+        },
+        {
+          "label": "Water & effluent for wet-processing — dyeing needs treatable water; NEMA compliance costly",
+          "w": "w3"
+        },
+        {
+          "label": "Skills — textile-engineering and supervisory skills limited",
+          "w": "w3"
+        },
+        {
+          "label": "Logistics — landlocked costs vs Asian exporters",
+          "w": "w3"
+        }
+      ],
+      "priorities": [
+        "Garments & apparel (incl. institutional uniforms) — most job-rich step; anchor with institutional demand + EAC market",
+        "Yarn & fabric (spinning/weaving + wet-processing/finishing) — process domestic lint instead of exporting raw; add missing finishing",
+        "Cottonseed oil & cake — capture ginning by-products (edible oil, animal feed); feasible, green, quick value-add"
+      ],
+      "proj": {
+        "title": "2040 Tenfold Projection",
+        "rows": [
+          {
+            "label": "Lint processed domestically",
+            "current": "~10%",
+            "target": "≥50% of national lint output"
+          },
+          {
+            "label": "Ginnery utilisation",
+            "current": "~10%",
+            "target": "60%+"
+          },
+          {
+            "label": "Garment employment",
+            "current": "~18,000",
+            "target": "One of Uganda's largest manufacturing employers"
+          },
+          {
+            "label": "Export play",
+            "current": "Raw lint USD 11.3m",
+            "target": "Regional garments/fabric + premium organic cotton"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "pharma",
+    "name": "Pharmaceuticals",
+    "map": {
+      "title": "Pharmaceuticals Value Chain",
+      "desc": "From API and excipient supply through formulation, packaging, distribution to dispensing. Uganda currently imports ~90% of medicines despite having 6 WHO-GMP aligned manufacturers led by QCIL.",
+      "phases": [
+        {
+          "name": "Phase I",
+          "label": "API &\nExcipients",
+          "detail": "Active pharmaceutical ingredients",
+          "strength": "gap",
+          "stat": "Near-total import dependence; API all imported"
+        },
+        {
+          "name": "Phase II",
+          "label": "Formulation\n& Mfg",
+          "detail": "APIs → tablets, capsules, syrups, injectables",
+          "strength": "strong",
+          "stat": "6 WHO-GMP plants; QCIL 1.2bn tabs/caps/yr"
+        },
+        {
+          "name": "Phase III",
+          "label": "Packaging",
+          "detail": "Finished dosage forms",
+          "strength": "strong",
+          "stat": "Active; linked to plastics chain"
+        },
+        {
+          "name": "Phase IV",
+          "label": "Distribution",
+          "detail": "NMS/JMS/wholesale network",
+          "strength": "strong",
+          "stat": "National Medicines Stores; JMS"
+        },
+        {
+          "name": "Phase V",
+          "label": "Dispensing",
+          "detail": "Pharmacies, hospitals, patients",
+          "strength": "strong",
+          "stat": "Active; growing private sector"
+        }
+      ],
+      "gap": "KEY GAP: API & excipients (Phase I) — near-total import dependence is the deepest structural and supply-security risk. India (58% of medicine imports) and China dominate."
+    },
+    "status": {
+      "current": [
+        {
+          "label": "Domestic Market",
+          "value": "~USD 221 million (2023); growing ~9.4%/year",
+          "color": "blue"
+        },
+        {
+          "label": "Import Dependence",
+          "value": "~90% of medicines imported (down from 96% in 2016)",
+          "color": "red"
+        },
+        {
+          "label": "Medicine Imports",
+          "value": "USD 263.4m (HS 3004, 2024); India 58% share",
+          "color": "red"
+        },
+        {
+          "label": "QCIL Revenue",
+          "value": "~UGX 267 billion (FY2024/25)",
+          "color": "green"
+        },
+        {
+          "label": "QCIL Capacity",
+          "value": "~1.2 billion tablets/capsules per year",
+          "color": "green"
+        },
+        {
+          "label": "WHO-GMP Plants",
+          "value": "6 aligned manufacturers in Uganda",
+          "color": "green"
+        },
+        {
+          "label": "Employment Growth",
+          "value": "+42% (2017–2019, UNIDO)",
+          "color": "green"
+        }
+      ],
+      "companies": [
+        "Cipla Quality Chemical Industries Ltd (QCIL) — WHO-GMP prequalified; ARVs, antimalarials, NCDs; UGX 267bn revenue",
+        "KPI (Kampala Pharmaceutical Industries)",
+        "Rene Industries",
+        "Abacus Pharma"
+      ],
+      "constraints": [
+        {
+          "label": "API/excipient import dependence — deepest structural and supply-security risk",
+          "w": "w5"
+        },
+        {
+          "label": "WHO-GMP / quality-systems depth — capability concentrated at QCIL",
+          "w": "w5"
+        },
+        {
+          "label": "Capital + long regulatory lead times — GMP plants capital-intensive; multi-year approval cycles",
+          "w": "w4"
+        },
+        {
+          "label": "Procurement/market access — NMS/JMS preferential procurement and NDA fees shape viability",
+          "w": "w4"
+        },
+        {
+          "label": "Skills — pharmacists, QA/QC, regulatory-affairs specialists in short supply",
+          "w": "w3"
+        },
+        {
+          "label": "Reliable power & pharma-grade utilities — GMP needs uninterrupted clean power and water",
+          "w": "w3"
+        },
+        {
+          "label": "Cold-chain & distribution logistics",
+          "w": "w3"
+        }
+      ],
+      "priorities": [
+        "Essential generics (ARVs, antimalarials, anti-TB, priority NCD) — build on QCIL's WHO-GMP base; guaranteed domestic + donor/regional demand",
+        "Medical consumables and basic formulations — feasible, job-creating, broad import substitution",
+        "Selective local API/excipient production — strategic longer-term to reduce deepest dependency"
+      ],
+      "proj": {
+        "title": "2040 Tenfold Projection",
+        "rows": [
+          {
+            "label": "Domestic market",
+            "current": "~USD 221m",
+            "target": "USD 0.9–1.2B by 2040 (at ~9.4%/yr growth)"
+          },
+          {
+            "label": "Import dependence",
+            "current": "~90%",
+            "target": "Reduced to <50% via expanded domestic manufacturing"
+          },
+          {
+            "label": "Export play",
+            "current": "QCIL regional exports (small)",
+            "target": "Regional + donor-funded essential generics supply"
+          },
+          {
+            "label": "API production",
+            "current": "Near zero",
+            "target": "Selective domestic API for highest-volume products"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "petrochem",
+    "name": "Petrochemicals & Fertilizers",
+    "map": {
+      "title": "Petrochemicals & Fertilizers Value Chain",
+      "desc": "Two parallel sub-chains: petroleum refining → petrochemicals, and phosphate mining → fertilisers. The Kabaale refinery (60,000 bpd, ~USD 4bn) is expected operational ~2029. The Sukulu phosphate plant (Tororo) is stalled.",
+      "phases": [
+        {
+          "name": "Phase I",
+          "label": "Upstream\nExtraction",
+          "detail": "Crude oil production / Phosphate mining",
+          "strength": "emerging",
+          "stat": "Oil production pre-FID; Sukulu phosphate stalled"
+        },
+        {
+          "name": "Phase II",
+          "label": "Refining /\nProcessing",
+          "detail": "Crude → fuels/LPG | Ore → phosphate",
+          "strength": "gap",
+          "stat": "Kabaale refinery ~2029; Sukulu shut 2021"
+        },
+        {
+          "name": "Phase III",
+          "label": "Petrochemical\nProcessing",
+          "detail": "Naphtha → polymers/solvents",
+          "strength": "gap",
+          "stat": "Kabalega park future; post-refinery"
+        },
+        {
+          "name": "Phase IV",
+          "label": "Blending &\nFormulation",
+          "detail": "NPK blends, LPG filling, plastics conversion",
+          "strength": "gap",
+          "stat": "Fertiliser blending limited; resin imported"
+        },
+        {
+          "name": "Phase V",
+          "label": "Market",
+          "detail": "Domestic fuel, agri-inputs, industrial chemicals",
+          "strength": "strong",
+          "stat": "USD 32.1m fertiliser imports/yr; demand >> supply"
+        }
+      ],
+      "gap": "CRITICAL GAPS: Refinery not operational until ~2029. Sukulu phosphate stalled. Uganda imports ~50,000 tonnes of fertiliser vs ~1 million tonnes needed — a 950,000 tonne annual gap."
+    },
+    "status": {
+      "current": [
+        {
+          "label": "Kabaale Refinery",
+          "value": "60,000 bpd; ~USD 4bn; Alpha MBM + UNOC (~40%); expected ops ~2029–30",
+          "color": "amber"
+        },
+        {
+          "label": "Sukulu Phosphate Plant",
+          "value": "100,000 tpa design; Tororo; shut 2021; briefly resumed 2023; halted again",
+          "color": "red"
+        },
+        {
+          "label": "Fertiliser Imports",
+          "value": "USD 32.1m (HS 3105, 2024); Saudi Arabia + Kenya dominant",
+          "color": "red"
+        },
+        {
+          "label": "Fertiliser Gap",
+          "value": "~50,000 tonnes supplied vs ~1,000,000 tonnes needed — 95% gap",
+          "color": "red"
+        },
+        {
+          "label": "Kabalega Petrochemical Park",
+          "value": "Future; post-refinery; polymer feedstock for plastics chain",
+          "color": "amber"
+        }
+      ],
+      "companies": [
+        "Alpha MBM Investments (UAE) + UNOC — Kabaale refinery (PSA signed March 2025)",
+        "Guangzhou Dongsong — Sukulu/Osukuru complex (stalled)",
+        "Uganda National Oil Company (UNOC) — ~40% refinery stake",
+        "Petroleum Authority of Uganda (PAU)"
+      ],
+      "constraints": [
+        {
+          "label": "Stalled phosphate processing — Sukulu shut; ~50k t vs ~1m t need",
+          "w": "w5"
+        },
+        {
+          "label": "Very large capital + financing fragility — refinery USD 4bn; Sukulu collapse shows fragility",
+          "w": "w5"
+        },
+        {
+          "label": "Feedstock timing — refinery pre-2029; no domestic petrochemical feedstock until ~2029–30",
+          "w": "w4"
+        },
+        {
+          "label": "Fertiliser quality & distribution — adulterated fertiliser (UNBS); rural distribution weak",
+          "w": "w4"
+        },
+        {
+          "label": "Environmental management — refinery emissions; phosphogypsum hazard",
+          "w": "w3"
+        },
+        {
+          "label": "Skills — chemical/process engineering scarce",
+          "w": "w3"
+        }
+      ],
+      "priorities": [
+        "Fertiliser blending + revival of phosphate processing (Sukulu or green ammonia alternative)",
+        "Sulphuric acid and basic industrial chemicals — paired with phosphate processing",
+        "Petrochemicals/polymers at Kabalega — transformational medium-term; sequenced to refinery ~2029–30"
+      ],
+      "proj": {
+        "title": "2040 Tenfold Projection",
+        "rows": [
+          {
+            "label": "Fertiliser demand",
+            "current": "~50,000 t supplied vs 1m t needed",
+            "target": "1.5–2 million tonnes/year"
+          },
+          {
+            "label": "Refinery status",
+            "current": "Under construction (ops ~2029–30)",
+            "target": "Operational; supplying domestic fuel + polymer feedstock"
+          },
+          {
+            "label": "Petrochemical park",
+            "current": "Future planning",
+            "target": "Operational; supplying domestic resin to plastics chain"
+          },
+          {
+            "label": "Green ammonia",
+            "current": "Not yet developed",
+            "target": "Hydro-powered electrolysis → low-carbon nitrogen fertiliser"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "sugar",
+    "name": "Sugar & Confectionery",
+    "map": {
+      "title": "Sugar & Confectionery Value Chain",
+      "desc": "From sugarcane growing through milling, refining, and downstream diversification (confectionery, ethanol, co-generation). Uganda produces ~822,000 tonnes/year with a structural surplus of 180,000+ tonnes.",
+      "phases": [
+        {
+          "name": "Phase I",
+          "label": "Cane Growing",
+          "detail": "Sugarcane cultivation",
+          "strength": "strong",
+          "stat": "Surplus — structural over-production"
+        },
+        {
+          "name": "Phase II",
+          "label": "Milling",
+          "detail": "Cane → raw/brown sugar + molasses + bagasse",
+          "strength": "strong",
+          "stat": "~822,000 t output; Kakira ~50% of national"
+        },
+        {
+          "name": "Phase III",
+          "label": "Refining",
+          "detail": "Brown → industrial/refined sugar",
+          "strength": "emerging",
+          "stat": "Kinyara ~75,000 t industrial; rest imported"
+        },
+        {
+          "name": "Phase IV",
+          "label": "Downstream",
+          "detail": "Confectionery, ethanol, co-gen electricity",
+          "strength": "gap",
+          "stat": "Under-exploited; molasses largely wasted/exported"
+        },
+        {
+          "name": "Phase V",
+          "label": "Market",
+          "detail": "Domestic + regional export",
+          "strength": "strong",
+          "stat": "Exporter; but USD 38.1m industrial sugar imported"
+        }
+      ],
+      "gap": "KEY GAP: Industrial sugar refining (Phase III) — USD 38.1m imported despite domestic surplus. Downstream (Phase IV) — ethanol from molasses and co-gen from bagasse largely unexploited."
+    },
+    "status": {
+      "current": [
+        {
+          "label": "National Sugar Output",
+          "value": "~822,000 tonnes/year (~720k brown + ~102k industrial)",
+          "color": "blue"
+        },
+        {
+          "label": "Structural Surplus",
+          "value": "180,000+ tonnes/year",
+          "color": "amber"
+        },
+        {
+          "label": "Industrial Sugar Imports",
+          "value": "USD 38.1m (HS 1701, 2024) despite domestic surplus",
+          "color": "red"
+        },
+        {
+          "label": "Kakira Output Share",
+          "value": "~50% of national output; >2 million tonnes cane crushed/year",
+          "color": "green"
+        },
+        {
+          "label": "Kinyara Industrial Sugar",
+          "value": "~75,000 t (2023)",
+          "color": "blue"
+        }
+      ],
+      "companies": [
+        "Kakira Sugar Works — ~50% of national output; crushing >2m tonnes cane/yr",
+        "Kinyara Sugar — industrial-sugar refinery expanded to ~75,000 t (2023)",
+        "Sugar Corporation of Uganda (SCOUL)",
+        "Mayuge Sugar",
+        "Uganda Sugar Manufacturers Association (USMA)"
+      ],
+      "constraints": [
+        {
+          "label": "Over-supply / over-licensing of raw sugar — 180,000+ t surplus; continued mill licensing strains cane per mill",
+          "w": "w5"
+        },
+        {
+          "label": "Downstream capital & technology — refining, ethanol distilleries, confectionery need investment",
+          "w": "w4"
+        },
+        {
+          "label": "Industrial sugar quality/standards — food/pharma buyers require industrial-grade specs (UNBS)",
+          "w": "w3"
+        },
+        {
+          "label": "Grid feed-in for co-generation — bagasse power needs clear feed-in/tariff framework",
+          "w": "w3"
+        },
+        {
+          "label": "Distillery effluent — vinasse and bagasse ash management",
+          "w": "w3"
+        },
+        {
+          "label": "Out-grower coordination & cane quality",
+          "w": "w2"
+        }
+      ],
+      "priorities": [
+        "Industrial/refined sugar — substitute USD 38.1m import line using surplus domestic cane; serves beverages, food processing, pharmaceuticals",
+        "Ethanol (fuel & industrial) — convert molasses surplus into fuel-blending ethanol; strong regional demand",
+        "Co-generation (bagasse to grid) — monetise bagasse as renewable grid electricity; improve mill economics"
+      ],
+      "proj": {
+        "title": "2040 Tenfold Projection",
+        "rows": [
+          {
+            "label": "Chain value",
+            "current": "Raw sugar dominated",
+            "target": "Downstream-dominated: industrial sugar, ethanol, co-gen, confectionery"
+          },
+          {
+            "label": "Industrial sugar",
+            "current": "~USD 38m imported",
+            "target": "Domestic refining meets full industrial demand"
+          },
+          {
+            "label": "Ethanol",
+            "current": "Negligible",
+            "target": "Significant fuel-blending + industrial export"
+          },
+          {
+            "label": "Co-generation",
+            "current": "Under-exploited",
+            "target": "Bagasse-powered grid contribution"
+          },
+          {
+            "label": "Export",
+            "current": "Regional brown sugar",
+            "target": "Regional industrial sugar/ethanol"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "plastics",
+    "name": "Plastics & Packaging",
+    "map": {
+      "title": "Plastics & Packaging Value Chain",
+      "desc": "From resin/feedstock through conversion, packaging production, use and recycling. All virgin resin is imported. ~600 tonnes of plastic waste generated daily; <40% properly collected.",
+      "phases": [
+        {
+          "name": "Phase I",
+          "label": "Resin/Feedstock\n(PE, PP, PET, PVC)",
+          "detail": "Virgin or recycled polymer resin",
+          "strength": "gap",
+          "stat": "100% imported until Kabalega park (~2029)"
+        },
+        {
+          "name": "Phase II",
+          "label": "Conversion",
+          "detail": "Resin → films, sheets, preforms, mouldings",
+          "strength": "strong",
+          "stat": "Established; Nice House, Nile Plastic, others"
+        },
+        {
+          "name": "Phase III",
+          "label": "Packaging\n& Products",
+          "detail": "Bottles, sacks, containers, household goods",
+          "strength": "strong",
+          "stat": "41 UNBS-certified firms; 67 valid permits"
+        },
+        {
+          "name": "Phase IV",
+          "label": "Use",
+          "detail": "Consumer & industrial packaging use",
+          "strength": "strong",
+          "stat": "Growing demand across all sectors"
+        },
+        {
+          "name": "Phase V",
+          "label": "Recycling",
+          "detail": "Waste → recycled flake/pellet",
+          "strength": "emerging",
+          "stat": "~600 t/day waste; <40% collected; under-scaled"
+        }
+      ],
+      "gap": "KEY GAP: Resin feedstock (Phase I) — 100% imported. Recycling (Phase V) — severely under-scaled despite 600t/day waste. Domestic resin awaits Kabalega petrochemical park (~2029)."
+    },
+    "status": {
+      "current": [
+        {
+          "label": "Plastic Imports",
+          "value": "USD 37.1m packaging (HS 3923, 2024); Kenya 71% dominant",
+          "color": "red"
+        },
+        {
+          "label": "Virgin Resin",
+          "value": "~150,000 tonnes/year — all imported",
+          "color": "red"
+        },
+        {
+          "label": "UNBS-Certified Firms",
+          "value": "41 certified bag manufacturers; 67 valid permits",
+          "color": "blue"
+        },
+        {
+          "label": "Plastic Waste",
+          "value": "~600 tonnes/day generated; <40% properly collected",
+          "color": "amber"
+        },
+        {
+          "label": "Policy",
+          "value": "National Plastics Circularity Strategy 2023–2028; 2025 single-use-bag ban (NEMA)",
+          "color": "green"
+        }
+      ],
+      "companies": [
+        "Nice House of Plastics — largest converter; est. 1970; Kampala area",
+        "Nile Plastic Industries — major converter",
+        "Quality Plastics (Mukono) — growing recycler"
+      ],
+      "constraints": [
+        {
+          "label": "100% imported virgin resin — no domestic resin until petrochemical park",
+          "w": "w5"
+        },
+        {
+          "label": "Low waste collection / weak circularity — ~600 t/day waste; <40% collected",
+          "w": "w4"
+        },
+        {
+          "label": "Capital & fragmentation — recycling plants and modern converters need capital",
+          "w": "w3"
+        },
+        {
+          "label": "Policy transition risk — single-use-ban opportunity for recyclers but risk for single-use producers",
+          "w": "w3"
+        },
+        {
+          "label": "Standards & substandard bags — UNBS certification on thickness and food-grade",
+          "w": "w3"
+        },
+        {
+          "label": "Logistics — imported resin bears landlocked penalty",
+          "w": "w2"
+        }
+      ],
+      "priorities": [
+        "Industrial and food/beverage packaging — substitute USD 37m+ imports with standards-compliant domestic packaging",
+        "Plastics recycling (PET/HDPE flake & pellet) — scale to turn 600 t/day waste into domestic feedstock; aligns with 2025 circularity policy",
+        "Agricultural and cement packaging (woven sacks, films) — feasible, job-rich, linked to agriculture and cement sectors"
+      ],
+      "proj": {
+        "title": "2040 Tenfold Projection",
+        "rows": [
+          {
+            "label": "Packaging demand",
+            "current": "USD 37m+ imports",
+            "target": "Several-fold increase as all manufacturing sectors scale"
+          },
+          {
+            "label": "Domestic resin",
+            "current": "Zero — 100% imported",
+            "target": "Kabalega park operational; domestic polymer feedstock"
+          },
+          {
+            "label": "Recycling",
+            "current": "<40% of 600 t/day collected",
+            "target": "Circularity Strategy target: ~37% plastic pollution cut by 2040"
+          },
+          {
+            "label": "Supply chain",
+            "current": "Import-dependent",
+            "target": "Domestic conversion + recycled content + domestic resin"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "cement",
+    "name": "Cement & Building Materials",
+    "map": {
+      "title": "Cement & Building Materials Value Chain",
+      "desc": "From limestone quarrying through clinker production, cement grinding, and downstream building materials to construction market. Uganda grinds well but imports >50% of its clinker. Two new clinker plants (totalling ~USD 500m) are under construction.",
+      "phases": [
+        {
+          "name": "Phase I",
+          "label": "Limestone\nQuarrying",
+          "detail": "Raw limestone extraction",
+          "strength": "strong",
+          "stat": "Dura (Kamwenge), Tororo, Karamoja deposits"
+        },
+        {
+          "name": "Phase II",
+          "label": "Clinker\nProduction",
+          "detail": "Limestone → clinker (kiln)",
+          "strength": "emerging",
+          "stat": ">50% clinker imported; 2 new plants under construction"
+        },
+        {
+          "name": "Phase III",
+          "label": "Cement\nGrinding",
+          "detail": "Clinker + gypsum → cement",
+          "strength": "strong",
+          "stat": "Tororo 3.0 Mtpa, Hima 2.0, Simba 1.0, Kampala 1.0"
+        },
+        {
+          "name": "Phase IV",
+          "label": "Building\nMaterials",
+          "detail": "Concrete, blocks, tiles, fibre-cement",
+          "strength": "emerging",
+          "stat": "Growing; largely artisanal"
+        },
+        {
+          "name": "Phase V",
+          "label": "Construction\nMarket",
+          "detail": "Infrastructure, housing, commercial",
+          "strength": "strong",
+          "stat": "USD 707m market; +12% YoY; regional exporter"
+        }
+      ],
+      "gap": "KEY GAP: Clinker (Phase II) — >50% imported; USD 162.2m import bill (2024). Closing this gap is the sector's #1 priority. Two new plants under construction are the right response."
+    },
+    "status": {
+      "current": [
+        {
+          "label": "Market Size",
+          "value": "~USD 707 million (2024); growing ~12% YoY",
+          "color": "green"
+        },
+        {
+          "label": "Clinker Imports",
+          "value": "USD 162.2m (HS 2523, 2024); Kenya 66% dominant",
+          "color": "red"
+        },
+        {
+          "label": "Cement Exports",
+          "value": "USD 86.0m to Rwanda, DRC, South Sudan, Kenya",
+          "color": "green"
+        },
+        {
+          "label": "Clinker Self-Sufficiency",
+          "value": "<50% — majority of clinker still imported",
+          "color": "red"
+        },
+        {
+          "label": "New Clinker Investment",
+          "value": "NE Uganda: USD 300m, >6,000 t/day + Buikwe: USD 200m, ~4,000 t/day (2025)",
+          "color": "green"
+        },
+        {
+          "label": "Hima Limestone Reserves",
+          "value": "Dura quarry (Kamwenge) — reserves to ~2036",
+          "color": "amber"
+        }
+      ],
+      "companies": [
+        "Tororo Cement — ~3.0 Mtpa; largest grinder",
+        "Hima Cement — ~2.0 Mtpa; owns Dura limestone quarry (Kamwenge)",
+        "Simba Cement — ~1.0 Mtpa",
+        "Kampala Cement — ~1.0 Mtpa",
+        "NE Uganda clinker plant — USD 300m new investment; >6,000 t/day (under construction)",
+        "West International Holding — USD 200m Buikwe clinker plant ~4,000 t/day (2025)"
+      ],
+      "constraints": [
+        {
+          "label": "Clinker capacity gap — >50% imported despite strong grinding; USD 162.2m import line",
+          "w": "w5"
+        },
+        {
+          "label": "Energy cost & reliability — clinker kilns highly energy-intensive; decisive for competitiveness",
+          "w": "w5"
+        },
+        {
+          "label": "Capital intensity — clinker kilns USD 200–300m; large but appetite shown",
+          "w": "w4"
+        },
+        {
+          "label": "Limestone licensing & land — reserves exist but licensing must keep pace with demand",
+          "w": "w3"
+        },
+        {
+          "label": "Logistics — bulk/low-density; landlocked penalty protects domestic market but raises input costs",
+          "w": "w3"
+        },
+        {
+          "label": "Kiln emissions/dust — carbon- and dust-intensive; NEMA-regulated; alt-fuel opportunity",
+          "w": "w3"
+        },
+        {
+          "label": "Standards — substandard cement a safety/market issue; UNBS enforcement critical",
+          "w": "w2"
+        }
+      ],
+      "priorities": [
+        "Clinker production — close the >50% import gap; support USD 200–300m new plants; alt. fuels + SCM substitution (steel slag, phosphogypsum, pozzolana)",
+        "Finished cement for regional export — defend and grow USD 86m export position, strengthened by domestic clinker",
+        "Higher-value building materials — fibre-cement, tiles, precast/concrete products"
+      ],
+      "proj": {
+        "title": "2040 Tenfold Projection",
+        "rows": [
+          {
+            "label": "Market size",
+            "current": "USD 707m (2024); +12%/yr",
+            "target": "Several USD Bn/yr — sustained infrastructure/urbanisation/housing"
+          },
+          {
+            "label": "Clinker self-sufficiency",
+            "current": "<50%",
+            "target": ">90% — two new plants under construction are the start"
+          },
+          {
+            "label": "Regional export",
+            "current": "USD 86m cement export",
+            "target": "Uganda as dominant regional cement supplier"
+          },
+          {
+            "label": "Circular materials",
+            "current": "Limited",
+            "target": "Steel slag + phosphogypsum → SCM; waste → alt. kiln fuel"
+          }
+        ]
+      }
+    }
+  }
+]

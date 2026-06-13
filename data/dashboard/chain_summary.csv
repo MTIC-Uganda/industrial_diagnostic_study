@@ -1,0 +1,10 @@
+chain,key_import_2024,key_export_2024,position_tag,position_color,target_2040,priority_tag,priority_color
+Iron & Steel,USD 219.5m flat steel,USD 55.8m rebar,Downstream only,amber,"5.5–8 Mtpa demand; domestic flat steel",R1 — Minerals,red
+Copper & Allied Metals,USD 57.7m cable,Negligible,Cable mfg; mine dormant,amber,"USD 300–500m cable market; Kilembe revival",R1 — Minerals,red
+Automotive,USD 298.4m vehicles,Negligible,KMC plant opened Sept 2025,amber,"KMC 10,000 veh/yr; e-boda assembly",R1 — Minerals,red
+Textiles & Garments,~USD 6.7m garments,USD 11.3m raw cotton,Raw cotton exporter; mills limited,amber,Process 50%+ of lint domestically,R2 — Agro/Light,blue
+Pharmaceuticals,USD 263.4m medicines,Small (QCIL regional),6 WHO-GMP plants; QCIL flagship,green,"USD 0.9–1.2B market; cut import to <50%",R2 — Agro/Light,blue
+Petrochemicals & Fertilizers,USD 32.1m fertiliser,—,Refinery pre-2029; Sukulu stalled,red,1.5–2m tonnes fertiliser demand by 2040,R2 — Agro/Light,blue
+Sugar & Confectionery,USD 38.1m industrial sugar,Regional brown sugar,Surplus producer; export ready,green,"Industrial sugar, ethanol, co-gen",R2 — Agro/Light,blue
+Plastics & Packaging,USD 37.1m packaging,—,Converters active; resin all imported,amber,Circular plastics + domestic resin (Kabalega),R2 — Agro/Light,blue
+Cement & Building Materials,USD 162.2m clinker,USD 86.0m cement,Exporter; clinker gap closing,green,"Several USD Bn/yr market; regional leader",R2 — Agro/Light,blue
