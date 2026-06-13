@@ -77,8 +77,7 @@ jobs:
 
       - name: Generate dashboard from data files
         env:
-          SUPABASE_URL:      ${{ secrets.SUPABASE_URL }}
-          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+          PB_URL: ${{ secrets.PB_URL }}
         run: python scripts/generate_dashboard.py
 
       - name: Build
