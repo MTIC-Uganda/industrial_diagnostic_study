@@ -3,8 +3,8 @@
 Generate report/sources-of-truth.html from template + data.
 
 Data source (auto-detected):
-  • If SUPABASE_URL + SUPABASE_ANON_KEY are set → fetch from Supabase (CI/prod)
-  • Otherwise → fall back to local CSV/JSON files in data/dashboard/ (local dev)
+  • If PB_URL is set  →  fetch from PocketBase (CI / prod)
+  • Otherwise         →  fall back to local CSV/JSON files in data/dashboard/
 
 Usage:
     python scripts/generate_dashboard.py
@@ -24,37 +24,36 @@ DATA   = ROOT / 'data' / 'dashboard'
 TMPL   = ROOT / 'report' / 'sources-of-truth.template.html'
 OUTPUT = ROOT / 'report' / 'sources-of-truth.html'
 
-SUPABASE_URL = os.environ.get('SUPABASE_URL', '').rstrip('/')
-SUPABASE_KEY = os.environ.get('SUPABASE_ANON_KEY', '')
-USE_SUPABASE = bool(SUPABASE_URL and SUPABASE_KEY)
+PB_URL      = os.environ.get('PB_URL', '').rstrip('/')
+USE_POCKETBASE = bool(PB_URL)
 
 # ── Data loading ──────────────────────────────────────────────────────────────
 
-def supabase_get(table, select='*', order=None):
-    url = f'{SUPABASE_URL}/rest/v1/{table}?select={select}'
-    if order:
-        url += f'&order={order}'
-    req = urllib.request.Request(url, headers={
-        'apikey':        SUPABASE_KEY,
-        'Authorization': f'Bearer {SUPABASE_KEY}',
-    })
+def pb_get(collection, sort=None, per_page=500):
+    """Fetch all records from a PocketBase collection (public read)."""
+    url = f'{PB_URL}/api/collections/{collection}/records?perPage={per_page}'
+    if sort:
+        url += f'&sort={sort}'
     try:
-        with urllib.request.urlopen(req) as r:
-            return json.loads(r.read())
+        with urllib.request.urlopen(url) as r:
+            return json.loads(r.read()).get('items', [])
     except urllib.error.HTTPError as e:
-        sys.exit(f'Supabase error {e.code} on {table}: {e.read().decode()[:300]}')
+        sys.exit(f'PocketBase error {e.code} fetching {collection}: {e.read().decode()[:200]}')
+    except Exception as e:
+        sys.exit(f'Cannot reach PocketBase at {PB_URL}: {e}')
 
 def load_csv(name):
     with open(DATA / name, newline='', encoding='utf-8') as f:
         return list(csv.DictReader(f))
 
-if USE_SUPABASE:
-    print(f'Data source: Supabase ({SUPABASE_URL})')
-    raw_chains    = supabase_get('value_chains', order='display_order')
-    raw_kpis      = supabase_get('kpi_indicators', order='display_order')
-    raw_facilities = supabase_get('facilities', order='chain_id,name')
+if USE_POCKETBASE:
+    print(f'Data source: PocketBase ({PB_URL})')
 
-    # Reshape Supabase rows into the same shape the generators expect
+    raw_chains    = pb_get('value_chains', sort='display_order')
+    raw_kpis      = pb_get('kpi_indicators', sort='display_order')
+    raw_facilities = pb_get('facilities', sort='chain_name,name')
+
+    # Reshape for the generators below
     chain_summary = [{
         'chain':           r['name'],
         'key_import_2024': r.get('key_import_2024') or '',
@@ -67,7 +66,7 @@ if USE_SUPABASE:
     } for r in raw_chains]
 
     overview_kpis = [{
-        'id':            r['id'],
+        'id':            r['slug'],
         'label':         r['label'],
         'current_value': r.get('current_value') or '',
         'sub_value':     r.get('sub_value') or '',
@@ -75,9 +74,8 @@ if USE_SUPABASE:
 
     chain_colors = {r['name']: r['color'] for r in raw_chains}
 
-    # Rebuild chains array (matches original JS structure)
     chains = [{
-        'id':   r['id'],
+        'id':   r['slug'],
         'name': r['name'],
         'map': {
             'title':  r.get('map_title') or '',
@@ -94,11 +92,9 @@ if USE_SUPABASE:
         },
     } for r in raw_chains]
 
-    # Rebuild factories list (matches original JS structure)
-    chain_id_to_name = {r['id']: r['name'] for r in raw_chains}
     factories_list = [{
         'name':               f['name'],
-        'chain':              chain_id_to_name.get(f['chain_id'], ''),
+        'chain':              f.get('chain_name') or '',
         'lat':                f.get('lat') or 0,
         'lng':                f.get('lng') or 0,
         'loc':                f.get('location') or '',
@@ -117,14 +113,12 @@ else:
     overview_kpis  = load_csv('overview_kpis.csv')
     chains         = json.loads((DATA / 'chains.json').read_text('utf-8'))
     chain_colors   = json.loads((DATA / 'chain_colors.json').read_text('utf-8'))
-    factories_list = load_csv('factories.csv')
-    # Rename CSV columns to match JS field names
-    for f in factories_list:
-        f['loc'] = f.pop('loc', f.get('loc', ''))
+    raw_fac        = load_csv('factories.csv')
+    factories_list = [{**f, 'loc': f.get('loc', '')} for f in raw_fac]
 
 # ── HTML generators ───────────────────────────────────────────────────────────
 
-TAG_COLOR = {'green': 'tag-green', 'amber': 'tag-yellow', 'red': 'tag-red', 'blue': 'tag-blue'}
+TAG_COLOR = {'green':'tag-green','amber':'tag-yellow','red':'tag-red','blue':'tag-blue'}
 
 def esc(s):
     return str(s).replace('&','&amp;').replace('<','&lt;').replace('>','&gt;')
@@ -144,16 +138,16 @@ def kpi_cards_html():
 def chain_table_rows_html():
     rows = []
     for r in chain_summary:
-        pos_cls = TAG_COLOR.get(r['position_color'], 'tag-yellow')
-        pri_cls = TAG_COLOR.get(r['priority_color'], 'tag-blue')
+        pc = TAG_COLOR.get(r['position_color'], 'tag-yellow')
+        rc = TAG_COLOR.get(r['priority_color'], 'tag-blue')
         rows.append(
             f'<tr>'
             f'<td><strong>{esc(r["chain"])}</strong></td>'
             f'<td>{esc(r["key_import_2024"])}</td>'
             f'<td>{esc(r["key_export_2024"])}</td>'
-            f'<td><span class="tag {pos_cls}">{esc(r["position_tag"])}</span></td>'
+            f'<td><span class="tag {pc}">{esc(r["position_tag"])}</span></td>'
             f'<td>{esc(r["target_2040"])}</td>'
-            f'<td><span class="tag {pri_cls}">{esc(r["priority_tag"])}</span></td>'
+            f'<td><span class="tag {rc}">{esc(r["priority_tag"])}</span></td>'
             f'</tr>'
         )
     return '\n        '.join(rows)
@@ -172,15 +166,14 @@ def factories_js():
             lng = float(f.get('lng') or 0)
         except (ValueError, TypeError):
             lat = lng = 0
-        loc = f.get('loc') or f.get('location') or ''
         fields = ','.join(
             f"{k}:'{js_str(f.get(fk,''))}'"
             for k, fk in [
-                ('loc', 'loc'), ('products','products'),
+                ('loc','loc'),('products','products'),
                 ('capacity_installed','capacity_installed'),
                 ('capacity_utilised','capacity_utilised'),
-                ('employees','employees'), ('est','est'),
-                ('ownership','ownership'), ('exports','exports'),
+                ('employees','employees'),('est','est'),
+                ('ownership','ownership'),('exports','exports'),
             ]
         )
         lines.append(
@@ -191,8 +184,7 @@ def factories_js():
     return '\n'.join(lines)
 
 def chain_colors_js():
-    items = list(chain_colors.items())
-    body  = ',\n'.join(f"  '{js_str(k)}':'{v}'" for k, v in items)
+    body = ',\n'.join(f"  '{js_str(k)}':'{v}'" for k, v in chain_colors.items())
     return f'const CHAIN_COLORS={{\n{body}\n}};'
 
 def chains_js():
@@ -216,7 +208,7 @@ replacements = {
 out = tmpl
 for marker, content in replacements.items():
     if marker not in out:
-        print(f'WARNING: marker not found in template: {marker}', file=sys.stderr)
+        print(f'WARNING: marker not found: {marker}', file=sys.stderr)
     out = out.replace(marker, content, 1)
 
 OUTPUT.write_text(out, 'utf-8')
