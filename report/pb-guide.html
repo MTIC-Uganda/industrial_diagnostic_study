@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PocketBase Data Entry Guide | MTIC Dashboard</title>
+<link rel="icon" type="image/png" href="uganda_coat_of_arms.png">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/driver.js@1.3.1/dist/driver.css"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;background:#f0f2f5;color:#1a1a2e;font-size:14px}
+
+/* HEADER */
+.site-header{background:linear-gradient(135deg,#0d47a1 0%,#1565c0 60%,#1976d2 100%);color:#fff;padding:18px 32px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 2px 8px rgba(0,0,0,.3)}
+.site-header h1{font-size:20px;font-weight:700}
+.site-header .sub{font-size:12px;opacity:.8;margin-top:3px}
+.badge{background:#f57f17;color:#fff;padding:4px 12px;border-radius:12px;font-size:11px;font-weight:700;letter-spacing:.5px}
+.tour-btn{background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.4);border-radius:6px;padding:7px 16px;font-size:12px;font-weight:600;cursor:pointer;transition:background .2s}
+.tour-btn:hover{background:rgba(255,255,255,.28)}
+
+/* LAYOUT */
+.wrap{max-width:1100px;margin:32px auto;padding:0 24px}
+
+/* INTRO CARD */
+.intro{background:#fff;border-radius:10px;border:1px solid #e0e0e0;padding:24px 28px;margin-bottom:28px;box-shadow:0 1px 6px rgba(0,0,0,.07)}
+.intro h2{font-size:17px;color:#1565c0;margin-bottom:10px;font-weight:700}
+.intro p{font-size:13px;color:#444;line-height:1.7;margin-bottom:8px}
+.intro a{color:#1565c0;font-weight:600}
+.link-btn{display:inline-block;background:#1565c0;color:#fff;padding:9px 20px;border-radius:8px;font-size:13px;font-weight:700;text-decoration:none;margin-top:6px;transition:background .2s}
+.link-btn:hover{background:#0d47a1}
+
+/* STEP CARDS */
+.step{background:#fff;border-radius:10px;border:1px solid #e0e0e0;padding:0;margin-bottom:24px;box-shadow:0 1px 6px rgba(0,0,0,.07);overflow:hidden}
+.step-header{background:#e8eaf6;padding:14px 20px;display:flex;align-items:center;gap:14px;border-bottom:1px solid #e0e0e0}
+.step-num{background:#1565c0;color:#fff;border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;flex-shrink:0}
+.step-title{font-size:15px;font-weight:700;color:#1a237e}
+.step-body{padding:20px 24px}
+.step-desc{font-size:13px;color:#444;line-height:1.7;margin-bottom:16px}
+
+/* MOCKUP SHELL */
+.mockup{border:1px solid #ccc;border-radius:8px;overflow:hidden;background:#fafafa;font-family:monospace,sans-serif}
+.mockup-bar{background:#2c2c3a;padding:6px 12px;display:flex;align-items:center;gap:8px}
+.mockup-dot{width:10px;height:10px;border-radius:50%}
+.mockup-url{background:#3a3a4a;color:#aaa;font-size:11px;padding:3px 10px;border-radius:4px;flex:1}
+.mockup-body{display:flex;min-height:340px}
+
+/* PB SIDEBAR */
+.pb-sidebar{width:200px;flex-shrink:0;background:#1e1f2b;color:#ccc;padding:16px 0;font-size:12px}
+.pb-logo{padding:12px 16px 20px;font-weight:700;color:#fff;font-size:14px;border-bottom:1px solid rgba(255,255,255,.08);margin-bottom:12px}
+.pb-logo span{color:#f57f17}
+.pb-item{padding:8px 16px;cursor:pointer;border-left:3px solid transparent;transition:all .15s;display:flex;align-items:center;gap:8px}
+.pb-item:hover{background:rgba(255,255,255,.06)}
+.pb-item.active{background:rgba(99,102,241,.18);border-left-color:#6366f1;color:#fff}
+.pb-section{padding:6px 16px 4px;font-size:10px;text-transform:uppercase;letter-spacing:.8px;color:#666;margin-top:8px}
+
+/* PB CONTENT */
+.pb-content{flex:1;padding:20px;background:#fff;overflow:auto}
+.pb-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.pb-title{font-size:15px;font-weight:700;color:#1a1a2e;font-family:'Segoe UI',sans-serif}
+.pb-new-btn{background:#6366f1;color:#fff;border:none;padding:7px 14px;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;font-family:'Segoe UI',sans-serif}
+.pb-search{border:1px solid #e0e0e0;border-radius:6px;padding:6px 12px;font-size:12px;width:220px;font-family:'Segoe UI',sans-serif;outline:none}
+.pb-table{width:100%;border-collapse:collapse;font-size:12px;font-family:'Segoe UI',sans-serif}
+.pb-table th{background:#f5f5f5;padding:8px 10px;text-align:left;font-weight:600;color:#666;border-bottom:1px solid #e8e8e8;font-size:11px;text-transform:uppercase;letter-spacing:.3px}
+.pb-table td{padding:8px 10px;border-bottom:1px solid #f0f0f0;color:#333}
+.pb-table tr:hover td{background:#f9f9ff;cursor:pointer}
+.pb-edit-btn{background:#f0f0f0;border:none;border-radius:4px;padding:3px 8px;font-size:11px;cursor:pointer;color:#555}
+.pb-chip{display:inline-block;padding:2px 7px;border-radius:8px;font-size:10px;font-weight:600}
+.chip-green{background:#e8f5e9;color:#2e7d32}
+.chip-amber{background:#fff8e1;color:#f57f17}
+.chip-red{background:#ffebee;color:#c62828}
+
+/* FORM MOCKUP */
+.pb-form{font-family:'Segoe UI',sans-serif;font-size:12px}
+.pb-field{margin-bottom:14px}
+.pb-label{display:block;font-size:11px;font-weight:600;color:#666;margin-bottom:4px;text-transform:uppercase;letter-spacing:.3px}
+.pb-input{width:100%;border:1px solid #d0d0d0;border-radius:6px;padding:7px 10px;font-size:13px;font-family:'Segoe UI',sans-serif;outline:none;color:#333}
+.pb-input:focus{border-color:#6366f1;box-shadow:0 0 0 2px rgba(99,102,241,.15)}
+.pb-input.filled{background:#f9f9ff}
+.pb-save-btn{background:#6366f1;color:#fff;border:none;padding:9px 20px;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Segoe UI',sans-serif}
+.pb-cancel-btn{background:#f0f0f0;color:#555;border:none;padding:9px 16px;border-radius:6px;font-size:13px;cursor:pointer;font-family:'Segoe UI',sans-serif;margin-right:8px}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+
+/* CALLOUT */
+.callout{background:#e8f5e9;border-left:4px solid #2e7d32;border-radius:0 6px 6px 0;padding:10px 14px;font-size:12px;color:#1b5e20;margin-top:12px;line-height:1.6}
+.callout.warn{background:#fff8e1;border-left-color:#f57f17;color:#5d4037}
+.callout.info{background:#e3f2fd;border-left-color:#1565c0;color:#0d47a1}
+
+/* HIGHLIGHT RING used by tour */
+.tour-highlight{outline:3px solid #6366f1;outline-offset:3px;border-radius:4px}
+
+/* COLLECTIONS OVERVIEW */
+.col-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:8px}
+.col-card{border:1px solid #e0e0e0;border-radius:8px;padding:16px;background:#fff}
+.col-card h4{font-size:13px;font-weight:700;color:#1565c0;margin-bottom:6px}
+.col-card p{font-size:11px;color:#666;line-height:1.6}
+.col-card .count{font-size:22px;font-weight:700;color:#1a237e;margin-top:8px}
+
+footer{text-align:center;padding:20px;color:#999;font-size:11px;margin-top:8px;border-top:1px solid #e0e0e0}
+</style>
+</head>
+<body>
+
+<div class="site-header" id="guide-header">
+  <div style="display:flex;align-items:center;gap:16px">
+    <img src="uganda_coat_of_arms.png" alt="Uganda Coat of Arms" style="height:52px;filter:drop-shadow(0 1px 4px rgba(0,0,0,.5))">
+    <div>
+      <h1>PocketBase Data Entry Guide</h1>
+      <div class="sub">How to update the MTIC dashboard data &nbsp;|&nbsp; Ministry of Trade, Industry &amp; Cooperatives</div>
+    </div>
+  </div>
+  <div style="display:flex;align-items:center;gap:10px">
+    <button id="tour-trigger" class="tour-btn" onclick="startTour()">🧭 Take a Tour</button>
+    <div class="badge">DATA ENTRY GUIDE</div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- INTRO -->
+  <div class="intro" id="guide-intro">
+    <h2>What is this guide?</h2>
+    <p>The MTIC dashboard at <strong>tinyurl.com/28lxntmc</strong> shows live data — KPI indicators, value chain snapshots, factory locations, and 2040 projections. All of that data lives in a database called <strong>PocketBase</strong>. This guide teaches you how to log in and update records whenever figures change.</p>
+    <p>You do not need to write any code. PocketBase has a simple spreadsheet-like interface in your browser. Click <strong>Take a Tour</strong> above (or below) to get a step-by-step walkthrough.</p>
+    <a href="http://89.167.121.193:8090/_/" target="_blank" class="link-btn">🔗 Open PocketBase Admin →</a>
+  </div>
+
+  <!-- COLLECTIONS OVERVIEW -->
+  <div class="step" id="guide-collections">
+    <div class="step-header">
+      <div class="step-num">📦</div>
+      <div class="step-title">The Three Data Tables</div>
+    </div>
+    <div class="step-body">
+      <div class="step-desc">PocketBase holds three collections (tables). Each maps to a section of the dashboard.</div>
+      <div class="col-grid">
+        <div class="col-card">
+          <h4>value_chains</h4>
+          <p>The 9 priority chains: trade figures, Uganda position, 2040 targets, strategic priority, map description, status narrative, key companies, constraints, and projections.</p>
+          <div class="count">9 records</div>
+        </div>
+        <div class="col-card">
+          <h4>facilities</h4>
+          <p>All manufacturing facilities plotted on the industry locations map: name, GPS coordinates, capacity, employees, ownership, products exported.</p>
+          <div class="count">89 records</div>
+        </div>
+        <div class="col-card">
+          <h4>kpi_indicators</h4>
+          <p>The six headline KPI cards at the top of the dashboard: GDP, Per Capita Income, Manufacturing Share, Capacity Utilisation, Exports, Employment.</p>
+          <div class="count">6 records</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 1: LOGIN -->
+  <div class="step" id="guide-login">
+    <div class="step-header">
+      <div class="step-num">1</div>
+      <div class="step-title">Log In to PocketBase</div>
+    </div>
+    <div class="step-body">
+      <div class="step-desc">Open <a href="http://89.167.121.193:8090/_/" target="_blank"><strong>http://89.167.121.193:8090/_/</strong></a> in your browser. You will see the login screen below. Enter your admin email and password, then click <strong>Login</strong>.</div>
+
+      <div class="mockup" id="mock-login">
+        <div class="mockup-bar">
+          <div class="mockup-dot" style="background:#ff5f57"></div>
+          <div class="mockup-dot" style="background:#febc2e"></div>
+          <div class="mockup-dot" style="background:#28c840"></div>
+          <div class="mockup-url">http://89.167.121.193:8090/_/</div>
+        </div>
+        <div style="background:#1e1f2b;min-height:300px;display:flex;align-items:center;justify-content:center;padding:32px">
+          <div style="background:#fff;border-radius:10px;padding:32px;width:340px;box-shadow:0 8px 32px rgba(0,0,0,.4)">
+            <div style="text-align:center;margin-bottom:24px">
+              <div style="font-size:28px;margin-bottom:8px">🔒</div>
+              <div style="font-size:16px;font-weight:700;color:#1a1a2e;font-family:'Segoe UI',sans-serif">PocketBase Admin</div>
+              <div style="font-size:11px;color:#999;font-family:'Segoe UI',sans-serif;margin-top:2px">MTIC Data Backend</div>
+            </div>
+            <div class="pb-form">
+              <div class="pb-field">
+                <label class="pb-label">Admin Email</label>
+                <input class="pb-input filled" value="admin@mtic.go.ug" readonly>
+              </div>
+              <div class="pb-field">
+                <label class="pb-label">Password</label>
+                <input class="pb-input filled" type="password" value="••••••••••••" readonly>
+              </div>
+              <button style="width:100%;background:#6366f1;color:#fff;border:none;padding:10px;border-radius:6px;font-size:14px;font-weight:600;cursor:pointer;font-family:'Segoe UI',sans-serif;margin-top:4px">Login</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="callout info">The admin email is <strong>admin@mtic.go.ug</strong>. Your password was given to you by the technical team. If you have forgotten it, contact Hillary Arinda.</div>
+    </div>
+  </div>
+
+  <!-- STEP 2: NAVIGATE -->
+  <div class="step" id="guide-navigate">
+    <div class="step-header">
+      <div class="step-num">2</div>
+      <div class="step-title">Navigate to a Collection</div>
+    </div>
+    <div class="step-body">
+      <div class="step-desc">After logging in you will see the main interface. The left sidebar lists all collections. Click the one you want to edit.</div>
+
+      <div class="mockup" id="mock-nav">
+        <div class="mockup-bar">
+          <div class="mockup-dot" style="background:#ff5f57"></div>
+          <div class="mockup-dot" style="background:#febc2e"></div>
+          <div class="mockup-dot" style="background:#28c840"></div>
+          <div class="mockup-url">http://89.167.121.193:8090/_/#/collections</div>
+        </div>
+        <div class="mockup-body">
+          <div class="pb-sidebar" id="mock-sidebar">
+            <div class="pb-logo"><span>Pocket</span>Base</div>
+            <div class="pb-section">Collections</div>
+            <div class="pb-item active">📋 value_chains</div>
+            <div class="pb-item">🏭 facilities</div>
+            <div class="pb-item">📊 kpi_indicators</div>
+            <div class="pb-section" style="margin-top:24px">System</div>
+            <div class="pb-item">⚙️ Settings</div>
+            <div class="pb-item">👤 Admins</div>
+            <div class="pb-item">📜 Logs</div>
+          </div>
+          <div class="pb-content">
+            <div class="pb-top">
+              <div class="pb-title">value_chains <span style="font-size:11px;color:#999;font-weight:400">&nbsp;9 records</span></div>
+              <div style="display:flex;gap:8px;align-items:center">
+                <input class="pb-search" placeholder="Search…">
+                <button class="pb-new-btn">+ New record</button>
+              </div>
+            </div>
+            <table class="pb-table">
+              <thead><tr><th></th><th>name</th><th>position_tag</th><th>position_color</th><th>priority_tag</th><th>Updated</th></tr></thead>
+              <tbody>
+                <tr><td><button class="pb-edit-btn">✏️</button></td><td>Iron &amp; Steel</td><td>Downstream only</td><td><span class="pb-chip chip-amber">amber</span></td><td>High — anchor chain</td><td style="color:#999">2026-06-12</td></tr>
+                <tr><td><button class="pb-edit-btn">✏️</button></td><td>Copper &amp; Allied Metals</td><td>Downstream only</td><td><span class="pb-chip chip-amber">amber</span></td><td>High — mineral export</td><td style="color:#999">2026-06-12</td></tr>
+                <tr><td><button class="pb-edit-btn">✏️</button></td><td>Automotive</td><td>Assembly only</td><td><span class="pb-chip chip-red">red</span></td><td>Medium — KMC pivot</td><td style="color:#999">2026-06-12</td></tr>
+                <tr><td><button class="pb-edit-btn">✏️</button></td><td>Textiles &amp; Garments</td><td>Mid-stream</td><td><span class="pb-chip chip-amber">amber</span></td><td>High — AGOA window</td><td style="color:#999">2026-06-12</td></tr>
+                <tr style="opacity:.5"><td colspan="6" style="padding:6px 10px;font-size:11px;color:#999">…5 more chains</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="callout">Click the collection name in the sidebar, then click the <strong>✏️ edit button</strong> on any row — or click the row itself — to open that record.</div>
+    </div>
+  </div>
+
+  <!-- STEP 3: EDIT VALUE CHAIN -->
+  <div class="step" id="guide-edit-chain">
+    <div class="step-header">
+      <div class="step-num">3</div>
+      <div class="step-title">Edit a Value Chain Record</div>
+    </div>
+    <div class="step-body">
+      <div class="step-desc">Click the edit icon on a chain row. A form opens on the right side. Update the fields that have changed — for example new trade figures — then click <strong>Save</strong>.</div>
+
+      <div class="mockup" id="mock-edit-chain">
+        <div class="mockup-bar">
+          <div class="mockup-dot" style="background:#ff5f57"></div>
+          <div class="mockup-dot" style="background:#febc2e"></div>
+          <div class="mockup-dot" style="background:#28c840"></div>
+          <div class="mockup-url">http://89.167.121.193:8090/_/#/collections/value_chains/edit/abc123</div>
+        </div>
+        <div style="padding:20px;background:#fff;font-family:'Segoe UI',sans-serif">
+          <div style="font-size:14px;font-weight:700;color:#1a1a2e;margin-bottom:20px;display:flex;align-items:center;gap:10px">
+            <span style="color:#999;font-weight:400;font-size:12px">value_chains /</span> Iron &amp; Steel
+          </div>
+          <div class="pb-form">
+            <div class="field-row">
+              <div class="pb-field">
+                <label class="pb-label">key_import_2024 <span style="color:#6366f1">← update when new TradeMap data arrives</span></label>
+                <input class="pb-input filled" id="field-import" value="USD 219.5m flat steel">
+              </div>
+              <div class="pb-field">
+                <label class="pb-label">key_export_2024</label>
+                <input class="pb-input filled" value="USD 55.8m rebar">
+              </div>
+            </div>
+            <div class="field-row">
+              <div class="pb-field">
+                <label class="pb-label">position_tag</label>
+                <input class="pb-input filled" value="Downstream only">
+              </div>
+              <div class="pb-field">
+                <label class="pb-label">position_color</label>
+                <input class="pb-input filled" value="amber">
+              </div>
+            </div>
+            <div class="pb-field">
+              <label class="pb-label">target_2040</label>
+              <input class="pb-input filled" value="Domestic EAF steel plant (500 kt/yr) + scrap export ban">
+            </div>
+            <div class="pb-field">
+              <label class="pb-label">priority_tag</label>
+              <input class="pb-input filled" value="High — anchor chain for Automotive + Construction">
+            </div>
+            <div style="margin-top:20px;display:flex;gap:8px">
+              <button class="pb-cancel-btn">Cancel</button>
+              <button class="pb-save-btn" id="field-save">💾 Save</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="callout warn">Only edit the fields that have actually changed. Leave all other fields exactly as they are — the dashboard reads every field.</div>
+    </div>
+  </div>
+
+  <!-- STEP 4: KPI INDICATORS -->
+  <div class="step" id="guide-edit-kpi">
+    <div class="step-header">
+      <div class="step-num">4</div>
+      <div class="step-title">Update a KPI Indicator</div>
+    </div>
+    <div class="step-body">
+      <div class="step-desc">Click <strong>kpi_indicators</strong> in the sidebar. Click the record you want to update (e.g. "gdp"). Change <code>current_value</code> and <code>current_pct</code> to reflect the latest figures. Click Save.</div>
+
+      <div class="mockup" id="mock-kpi">
+        <div class="mockup-bar">
+          <div class="mockup-dot" style="background:#ff5f57"></div>
+          <div class="mockup-dot" style="background:#febc2e"></div>
+          <div class="mockup-dot" style="background:#28c840"></div>
+          <div class="mockup-url">http://89.167.121.193:8090/_/#/collections/kpi_indicators/edit/def456</div>
+        </div>
+        <div style="padding:20px;background:#fff;font-family:'Segoe UI',sans-serif">
+          <div style="font-size:14px;font-weight:700;color:#1a1a2e;margin-bottom:20px">
+            <span style="color:#999;font-weight:400;font-size:12px">kpi_indicators /</span> GDP (Total)
+          </div>
+          <div class="pb-form">
+            <div class="pb-field">
+              <label class="pb-label">label</label>
+              <input class="pb-input filled" value="GDP (Total)" style="color:#999" readonly>
+            </div>
+            <div class="field-row">
+              <div class="pb-field">
+                <label class="pb-label" style="color:#6366f1">current_value ← change this</label>
+                <input class="pb-input" id="kpi-current" value="USD 53.2B" style="border-color:#6366f1;box-shadow:0 0 0 2px rgba(99,102,241,.15)">
+              </div>
+              <div class="pb-field">
+                <label class="pb-label" style="color:#6366f1">current_pct ← and this (% of tenfold target)</label>
+                <input class="pb-input" value="11" style="border-color:#6366f1;box-shadow:0 0 0 2px rgba(99,102,241,.15)">
+              </div>
+            </div>
+            <div class="field-row">
+              <div class="pb-field">
+                <label class="pb-label">ndp_value</label>
+                <input class="pb-input filled" value="USD 158B" readonly>
+              </div>
+              <div class="pb-field">
+                <label class="pb-label">ndp_pct</label>
+                <input class="pb-input filled" value="32" readonly>
+              </div>
+            </div>
+            <div class="field-row">
+              <div class="pb-field">
+                <label class="pb-label">tenfold_value</label>
+                <input class="pb-input filled" value="~USD 500B" readonly>
+              </div>
+              <div class="pb-field">
+                <label class="pb-label">tenfold_pct</label>
+                <input class="pb-input filled" value="100" readonly>
+              </div>
+            </div>
+            <div style="margin-top:20px;display:flex;gap:8px">
+              <button class="pb-cancel-btn">Cancel</button>
+              <button class="pb-save-btn">💾 Save</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="callout info"><strong>current_pct</strong> is a whole number (0–100) representing how far Uganda is towards the tenfold target. Example: if GDP is USD 53B and the tenfold target is USD 500B, then current_pct = 11.</div>
+    </div>
+  </div>
+
+  <!-- STEP 5: ADD FACILITY -->
+  <div class="step" id="guide-add-facility">
+    <div class="step-header">
+      <div class="step-num">5</div>
+      <div class="step-title">Add a New Manufacturing Facility</div>
+    </div>
+    <div class="step-body">
+      <div class="step-desc">Click <strong>facilities</strong> in the sidebar, then click <strong>+ New record</strong>. Fill in the form below and click Save. The factory will appear on the Industry Locations map immediately.</div>
+
+      <div class="mockup" id="mock-facility">
+        <div class="mockup-bar">
+          <div class="mockup-dot" style="background:#ff5f57"></div>
+          <div class="mockup-dot" style="background:#febc2e"></div>
+          <div class="mockup-dot" style="background:#28c840"></div>
+          <div class="mockup-url">http://89.167.121.193:8090/_/#/collections/facilities/new</div>
+        </div>
+        <div style="padding:20px;background:#fff;font-family:'Segoe UI',sans-serif">
+          <div style="font-size:14px;font-weight:700;color:#1a1a2e;margin-bottom:20px">facilities / New Record</div>
+          <div class="pb-form">
+            <div class="field-row">
+              <div class="pb-field">
+                <label class="pb-label">chain_name <span style="color:#f57f17">*required</span></label>
+                <input class="pb-input" placeholder="e.g. Iron &amp; Steel">
+              </div>
+              <div class="pb-field">
+                <label class="pb-label">chain_slug</label>
+                <input class="pb-input" placeholder="e.g. iron-steel">
+              </div>
+            </div>
+            <div class="pb-field">
+              <label class="pb-label">name <span style="color:#f57f17">*required</span></label>
+              <input class="pb-input" placeholder="Full name of the facility">
+            </div>
+            <div class="field-row">
+              <div class="pb-field">
+                <label class="pb-label">lat (latitude)</label>
+                <input class="pb-input" placeholder="e.g. 0.3476 (use Google Maps)">
+              </div>
+              <div class="pb-field">
+                <label class="pb-label">lng (longitude)</label>
+                <input class="pb-input" placeholder="e.g. 32.5825">
+              </div>
+            </div>
+            <div class="field-row">
+              <div class="pb-field">
+                <label class="pb-label">location</label>
+                <input class="pb-input" placeholder="e.g. Jinja Industrial Area">
+              </div>
+              <div class="pb-field">
+                <label class="pb-label">employees</label>
+                <input class="pb-input" placeholder="e.g. 450">
+              </div>
+            </div>
+            <div class="pb-field">
+              <label class="pb-label">products</label>
+              <input class="pb-input" placeholder="e.g. Rebar, wire rod, flat steel sheets">
+            </div>
+            <div style="margin-top:20px;display:flex;gap:8px">
+              <button class="pb-cancel-btn">Cancel</button>
+              <button class="pb-save-btn">💾 Save</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="callout warn"><strong>Getting GPS coordinates:</strong> Go to <a href="https://maps.google.com" target="_blank">maps.google.com</a>, right-click the factory location, and click the coordinates at the top of the menu. Paste them into lat and lng (lat first, lng second).</div>
+    </div>
+  </div>
+
+  <!-- STEP 6: AFTER SAVING -->
+  <div class="step" id="guide-deploy">
+    <div class="step-header">
+      <div class="step-num">6</div>
+      <div class="step-title">After Saving — Updating the Live Dashboard</div>
+    </div>
+    <div class="step-body">
+      <div class="step-desc">Your changes are saved in PocketBase immediately. The live dashboard at <strong>tinyurl.com/28lxntmc</strong> reads from PocketBase every time CI deploys. To push your changes live:</div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin:16px 0" id="guide-deploy-steps">
+        <div style="background:#f9f9ff;border:1px solid #e0e0e0;border-radius:8px;padding:16px">
+          <div style="font-size:13px;font-weight:700;color:#1565c0;margin-bottom:8px">Option A — Self-serve</div>
+          <ol style="font-size:12px;color:#444;line-height:2;padding-left:18px">
+            <li>Open <a href="https://github.com/MTIC-Uganda/industrial_diagnostic_study/actions" target="_blank">GitHub Actions</a></li>
+            <li>Click <strong>Run workflow</strong> on the Deploy workflow</li>
+            <li>Wait ~3 minutes for it to finish</li>
+            <li>Refresh the dashboard — data is updated</li>
+          </ol>
+        </div>
+        <div style="background:#f9f9ff;border:1px solid #e0e0e0;border-radius:8px;padding:16px">
+          <div style="font-size:13px;font-weight:700;color:#1565c0;margin-bottom:8px">Option B — Ask the team</div>
+          <ol style="font-size:12px;color:#444;line-height:2;padding-left:18px">
+            <li>WhatsApp Solomon or Hillary</li>
+            <li>Tell them you've updated data in PocketBase</li>
+            <li>They will trigger a deployment</li>
+            <li>Dashboard is updated within a few minutes</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="callout">The technical team is working on making the dashboard auto-refresh from PocketBase without a manual deployment step. Until then, use Option A or B above.</div>
+    </div>
+  </div>
+
+</div><!-- /wrap -->
+
+<footer>Uganda Industrial Diagnostic Study &nbsp;|&nbsp; MTIC × UNIDO PCP &nbsp;|&nbsp; Data Entry Guide &nbsp;|&nbsp; For official use</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/driver.js@1.3.1/dist/driver.js.iife.js"></script>
+<script>
+function startTour(){
+  const d = window.driver.js.driver;
+  const tour = d({
+    showProgress: true,
+    animate: true,
+    overlayOpacity: 0.55,
+    nextBtnText: 'Next →',
+    prevBtnText: '← Back',
+    doneBtnText: 'Done',
+    steps: [
+      {
+        element: '#guide-header',
+        popover: {
+          title: 'PocketBase Data Entry Guide',
+          description: 'This page walks you through how to update the MTIC dashboard data. Every section below shows a real screen from PocketBase with instructions. Use this as a reference before you log in.',
+          side: 'bottom', align: 'start'
+        }
+      },
+      {
+        element: '#guide-intro',
+        popover: {
+          title: 'Open PocketBase First',
+          description: 'Before following any steps below, click the blue <strong>Open PocketBase Admin</strong> button to log into the database. Keep this guide open in a second browser tab so you can follow along.',
+          side: 'bottom', align: 'start'
+        }
+      },
+      {
+        element: '#guide-collections',
+        popover: {
+          title: 'Three Tables, Three Jobs',
+          description: '<strong>value_chains</strong> — edit when trade figures, targets, or policy priorities change.<br><br><strong>facilities</strong> — add or update manufacturing facilities on the locations map.<br><br><strong>kpi_indicators</strong> — update the six headline numbers at the top of the dashboard.',
+          side: 'bottom', align: 'start'
+        }
+      },
+      {
+        element: '#guide-login',
+        popover: {
+          title: 'Step 1: Log In',
+          description: 'Go to <strong>http://89.167.121.193:8090/_/</strong> in your browser. Enter the admin email (<em>admin@mtic.go.ug</em>) and your password. The login screen looks exactly like the one shown here.',
+          side: 'top', align: 'start'
+        }
+      },
+      {
+        element: '#mock-sidebar',
+        popover: {
+          title: 'The Sidebar',
+          description: 'After logging in you will see this sidebar on the left. The three MTIC collections are listed at the top: <strong>value_chains</strong>, <strong>facilities</strong>, and <strong>kpi_indicators</strong>. Click any one to open that table.',
+          side: 'right', align: 'start'
+        }
+      },
+      {
+        element: '#guide-edit-chain',
+        popover: {
+          title: 'Step 3: Edit a Value Chain',
+          description: 'When TradeMap publishes new trade data, click the row for that chain and update <strong>key_import_2024</strong> and <strong>key_export_2024</strong>. Use format: <em>USD 219.5m flat steel</em>. Then click Save.',
+          side: 'top', align: 'start'
+        }
+      },
+      {
+        element: '#field-import',
+        popover: {
+          title: 'The Import Field',
+          description: 'This field holds the headline import figure for that chain. Write it as a short phrase: <em>USD 219.5m flat steel</em>. Include the unit (m = millions, B = billions) and the main commodity.',
+          side: 'top', align: 'start'
+        }
+      },
+      {
+        element: '#field-save',
+        popover: {
+          title: 'Always Click Save',
+          description: 'PocketBase does NOT auto-save. After every edit, click the purple <strong>Save</strong> button. If you close the tab without saving, your changes are lost.',
+          side: 'top', align: 'start'
+        }
+      },
+      {
+        element: '#guide-edit-kpi',
+        popover: {
+          title: 'Step 4: Update KPI Indicators',
+          description: 'The six KPI cards at the top of the dashboard come from <strong>kpi_indicators</strong>. When the Uganda Bureau of Statistics publishes new national figures, update <strong>current_value</strong> (the written figure, e.g. <em>USD 55.2B</em>) and <strong>current_pct</strong> (a number 0–100 showing progress towards the tenfold target).',
+          side: 'top', align: 'start'
+        }
+      },
+      {
+        element: '#kpi-current',
+        popover: {
+          title: 'current_value Format',
+          description: 'Write the value as it should appear on the dashboard card — include the unit. Examples: <em>USD 53.2B</em>, <em>15.2%</em>, <em>USD 1,146</em>, <em>2.1M jobs</em>. Keep it short — it appears in a small card.',
+          side: 'top', align: 'start'
+        }
+      },
+      {
+        element: '#guide-add-facility',
+        popover: {
+          title: 'Step 5: Add a New Facility',
+          description: 'When a new factory opens or is commissioned, add it under <strong>facilities</strong>. The minimum required fields are <strong>chain_name</strong> and <strong>name</strong>. GPS coordinates (lat/lng) are needed for the map marker — get them from Google Maps.',
+          side: 'top', align: 'start'
+        }
+      },
+      {
+        element: '#guide-deploy',
+        popover: {
+          title: 'Step 6: Push Changes Live',
+          description: 'Your PocketBase edits are saved but the public dashboard needs a deployment to pick them up. Use Option A (trigger GitHub Actions yourself) or Option B (ask Solomon or Hillary). The dashboard will show your new data within a few minutes.',
+          side: 'top', align: 'start'
+        }
+      },
+      {
+        element: '#tour-trigger',
+        popover: {
+          title: 'You\'re ready!',
+          description: 'This tour is always here whenever you need a refresher. Open PocketBase in a second tab and follow these steps. If you get stuck, contact the technical team on WhatsApp.',
+          side: 'bottom', align: 'end'
+        }
+      }
+    ]
+  });
+  tour.drive();
+}
+
+// Auto-launch on first visit
+(function(){
+  if(!localStorage.getItem('mtic_pb_guide_done')){
+    localStorage.setItem('mtic_pb_guide_done','1');
+    setTimeout(startTour, 600);
+  }
+})();
+</script>
+</body>
+</html>
