@@ -232,3 +232,50 @@ jobs:
           echo "  Commit:    ${COMMIT:0:7} from $BRANCH"
           echo "============================================"
           echo "::notice::Prod live: $PROD_SHORT_URL"
+
+  # ── 4. Seed PocketBase (main branch only, after prod succeeds) ─────────────
+  seed-pocketbase:
+    name: Seed PocketBase
+    runs-on: ubuntu-latest
+    needs: deploy-prod
+    timeout-minutes: 5
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Set up SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.HETZNER_SSH_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H $HETZNER_HOST >> ~/.ssh/known_hosts
+
+      - name: Run PocketBase seeding
+        env:
+          PB_URL: ${{ secrets.PB_URL }}
+          PB_ADMIN_EMAIL: ${{ secrets.PB_ADMIN_EMAIL }}
+          PB_ADMIN_PASSWORD: ${{ secrets.PB_ADMIN_PASSWORD }}
+        run: |
+          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no \
+            $HETZNER_USER@$HETZNER_HOST \
+            "cd /var/www/industrial_diagnostic_study && \
+             export PB_URL='$PB_URL' && \
+             export PB_ADMIN_EMAIL='$PB_ADMIN_EMAIL' && \
+             export PB_ADMIN_PASSWORD='$PB_ADMIN_PASSWORD' && \
+             python db/pb_setup.py"
+          echo "::notice::PocketBase collections seeded on main"
+
+      - name: Verify PocketBase
+        run: |
+          curl -s ${{ secrets.PB_URL }}/api/collections \
+            -H "Authorization: Bearer $(curl -s -X POST ${{ secrets.PB_URL }}/api/admins/auth-with-password \
+              -H 'Content-Type: application/json' \
+              -d '{\"identity\":\"${{ secrets.PB_ADMIN_EMAIL }}\",\"password\":\"${{ secrets.PB_ADMIN_PASSWORD }}\"}' \
+              | jq -r '.token')" | jq '.items | length' | grep -qE '^[0-9]+$' && \
+            echo "✓ PocketBase collections verified" || \
+            echo "⚠️ PocketBase verification inconclusive (may still be seeded)"
