@@ -121,11 +121,15 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-t
   .card{box-shadow:none;border:1px solid #ddd}
   button{display:none!important}
 }
+/* TOUR */
+.tour-btn{background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.4);border-radius:6px;padding:7px 16px;font-size:12px;font-weight:600;cursor:pointer;transition:background .2s}
+.tour-btn:hover{background:rgba(255,255,255,.28)}
 </style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/driver.js@1.3.1/dist/driver.css"/>
 </head>
 <body>
 
-<div class="site-header">
+<div class="site-header" id="tour-header">
   <div style="display:flex;align-items:center;gap:18px">
     <img src="uganda_coat_of_arms.png" alt="Uganda Coat of Arms" style="height:64px;flex-shrink:0;filter:drop-shadow(0 1px 4px rgba(0,0,0,.5))">
     <div>
@@ -135,15 +139,16 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-t
   </div>
   <div style="display:flex;align-items:center;gap:10px">
     <button onclick="window.print()" style="background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.4);border-radius:6px;padding:7px 16px;font-size:12px;font-weight:600;cursor:pointer;transition:background .2s" onmouseover="this.style.background='rgba(255,255,255,.25)'" onmouseout="this.style.background='rgba(255,255,255,.15)'">🖨️ Print / Export</button>
+    <button id="tour-trigger" class="tour-btn" onclick="startTour()">🧭 Take a Tour</button>
     <div class="badge">TENFOLD GROWTH FRAMEWORK</div>
   </div>
 </div>
 
-<div class="tab-bar">
-  <button class="tab-btn active" onclick="showTab('overview')">🏭 Manufacturing Overview</button>
-  <button class="tab-btn" onclick="showTab('maps')">🗺️ Value Chain Maps</button>
-  <button class="tab-btn" onclick="showTab('status')">📊 Chain Status &amp; 2040 Projections</button>
-  <button class="tab-btn" onclick="showTab('locations')">📍 Industry Locations</button>
+<div class="tab-bar" id="tour-tab-bar">
+  <button id="tab-btn-overview" class="tab-btn active" onclick="showTab('overview')">🏭 Manufacturing Overview</button>
+  <button id="tab-btn-maps" class="tab-btn" onclick="showTab('maps')">🗺️ Value Chain Maps</button>
+  <button id="tab-btn-status" class="tab-btn" onclick="showTab('status')">📊 Chain Status &amp; 2040 Projections</button>
+  <button id="tab-btn-locations" class="tab-btn" onclick="showTab('locations')">📍 Industry Locations</button>
 </div>
 
 <!-- ═══════════════════════════════════════════════════════════════
@@ -151,7 +156,7 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-t
 ═══════════════════════════════════════════════════════════════ -->
 <div id="tab-overview" class="tab-content active">
 
-  <div class="tenfold-banner">
+  <div class="tenfold-banner" id="tour-tenfold-banner">
     <div class="icon">🚀</div>
     <div>
       <strong>The Tenfold Growth Strategy is the governing purpose of this entire study.</strong>
@@ -162,7 +167,7 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-t
   <div class="section-title">📊 Uganda Manufacturing — Key Indicators</div>
   <div class="section-sub">Current status (2024) versus NDP IV targets (FY2029/30) versus Tenfold Growth targets (2040)</div>
 
-  <div class="kpi-grid">
+  <div class="kpi-grid" id="tour-kpi-grid">
     <div class="card"><h3>Manufacturing / GDP</h3><div class="value">15.2%</div><div class="sub-value">NDP IV target: 21% &nbsp;|&nbsp; Tenfold target: 30%</div></div>
     <div class="card"><h3>Uganda GDP</h3><div class="value">USD 53.2B</div><div class="sub-value">NDP IV: USD 158B by 2029/30 &nbsp;|&nbsp; Tenfold: ~USD 500B by 2040</div></div>
     <div class="card"><h3>Capacity Utilisation</h3><div class="value">~30%</div><div class="sub-value">NDP IV target: 60% &nbsp;|&nbsp; Tenfold target: 80%</div></div>
@@ -171,7 +176,7 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-t
     <div class="card"><h3>Manufactured Exports</h3><div class="value">~12%</div><div class="sub-value">of total exports &nbsp;|&nbsp; NDP IV target: 35% &nbsp;|&nbsp; Tenfold: >50%</div></div>
   </div>
 
-  <div class="card" style="margin-bottom:24px">
+  <div class="card" id="tour-progress-card" style="margin-bottom:24px">
     <h3 style="font-size:15px;color:var(--blue);margin-bottom:16px;font-weight:700">Progress Towards 2040 Targets</h3>
     <div class="progress-section">
       <div class="progress-item">
@@ -207,7 +212,7 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-t
   </div>
 
   <div class="section-title" style="margin-bottom:16px">🏭 The 9 Priority Value Chains — Snapshot</div>
-  <div class="card">
+  <div class="card" id="tour-chain-table">
     <table>
       <thead><tr><th>Value Chain</th><th>Key Import (2024)</th><th>Key Export (2024)</th><th>Uganda Position</th><th>Top 2040 Target</th><th>Priority</th></tr></thead>
       <tbody>
@@ -2318,6 +2323,125 @@ function initMap(){
   });
 }
 
+// ═══════════════════ DRIVER.JS TOUR ═══════════════════
+</script>
+<script src="https://cdn.jsdelivr.net/npm/driver.js@1.3.1/dist/driver.js.iife.js"></script>
+<script>
+function startTour(){
+  const d = window.driver.js.driver;
+  const tour = d({
+    showProgress: true,
+    animate: true,
+    overlayOpacity: 0.55,
+    popoverClass: 'mtic-tour',
+    nextBtnText: 'Next →',
+    prevBtnText: '← Back',
+    doneBtnText: 'Done',
+    steps: [
+      {
+        element: '#tour-header',
+        popover: {
+          title: 'Welcome to the MTIC Dashboard',
+          description: 'This is Uganda\'s Manufacturing Sources of Truth — live data on the 9 priority value chains under the UNIDO Programme for Country Partnership. Use this to track progress, compare targets, and explore each chain in detail.',
+          side: 'bottom', align: 'start'
+        }
+      },
+      {
+        element: '#tour-tab-bar',
+        popover: {
+          title: 'Four Views',
+          description: 'Navigate between four sections: <strong>Manufacturing Overview</strong> (KPIs and chain snapshot), <strong>Value Chain Maps</strong> (interactive Sankey), <strong>Chain Status</strong> (detailed 2040 projections), and <strong>Industry Locations</strong> (factory map). Click any tab to switch.',
+          side: 'bottom', align: 'start'
+        }
+      },
+      {
+        element: '#tour-tenfold-banner',
+        popover: {
+          title: 'The Governing Purpose',
+          description: 'Everything in this dashboard is calibrated to Uganda\'s Tenfold Growth Strategy — achieving a tenfold expansion of the economy by 2040, driven by manufacturing, mineral value addition, and agro-industrialisation. Keep this in mind as you read each indicator.',
+          side: 'bottom', align: 'start'
+        }
+      },
+      {
+        element: '#tour-kpi-grid',
+        popover: {
+          title: 'Key Indicators',
+          description: 'Six headline numbers: GDP, Per Capita Income, Manufacturing Share, Capacity Utilisation, Exports, and Employment. Each card shows the current 2024 figure, the NDP IV target for FY2029/30, and the Tenfold Growth target for 2040. The progress bar shows how far Uganda has come.',
+          side: 'bottom', align: 'start'
+        }
+      },
+      {
+        element: '#tour-progress-card',
+        popover: {
+          title: 'Progress Towards 2040',
+          description: 'These bars visualise three milestones for each indicator: current (blue), NDP IV target (green), and the Tenfold target (orange). The longer the orange bar remaining, the greater the growth challenge — and opportunity.',
+          side: 'top', align: 'start'
+        }
+      },
+      {
+        element: '#tour-chain-table',
+        popover: {
+          title: 'The 9 Priority Value Chains',
+          description: 'A snapshot of all nine chains: key imports, key exports, Uganda\'s current position (Downstream only / Mid-stream / Integrated), the top 2040 target, and strategic priority. Amber = high ambition. Red = critical gap. Green = competitive advantage.',
+          side: 'top', align: 'start'
+        }
+      },
+      {
+        element: '#tab-btn-maps',
+        popover: {
+          title: 'Value Chain Maps (Interactive Sankey)',
+          description: 'Click here to explore each chain visually — from final product upstream through technology types, components, raw materials, and labour. Hover over any node to see cost-share weights and TradeMap trade figures. Select a different chain from the dropdown inside.',
+          side: 'bottom', align: 'start',
+          onNextClick: function(){
+            showTab('status');
+            tour.moveNext();
+          }
+        }
+      },
+      {
+        element: '#tab-btn-status',
+        popover: {
+          title: 'Chain Status & 2040 Projections',
+          description: 'Click here for a deep-dive on any individual chain: current state, key companies operating in Uganda, binding constraints, strategic priorities, and financial projections to 2040. Select a chain using the buttons at the top of that section.',
+          side: 'bottom', align: 'start',
+          onNextClick: function(){
+            showTab('locations');
+            tour.moveNext();
+          }
+        }
+      },
+      {
+        element: '#tab-btn-locations',
+        popover: {
+          title: 'Industry Locations Map',
+          description: 'Click here to see all 89 manufacturing facilities plotted on Uganda\'s map. Filter by value chain using the sidebar, or search a specific factory by name. Click any marker for details on capacity, ownership, and products.',
+          side: 'bottom', align: 'start',
+          onNextClick: function(){
+            showTab('overview');
+            tour.moveNext();
+          }
+        }
+      },
+      {
+        element: '#tour-trigger',
+        popover: {
+          title: 'You\'re all set!',
+          description: 'This "Take a Tour" button is always here whenever you need a refresher. Data in this dashboard is updated by the MTIC team — if you notice anything outdated, contact the Programme team. Welcome aboard.',
+          side: 'bottom', align: 'end'
+        }
+      }
+    ]
+  });
+  tour.drive();
+}
+
+// Auto-launch on first visit
+(function(){
+  if(!localStorage.getItem('mtic_tour_done')){
+    localStorage.setItem('mtic_tour_done','1');
+    setTimeout(startTour, 800);
+  }
+})();
 </script>
 </body>
 </html>
