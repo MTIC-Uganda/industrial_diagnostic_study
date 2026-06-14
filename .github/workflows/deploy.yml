@@ -206,6 +206,7 @@ jobs:
 
       - name: Auto-merge branch to main
         if: github.ref != 'refs/heads/main'
+        continue-on-error: true
         run: |
           BRANCH="${{ github.ref_name }}"
           git config user.name  "MTIC CI Bot"
