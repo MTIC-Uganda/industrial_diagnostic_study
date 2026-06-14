@@ -18,7 +18,9 @@ workspace "MTIC Industrial Diagnostic Study — Value Chain Intelligence System"
         pipeline = softwareSystem "Value Chain Intelligence Pipeline" "End-to-end data-to-dashboard automation." {
 
             # ── DATA LAYER ──────────────────────────────────────────────────
-            rawData = container "Raw Data Store" "Jerome uploads: PDFs, DOCX, XLSX, DOCX with context notes. Also TradeMap CSV exports. Path: data/ in repo." "PDF/XLSX/DOCX/Markdown"
+            pocketbase = container "PocketBase — Data Backend" "Live database on Hetzner port 8090. Jerome edits data via web UI (no Git, no terminal). REST API for CI reads live data. SQLite store at /var/lib/pocketbase/pb_data." "PocketBase/SQLite"
+
+            rawData = container "Raw Data Store" "Jerome uploads: PDFs, DOCX, XLSX with context notes (legacy). Also TradeMap CSV exports. Path: data/ in repo." "PDF/XLSX/DOCX/Markdown"
 
             schema = container "Value Chain Schema" "Structured field definitions per stage per chain: production capacity, utilisation %, imports, exports (TradeMap), Tenfold 2040 targets, data gap flags. Authored by Jerome. Path: data/schema/." "Markdown/JSON"
 
@@ -33,27 +35,36 @@ workspace "MTIC Industrial Diagnostic Study — Value Chain Intelligence System"
 
             reviewAgent = container "Review Agent" "Validates synthesis output against Jerome's quality matrix. PASS: opens PR to main. FAIL: sends specific feedback via WhatsApp and routes back to synthesis. Self-healing loop until PASS or human override. (Phase 2)" "Python/Claude Code"
 
+            # ── BUILD LAYER ─────────────────────────────────────────────────
+            dashboardGen = container "Dashboard Generator" "reads PocketBase REST API → generates sources-of-truth.html + sankey.html. Runs on every CI push. Path: scripts/generate_dashboard.py" "Python"
+
+            reactBuild = container "React Build (Vite)" "Builds app/frontend → dist/. React + D3-sankey. Served as sankey.html inside the dashboard." "Node.js/Vite"
+
             # ── CI/CD LAYER ────────────────────────────────────────────────
-            ciPipeline = container "GitHub Actions Pipeline" "Triggered on every push. Any branch → staging deploy (self-heal retry loop up to 3×). Staging pass → prod promotion + auto-merge to main. Merge conflict → warning only (prod still updated). Short URL: https://tinyurl.com/28lxntmc" "YAML"
+            ciPipeline = container "GitHub Actions Pipeline" "Triggered on every push. (1) Generate dashboard from PocketBase. (2) Build React app. (3) Deploy to staging with self-heal (3 attempts, 10s backoff). (4) Health check (timeout: 15min). (5) Staging pass → promote to prod + auto-merge to main (timeout: 10min). Merge conflict → warning only. Short URL: https://tinyurl.com/28lxntmc" "YAML"
 
             # ── PRESENTATION LAYER ─────────────────────────────────────────
-            stagingApp = container "Staging Dashboard" "Live preview of every branch push. URL: http://89.167.121.193:8200. Reviewers check here before main." "Static HTML served by nginx"
+            stagingApp = container "Staging Dashboard" "Live preview of every branch push. URL: http://89.167.121.193:8200. Dual-app: sources-of-truth.html (main) + sankey.html (iframed). Reviewers check here before main." "Static HTML/Nginx"
 
-            prodApp = container "Production Dashboard" "Public-facing value chain dashboard. URL: http://89.167.121.193:8201. Promoted from staging on main only. Jerome shares this with MTIC colleagues and Commissioner." "Static HTML served by nginx"
+            prodApp = container "Production Dashboard" "Public-facing value chain dashboard. URL: http://89.167.121.193:8201 (short: https://tinyurl.com/28lxntmc). Promoted from staging on main only. Jerome shares this with MTIC colleagues and Commissioner." "Static HTML/Nginx"
 
             # ── SCRIPTS ───────────────────────────────────────────────────
             buildScripts = container "Report Build Scripts" "Assemble markdown chapters into Word/PPTX deliverables. Separate from the dashboard pipeline. scripts/build_reports_docx.py etc." "Python"
         }
 
         # ── RELATIONSHIPS: people → systems ──────────────────────────────
-        jerome    -> rawData   "Uploads data files with context notes (push to data/ branch → PR → main)"
+        jerome    -> pocketbase   "Edits data via web UI (no Git, no terminal)"
         jerome    -> qualityMatrix "Authors and maintains pass/fail criteria"
         solomon   -> pipeline  "Pushes dashboard code to branches; main triggers deploy"
         hillary   -> pipeline  "Builds and maintains the agentic pipeline and CI/CD"
         colleagues -> prodApp  "Reviews value chain assessments via public URL"
         commissioner -> prodApp "Reviews strategic outputs"
 
-        # ── DATA FLOW: ingest → synthesize → review ───────────────────────
+        # ── DATA FLOW: PocketBase → Dashboard Generation (Phase 1+) ──────
+        pocketbase -> dashboardGen "CI fetches live data via REST API"
+        dashboardGen -> stagingApp "Outputs sources-of-truth.html + sankey.html"
+
+        # ── DATA FLOW: ingest → synthesize → review (Phase 2+) ───────────
         rawData   -> ingestionAgent  "File + context note read on push event"
         schema    -> ingestionAgent  "Field definitions guide extraction"
         ingestionAgent -> synthesizedDB "Writes structured JSON, flags data gaps"
@@ -66,9 +77,11 @@ workspace "MTIC Industrial Diagnostic Study — Value Chain Intelligence System"
 
         # ── CI/CD FLOW ────────────────────────────────────────────────────
         github    -> ciPipeline  "Push event triggers pipeline"
-        ciPipeline -> stagingApp "Every push: scp dashboard HTML to staging"
-        ciPipeline -> prodApp    "main only: copy staging → prod after health check"
-        ciPipeline -> whatsapp   "Deploy complete notification to MTIC group (Phase 2)"
+        ciPipeline -> dashboardGen "Generate dashboard from PocketBase"
+        ciPipeline -> reactBuild "Build React Sankey app"
+        ciPipeline -> stagingApp "Deploy with self-heal retry (3×, timeout 15min)"
+        ciPipeline -> prodApp    "main only: rsync staging → prod (timeout 10min)"
+        ciPipeline -> whatsapp   "Deploy complete notification to MTIC group"
 
         # ── EXTERNAL DATA ─────────────────────────────────────────────────
         itcTrade  -> rawData     "TradeMap CSV exports stored in data/"
