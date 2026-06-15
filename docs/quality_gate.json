@@ -1,0 +1,673 @@
+{
+  "gate_metadata": {
+    "name": "Uganda Industrial Development Diagnostic \u2014 Publication Quality Gate",
+    "version": "1.0.0",
+    "purpose": "Defines when a value chain diagnostic is ready to publish. The review agent checks every completed diagnostic against these rules before acceptance. A diagnostic that does not pass ALL mandatory checks is RETURNED FOR REVISION and does not proceed to publication.",
+    "standard_statement": "This is a decision-grade diagnostic for the Government of Uganda. It must be actionable by the Commissioner, investable by the private sector, and credible to development partners. 'Good enough' means every mandatory check below passes.",
+    "owner": "Technical Working Group (TWG), MTIC \u2014 policy artifact, may be revised independently of the field schema.",
+    "links_to": "diagnostic_schema.json v1.0.0 \u2014 every check cites the field_ids/domains it depends on.",
+    "decision_rule": "PUBLISH only if ALL mandatory checks PASS. If any mandatory check FAILS -> RETURN_FOR_REVISION. Conditional checks that fail are logged as advisories and do not block publication but must be acknowledged.",
+    "execution_order": "Run by stage in sequence: STAGE_1_EVIDENCE -> STAGE_2_ANALYSIS -> STAGE_3_PRIORITIZATION -> STAGE_4_INVESTMENT -> STAGE_5_NARRATIVE_INTEGRITY. Fail fast: report the earliest broken stage first so revision targets the root cause.",
+    "scope": "Applied once per value chain diagnostic (9 times total), plus the consolidated-report checks (CR-*) applied once to the final consolidated report."
+  },
+  "tags": {
+    "stages": {
+      "STAGE_1_EVIDENCE": "Is the underlying evidence complete, sourced, and credible?",
+      "STAGE_2_ANALYSIS": "Is the constraint analysis sound and traceable to evidence?",
+      "STAGE_3_PRIORITIZATION": "Is prioritization transparent, consistent, and logically derived?",
+      "STAGE_4_INVESTMENT": "Are investment opportunities feasible and investment-ready?",
+      "STAGE_5_NARRATIVE_INTEGRITY": "Does the written report hold together and avoid unsupported claims?"
+    },
+    "tor_criteria": {
+      "completeness": "All required content present across all chains.",
+      "analytical_rigor": "Claims evidenced, sourced, internally consistent.",
+      "action_orientation": "Findings convert to implementable, owned, sequenced actions.",
+      "prioritization_clarity": "Transparent, consistent scoring logic.",
+      "feasibility": "Proposed projects are realistic and risk-assessed.",
+      "bankable_readiness": "Investment package can be presented to financiers."
+    },
+    "audience_pillars": {
+      "commissioner_actionable": "A government decision-maker can act on it.",
+      "investor_investable": "A private investor can evaluate the opportunity.",
+      "partner_credible": "A development partner (UNIDO/DPs) finds it credible."
+    }
+  },
+  "checks": [
+    {
+      "check_id": "E-01",
+      "stage": "STAGE_1_EVIDENCE",
+      "mandatory": true,
+      "statement": "All MANDATORY fields in domains D0 and D1 are populated for this chain, or explicitly marked not_available with a documented reason.",
+      "tor_criteria": [
+        "completeness"
+      ],
+      "audience_pillars": [
+        "commissioner_actionable",
+        "partner_credible"
+      ],
+      "depends_on": [
+        "D0.01",
+        "D0.02",
+        "D0.03",
+        "D0.04",
+        "D0.06",
+        "D1.01",
+        "D1.02",
+        "D1.03",
+        "D1.04",
+        "D1.05",
+        "D1.06",
+        "D1.07",
+        "D1.08",
+        "D1.09",
+        "D1.11"
+      ],
+      "pass_condition": "No mandatory D0/D1 cell is empty without a not_available flag carrying a reason.",
+      "on_fail": "Return to ingestion: list empty mandatory cells. Cannot proceed; everything downstream depends on this."
+    },
+    {
+      "check_id": "E-02",
+      "stage": "STAGE_1_EVIDENCE",
+      "mandatory": true,
+      "statement": "Every evidence_required datapoint used in this diagnostic carries a raw_source and a source_type.",
+      "tor_criteria": [
+        "analytical_rigor"
+      ],
+      "audience_pillars": [
+        "partner_credible"
+      ],
+      "depends_on": [
+        "record_envelope.raw_source",
+        "record_envelope.source_type"
+      ],
+      "pass_condition": "For every populated field where evidence_required=true, raw_source is non-empty and source_type is from the controlled vocabulary.",
+      "on_fail": "Return to ingestion: list datapoints missing sources. ToR requires all data sources cited."
+    },
+    {
+      "check_id": "E-03",
+      "stage": "STAGE_1_EVIDENCE",
+      "mandatory": true,
+      "statement": "Quantitative headline figures carry a reporting year within the accepted window and are not silently stale.",
+      "tor_criteria": [
+        "analytical_rigor"
+      ],
+      "audience_pillars": [
+        "partner_credible",
+        "investor_investable"
+      ],
+      "depends_on": [
+        "D1.01",
+        "D1.02",
+        "D1.06",
+        "D1.07",
+        "record_envelope.reporting_year"
+      ],
+      "pass_condition": "Each headline quantitative field has reporting_year set and >=2020, OR is flagged low/estimated confidence with a note.",
+      "on_fail": "Return to ingestion: flag undated or pre-2020 figures."
+    },
+    {
+      "check_id": "E-04",
+      "stage": "STAGE_1_EVIDENCE",
+      "mandatory": true,
+      "statement": "Capacity utilization is reported and contextualized against the national baseline (~30%) and NDP IV / Tenfold targets (60% / 80%).",
+      "tor_criteria": [
+        "completeness",
+        "analytical_rigor"
+      ],
+      "audience_pillars": [
+        "commissioner_actionable"
+      ],
+      "depends_on": [
+        "D1.03"
+      ],
+      "pass_condition": "D1.03 populated (0-100) and the narrative references the baseline/target frame.",
+      "on_fail": "Return: capacity utilization missing or not contextualized \u2014 it is the ToR's flagship metric."
+    },
+    {
+      "check_id": "E-05",
+      "stage": "STAGE_1_EVIDENCE",
+      "mandatory": false,
+      "statement": "Where a mandatory figure is not_available, a triangulated estimate or proxy is offered rather than a blank.",
+      "tor_criteria": [
+        "completeness"
+      ],
+      "audience_pillars": [
+        "partner_credible"
+      ],
+      "depends_on": [
+        "record_envelope.confidence",
+        "record_envelope.collection_notes"
+      ],
+      "pass_condition": "not_available cells carry either a proxy/estimate with assumptions, or a data-gap note for the limitations section.",
+      "on_fail": "Advisory: data gap logged; acceptable but should appear in limitations."
+    },
+    {
+      "check_id": "E-06",
+      "stage": "STAGE_1_EVIDENCE",
+      "mandatory": true,
+      "statement": "Every datapoint sourced from the open web (ingestion_method='web_gap_fill') has been approved via merged PR before inclusion; no pending or rejected web data is present.",
+      "tor_criteria": [
+        "analytical_rigor"
+      ],
+      "audience_pillars": [
+        "partner_credible"
+      ],
+      "depends_on": [
+        "record_envelope.ingestion_method",
+        "record_envelope.approval_status"
+      ],
+      "pass_condition": "No record with ingestion_method='web_gap_fill' has approval_status other than 'approved'.",
+      "on_fail": "Return: unapproved web data present. It must be approved by PR merge or removed before publication."
+    },
+    {
+      "check_id": "A-01",
+      "stage": "STAGE_2_ANALYSIS",
+      "mandatory": true,
+      "statement": "All seven ToR constraint domains (D2-D8) have been assessed for this chain \u2014 none is silently omitted.",
+      "tor_criteria": [
+        "completeness"
+      ],
+      "audience_pillars": [
+        "commissioner_actionable",
+        "partner_credible"
+      ],
+      "depends_on": [
+        "D2",
+        "D3",
+        "D4",
+        "D5",
+        "D6",
+        "D7",
+        "D8"
+      ],
+      "pass_condition": "Each of D2-D8 has its mandatory fields populated or explicitly marked not-a-constraint with reasoning.",
+      "on_fail": "Return: name the unassessed constraint domain(s). Task 2 mandates all seven."
+    },
+    {
+      "check_id": "A-02",
+      "stage": "STAGE_2_ANALYSIS",
+      "mandatory": true,
+      "statement": "Every identified constraint traces to a finding in a specific constraint domain (D2-D8) \u2014 no constraint is asserted without an evidentiary basis.",
+      "tor_criteria": [
+        "analytical_rigor"
+      ],
+      "audience_pillars": [
+        "partner_credible"
+      ],
+      "depends_on": [
+        "D9.01",
+        "D9.02",
+        "D2",
+        "D3",
+        "D4",
+        "D5",
+        "D6",
+        "D7",
+        "D8"
+      ],
+      "pass_condition": "Each D9.01 constraint record links to at least one populated domain field that evidences it.",
+      "on_fail": "Return to synthesis: list constraints lacking an evidentiary link."
+    },
+    {
+      "check_id": "A-03",
+      "stage": "STAGE_2_ANALYSIS",
+      "mandatory": true,
+      "statement": "At least one BINDING constraint is identified and justified for this chain.",
+      "tor_criteria": [
+        "analytical_rigor",
+        "action_orientation"
+      ],
+      "audience_pillars": [
+        "commissioner_actionable"
+      ],
+      "depends_on": [
+        "D9.02"
+      ],
+      "pass_condition": "At least one D9.02 record = 'binding', with reasoning distinguishing it from lesser constraints.",
+      "on_fail": "Return: a diagnostic with no binding constraint has not diagnosed anything actionable."
+    },
+    {
+      "check_id": "A-04",
+      "stage": "STAGE_2_ANALYSIS",
+      "mandatory": true,
+      "statement": "At least one opportunity / upgrading option is identified for this chain.",
+      "tor_criteria": [
+        "completeness",
+        "action_orientation"
+      ],
+      "audience_pillars": [
+        "investor_investable",
+        "commissioner_actionable"
+      ],
+      "depends_on": [
+        "D9.03"
+      ],
+      "pass_condition": "At least one D9.03 opportunity record present.",
+      "on_fail": "Return: Objective 1 requires opportunities, not only constraints."
+    },
+    {
+      "check_id": "A-05",
+      "stage": "STAGE_2_ANALYSIS",
+      "mandatory": true,
+      "statement": "Competitiveness is benchmarked against at least one regional/global comparator.",
+      "tor_criteria": [
+        "analytical_rigor"
+      ],
+      "audience_pillars": [
+        "investor_investable",
+        "partner_credible"
+      ],
+      "depends_on": [
+        "D1.11"
+      ],
+      "pass_condition": "D1.11 names at least one comparator and states Uganda's relative position.",
+      "on_fail": "Return: competitiveness gap (Objective 1) cannot be assessed without a comparator."
+    },
+    {
+      "check_id": "P-01",
+      "stage": "STAGE_3_PRIORITIZATION",
+      "mandatory": true,
+      "statement": "The SAME prioritization scoring criteria are applied to this chain as to all other chains, on a documented scale.",
+      "tor_criteria": [
+        "prioritization_clarity"
+      ],
+      "audience_pillars": [
+        "commissioner_actionable",
+        "partner_credible"
+      ],
+      "depends_on": [
+        "D9.04"
+      ],
+      "pass_condition": "D9.04 scoring criteria and scale match the study-wide definition; no chain-specific ad hoc criteria.",
+      "on_fail": "Return: inconsistent prioritization breaks cross-chain comparability (Objective 2 'transparent framework')."
+    },
+    {
+      "check_id": "P-02",
+      "stage": "STAGE_3_PRIORITIZATION",
+      "mandatory": true,
+      "statement": "A priority action matrix exists with every action classified as quick_win, policy_reform, or investment_need.",
+      "tor_criteria": [
+        "action_orientation",
+        "prioritization_clarity"
+      ],
+      "audience_pillars": [
+        "commissioner_actionable"
+      ],
+      "depends_on": [
+        "D9.05",
+        "D9.06"
+      ],
+      "pass_condition": "Every D9.05 action carries a D9.06 type from the allowed set.",
+      "on_fail": "Return: untyped or missing actions \u2014 Task 2 requires the typed matrix."
+    },
+    {
+      "check_id": "P-03",
+      "stage": "STAGE_3_PRIORITIZATION",
+      "mandatory": true,
+      "statement": "At least one QUICK WIN is identified for this chain.",
+      "tor_criteria": [
+        "action_orientation"
+      ],
+      "audience_pillars": [
+        "commissioner_actionable"
+      ],
+      "depends_on": [
+        "D9.06"
+      ],
+      "pass_condition": "At least one D9.06 = 'quick_win'.",
+      "on_fail": "Return: the ToR expects quick wins per chain; an all-long-term matrix is not decision-grade."
+    },
+    {
+      "check_id": "P-04",
+      "stage": "STAGE_3_PRIORITIZATION",
+      "mandatory": true,
+      "statement": "Every priority action names a responsible actor and an indicative timeframe.",
+      "tor_criteria": [
+        "action_orientation"
+      ],
+      "audience_pillars": [
+        "commissioner_actionable"
+      ],
+      "depends_on": [
+        "D9.05",
+        "D9.07",
+        "D9.08"
+      ],
+      "pass_condition": "Each action has a non-null D9.08 responsible actor and a D9.07 timeframe.",
+      "on_fail": "Return: actions without owner or timing are not implementable."
+    },
+    {
+      "check_id": "P-05",
+      "stage": "STAGE_3_PRIORITIZATION",
+      "mandatory": true,
+      "statement": "Each top-priority action maps back to a named constraint it addresses.",
+      "tor_criteria": [
+        "analytical_rigor",
+        "action_orientation"
+      ],
+      "audience_pillars": [
+        "commissioner_actionable",
+        "partner_credible"
+      ],
+      "depends_on": [
+        "D9.05",
+        "D9.01"
+      ],
+      "pass_condition": "Each high-priority D9.05 action references a D9.01 constraint.",
+      "on_fail": "Return to synthesis: actions disconnected from constraints break the diagnostic logic."
+    },
+    {
+      "check_id": "I-01",
+      "stage": "STAGE_4_INVESTMENT",
+      "mandatory": true,
+      "statement": "At least one priority investment opportunity is defined for this chain.",
+      "tor_criteria": [
+        "completeness",
+        "bankable_readiness"
+      ],
+      "audience_pillars": [
+        "investor_investable"
+      ],
+      "depends_on": [
+        "D10.01"
+      ],
+      "pass_condition": "At least one D10.01 opportunity present.",
+      "on_fail": "Return: the Purpose requires a portfolio of priority investment opportunities."
+    },
+    {
+      "check_id": "I-02",
+      "stage": "STAGE_4_INVESTMENT",
+      "mandatory": true,
+      "statement": "Each investment opportunity's rationale ties to demand or import-substitution evidence.",
+      "tor_criteria": [
+        "analytical_rigor",
+        "feasibility"
+      ],
+      "audience_pillars": [
+        "investor_investable"
+      ],
+      "depends_on": [
+        "D10.02",
+        "D1.06",
+        "D1.08",
+        "D1.09"
+      ],
+      "pass_condition": "Each D10.02 rationale references a market/demand/import field.",
+      "on_fail": "Return: investment cases asserted without a market basis are not investable."
+    },
+    {
+      "check_id": "I-03",
+      "stage": "STAGE_4_INVESTMENT",
+      "mandatory": true,
+      "statement": "Each investment opportunity carries indicative CAPEX and OPEX with documented assumptions.",
+      "tor_criteria": [
+        "feasibility",
+        "bankable_readiness"
+      ],
+      "audience_pillars": [
+        "investor_investable"
+      ],
+      "depends_on": [
+        "D10.03",
+        "D10.04"
+      ],
+      "pass_condition": "D10.03 and D10.04 populated with an assumptions note (no spurious precision; estimates allowed if flagged).",
+      "on_fail": "Return: figures without assumptions are not credible to financiers."
+    },
+    {
+      "check_id": "I-04",
+      "stage": "STAGE_4_INVESTMENT",
+      "mandatory": true,
+      "statement": "Each investment opportunity states an implementation modality and a bankability/readiness level.",
+      "tor_criteria": [
+        "bankable_readiness"
+      ],
+      "audience_pillars": [
+        "investor_investable",
+        "commissioner_actionable"
+      ],
+      "depends_on": [
+        "D10.05",
+        "D10.07"
+      ],
+      "pass_condition": "D10.05 modality and D10.07 readiness level set from allowed values.",
+      "on_fail": "Return: handover requires a stated modality and honest readiness level."
+    },
+    {
+      "check_id": "I-05",
+      "stage": "STAGE_4_INVESTMENT",
+      "mandatory": false,
+      "statement": "Each investment opportunity has a risk register with paired mitigations.",
+      "tor_criteria": [
+        "feasibility"
+      ],
+      "audience_pillars": [
+        "investor_investable",
+        "partner_credible"
+      ],
+      "depends_on": [
+        "D10.06"
+      ],
+      "pass_condition": "Where D10.06 present, each risk has a mitigation.",
+      "on_fail": "Advisory: missing risk-mitigation weakens but does not void the case; flag for upgrade."
+    },
+    {
+      "check_id": "I-06",
+      "stage": "STAGE_4_INVESTMENT",
+      "mandatory": false,
+      "statement": "An investor-facing summary is derivable for at least the top opportunity per chain.",
+      "tor_criteria": [
+        "bankable_readiness"
+      ],
+      "audience_pillars": [
+        "investor_investable"
+      ],
+      "depends_on": [
+        "D10.01",
+        "D10.02",
+        "D10.03",
+        "D10.04",
+        "D10.05",
+        "D10.07"
+      ],
+      "pass_condition": "The D10 fields for the top opportunity are jointly complete enough to generate a one-page investor summary.",
+      "on_fail": "Advisory: top opportunity not yet packageable for investors; flag for the consolidated stage."
+    },
+    {
+      "check_id": "N-01",
+      "stage": "STAGE_5_NARRATIVE_INTEGRITY",
+      "mandatory": true,
+      "statement": "Every claim in the written diagnostic that rests on an evidence_required field carries its source attribution.",
+      "tor_criteria": [
+        "analytical_rigor"
+      ],
+      "audience_pillars": [
+        "partner_credible"
+      ],
+      "depends_on": [
+        "record_envelope.raw_source"
+      ],
+      "pass_condition": "No sentence built on an evidence_required field appears without its raw_source traceable.",
+      "on_fail": "Return to synthesis: list unsupported claims. ToR requires sources cited throughout."
+    },
+    {
+      "check_id": "N-02",
+      "stage": "STAGE_5_NARRATIVE_INTEGRITY",
+      "mandatory": true,
+      "statement": "The diagnostic introduces no claim or figure that is not backed by a populated field.",
+      "tor_criteria": [
+        "analytical_rigor"
+      ],
+      "audience_pillars": [
+        "partner_credible"
+      ],
+      "depends_on": [
+        "all_fields"
+      ],
+      "pass_condition": "No invented figures, no narrative not grounded in the schema records.",
+      "on_fail": "Return: flag fabricated or ungrounded content. Decision-grade work cannot contain invention."
+    },
+    {
+      "check_id": "N-03",
+      "stage": "STAGE_5_NARRATIVE_INTEGRITY",
+      "mandatory": true,
+      "statement": "Data limitations and mitigation are disclosed in a dedicated section.",
+      "tor_criteria": [
+        "analytical_rigor"
+      ],
+      "audience_pillars": [
+        "partner_credible"
+      ],
+      "depends_on": [
+        "record_envelope.collection_notes",
+        "record_envelope.confidence"
+      ],
+      "pass_condition": "A limitations subsection consolidates not_available cells, low-confidence figures, and proxies used.",
+      "on_fail": "Return: undisclosed limitations damage credibility with development partners."
+    },
+    {
+      "check_id": "N-04",
+      "stage": "STAGE_5_NARRATIVE_INTEGRITY",
+      "mandatory": true,
+      "statement": "Cross-cutting dimensions (gender/inclusion, green/circular/4IR, linkages) are addressed, not omitted.",
+      "tor_criteria": [
+        "completeness"
+      ],
+      "audience_pillars": [
+        "partner_credible"
+      ],
+      "depends_on": [
+        "D11.01",
+        "D11.02",
+        "D11.03"
+      ],
+      "pass_condition": "D11.01-D11.03 populated and reflected in the narrative.",
+      "on_fail": "Return: ISID inclusiveness and PCP green/linkage angles are mandatory framing."
+    },
+    {
+      "check_id": "N-05",
+      "stage": "STAGE_5_NARRATIVE_INTEGRITY",
+      "mandatory": false,
+      "statement": "The chain's narrative is internally consistent \u2014 no figure contradicts another (e.g., trade balance vs import/export).",
+      "tor_criteria": [
+        "analytical_rigor"
+      ],
+      "audience_pillars": [
+        "partner_credible",
+        "investor_investable"
+      ],
+      "depends_on": [
+        "D1.06",
+        "D1.07",
+        "D1.08"
+      ],
+      "pass_condition": "Derived figures reconcile with their inputs within tolerance.",
+      "on_fail": "Advisory: reconcile flagged inconsistencies before publication."
+    },
+    {
+      "check_id": "T-01",
+      "stage": "STAGE_3_PRIORITIZATION",
+      "mandatory": true,
+      "statement": "A 2040 Uganda demand projection is present using Tenfold Growth logic — not a simple ×10 multiplication — with an explicit structural chain-of-reasoning.",
+      "tor_criteria": [
+        "analytical_rigor",
+        "action_orientation"
+      ],
+      "audience_pillars": [
+        "commissioner_actionable",
+        "investor_investable"
+      ],
+      "depends_on": [
+        "D1.12"
+      ],
+      "pass_condition": "D1.12 populated, contains structural reasoning (infrastructure demand / income effects / urbanisation / industrialisation linkages), and states a projected value. Multiplication of current figures by 10 without reasoning FAILS.",
+      "on_fail": "Return: the 2040 projection is the analytical centrepiece of market analysis. A mechanistic ×10 is not credible to the Commissioner, investors, or UNIDO."
+    },
+    {
+      "check_id": "T-02",
+      "stage": "STAGE_3_PRIORITIZATION",
+      "mandatory": true,
+      "statement": "Every priority action in the matrix has a Tenfold Growth alignment verdict (D9.09), at least one action is 'directly_enables_tenfold', and no action is 'misaligned'.",
+      "tor_criteria": [
+        "prioritization_clarity",
+        "action_orientation"
+      ],
+      "audience_pillars": [
+        "commissioner_actionable"
+      ],
+      "depends_on": [
+        "D9.09"
+      ],
+      "pass_condition": "All D9.05 actions carry a D9.09 verdict; at least one = 'directly_enables_tenfold'; zero = 'misaligned'.",
+      "on_fail": "Return: the Tenfold Growth Strategy is the governing purpose of this diagnostic. A priority matrix with no action that directly enables tenfold growth, or with misaligned actions, has not done its job."
+    },
+    {
+      "check_id": "CR-01",
+      "stage": "STAGE_5_NARRATIVE_INTEGRITY",
+      "scope": "consolidated_report",
+      "mandatory": true,
+      "statement": "The consolidated report applies one identical prioritization framework across ALL covered chains, enabling cross-chain ranking.",
+      "tor_criteria": [
+        "prioritization_clarity"
+      ],
+      "audience_pillars": [
+        "commissioner_actionable"
+      ],
+      "depends_on": [
+        "D9.04"
+      ],
+      "pass_condition": "Scoring criteria/scale identical across every chain in the batch.",
+      "on_fail": "Return: cross-chain comparison invalid if criteria differ between chains."
+    },
+    {
+      "check_id": "CR-02",
+      "stage": "STAGE_5_NARRATIVE_INTEGRITY",
+      "scope": "consolidated_report",
+      "mandatory": true,
+      "statement": "Every chain in scope has cleared all its mandatory per-chain checks before the consolidated report is accepted.",
+      "tor_criteria": [
+        "completeness"
+      ],
+      "audience_pillars": [
+        "commissioner_actionable",
+        "partner_credible"
+      ],
+      "depends_on": [
+        "per_chain_gate_results"
+      ],
+      "pass_condition": "No chain in the batch is in RETURN_FOR_REVISION state.",
+      "on_fail": "Hold consolidated report: name the chain(s) still failing."
+    },
+    {
+      "check_id": "CR-03",
+      "stage": "STAGE_5_NARRATIVE_INTEGRITY",
+      "scope": "consolidated_report",
+      "mandatory": true,
+      "statement": "A consolidated investment portfolio aggregates the priority opportunities across all chains with comparable fields.",
+      "tor_criteria": [
+        "bankable_readiness",
+        "completeness"
+      ],
+      "audience_pillars": [
+        "investor_investable",
+        "commissioner_actionable"
+      ],
+      "depends_on": [
+        "D10.01",
+        "D10.03",
+        "D10.05",
+        "D10.07"
+      ],
+      "pass_condition": "All chains' top opportunities are represented with comparable CAPEX/modality/readiness fields.",
+      "on_fail": "Return: incomplete portfolio undermines the PCP investment pipeline purpose."
+    }
+  ],
+  "review_agent_protocol": {
+    "step_1": "Run STAGE_1 checks. If any mandatory STAGE_1 check fails, set state=RETURN_FOR_REVISION, emit the failed checks with their depends_on field_ids, and STOP (do not waste effort on later stages built on broken evidence).",
+    "step_2": "Only if STAGE_1 mandatory checks pass, proceed to STAGE_2, then 3, 4, 5 in order, accumulating failures.",
+    "step_3": "Compile a verdict: PUBLISH if every mandatory check across all stages PASSED; otherwise RETURN_FOR_REVISION.",
+    "step_4": "For RETURN_FOR_REVISION, produce a revision notice grouped by stage, each item citing: check_id, statement, the failing field_ids/domains, the ToR criterion protected, and the concrete fix required.",
+    "step_5": "Log conditional (non-mandatory) failures as advisories that must be acknowledged but do not block publication.",
+    "consolidated_report": "Apply CR-* checks only after all per-chain diagnostics in the batch have reached PUBLISH state."
+  }
+}
