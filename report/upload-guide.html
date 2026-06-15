@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Upload Guide — MTIC Pipeline | Jerome Nuwabaasa</title>
+<link rel="icon" type="image/png" href="uganda_coat_of_arms.png">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;background:#f0f2f5;color:#1a1a2e;font-size:14px}
+:root{--blue:#1565c0;--green:#2e7d32;--amber:#f57f17;--red:#c62828;--border:#e0e0e0;--card:#fff;--muted:#757575}
+
+.site-header{background:linear-gradient(135deg,#0d47a1,#1565c0);color:#fff;padding:20px 32px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 2px 8px rgba(0,0,0,.3)}
+.site-header h1{font-size:20px;font-weight:700}
+.site-header .sub{font-size:12px;opacity:.8;margin-top:3px}
+.back-btn{background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.4);border-radius:6px;padding:7px 16px;font-size:12px;font-weight:600;cursor:pointer;text-decoration:none;display:inline-block}
+.back-btn:hover{background:rgba(255,255,255,.28)}
+
+.content{max-width:900px;margin:0 auto;padding:28px 24px}
+.card{background:#fff;border-radius:10px;box-shadow:0 1px 6px rgba(0,0,0,.08);padding:24px;border:1px solid var(--border);margin-bottom:24px}
+.step-num{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:50%;background:var(--blue);color:#fff;font-weight:700;font-size:14px;flex-shrink:0;margin-right:12px}
+.step-header{display:flex;align-items:center;margin-bottom:16px}
+.step-title{font-size:16px;font-weight:700;color:var(--blue)}
+.step-sub{font-size:13px;color:var(--muted);margin-top:2px}
+
+/* GITHUB UI MOCKUPS */
+.gh-window{background:#0d1117;border-radius:10px;overflow:hidden;margin:16px 0;font-size:12px}
+.gh-topbar{background:#161b22;padding:10px 16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid #30363d}
+.gh-dot{width:10px;height:10px;border-radius:50%}
+.gh-url-bar{background:#0d1117;border:1px solid #30363d;border-radius:6px;padding:4px 12px;color:#8b949e;font-size:11px;flex:1;font-family:monospace}
+.gh-body{background:#0d1117;color:#c9d1d9;padding:16px}
+.gh-repo-header{background:#161b22;padding:12px 16px;border-bottom:1px solid #30363d;display:flex;align-items:center;gap:10px}
+.gh-repo-icon{font-size:16px}
+.gh-repo-name{color:#58a6ff;font-weight:700;font-size:13px}
+.gh-repo-sub{color:#8b949e;font-size:11px}
+.gh-breadcrumb{padding:10px 16px;color:#58a6ff;font-size:12px;border-bottom:1px solid #21262d;font-family:monospace}
+.gh-file-row{padding:8px 16px;border-bottom:1px solid #21262d;display:flex;align-items:center;gap:10px;color:#c9d1d9}
+.gh-file-row:hover{background:#161b22}
+.gh-file-icon{color:#8b949e}
+.gh-file-name{color:#58a6ff;flex:1}
+.gh-btn{background:#238636;border:1px solid #2ea043;color:#fff;padding:6px 16px;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;display:inline-block}
+.gh-btn-gray{background:#21262d;border:1px solid #30363d;color:#c9d1d9;padding:6px 16px;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;display:inline-block}
+.gh-actions-row{padding:8px 16px;border-bottom:1px solid #21262d;display:flex;align-items:center;gap:12px}
+.gh-status-dot{width:12px;height:12px;border-radius:50%;flex-shrink:0}
+.gh-dot-green{background:#2ea043}
+.gh-dot-yellow{background:#d29922}
+.gh-dot-blue{background:#388bfd}
+
+.naming-rule{background:#e3f2fd;border-radius:8px;padding:16px;margin:12px 0;border-left:4px solid var(--blue)}
+.naming-rule code{background:#fff;padding:2px 6px;border-radius:4px;font-size:12px;color:#c62828;font-family:monospace}
+.naming-rule p{font-size:13px;line-height:1.7;margin-top:4px}
+
+.flow-diagram{display:flex;align-items:center;flex-wrap:wrap;gap:4px;margin:16px 0}
+.flow-step{background:#e3f2fd;border-radius:8px;padding:10px 14px;font-size:12px;font-weight:600;color:var(--blue);text-align:center}
+.flow-arrow{color:var(--muted);font-size:18px;font-weight:700}
+.flow-step.green{background:#e8f5e9;color:var(--green)}
+.flow-step.amber{background:#fff8e1;color:var(--amber)}
+.flow-step.red{background:#ffebee;color:var(--red)}
+
+.vc-table{width:100%;border-collapse:collapse;font-size:12px;margin:12px 0}
+.vc-table th{background:#e8eaf6;color:#1a237e;padding:8px 12px;text-align:left;font-weight:700}
+.vc-table td{padding:7px 12px;border-bottom:1px solid #f0f0f0;font-family:monospace}
+.vc-table tr:hover td{background:#fafafa}
+
+.callout{border-radius:8px;padding:12px 16px;font-size:13px;margin:12px 0;display:flex;gap:10px;align-items:flex-start}
+.callout-icon{font-size:18px;flex-shrink:0}
+.callout.info{background:#e3f2fd;border-left:4px solid var(--blue)}
+.callout.warn{background:#fff8e1;border-left:4px solid var(--amber)}
+.callout.success{background:#e8f5e9;border-left:4px solid var(--green)}
+
+.section-title{font-size:18px;font-weight:700;color:var(--blue);margin-bottom:6px;display:flex;align-items:center;gap:8px}
+
+/* DRIVER.JS tour button */
+.tour-btn{background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.4);border-radius:6px;padding:7px 16px;font-size:12px;font-weight:600;cursor:pointer;transition:background .2s}
+.tour-btn:hover{background:rgba(255,255,255,.28)}
+</style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/driver.js@1.3.1/dist/driver.css"/>
+</head>
+<body>
+
+<div class="site-header">
+  <div style="display:flex;align-items:center;gap:16px">
+    <img src="uganda_coat_of_arms.png" alt="" style="height:52px;filter:drop-shadow(0 1px 4px rgba(0,0,0,.5))">
+    <div>
+      <h1>📤 Document Upload Guide</h1>
+      <div class="sub">How Jerome uploads data → how the pipeline turns it into a diagnostic chapter</div>
+    </div>
+  </div>
+  <div style="display:flex;gap:8px;align-items:center">
+    <button class="tour-btn" onclick="startTour()">🧭 Take a Tour</button>
+    <a href="index.html" class="back-btn">← Back to Dashboard</a>
+  </div>
+</div>
+
+<div class="content">
+
+  <div class="callout success" id="guide-intro">
+    <div class="callout-icon">🚀</div>
+    <div><strong>You upload a file. The pipeline does the rest.</strong><br>
+    Name your file correctly, drop it into <code>data/uploads/</code> on GitHub, commit — and within minutes the ingestion, synthesis, and review agents run automatically. Check the <a href="index.html#pipeline" style="color:var(--blue)">Pipeline tab</a> for results.</div>
+  </div>
+
+  <!-- ── STEP 1: NAMING ── -->
+  <div class="card" id="step-naming">
+    <div class="step-header">
+      <div class="step-num">1</div>
+      <div>
+        <div class="step-title">Name Your File Correctly</div>
+        <div class="step-sub">The pipeline infers the value chain from the filename — this is the only manual step you must get right.</div>
+      </div>
+    </div>
+
+    <div class="naming-rule">
+      <strong>Rule:</strong> Start the filename with the value chain code (e.g. <code>VC01_</code>), then a short description, then the year.<br>
+      <p style="margin-top:8px;font-weight:600">Format: <code>VCxx_description_year.ext</code></p>
+    </div>
+
+    <table class="vc-table">
+      <thead><tr><th>Code</th><th>Value Chain</th><th>Good filename example</th></tr></thead>
+      <tbody>
+        <tr><td>VC01</td><td>Iron &amp; Steel</td><td>VC01_market_survey_2024.pdf</td></tr>
+        <tr><td>VC02</td><td>Copper &amp; Allied Metals</td><td>VC02_production_data_2024.xlsx</td></tr>
+        <tr><td>VC03</td><td>Automotive</td><td>VC03_KMC_capacity_report.docx</td></tr>
+        <tr><td>VC04</td><td>Textiles &amp; Garments</td><td>VC04_firms_survey_2025.pdf</td></tr>
+        <tr><td>VC05</td><td>Pharmaceuticals</td><td>VC05_NDA_register_2024.xlsx</td></tr>
+        <tr><td>VC06</td><td>Petrochemicals &amp; Fertilizers</td><td>VC06_kabalega_project_brief.pdf</td></tr>
+        <tr><td>VC07</td><td>Sugar &amp; Confectionery</td><td>VC07_USPA_statistics_2024.pdf</td></tr>
+        <tr><td>VC08</td><td>Plastics &amp; Packaging</td><td>VC08_industry_association_data.xlsx</td></tr>
+        <tr><td>VC09</td><td>Cement &amp; Building Materials</td><td>VC09_UCHA_capacity_2024.docx</td></tr>
+      </tbody>
+    </table>
+
+    <div class="callout warn">
+      <div class="callout-icon">⚠️</div>
+      <div>If the filename does NOT start with VCxx, the pipeline will try to guess the chain from keywords in the content. This sometimes works, but can result in data going to the wrong chain. <strong>Always use the VCxx prefix.</strong></div>
+    </div>
+
+    <p style="font-size:13px;margin-top:12px">Accepted file types: <strong>PDF, DOCX, XLSX, CSV</strong>. Maximum size: no hard limit (content is truncated at 80,000 characters for Claude processing).</p>
+  </div>
+
+  <!-- ── STEP 2: UPLOAD ── -->
+  <div class="card" id="step-upload">
+    <div class="step-header">
+      <div class="step-num">2</div>
+      <div>
+        <div class="step-title">Upload to data/uploads/ on GitHub</div>
+        <div class="step-sub">Navigate to the folder and drag-drop or click "Add file".</div>
+      </div>
+    </div>
+
+    <div class="gh-window">
+      <div class="gh-topbar">
+        <div class="gh-dot" style="background:#ff5f57"></div>
+        <div class="gh-dot" style="background:#ffbd2e"></div>
+        <div class="gh-dot" style="background:#28c840"></div>
+        <div class="gh-url-bar">github.com/MTIC-Uganda/industrial_diagnostic_study/tree/main/data/uploads</div>
+      </div>
+      <div class="gh-repo-header">
+        <div class="gh-repo-icon">📁</div>
+        <div>
+          <div class="gh-repo-name">MTIC-Uganda / industrial_diagnostic_study</div>
+          <div class="gh-repo-sub">Branch: main</div>
+        </div>
+      </div>
+      <div class="gh-breadcrumb">industrial_diagnostic_study / <span style="color:#c9d1d9">data</span> / <span style="color:#c9d1d9">uploads</span> / ▼</div>
+      <div style="padding:10px 16px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #21262d">
+        <span style="color:#8b949e;font-size:12px">Drop files here to upload, or use Add file →</span>
+        <div style="display:flex;gap:8px">
+          <span class="gh-btn-gray">↑ Go to file</span>
+          <span class="gh-btn">+ Add file ▾</span>
+        </div>
+      </div>
+      <div class="gh-file-row"><span class="gh-file-icon">📄</span><span class="gh-file-name">.gitkeep</span><span style="color:#8b949e;font-size:11px">naming convention docs</span></div>
+      <div class="gh-file-row" style="background:#161b22;border:1px dashed #388bfd"><span class="gh-file-icon" style="color:#388bfd">📤</span><span style="color:#58a6ff;font-weight:600">VC01_market_survey_2024.pdf</span><span style="color:#388bfd;font-size:11px">⟵ your file goes here</span></div>
+    </div>
+
+    <div class="callout info">
+      <div class="callout-icon">ℹ️</div>
+      <div>
+        <strong>Two ways to upload:</strong><br>
+        <strong>a) Browser drag-drop:</strong> Navigate to <code>data/uploads/</code> → click "Add file" → "Upload files" → drag your file → scroll down → write a short commit message → click "Commit changes".<br>
+        <strong>b) Git on your laptop:</strong> Copy the file into <code>data/uploads/</code>, then <code>git add</code> → <code>git commit</code> → <code>git push</code>.
+      </div>
+    </div>
+  </div>
+
+  <!-- ── STEP 3: COMMIT ── -->
+  <div class="card" id="step-commit">
+    <div class="step-header">
+      <div class="step-num">3</div>
+      <div>
+        <div class="step-title">Write a Commit Message and Commit</div>
+        <div class="step-sub">The commit message is how the team knows what was uploaded — keep it short and descriptive.</div>
+      </div>
+    </div>
+
+    <div class="gh-window">
+      <div class="gh-topbar">
+        <div class="gh-dot" style="background:#ff5f57"></div>
+        <div class="gh-dot" style="background:#ffbd2e"></div>
+        <div class="gh-dot" style="background:#28c840"></div>
+        <div class="gh-url-bar">github.com/MTIC-Uganda/industrial_diagnostic_study/upload/main/data/uploads</div>
+      </div>
+      <div class="gh-body">
+        <div style="margin-bottom:12px;color:#8b949e;font-size:12px">Commit changes</div>
+        <div style="background:#161b22;border:1px solid #30363d;border-radius:6px;padding:10px 14px;margin-bottom:8px;color:#c9d1d9;font-size:13px">data: add VC01 Iron &amp; Steel market survey 2024</div>
+        <div style="background:#0d1117;border:1px solid #30363d;border-radius:6px;padding:8px 14px;margin-bottom:16px;color:#8b949e;font-size:12px;height:56px">Source: Uganda Bureau of Standards / Commissioner's office ...</div>
+        <div style="display:flex;justify-content:flex-end;gap:8px">
+          <span class="gh-btn-gray">Cancel</span>
+          <span class="gh-btn">Commit changes</span>
+        </div>
+      </div>
+    </div>
+
+    <p style="font-size:13px;margin-top:4px;color:var(--muted)">Good commit message format: <code>data: add VC&lt;XX&gt; &lt;short description&gt; &lt;year&gt;</code></p>
+  </div>
+
+  <!-- ── STEP 4: PIPELINE RUNS ── -->
+  <div class="card" id="step-pipeline">
+    <div class="step-header">
+      <div class="step-num">4</div>
+      <div>
+        <div class="step-title">The Pipeline Runs Automatically</div>
+        <div class="step-sub">GitHub Actions detects the upload and triggers three agents in sequence.</div>
+      </div>
+    </div>
+
+    <div class="flow-diagram">
+      <div class="flow-step">📤 You upload<br><small>data/uploads/</small></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">📥 Ingest Agent<br><small>mines doc + trusted sources</small></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">✍️ Synthesis Agent<br><small>writes diagnostic chapter</small></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step green">✅ Review Agent<br><small>validates 32 checks</small></div>
+    </div>
+
+    <div style="margin-top:12px;display:grid;grid-template-columns:1fr 1fr;gap:12px">
+      <div class="callout success" style="margin:0">
+        <div class="callout-icon">✅</div>
+        <div><strong>PUBLISH verdict:</strong> The review agent opens a GitHub Pull Request with the finished chapter. Jerome or Solomon merges it to publish.</div>
+      </div>
+      <div class="callout warn" style="margin:0">
+        <div class="callout-icon">❌</div>
+        <div><strong>REVISION verdict:</strong> The review agent writes a revision notice to <code>data/revision/</code> and sends a WhatsApp notification. The notice explains exactly what data is missing and which fields need to be filled.</div>
+      </div>
+    </div>
+
+    <div style="margin-top:16px">
+      <strong style="font-size:13px">How long does it take?</strong>
+      <table style="width:100%;border-collapse:collapse;font-size:12px;margin-top:8px">
+        <tr><td style="padding:5px 0;border-bottom:1px solid #f0f0f0;width:180px"><strong>Ingest Agent</strong></td><td style="padding:5px 8px;border-bottom:1px solid #f0f0f0;color:var(--muted)">1–3 minutes (depends on document size and Claude processing time)</td></tr>
+        <tr><td style="padding:5px 0;border-bottom:1px solid #f0f0f0"><strong>Synthesis Agent</strong></td><td style="padding:5px 8px;border-bottom:1px solid #f0f0f0;color:var(--muted)">2–5 minutes (Claude writes the full chapter)</td></tr>
+        <tr><td style="padding:5px 0"><strong>Review Agent</strong></td><td style="padding:5px 8px;color:var(--muted)">1–3 minutes (Claude evaluates 32 quality gate checks)</td></tr>
+      </table>
+      <p style="font-size:12px;color:var(--muted);margin-top:8px">Total: typically <strong>5–12 minutes</strong> from commit to verdict.</p>
+    </div>
+  </div>
+
+  <!-- ── STEP 5: CHECK RESULTS ── -->
+  <div class="card" id="step-results">
+    <div class="step-header">
+      <div class="step-num">5</div>
+      <div>
+        <div class="step-title">Check the Pipeline Status</div>
+        <div class="step-sub">Two places to see what happened: the dashboard Pipeline tab, and GitHub Actions.</div>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
+      <div style="background:#f8f9fa;border-radius:8px;padding:16px;border:1px solid var(--border)">
+        <div style="font-weight:700;margin-bottom:8px;color:var(--blue)">🔄 Dashboard — Pipeline Tab</div>
+        <p style="font-size:12px;color:var(--muted);line-height:1.7">Go to the main dashboard → click the <strong>🔄 Pipeline</strong> tab. Each value chain shows its Ingest / Synthesise / Review status at a glance, plus the revision summary if something needs fixing.</p>
+        <a href="index.html" style="display:inline-block;margin-top:10px;font-size:12px;color:var(--blue);font-weight:600">Open Dashboard →</a>
+      </div>
+      <div style="background:#f8f9fa;border-radius:8px;padding:16px;border:1px solid var(--border)">
+        <div style="font-weight:700;margin-bottom:8px;color:var(--blue)">⚙️ GitHub Actions</div>
+        <p style="font-size:12px;color:var(--muted);line-height:1.7">For detailed logs: go to the repo → <strong>Actions</strong> tab → find the workflow run triggered by your commit → click "Ingestion Agent", "Synthesis Agent", or "Review Agent" to see the full output.</p>
+      </div>
+    </div>
+
+    <div class="gh-window">
+      <div class="gh-topbar">
+        <div class="gh-dot" style="background:#ff5f57"></div>
+        <div class="gh-dot" style="background:#ffbd2e"></div>
+        <div class="gh-dot" style="background:#28c840"></div>
+        <div class="gh-url-bar">github.com/MTIC-Uganda/industrial_diagnostic_study/actions</div>
+      </div>
+      <div class="gh-repo-header">
+        <span style="color:#8b949e;font-size:12px">All workflows</span>
+      </div>
+      <div class="gh-actions-row">
+        <div class="gh-status-dot gh-dot-green"></div>
+        <div style="flex:1"><span style="color:#c9d1d9;font-size:12px;font-weight:600">Deploy MTIC Value Chains App</span><br><span style="color:#8b949e;font-size:11px">data: add VC01 Iron &amp; Steel market survey 2024 · main · 8 minutes ago</span></div>
+        <span style="color:#2ea043;font-size:11px;font-weight:600">✓ completed</span>
+      </div>
+      <div class="gh-actions-row" style="padding-left:40px;background:#0a0f18">
+        <div class="gh-status-dot gh-dot-green"></div>
+        <span style="color:#8b949e;font-size:11px">📥 Ingestion Agent · 2m 14s</span>
+      </div>
+      <div class="gh-actions-row" style="padding-left:40px;background:#0a0f18">
+        <div class="gh-status-dot gh-dot-green"></div>
+        <span style="color:#8b949e;font-size:11px">✍️ Synthesis Agent · 4m 07s</span>
+      </div>
+      <div class="gh-actions-row" style="padding-left:40px;background:#0a0f18">
+        <div class="gh-status-dot gh-dot-yellow"></div>
+        <span style="color:#8b949e;font-size:11px">🔍 Review Agent · 2m 53s — 3 mandatory failures</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── STEP 6: REVISION NOTICE ── -->
+  <div class="card" id="step-revision">
+    <div class="step-header">
+      <div class="step-num">6</div>
+      <div>
+        <div class="step-title">If Revision Is Required — Read the Notice</div>
+        <div class="step-sub">The review agent writes exactly what is missing and what you need to do.</div>
+      </div>
+    </div>
+
+    <div class="callout info">
+      <div class="callout-icon">ℹ️</div>
+      <div>A REVISION verdict does <strong>not</strong> mean your document was wrong — it means some mandatory data fields are still empty after all three ingestion methods ran. The notice tells you which fields and what source to consult.</div>
+    </div>
+
+    <div style="background:#f8f9fa;border-radius:8px;padding:16px;margin-top:12px;border:1px solid var(--border);font-size:12px;font-family:monospace;line-height:1.8">
+      <div style="color:#c62828;font-weight:700">## Revision Notice — Iron &amp; Steel (VC01)</div>
+      <div style="color:#666">Run: 20260615T103412Z | Verdict: RETURN_FOR_REVISION</div>
+      <br>
+      <div style="color:#1565c0;font-weight:700">### E-01 — STAGE_1_EVIDENCE</div>
+      <div><strong>Check:</strong> All evidence_required=true fields have populated values or explicit not_available with source note.</div>
+      <div style="color:#c62828"><strong>Failing fields:</strong> D1.02, D1.03, D3.01</div>
+      <div><strong>Fix required:</strong> Add TradeMap export/import figures for Iron &amp; Steel (HS 72). Run the trusted_source method manually or upload a TradeMap CSV named VC01_trademap_2024.csv.</div>
+      <br>
+      <div style="color:#666;font-style:italic">## Summary</div>
+      <div style="color:#666;font-style:italic">Three evidence-required fields are missing trade volume data. Upload a TradeMap CSV for VC01 to resolve all three failures in one run.</div>
+    </div>
+
+    <div style="margin-top:16px;font-size:13px">
+      <strong>What to do:</strong>
+      <ol style="margin:8px 0 0 20px;line-height:2">
+        <li>Read the revision notice — it names the exact field IDs and the data source needed.</li>
+        <li>Find the missing data from the suggested source (e.g. TradeMap, UBOS, firm records).</li>
+        <li>Save it as a new file named with the correct VCxx prefix.</li>
+        <li>Upload to <code>data/uploads/</code> and commit — the pipeline re-runs automatically.</li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- ── STEP 7: GAP-FILL PR ── -->
+  <div class="card" id="step-gapfill">
+    <div class="step-header">
+      <div class="step-num">7</div>
+      <div>
+        <div class="step-title">Approving Gap-Fill Proposals (Optional)</div>
+        <div class="step-sub">When the pipeline cannot find data anywhere, it proposes candidate values for your review.</div>
+      </div>
+    </div>
+
+    <p style="font-size:13px;margin-bottom:12px;line-height:1.7">Sometimes the ingestion agent exhausts all three methods (doc mining, trusted sources, web search) and still cannot find a value for a mandatory field. In that case it proposes a candidate from general knowledge and opens a GitHub Pull Request for your approval.</p>
+
+    <div class="callout warn">
+      <div class="callout-icon">⚠️</div>
+      <div><strong>Your merge = your approval.</strong> Before merging a gap-fill PR, verify each proposed value by clicking the <code>source_url</code> link in the JSON file. If a value is wrong, edit it before merging. Closing without merging = rejection — nothing enters the dataset.</div>
+    </div>
+
+    <div class="gh-window">
+      <div class="gh-topbar">
+        <div class="gh-dot" style="background:#ff5f57"></div>
+        <div class="gh-dot" style="background:#ffbd2e"></div>
+        <div class="gh-dot" style="background:#28c840"></div>
+        <div class="gh-url-bar">github.com/MTIC-Uganda/industrial_diagnostic_study/pull/62</div>
+      </div>
+      <div class="gh-body">
+        <div style="color:#58a6ff;font-weight:700;font-size:13px;margin-bottom:4px">Data review: web gap-fill proposals 2026-06-15</div>
+        <div style="color:#8b949e;font-size:11px;margin-bottom:12px">jnuwabaasa-spec opened this pull request · 1 file changed</div>
+        <div style="background:#161b22;border-radius:6px;padding:12px;font-size:12px;line-height:1.7;color:#c9d1d9">
+          <div>The ingestion agent could not find values for some mandatory fields.</div>
+          <div>It has proposed candidate values from general knowledge.</div>
+          <br>
+          <div style="color:#2ea043;font-weight:700">✔ Review each value in data/proposed/web_gap_fill_20260615.json</div>
+          <div>Check the source_url for each field. If correct: merge. If wrong: edit first.</div>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:12px">
+          <span class="gh-btn">Merge pull request ✓</span>
+          <span class="gh-btn-gray">Close pull request</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout success" style="margin-top:0">
+    <div class="callout-icon">✅</div>
+    <div><strong>That's the whole workflow.</strong> Name → Upload → Commit → Wait 5–12 min → Check Pipeline tab. If revision required, follow the notice and upload again. The pipeline is self-correcting — every upload gets you closer to a published chapter.</div>
+  </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/driver.js@1.3.1/dist/driver.js.iife.js"></script>
+<script>
+function startTour(){
+  const tour = window.driver.js.driver({
+    showProgress: true,
+    steps: [
+      {
+        element: '#guide-intro',
+        popover: {
+          title: 'The Upload Pipeline',
+          description: 'This guide walks you through exactly what Jerome needs to do to feed data into the automated pipeline. Follow each step and the agents handle everything else.',
+          side: 'bottom', align: 'start'
+        }
+      },
+      {
+        element: '#step-naming',
+        popover: {
+          title: 'Step 1: Name Your File',
+          description: 'The most important step. Always start with the VCxx code — e.g. VC01_ for Iron & Steel. The pipeline reads this to know which value chain\'s data you are uploading.',
+          side: 'bottom', align: 'start'
+        }
+      },
+      {
+        element: '#step-upload',
+        popover: {
+          title: 'Step 2: Upload to GitHub',
+          description: 'Go to data/uploads/ in the GitHub repo. Click "Add file" → "Upload files" and drag your file in. Or use git on your laptop — whichever is easier.',
+          side: 'top', align: 'start'
+        }
+      },
+      {
+        element: '#step-commit',
+        popover: {
+          title: 'Step 3: Write a Commit Message',
+          description: 'A short message like "data: add VC01 Iron & Steel market survey 2024" is all that is needed. Then click Commit changes.',
+          side: 'top', align: 'start'
+        }
+      },
+      {
+        element: '#step-pipeline',
+        popover: {
+          title: 'Step 4: Pipeline Runs Automatically',
+          description: 'The moment you commit, GitHub Actions detects the upload and triggers the Ingest → Synthesise → Review chain. Typically done in 5–12 minutes.',
+          side: 'top', align: 'start'
+        }
+      },
+      {
+        element: '#step-results',
+        popover: {
+          title: 'Step 5: Check the Results',
+          description: 'Open the main dashboard and click the Pipeline tab. Each value chain shows a live status card with Ingest / Synthesise / Review stages and the verdict.',
+          side: 'top', align: 'start'
+        }
+      },
+      {
+        element: '#step-revision',
+        popover: {
+          title: 'Step 6: If Revision Is Required',
+          description: 'Read the revision notice — it tells you the exact field IDs that are missing and which data source can fill them. Upload the missing data and the pipeline runs again.',
+          side: 'top', align: 'start'
+        }
+      },
+      {
+        element: '#step-gapfill',
+        popover: {
+          title: 'Step 7: Approving Gap-Fill Proposals',
+          description: 'If the pipeline cannot find data anywhere, it proposes candidates and opens a GitHub PR. Verify each value, then merge to approve — or close to reject.',
+          side: 'top', align: 'start'
+        }
+      }
+    ]
+  });
+  tour.drive();
+}
+
+// Auto-launch on first visit
+(function(){
+  if(!localStorage.getItem('mtic_upload_guide_done')){
+    localStorage.setItem('mtic_upload_guide_done','1');
+    setTimeout(startTour, 800);
+  }
+})();
+</script>
+</body>
+</html>

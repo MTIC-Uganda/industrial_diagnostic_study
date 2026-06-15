@@ -114,11 +114,11 @@ jobs:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: python agents/synthesis_agent.py
 
-      - name: Commit synthesised chapters
+      - name: Commit synthesised chapters + pipeline status
         run: |
           git config user.name  "MTIC CI Bot"
           git config user.email "ci-bot@mtic-pipeline"
-          git add report/chapters/
+          git add report/chapters/ data/pipeline_status.json
           if git diff --cached --quiet; then
             echo "No new chapters to commit."
           else
@@ -146,16 +146,28 @@ jobs:
           GH_TOKEN:          ${{ secrets.GITHUB_TOKEN }}
         run: python agents/review_agent.py
 
-      - name: Commit revision notices (if any)
+      - name: Commit revision notices + pipeline status
         run: |
           git config user.name  "MTIC CI Bot"
           git config user.email "ci-bot@mtic-pipeline"
-          git add data/revision/
+          git add data/revision/ data/pipeline_status.json
           if git diff --cached --quiet; then
-            echo "No revision notices to commit."
+            echo "No new outputs to commit."
           else
-            git commit -m "review: revision notices from run ${{ github.sha }}"
+            git commit -m "review: notices + status from run ${{ github.sha }}"
             git push origin ${{ github.ref_name }}
+          fi
+
+      - name: WhatsApp notify on revision
+        env:
+          WA_RECIPIENT: ${{ secrets.WA_RECIPIENT }}
+          WA_TOKEN:     ${{ secrets.WA_TOKEN }}
+          WA_PROVIDER:  ${{ secrets.WA_PROVIDER }}
+        run: |
+          if ls data/revision/*.md 2>/dev/null | head -1 | grep -q .; then
+            python agents/whatsapp_notify.py
+          else
+            echo "No revision notices — WhatsApp notification skipped."
           fi
 
   # ── 0. Doc Guardian (parallel, never blocks deploy) ───────────────────────
@@ -226,7 +238,9 @@ jobs:
           cp report/sources-of-truth.html site/index.html
           cp report/sankey.html site/sankey.html
           cp report/pb-guide.html site/pb-guide.html
+          cp report/upload-guide.html site/upload-guide.html
           cp report/uganda_coat_of_arms.png site/uganda_coat_of_arms.png
+          [ -f data/pipeline_status.json ] && cp data/pipeline_status.json site/pipeline_status.json || true
 
       - name: Upload dist
         uses: actions/upload-artifact@v4

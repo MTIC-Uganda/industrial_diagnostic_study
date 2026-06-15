@@ -14,6 +14,8 @@ Output: seeds approved datapoints to PocketBase collection `diagnostic_datapoint
 
 import json, os, sys, time, datetime, hashlib, textwrap, urllib.request, urllib.error
 from pathlib import Path
+import sys as _sys; _sys.path.insert(0, str(Path(__file__).parent))
+from _status import update_status
 
 ROOT        = Path(__file__).resolve().parent.parent
 SCHEMA_FILE = ROOT / 'data' / 'schema' / 'diagnostic_schema.json'
@@ -459,6 +461,19 @@ def run(upload_files: list[Path] | None = None, value_chain_id: str | None = Non
     print(f'\n══ Done  approved={len(all_approved)}  proposed={len(all_proposed)} ══')
     if all_proposed:
         print('  Next: review data/proposed/ and open a PR to approve gap-fill data.')
+
+    # Write pipeline status for each processed chain
+    for vc in chains_processed:
+        chain_dps = [dp for dp in all_approved if dp.get('value_chain_id') == vc]
+        chain_props = [dp for dp in all_proposed if dp.get('value_chain_id') == vc]
+        update_status('ingest', vc, {
+            'run_id': RUN_ID,
+            'datapoints_added': len(chain_dps),
+            'gaps_proposed': len(chain_props),
+            'source_files': [f.name for f in (upload_files or list(UPLOADS_DIR.glob('*')))
+                             if f.suffix.lower() in {'.pdf', '.docx', '.xlsx', '.csv'}
+                             and infer_vc(f.name) == vc],
+        })
 
 
 if __name__ == '__main__':

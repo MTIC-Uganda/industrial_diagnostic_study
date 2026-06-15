@@ -17,6 +17,8 @@ Output:
 
 import json, os, sys, textwrap, datetime, urllib.request, urllib.error
 from pathlib import Path
+import sys as _sys; _sys.path.insert(0, str(Path(__file__).parent))
+from _status import update_status
 
 ROOT        = Path(__file__).resolve().parent.parent
 SCHEMA_FILE = ROOT / 'data' / 'schema' / 'diagnostic_schema.json'
@@ -252,6 +254,15 @@ def run(vc_ids: list[str] | None = None):
     if written:
         print('\n  Next: run the review agent to validate.')
         print('  python agents/review_agent.py')
+
+    for p in written:
+        vc_id = p.stem.split('_')[0]  # VC01_diagnostic → VC01
+        word_count = len(p.read_text('utf-8').split())
+        update_status('synthesise', vc_id, {
+            'run_id': RUN_ID,
+            'chapter_file': str(p.relative_to(ROOT)),
+            'word_count': word_count,
+        })
 
 
 if __name__ == '__main__':

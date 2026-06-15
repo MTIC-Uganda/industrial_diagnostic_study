@@ -106,6 +106,26 @@ tr:hover td{background:#fafafa}
 .proj-row:last-child{border-bottom:none}
 .proj-val{font-weight:700;font-size:15px}
 
+/* PIPELINE */
+.pipe-chain-card{background:#fff;border-radius:10px;box-shadow:0 1px 6px rgba(0,0,0,.08);border:1px solid var(--border);margin-bottom:16px;overflow:hidden}
+.pipe-chain-header{padding:14px 20px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border)}
+.pipe-chain-name{font-weight:700;font-size:14px}
+.pipe-verdict{padding:3px 12px;border-radius:12px;font-size:11px;font-weight:700}
+.pipe-verdict.publish{background:#e8f5e9;color:#2e7d32}
+.pipe-verdict.revise{background:#ffebee;color:#c62828}
+.pipe-verdict.pending{background:#fff8e1;color:#f57f17}
+.pipe-verdict.none{background:#f5f5f5;color:#999}
+.pipe-stages{display:flex;gap:0;padding:12px 20px;flex-wrap:wrap;gap:8px}
+.pipe-stage{flex:1;min-width:160px;padding:10px 14px;border-radius:8px;background:#f8f9fa;border:1px solid #e0e0e0;font-size:12px}
+.pipe-stage-label{font-weight:700;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px}
+.pipe-stage-val{font-size:13px;color:var(--text)}
+.pipe-stage-ts{font-size:10px;color:#bbb;margin-top:2px}
+.pipe-stage.ok{border-color:#a5d6a7;background:#f1f8f2}
+.pipe-stage.fail{border-color:#ef9a9a;background:#fff5f5}
+.pipe-stage.wait{border-color:#ffe082;background:#fffde7}
+.pipe-revision{margin:0 20px 14px;padding:12px 16px;background:#fff8e1;border-radius:8px;border-left:4px solid #f57f17;font-size:12px;line-height:1.6}
+.pipe-empty{text-align:center;padding:48px 20px;color:var(--muted);font-size:13px}
+
 /* FOOTER */
 footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-top:24px;border-top:1px solid var(--border)}
 .factory-label{background:rgba(255,255,255,.97);border:1px solid rgba(0,0,0,.18);border-radius:4px;padding:3px 8px;font-size:11px;font-weight:600;color:#1a1a1a;white-space:nowrap;box-shadow:0 2px 6px rgba(0,0,0,.22);pointer-events:none}
@@ -139,6 +159,7 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-t
   </div>
   <div style="display:flex;align-items:center;gap:10px">
     <button onclick="window.print()" style="background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.4);border-radius:6px;padding:7px 16px;font-size:12px;font-weight:600;cursor:pointer;transition:background .2s" onmouseover="this.style.background='rgba(255,255,255,.25)'" onmouseout="this.style.background='rgba(255,255,255,.15)'">🖨️ Print / Export</button>
+    <a href="upload-guide.html" class="tour-btn" style="text-decoration:none">📤 Upload Guide</a>
     <a href="pb-guide.html" class="tour-btn" style="text-decoration:none">📋 Data Entry Guide</a>
     <button id="tour-trigger" class="tour-btn" onclick="startTour()">🧭 Take a Tour</button>
     <div class="badge">TENFOLD GROWTH FRAMEWORK</div>
@@ -150,6 +171,7 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-t
   <button id="tab-btn-maps" class="tab-btn" onclick="showTab('maps')">🗺️ Value Chain Maps</button>
   <button id="tab-btn-status" class="tab-btn" onclick="showTab('status')">📊 Chain Status &amp; 2040 Projections</button>
   <button id="tab-btn-locations" class="tab-btn" onclick="showTab('locations')">📍 Industry Locations</button>
+  <button id="tab-btn-pipeline" class="tab-btn" onclick="showTab('pipeline')">🔄 Pipeline</button>
 </div>
 
 <!-- ═══════════════════════════════════════════════════════════════
@@ -303,6 +325,28 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-t
     <!-- ── Chain detail panel (right) ── -->
     <div id="map-chain-stats" style="width:220px;flex-shrink:0;background:#fff;border-radius:10px;border:1px solid var(--border);box-shadow:0 1px 4px rgba(0,0,0,.07);font-size:12px;display:none;overflow:hidden"></div>
 
+  </div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SECTION 5: PIPELINE STATUS
+═══════════════════════════════════════════════════════════════ -->
+<div id="tab-pipeline" class="tab-content">
+
+  <div class="section-title">🔄 Agentic Pipeline Status</div>
+  <div class="section-sub">
+    Live status of the Ingest → Synthesise → Review loop. Upload a document to
+    <code>data/uploads/</code> to trigger the pipeline.
+    <a href="upload-guide.html" style="color:var(--blue);font-weight:600">📤 How to upload →</a>
+  </div>
+
+  <div id="pipeline-updated" style="font-size:12px;color:var(--muted);margin-bottom:20px"></div>
+  <div id="pipeline-cards">
+    <div class="pipe-empty">
+      Loading pipeline status…<br>
+      <span style="font-size:11px;margin-top:6px;display:block">If this persists, no pipeline run has been committed yet — upload a document to start.</span>
+    </div>
   </div>
 
 </div>
@@ -2442,6 +2486,110 @@ function startTour(){
     localStorage.setItem('mtic_tour_done','1');
     setTimeout(startTour, 800);
   }
+})();
+
+// ═══════════════════ PIPELINE STATUS TAB ═══════════════════
+(function(){
+  const VC_ORDER = ['VC01','VC02','VC03','VC04','VC05','VC06','VC07','VC08','VC09'];
+
+  function fmtTime(iso){
+    if(!iso) return '—';
+    try {
+      const d = new Date(iso);
+      return d.toLocaleString('en-GB',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'});
+    } catch(e){ return iso; }
+  }
+
+  function stageCard(label, icon, data, statusClass, lines){
+    return `<div class="pipe-stage ${statusClass}">
+      <div class="pipe-stage-label">${icon} ${label}</div>
+      ${lines.map(l=>`<div class="pipe-stage-val">${l}</div>`).join('')}
+      <div class="pipe-stage-ts">${data ? fmtTime(data.timestamp) : 'Not run'}</div>
+    </div>`;
+  }
+
+  function buildCards(status){
+    const chains = status.chains || {};
+    const container = document.getElementById('pipeline-cards');
+    const updEl = document.getElementById('pipeline-updated');
+    if(status.updated_at) updEl.textContent = 'Last updated: ' + fmtTime(status.updated_at);
+
+    const order = VC_ORDER.filter(id => chains[id]);
+    const missing = VC_ORDER.filter(id => !chains[id]);
+
+    if(order.length === 0){
+      container.innerHTML = `<div class="pipe-empty">No pipeline runs yet.<br>
+        <span style="font-size:11px;margin-top:6px;display:block">
+          Upload a document to <code>data/uploads/</code> on GitHub to trigger the pipeline.
+          <a href="upload-guide.html" style="color:var(--blue)">See upload guide →</a>
+        </span></div>`;
+      return;
+    }
+
+    container.innerHTML = order.map(vc => {
+      const c   = chains[vc];
+      const ing = c.ingest;
+      const syn = c.synthesise;
+      const rev = c.review;
+      const verdict = rev ? rev.verdict : null;
+
+      const vclass = verdict === 'PUBLISH' ? 'publish' :
+                     verdict === 'RETURN_FOR_REVISION' ? 'revise' :
+                     syn ? 'pending' : 'none';
+      const vtxt   = verdict === 'PUBLISH' ? '✅ PUBLISH' :
+                     verdict === 'RETURN_FOR_REVISION' ? '❌ NEEDS REVISION' :
+                     syn ? '⏳ UNDER REVIEW' :
+                     ing ? '⏳ SYNTHESISING' : '⏳ INGESTING';
+
+      const ingStage = stageCard('Ingest','📥', ing,
+        ing ? 'ok' : 'wait',
+        ing ? [`${ing.datapoints_added} datapoints`,
+               `${ing.gaps_proposed} gap-fill proposals`,
+               ing.source_files?.length ? ing.source_files.join(', ') : ''] : ['Not run']);
+
+      const synStage = stageCard('Synthesise','✍️', syn,
+        syn ? 'ok' : (ing ? 'wait' : ''),
+        syn ? [`Chapter: ${syn.chapter_file?.split('/').pop() || '—'}`,
+               `${(syn.word_count||0).toLocaleString()} words`] : ['Waiting for ingest']);
+
+      const revStage = stageCard('Review','🔍', rev,
+        rev ? (verdict === 'PUBLISH' ? 'ok' : 'fail') : (syn ? 'wait' : ''),
+        rev ? [`Verdict: ${verdict}`,
+               `${rev.mandatory_failures} mandatory failures`,
+               `${rev.advisories} advisories`] : ['Waiting for synthesis']);
+
+      const revisionBlock = (rev && verdict === 'RETURN_FOR_REVISION' && rev.revision_summary)
+        ? `<div class="pipe-revision"><strong>What must be fixed:</strong><br>${rev.revision_summary}</div>`
+        : '';
+
+      return `<div class="pipe-chain-card">
+        <div class="pipe-chain-header">
+          <span class="pipe-chain-name">${c.name || vc}</span>
+          <span class="pipe-verdict ${vclass}">${vtxt}</span>
+        </div>
+        <div class="pipe-stages">${ingStage}${synStage}${revStage}</div>
+        ${revisionBlock}
+      </div>`;
+    }).join('') +
+    (missing.length ? `<div style="font-size:12px;color:var(--muted);margin-top:8px">
+      Not yet started: ${missing.map(v=>chains[v]?.name||v).join(', ')}</div>` : '');
+  }
+
+  function loadPipelineStatus(){
+    fetch('./pipeline_status.json?_=' + Date.now())
+      .then(r => r.ok ? r.json() : Promise.reject(r.status))
+      .then(buildCards)
+      .catch(() => {
+        document.getElementById('pipeline-cards').innerHTML =
+          `<div class="pipe-empty">No pipeline status file yet.<br>
+          <span style="font-size:11px;margin-top:6px;display:block">
+            Pipeline status will appear here after the first CI run.
+            <a href="upload-guide.html" style="color:var(--blue)">Upload a document to start →</a>
+          </span></div>`;
+      });
+  }
+
+  document.getElementById('tab-btn-pipeline').addEventListener('click', loadPipelineStatus);
 })();
 </script>
 </body>

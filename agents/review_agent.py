@@ -20,6 +20,8 @@ Usage:
 
 import json, os, sys, textwrap, datetime, subprocess, urllib.request, urllib.error
 from pathlib import Path
+import sys as _sys; _sys.path.insert(0, str(Path(__file__).parent))
+from _status import update_status
 
 ROOT         = Path(__file__).resolve().parent.parent
 SCHEMA_FILE  = ROOT / 'data' / 'schema' / 'diagnostic_schema.json'
@@ -324,6 +326,15 @@ def review(vc_id: str) -> dict:
         rev_path = write_revision_notice(verdict, vc_id)
         print(f'  Revision notice → {rev_path.relative_to(ROOT)}')
         print('  Fix the flagged gaps and re-run ingestion + synthesis.')
+
+    update_status('review', vc_id, {
+        'run_id': RUN_ID,
+        'verdict': v,
+        'mandatory_failures': mandatory_fails,
+        'advisories': advisories,
+        'revision_file': f'data/revision/{vc_id}_revision.md' if v != 'PUBLISH' else None,
+        'revision_summary': verdict.get('revision_summary') if v != 'PUBLISH' else None,
+    })
 
     return verdict
 
