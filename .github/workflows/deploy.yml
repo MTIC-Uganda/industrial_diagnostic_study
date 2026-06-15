@@ -3,6 +3,9 @@ name: Deploy MTIC Value Chains App
 # Every push to any branch:
 #   0. Doc Guardian (parallel, non-blocking)
 #   A. Ingestion Agent — runs ONLY when data/uploads/ changes; mines docs + seeds PocketBase
+#   B. Synthesis Agent — runs after ingest; reads PocketBase → writes chapters
+#   C. Review Agent    — runs after synthesis; validates chapters via quality_gate.json
+#                        PUBLISH → opens chapter PR   |   FAIL → writes revision notice
 #   1. Build the React frontend (app/frontend → dist/)
 #   2. Deploy dist/ to staging + health check (self-heal retry up to MAX_HEAL_ATTEMPTS)
 #   3. Staging passes → promote to prod + auto-merge branch to main
@@ -91,6 +94,69 @@ jobs:
   )" \
             --base main \
             --head $BRANCH
+
+  # ── B. Synthesis Agent (after ingest, same condition) ────────────────────
+  synthesise:
+    name: Synthesis Agent
+    runs-on: ubuntu-latest
+    needs: ingest
+    if: needs.ingest.result == 'success'
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Run synthesis agent
+        env:
+          PB_URL:            ${{ secrets.PB_URL }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: python agents/synthesis_agent.py
+
+      - name: Commit synthesised chapters
+        run: |
+          git config user.name  "MTIC CI Bot"
+          git config user.email "ci-bot@mtic-pipeline"
+          git add report/chapters/
+          if git diff --cached --quiet; then
+            echo "No new chapters to commit."
+          else
+            git commit -m "synthesise: agent run ${{ github.sha }} — new chapters"
+            git push origin ${{ github.ref_name }}
+          fi
+
+  # ── C. Review Agent (after synthesis) ────────────────────────────────────
+  review:
+    name: Review Agent
+    runs-on: ubuntu-latest
+    needs: synthesise
+    if: needs.synthesise.result == 'success'
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Run review agent
+        env:
+          PB_URL:            ${{ secrets.PB_URL }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GH_TOKEN:          ${{ secrets.GITHUB_TOKEN }}
+        run: python agents/review_agent.py
+
+      - name: Commit revision notices (if any)
+        run: |
+          git config user.name  "MTIC CI Bot"
+          git config user.email "ci-bot@mtic-pipeline"
+          git add data/revision/
+          if git diff --cached --quiet; then
+            echo "No revision notices to commit."
+          else
+            git commit -m "review: revision notices from run ${{ github.sha }}"
+            git push origin ${{ github.ref_name }}
+          fi
 
   # ── 0. Doc Guardian (parallel, never blocks deploy) ───────────────────────
   doc-check:
