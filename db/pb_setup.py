@@ -174,6 +174,44 @@ COLLECTIONS = [
             num('display_order'),
         ],
     },
+    {
+        # One row per field × value-chain datapoint collected by the agents.
+        # Schema mirrors the record envelope in diagnostic_schema.json.
+        'name': 'diagnostic_datapoints',
+        'type': 'base',
+        'listRule': '',
+        'viewRule': '',
+        'createRule': None,
+        'updateRule': None,
+        'deleteRule': None,
+        'schema': [
+            text('field_id', required=True),        # e.g. D1.01
+            text('value_chain_id', required=True),   # VC01..VC09
+            text('value'),                           # measured value (stored as text; typed in agent)
+            text('raw_source'),                      # citation/document/interviewee
+            sel('source_type', [
+                'secondary_statistic','admin_record','key_informant_interview',
+                'field_visit_observation','firm_survey','policy_document',
+                'desk_estimate','triangulated','upload_mined','trusted_api',
+            ]),
+            text('reporting_year'),                  # e.g. 2024 or FY2023/24
+            sel('confidence', ['high','medium','low','estimated','not_available']),
+            text('disaggregation_values'),
+            text('collection_notes'),
+            text('collected_by'),                    # agent run id / timestamp
+            text('triangulation_refs'),
+            sel('ingestion_method', ['manual','upload_mining','trusted_source','web_gap_fill']),
+            text('trusted_source_id'),               # for trusted_source method
+            text('source_document_ref'),             # for upload_mining: filename + page/cell
+            text('source_url'),                      # for web_gap_fill
+            sel('approval_status', [
+                'not_required','pending_approval','approved','rejected',
+            ]),
+            text('approved_by'),
+            text('approved_at'),
+            text('approval_pr'),
+        ],
+    },
 ]
 
 # ── Create / update collections ───────────────────────────────────────────────

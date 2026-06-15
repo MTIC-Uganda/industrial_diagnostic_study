@@ -1,10 +1,11 @@
 name: Deploy MTIC Value Chains App
 
 # Every push to any branch:
-#   1. Doc Guardian (parallel, non-blocking)
-#   2. Build the React frontend (app/frontend → dist/)
-#   3. Deploy dist/ to staging + health check (self-heal retry up to MAX_HEAL_ATTEMPTS)
-#   4. Staging passes → promote to prod + auto-merge branch to main
+#   0. Doc Guardian (parallel, non-blocking)
+#   A. Ingestion Agent — runs ONLY when data/uploads/ changes; mines docs + seeds PocketBase
+#   1. Build the React frontend (app/frontend → dist/)
+#   2. Deploy dist/ to staging + health check (self-heal retry up to MAX_HEAL_ATTEMPTS)
+#   3. Staging passes → promote to prod + auto-merge branch to main
 
 on:
   push:
@@ -24,6 +25,73 @@ permissions:
   contents: write
 
 jobs:
+  # ── A. Ingestion Agent (only when uploads change) ─────────────────────────
+  ingest:
+    name: Ingestion Agent
+    runs-on: ubuntu-latest
+    if: |
+      contains(toJson(github.event.commits.*.modified), 'data/uploads/') ||
+      contains(toJson(github.event.commits.*.added), 'data/uploads/')
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Run ingestion agent
+        env:
+          PB_URL:              ${{ secrets.PB_URL }}
+          PB_ADMIN_EMAIL:      ${{ secrets.PB_ADMIN_EMAIL }}
+          PB_ADMIN_PASSWORD:   ${{ secrets.PB_ADMIN_PASSWORD }}
+          ANTHROPIC_API_KEY:   ${{ secrets.ANTHROPIC_API_KEY }}
+        run: python agents/ingestion_agent.py
+
+      - name: Commit ingested datapoints
+        run: |
+          git config user.name  "MTIC CI Bot"
+          git config user.email "ci-bot@mtic-pipeline"
+          git add data/ingested/ data/proposed/
+          if git diff --cached --quiet; then
+            echo "No new datapoints to commit."
+          else
+            git commit -m "ingest: agent run ${{ github.sha }} — new datapoints"
+            git push origin ${{ github.ref_name }}
+          fi
+
+      - name: Open gap-fill PR if proposals exist
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          PROP=$(ls data/proposed/web_gap_fill_*.json 2>/dev/null | tail -1)
+          if [ -z "$PROP" ]; then exit 0; fi
+          BRANCH="propose/web-gap-fill-$(date +%Y%m%d)"
+          git checkout -b $BRANCH
+          git add data/proposed/
+          git commit -m "propose: web gap-fill candidates — review and merge to approve"
+          git push origin $BRANCH
+          gh pr create \
+            --title "Data review: web gap-fill proposals $(date +%Y-%m-%d)" \
+            --body "$(cat <<'PREOF'
+  ## Gap-fill proposals for review
+
+  The ingestion agent could not find values for some mandatory fields in the uploaded
+  documents or trusted sources. It has proposed candidate values from general knowledge.
+
+  **Your merge of this PR = approval.** These values enter the dataset only if you merge.
+  Closing without merging = rejection; nothing enters the dataset.
+
+  Review each proposed value in `data/proposed/web_gap_fill_*.json`:
+  - Check the `source_url` to verify the figure
+  - If correct: merge this PR
+  - If wrong: edit the value and source_url before merging, or close to reject
+
+  /cc @jnuwabaasa-spec @arihosolomon @arindahills
+  PREOF
+  )" \
+            --base main \
+            --head $BRANCH
+
   # ── 0. Doc Guardian (parallel, never blocks deploy) ───────────────────────
   doc-check:
     name: Doc Guardian

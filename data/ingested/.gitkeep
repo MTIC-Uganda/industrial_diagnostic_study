@@ -1,0 +1,2 @@
+Approved datapoints written here by the ingestion agent (ingested_<run_id>.json).
+Committed to git automatically by CI after each ingestion run.
