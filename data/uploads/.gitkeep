@@ -1,0 +1,3 @@
+Jerome drops diagnostic source documents here.
+Naming convention: VC01_iron_steel_<description>.txt  (or .pdf, .docx)
+Push to this folder triggers the ingestion agent in CI.
