@@ -1,0 +1,327 @@
+{
+  "rules_metadata": {
+    "name": "Cross-field & structural validation rules",
+    "purpose": "Rules that span multiple fields, records, or whole chains \u2014 not expressible in stateless JSON Schema. The review agent executes these after per-record JSON-Schema validation passes.",
+    "applies_after": "field_record_validators.schema.json"
+  },
+  "rules": [
+    {
+      "rule_id": "X-01",
+      "scope": "per_datapoint",
+      "fields": [
+        "D1.01",
+        "D1.02",
+        "D1.06",
+        "D1.07"
+      ],
+      "rule": "reporting_year >= 2020 OR confidence in ['low','estimated','not_available']",
+      "message": "Headline quantitative figure must be dated 2020+ or explicitly flagged low/estimated."
+    },
+    {
+      "rule_id": "X-02",
+      "scope": "per_chain",
+      "fields": [
+        "D1.06",
+        "D1.07",
+        "D1.08"
+      ],
+      "rule": "if D1.06.value and D1.07.value present, D1.08 (trade balance/dependency) must reconcile within 5% tolerance",
+      "message": "Trade balance/import-dependency must be consistent with import and export values."
+    },
+    {
+      "rule_id": "X-03",
+      "scope": "per_chain",
+      "fields": [
+        "D9.02"
+      ],
+      "rule": "count(D9.02.value == 'binding') >= 1",
+      "message": "Each chain must identify at least one binding constraint."
+    },
+    {
+      "rule_id": "X-04",
+      "scope": "per_chain",
+      "fields": [
+        "D9.06"
+      ],
+      "rule": "count(D9.06.value == 'quick_win') >= 1",
+      "message": "Each chain must have at least one quick win."
+    },
+    {
+      "rule_id": "X-05",
+      "scope": "per_chain",
+      "fields": [
+        "D9.03"
+      ],
+      "rule": "count(D9.03 records) >= 1",
+      "message": "Each chain must identify at least one opportunity/upgrading option."
+    },
+    {
+      "rule_id": "X-06",
+      "scope": "per_chain",
+      "fields": [
+        "D10.01"
+      ],
+      "rule": "count(D10.01 records) >= 1",
+      "message": "Each chain must define at least one priority investment opportunity."
+    },
+    {
+      "rule_id": "X-07",
+      "scope": "per_chain",
+      "fields": [
+        "D9.05",
+        "D9.06",
+        "D9.07",
+        "D9.08"
+      ],
+      "rule": "every D9.05 action record has a matching D9.06 type, D9.07 timeframe, D9.08 responsible actor",
+      "message": "Every priority action must be typed, timed, and owned."
+    },
+    {
+      "rule_id": "X-08",
+      "scope": "per_chain",
+      "fields": [
+        "D9.01",
+        "D9.02",
+        "D2",
+        "D3",
+        "D4",
+        "D5",
+        "D6",
+        "D7",
+        "D8"
+      ],
+      "rule": "every D9.01 constraint references >=1 populated field in domains D2-D8",
+      "message": "Every constraint must trace to a constraint-domain finding."
+    },
+    {
+      "rule_id": "X-09",
+      "scope": "per_chain",
+      "fields": [
+        "D9.05",
+        "D9.01"
+      ],
+      "rule": "every high-priority D9.05 action references >=1 D9.01 constraint",
+      "message": "Every priority action must address a named constraint."
+    },
+    {
+      "rule_id": "X-10",
+      "scope": "per_chain",
+      "fields": [
+        "D10.02",
+        "D1.06",
+        "D1.08",
+        "D1.09"
+      ],
+      "rule": "every D10.02 rationale references >=1 of D1.06/D1.08/D1.09",
+      "message": "Every investment rationale must tie to demand or import-substitution evidence."
+    },
+    {
+      "rule_id": "X-11",
+      "scope": "per_chain",
+      "fields": [
+        "D10.03",
+        "D10.04"
+      ],
+      "rule": "if any D10 opportunity present, D10.03 and D10.04 populated with collection_notes documenting assumptions",
+      "message": "CAPEX/OPEX must carry documented assumptions."
+    },
+    {
+      "rule_id": "X-12",
+      "scope": "study_wide",
+      "fields": [
+        "D9.04"
+      ],
+      "rule": "D9.04 scoring criteria and scale identical across all 9 value chains",
+      "message": "Prioritization scoring must be consistent across every chain."
+    },
+    {
+      "rule_id": "X-13",
+      "scope": "per_chain",
+      "fields": [
+        "D0.03"
+      ],
+      "rule": "D0.03 node map contains nodes: input_supply, production, processing, distribution, end_market",
+      "message": "Value chain map must cover all standard nodes."
+    },
+    {
+      "rule_id": "X-14",
+      "scope": "per_chain",
+      "fields": [
+        "D1.05"
+      ],
+      "rule": "D1.05 employment has gender disaggregation_values present OR collection_notes explaining absence",
+      "message": "Employment must be gender-disaggregated or the gap explained."
+    },
+    {
+      "rule_id": "X-15",
+      "scope": "per_chain",
+      "fields": [
+        "mandatory_fields"
+      ],
+      "rule": "every field with required_level=='mandatory' is either populated (value present) or not_available==true with collection_notes",
+      "message": "No mandatory field may be silently empty."
+    },
+    {
+      "rule_id": "X-16",
+      "scope": "per_chain",
+      "fields": [
+        "D1.12"
+      ],
+      "rule": "D1.12 value must contain an explicit chain-of-reasoning (not a simple 10x multiplication) AND must state a projected value with unit AND must reference at least one structural driver (e.g. infrastructure demand, urbanisation, income effect, industrialisation linkage)",
+      "message": "2040 Uganda demand projection must use Tenfold Growth logic, not a simple multiplication. Show the structural reasoning."
+    },
+    {
+      "rule_id": "X-17",
+      "scope": "per_chain",
+      "fields": [
+        "D9.09"
+      ],
+      "rule": "count(D9.09.value == 'directly_enables_tenfold') >= 1 AND count(D9.09.value == 'misaligned') == 0",
+      "message": "Every chain's priority matrix must have at least one action that directly enables tenfold growth, and zero misaligned actions."
+    },
+    {
+      "rule_id": "X-18",
+      "scope": "per_datapoint",
+      "fields": [
+        "ingestion_method",
+        "trusted_source_id"
+      ],
+      "rule": "if ingestion_method=='trusted_source' then trusted_source_id must be in trusted_sources.json AND field_id must appear in that source's authoritative_for list",
+      "message": "A trusted source may only be used for the fields it is registered as authoritative for."
+    },
+    {
+      "rule_id": "X-19",
+      "scope": "per_datapoint",
+      "fields": [
+        "ingestion_method",
+        "source_document_ref"
+      ],
+      "rule": "if ingestion_method=='upload_mining' then source_document_ref must be non-null and include filename plus locator (page/sheet/cell)",
+      "message": "Every upload-mined datapoint must be traceable to the source document and location."
+    },
+    {
+      "rule_id": "X-20",
+      "scope": "per_datapoint",
+      "fields": [
+        "ingestion_method",
+        "approval_status",
+        "source_url"
+      ],
+      "rule": "if ingestion_method=='web_gap_fill' then source_url must be non-null AND approval_status must be 'approved' before synthesis agent may use it",
+      "message": "Web gap-fill data requires a source URL and PR-merge approval before use."
+    }
+  ],
+  "mandatory_field_ids": [
+    "D0.01",
+    "D0.02",
+    "D0.03",
+    "D0.04",
+    "D0.06",
+    "D1.01",
+    "D1.02",
+    "D1.03",
+    "D1.04",
+    "D1.05",
+    "D1.06",
+    "D1.07",
+    "D1.08",
+    "D1.09",
+    "D1.11",
+    "D2.01",
+    "D2.02",
+    "D2.03",
+    "D2.04",
+    "D3.01",
+    "D3.04",
+    "D4.01",
+    "D4.02",
+    "D4.03",
+    "D4.04",
+    "D5.01",
+    "D5.03",
+    "D6.01",
+    "D6.02",
+    "D7.01",
+    "D7.02",
+    "D8.01",
+    "D8.02",
+    "D8.03",
+    "D8.04",
+    "D9.01",
+    "D9.02",
+    "D9.03",
+    "D9.04",
+    "D9.05",
+    "D9.06",
+    "D9.07",
+    "D9.08",
+    "D10.01",
+    "D10.02",
+    "D11.01",
+    "D11.02",
+    "D11.03",
+    "D1.12",
+    "D9.09"
+  ],
+  "evidence_required_field_ids": [
+    "D0.01",
+    "D0.02",
+    "D0.03",
+    "D0.04",
+    "D0.05",
+    "D0.06",
+    "D1.01",
+    "D1.02",
+    "D1.03",
+    "D1.04",
+    "D1.05",
+    "D1.06",
+    "D1.07",
+    "D1.08",
+    "D1.09",
+    "D1.10",
+    "D1.11",
+    "D2.01",
+    "D2.02",
+    "D2.03",
+    "D2.04",
+    "D2.05",
+    "D3.01",
+    "D3.02",
+    "D3.03",
+    "D3.04",
+    "D3.05",
+    "D4.01",
+    "D4.02",
+    "D4.03",
+    "D4.04",
+    "D5.01",
+    "D5.02",
+    "D5.03",
+    "D5.04",
+    "D6.01",
+    "D6.02",
+    "D6.03",
+    "D7.01",
+    "D7.02",
+    "D7.03",
+    "D8.01",
+    "D8.02",
+    "D8.03",
+    "D8.04",
+    "D9.01",
+    "D9.02",
+    "D9.03",
+    "D9.04",
+    "D9.05",
+    "D10.02",
+    "D10.03",
+    "D10.04",
+    "D11.01",
+    "D11.02",
+    "D11.03",
+    "D11.04",
+    "D1.12",
+    "D9.09"
+  ]
+}

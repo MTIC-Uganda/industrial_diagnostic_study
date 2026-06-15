@@ -1,0 +1,68 @@
+{
+  "registry_metadata": {
+    "name": "Trusted Data Source Registry",
+    "version": "1.0.0",
+    "purpose": "Whitelist of pre-vetted data sources the dashboard may pull from directly (ingestion method 'trusted_source'). Each source is authoritative ONLY for the fields listed against it. The ingestion agent must not use a source for a field it is not registered for. Method-3 web-gap candidates that originate from a domain in this registry may be ranked as higher-confidence, but still require PR approval.",
+    "owner": "TWG / project lead — add or remove sources here; changes take effect without touching the field schema.",
+    "rule": "For ingestion_method='trusted_source', trusted_source_id MUST be one of the ids below AND the field_id being populated MUST appear in that source's authoritative_for list."
+  },
+
+  "sources": [
+    {
+      "id": "trade_map",
+      "name": "ITC Trade Map",
+      "url": "https://www.trademap.org/",
+      "access": "API / authenticated export",
+      "authoritative_for": ["D1.06", "D1.07", "D1.08"],
+      "notes": "Import value, export value, and derived trade balance / import-dependency. Bilateral and product-level trade statistics.",
+      "default_confidence": "high"
+    },
+    {
+      "id": "ubos",
+      "name": "Uganda Bureau of Statistics",
+      "url": "https://www.ubos.org/",
+      "access": "Published statistical abstracts / API where available",
+      "authoritative_for": ["D1.01", "D1.02", "D1.04", "D1.05", "D3.02"],
+      "notes": "Domestic production volume/value, firm counts, employment, productivity. National authority for Uganda industrial statistics.",
+      "default_confidence": "high"
+    },
+    {
+      "id": "comtrade",
+      "name": "UN Comtrade",
+      "url": "https://comtrade.un.org/",
+      "access": "API",
+      "authoritative_for": ["D1.06", "D1.07"],
+      "notes": "Cross-check / fallback for trade data where Trade Map coverage is thin.",
+      "default_confidence": "high"
+    },
+    {
+      "id": "wits",
+      "name": "World Integrated Trade Solution (World Bank)",
+      "url": "https://wits.worldbank.org/",
+      "access": "API",
+      "authoritative_for": ["D1.06", "D1.07", "D1.11"],
+      "notes": "Trade flows plus tariff/competitiveness context for regional benchmarking.",
+      "default_confidence": "medium"
+    },
+    {
+      "id": "bou",
+      "name": "Bank of Uganda",
+      "url": "https://www.bou.or.ug/",
+      "access": "Published statistics",
+      "authoritative_for": ["D5.02"],
+      "notes": "Lending rates / cost of credit context for the finance domain.",
+      "default_confidence": "high"
+    },
+    {
+      "id": "unido_stat",
+      "name": "UNIDO Statistics (INDSTAT / MVA)",
+      "url": "https://stat.unido.org/",
+      "access": "Database export / API",
+      "authoritative_for": ["D1.02", "D3.02", "D3.04", "D1.11"],
+      "notes": "Manufacturing value added, productivity, value-addition share, international comparators.",
+      "default_confidence": "high"
+    }
+  ],
+
+  "extension_guidance": "To add a source: give it a stable id, list only the field_ids it is genuinely authoritative for, set a default_confidence, and record access method. Do not list a source for a field outside its competence (e.g. a trade database is not authoritative for capacity utilization)."
+}
