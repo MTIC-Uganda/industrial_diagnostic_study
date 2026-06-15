@@ -6,6 +6,8 @@ name: Deploy MTIC Value Chains App
 #   B. Synthesis Agent — runs after ingest; reads PocketBase → writes chapters
 #   C. Review Agent    — runs after synthesis; validates chapters via quality_gate.json
 #                        PUBLISH → opens chapter PR   |   FAIL → writes revision notice
+#   D. Gap-fill seeder — runs ONLY on main when data/proposed/ changes (gap-fill PR merged)
+#                        re-seeds approved proposals to PocketBase and re-triggers synthesis
 #   1. Build the React frontend (app/frontend → dist/)
 #   2. Deploy dist/ to staging + health check (self-heal retry up to MAX_HEAL_ATTEMPTS)
 #   3. Staging passes → promote to prod + auto-merge branch to main
@@ -170,6 +172,69 @@ jobs:
             echo "No revision notices — WhatsApp notification skipped."
           fi
 
+  # ── D. Gap-fill seeder (main only, when data/proposed/ changes) ─────────
+  # Triggered when Jerome merges a gap-fill PR — re-seeds approved proposals
+  # to PocketBase then kicks off synthesis + review automatically.
+  gapfill-seed:
+    name: Gap-fill Seeder
+    runs-on: ubuntu-latest
+    if: |
+      github.ref == 'refs/heads/main' && (
+        contains(toJson(github.event.commits.*.modified), 'data/proposed/') ||
+        contains(toJson(github.event.commits.*.added), 'data/proposed/')
+      )
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Seed approved gap-fill proposals to PocketBase
+        env:
+          PB_URL:            ${{ secrets.PB_URL }}
+          PB_ADMIN_EMAIL:    ${{ secrets.PB_ADMIN_EMAIL }}
+          PB_ADMIN_PASSWORD: ${{ secrets.PB_ADMIN_PASSWORD }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: python agents/gapfill_seeder.py
+
+      - name: Run synthesis on updated chains
+        env:
+          PB_URL:            ${{ secrets.PB_URL }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: python agents/synthesis_agent.py
+
+      - name: Run review on updated chains
+        env:
+          PB_URL:            ${{ secrets.PB_URL }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GH_TOKEN:          ${{ secrets.GITHUB_TOKEN }}
+        run: python agents/review_agent.py
+
+      - name: Commit all outputs
+        run: |
+          git config user.name  "MTIC CI Bot"
+          git config user.email "ci-bot@mtic-pipeline"
+          git add report/chapters/ data/revision/ data/pipeline_status.json
+          if git diff --cached --quiet; then
+            echo "No new outputs to commit."
+          else
+            git commit -m "gapfill: re-synthesise + review after approved proposals"
+            git push origin main
+          fi
+
+      - name: WhatsApp notify on revision
+        env:
+          WA_RECIPIENT: ${{ secrets.WA_RECIPIENT }}
+          WA_TOKEN:     ${{ secrets.WA_TOKEN }}
+          WA_PROVIDER:  ${{ secrets.WA_PROVIDER }}
+        run: |
+          if ls data/revision/*.md 2>/dev/null | head -1 | grep -q .; then
+            python agents/whatsapp_notify.py
+          else
+            echo "All chains passed review."
+          fi
+
   # ── 0. Doc Guardian (parallel, never blocks deploy) ───────────────────────
   doc-check:
     name: Doc Guardian
@@ -241,6 +306,8 @@ jobs:
           cp report/upload-guide.html site/upload-guide.html
           cp report/uganda_coat_of_arms.png site/uganda_coat_of_arms.png
           [ -f data/pipeline_status.json ] && cp data/pipeline_status.json site/pipeline_status.json || true
+          mkdir -p site/chapters
+          ls report/chapters/VC*.md 2>/dev/null && cp report/chapters/VC*.md site/chapters/ || true
 
       - name: Upload dist
         uses: actions/upload-artifact@v4

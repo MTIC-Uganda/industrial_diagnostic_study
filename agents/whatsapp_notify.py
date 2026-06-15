@@ -28,7 +28,7 @@ Usage (local test):
 import json, os, sys, textwrap, urllib.request, urllib.parse, urllib.error, argparse
 from pathlib import Path
 
-ROOT         = ROOT = Path(__file__).resolve().parent.parent
+ROOT         = Path(__file__).resolve().parent.parent
 REVISION_DIR = ROOT / 'data' / 'revision'
 
 WA_PROVIDER  = os.environ.get('WA_PROVIDER', 'callmebot').lower()

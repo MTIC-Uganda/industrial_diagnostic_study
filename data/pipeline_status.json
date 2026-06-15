@@ -1,0 +1,14 @@
+{
+  "updated_at": "",
+  "chains": {
+    "VC01": {"name": "Iron & Steel"},
+    "VC02": {"name": "Copper & Allied Metals"},
+    "VC03": {"name": "Automotive"},
+    "VC04": {"name": "Textiles & Garments"},
+    "VC05": {"name": "Pharmaceuticals"},
+    "VC06": {"name": "Petrochemicals & Fertilizers"},
+    "VC07": {"name": "Sugar & Confectionery"},
+    "VC08": {"name": "Plastics & Packaging"},
+    "VC09": {"name": "Cement & Building Materials"}
+  }
+}
