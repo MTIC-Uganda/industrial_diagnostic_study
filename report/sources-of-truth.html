@@ -40,6 +40,9 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#f0f2f5;color:#1a1a2e;fo
 .momentum-item{background:#f8f9fa;border-radius:8px;padding:14px 16px;border:1px solid var(--border)}
 .momentum-label{display:flex;justify-content:space-between;align-items:center;font-size:12px;font-weight:700;margin-bottom:10px;flex-wrap:wrap;gap:4px}
 .momentum-delta{background:#e8f5e9;color:#2e7d32;padding:2px 9px;border-radius:10px;font-size:11px;font-weight:700}
+.momentum-delta-down{background:#ffebee;color:#c62828;padding:2px 9px;border-radius:10px;font-size:11px;font-weight:700}
+.momentum-spark{display:flex;align-items:center;gap:8px;margin-top:8px;padding-top:8px;border-top:1px dashed #e0e0e0}
+.momentum-spark-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.3px}
 .momentum-bar-row{display:flex;align-items:center;gap:8px;margin-bottom:6px}
 .momentum-bar-tag{font-size:10px;color:var(--muted);width:54px;flex-shrink:0;font-weight:600}
 .momentum-track{flex:1;height:14px;background:#e8eaf6;border-radius:4px;overflow:hidden}
@@ -47,6 +50,15 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#f0f2f5;color:#1a1a2e;fo
 .momentum-fill.old{background:#b0bec5}
 .momentum-fill.new{background:#1565c0}
 .momentum-bar-val{font-size:11px;font-weight:700;width:90px;text-align:right;flex-shrink:0;color:var(--text)}
+
+/* SECTOR COMPARISON */
+.sector-bar-row{display:flex;align-items:center;gap:10px;margin-bottom:9px}
+.sector-bar-label{font-size:12px;width:150px;flex-shrink:0;color:var(--text)}
+.sector-bar-label.highlight{font-weight:700;color:var(--blue)}
+.sector-bar-track{flex:1;height:16px;background:#f0f0f0;border-radius:4px;overflow:hidden}
+.sector-bar-fill{height:100%;border-radius:4px;background:#b0bec5}
+.sector-bar-fill.highlight{background:#1565c0}
+.sector-bar-val{font-size:11px;color:var(--muted);width:140px;flex-shrink:0;text-align:right}
 
 /* RECENTLY UPDATED */
 .update-item{display:flex;align-items:center;gap:10px;padding:8px 4px;border-bottom:1px solid #f0f0f0;font-size:12px}
@@ -226,6 +238,12 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-t
   body.brief-mode .card .value{ font-size:20px!important }
   body.brief-mode #momentum-panel .momentum-grid{ grid-template-columns:repeat(2,1fr)!important;gap:8px!important }
   body.brief-mode #momentum-panel .momentum-item{ padding:8px 10px!important }
+  body.brief-mode #momentum-panel .momentum-spark{ display:none!important }
+  body.brief-mode #momentum-panel .two-col{ grid-template-columns:1fr 1fr!important;gap:12px!important;margin-top:10px!important }
+  body.brief-mode .sector-bar-label{ width:110px!important;font-size:10px!important }
+  body.brief-mode .sector-bar-val{ width:100px!important;font-size:9px!important }
+  body.brief-mode .sector-bar-row{ margin-bottom:5px!important }
+  body.brief-mode .sector-bar-track{ height:11px!important }
   body.brief-mode table{ font-size:10px!important }
   body.brief-mode th,body.brief-mode td{ padding:5px 7px!important }
   body.brief-mode #sources-panel{ margin-top:10px!important }
@@ -331,14 +349,14 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-t
     <div class="section-title" style="margin-bottom:6px">🕓 Recently Updated</div>
     <div class="section-sub">Latest data, chapters, and reviews from the agentic pipeline — newest first.</div>
     <div class="card" style="margin-bottom:24px">
-      <div class="update-item"><span class="update-icon">🚀</span><span class="update-tag">Feature</span><span class="update-msg">confidence badges, Sources panel, Momentum trend, one-page Brief</span><span class="update-date">2026-06-18</span></div>
+      <div class="update-item"><span class="update-icon">🚀</span><span class="update-tag">Feature</span><span class="update-msg">Recently Updated feed, Glossary, Risk Register, Milestone Roadmap</span><span class="update-date">2026-06-18</span></div>
+    <div class="update-item"><span class="update-icon">🚀</span><span class="update-tag">Feature</span><span class="update-msg">confidence badges, Sources panel, Momentum trend, one-page Brief</span><span class="update-date">2026-06-18</span></div>
     <div class="update-item"><span class="update-icon">🚀</span><span class="update-tag">Feature</span><span class="update-msg">close gap-fill loop, chapter viewer, pipeline status seed</span><span class="update-date">2026-06-15</span></div>
     <div class="update-item"><span class="update-icon">🚀</span><span class="update-tag">Feature</span><span class="update-msg">Pipeline status, upload guide, WhatsApp notifier, Pipeline tab</span><span class="update-date">2026-06-15</span></div>
     <div class="update-item"><span class="update-icon">🚀</span><span class="update-tag">Feature</span><span class="update-msg">Synthesis Agent + Review Agent (Phase 2 agentic pipeline complete)</span><span class="update-date">2026-06-15</span></div>
     <div class="update-item"><span class="update-icon">🚀</span><span class="update-tag">Feature</span><span class="update-msg">ingestion agent + diagnostic_datapoints PocketBase collection</span><span class="update-date">2026-06-15</span></div>
     <div class="update-item"><span class="update-icon">🛠️</span><span class="update-tag">Fix</span><span class="update-msg">mark auto-merge step continue-on-error</span><span class="update-date">2026-06-14</span></div>
     <div class="update-item"><span class="update-icon">🛠️</span><span class="update-tag">Fix</span><span class="update-msg">rebuild pb-guide mockups to match real PocketBase v0.22.7 UI</span><span class="update-date">2026-06-14</span></div>
-    <div class="update-item"><span class="update-icon">🚀</span><span class="update-tag">Feature</span><span class="update-msg">add PocketBase data entry guide with Driver.js tour</span><span class="update-date">2026-06-14</span></div>
     </div>
   </div>
 
@@ -361,6 +379,7 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-t
           <span class="momentum-bar-val">6.9%</span>
         </div>
       </div>
+      
     </div>
 
     <div class="momentum-item">
@@ -377,6 +396,7 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-t
           <span class="momentum-bar-val">5.6%</span>
         </div>
       </div>
+      
     </div>
 
     <div class="momentum-item">
@@ -393,6 +413,7 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-t
           <span class="momentum-bar-val">Shs 23.3trn</span>
         </div>
       </div>
+      <div class="momentum-spark"><svg class="sparkline" width="120" height="28" viewBox="0 0 120 28"><polyline points="2.0,26.0 31.0,20.8 60.0,16.9 89.0,10.4 118.0,2.0" fill="none" stroke="#1565c0" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="118.0" cy="2.0" r="2.5" fill="#1565c0"/></svg><span class="momentum-spark-label">5-yr trend</span></div>
     </div>
 
     <div class="momentum-item">
@@ -409,6 +430,7 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-t
           <span class="momentum-bar-val">#2</span>
         </div>
       </div>
+      
     </div>
 
     <div class="momentum-item">
@@ -425,6 +447,7 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-t
           <span class="momentum-bar-val">USD 2.4bn</span>
         </div>
       </div>
+      
     </div>
 
     <div class="momentum-item">
@@ -441,6 +464,7 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-t
           <span class="momentum-bar-val">Shs 3.4trn</span>
         </div>
       </div>
+      
     </div>
 
     <div class="momentum-item">
@@ -457,7 +481,112 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-t
           <span class="momentum-bar-val">65%</span>
         </div>
       </div>
+      
     </div>
+
+    <div class="momentum-item">
+      <div class="momentum-label"><span>Industry Share of GDP (current prices) <span class="conf-badge conf-exact" title="Source: UBOS Annual GDP 2024/25">● exact</span></span><span class="momentum-delta-down">-2.8 pts</span></div>
+      <div class="momentum-bars">
+        <div class="momentum-bar-row">
+          <span class="momentum-bar-tag">FY20/21</span>
+          <div class="momentum-track"><div class="momentum-fill old" style="width:90.0%"></div></div>
+          <span class="momentum-bar-val">27.1%</span>
+        </div>
+        <div class="momentum-bar-row">
+          <span class="momentum-bar-tag">FY24/25</span>
+          <div class="momentum-track"><div class="momentum-fill new" style="width:81.0%"></div></div>
+          <span class="momentum-bar-val">24.3%</span>
+        </div>
+      </div>
+      
+    </div>
+
+    <div class="momentum-item">
+      <div class="momentum-label"><span>Manufacturing Share of GDP (current prices) <span class="conf-badge conf-exact" title="Source: UBOS Annual GDP 2024/25">● exact</span></span><span class="momentum-delta-down">-1.9 pts</span></div>
+      <div class="momentum-bars">
+        <div class="momentum-bar-row">
+          <span class="momentum-bar-tag">FY20/21</span>
+          <div class="momentum-track"><div class="momentum-fill old" style="width:55.0%"></div></div>
+          <span class="momentum-bar-val">16.4%</span>
+        </div>
+        <div class="momentum-bar-row">
+          <span class="momentum-bar-tag">FY24/25</span>
+          <div class="momentum-track"><div class="momentum-fill new" style="width:48.0%"></div></div>
+          <span class="momentum-bar-val">14.5%</span>
+        </div>
+      </div>
+      
+    </div>
+    </div>
+    <div class="two-col" style="margin-top:20px;margin-bottom:0">
+      <div>
+        <h3 style="font-size:13px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px">Tax Contribution by Sector &middot; URA</h3>
+        
+    <div class="sector-bar-row">
+      <span class="sector-bar-label">Wholesale &amp; Retail</span>
+      <div class="sector-bar-track"><div class="sector-bar-fill" style="width:100.0%"></div></div>
+      <span class="sector-bar-val">39% &middot; Shs 6.1trn</span>
+    </div>
+
+    <div class="sector-bar-row">
+      <span class="sector-bar-label highlight">Manufacturing</span>
+      <div class="sector-bar-track"><div class="sector-bar-fill highlight" style="width:82.05128205128204%"></div></div>
+      <span class="sector-bar-val">32% &middot; Shs 5.0trn</span>
+    </div>
+
+    <div class="sector-bar-row">
+      <span class="sector-bar-label">Financial &amp; Insurance</span>
+      <div class="sector-bar-track"><div class="sector-bar-fill" style="width:38.46153846153847%"></div></div>
+      <span class="sector-bar-val">15% &middot; Shs 2.3trn</span>
+    </div>
+
+    <div class="sector-bar-row">
+      <span class="sector-bar-label">Info &amp; Communications</span>
+      <div class="sector-bar-track"><div class="sector-bar-fill" style="width:23.076923076923077%"></div></div>
+      <span class="sector-bar-val">9% &middot; Shs 1.4trn</span>
+    </div>
+
+    <div class="sector-bar-row">
+      <span class="sector-bar-label">Public Administration</span>
+      <div class="sector-bar-track"><div class="sector-bar-fill" style="width:12.82051282051282%"></div></div>
+      <span class="sector-bar-val">5% &middot; Shs 0.8trn</span>
+    </div>
+        <div style="font-size:11px;color:var(--muted);margin-top:6px">Wholesale &amp; retail leads largely because it carries VAT on manufactured goods — underpinned by manufacturing, which also holds the #2 line directly.</div>
+      </div>
+      <div>
+        <h3 style="font-size:13px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px">Private-Sector Credit by Sector, FY24/25 &middot; Bank of Uganda</h3>
+        
+    <div class="sector-bar-row">
+      <span class="sector-bar-label">Building &amp; Real Estate</span>
+      <div class="sector-bar-track"><div class="sector-bar-fill" style="width:100.0%"></div></div>
+      <span class="sector-bar-val">Shs 3.8trn &rarr; 5.0trn</span>
+    </div>
+
+    <div class="sector-bar-row">
+      <span class="sector-bar-label">Trade</span>
+      <div class="sector-bar-track"><div class="sector-bar-fill" style="width:86.0%"></div></div>
+      <span class="sector-bar-val">Shs 2.9trn &rarr; 4.3trn</span>
+    </div>
+
+    <div class="sector-bar-row">
+      <span class="sector-bar-label">Personal &amp; Household</span>
+      <div class="sector-bar-track"><div class="sector-bar-fill" style="width:92.0%"></div></div>
+      <span class="sector-bar-val">Shs 3.5trn &rarr; 4.6trn</span>
+    </div>
+
+    <div class="sector-bar-row">
+      <span class="sector-bar-label highlight">Manufacturing</span>
+      <div class="sector-bar-track"><div class="sector-bar-fill highlight" style="width:68.0%"></div></div>
+      <span class="sector-bar-val">Shs 2.3trn &rarr; 3.4trn</span>
+    </div>
+
+    <div class="sector-bar-row">
+      <span class="sector-bar-label">Agriculture</span>
+      <div class="sector-bar-track"><div class="sector-bar-fill" style="width:54.0%"></div></div>
+      <span class="sector-bar-val">Shs 2.1trn &rarr; 2.7trn</span>
+    </div>
+        <div style="font-size:11px;color:var(--muted);margin-top:6px">Bars show FY24/25 stock; labels show FY20/21 &rarr; FY24/25 growth. Manufacturing credit grew faster (+48%) than the sector average.</div>
+      </div>
     </div>
   </div>
 

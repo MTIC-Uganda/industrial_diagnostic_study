@@ -118,6 +118,8 @@ if USE_POCKETBASE:
             'fy2021_pct':   r.get('fy2021_pct') or 0,
             'fy2025_pct':   r.get('fy2025_pct') or 0,
             'delta':        r.get('delta') or '',
+            'direction':    r.get('direction') or 'up',
+            'trajectory':   r.get('trajectory') or '',
             'confidence':   r.get('confidence') or 'estimated',
             'source':       r.get('source') or '',
         } for r in raw_macro]
@@ -169,6 +171,26 @@ def kpi_cards_html():
         )
     return '\n    '.join(parts)
 
+def sparkline_svg(values, width=120, height=28):
+    if not values or len(values) < 2:
+        return ''
+    lo, hi = min(values), max(values)
+    span = (hi - lo) or 1
+    n = len(values)
+    pts = []
+    for i, v in enumerate(values):
+        x = (i / (n - 1)) * (width - 4) + 2
+        y = height - 2 - ((v - lo) / span) * (height - 4)
+        pts.append(f'{x:.1f},{y:.1f}')
+    points = ' '.join(pts)
+    last_x, last_y = pts[-1].split(',')
+    return (
+        f'<svg class="sparkline" width="{width}" height="{height}" viewBox="0 0 {width} {height}">'
+        f'<polyline points="{points}" fill="none" stroke="#1565c0" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>'
+        f'<circle cx="{last_x}" cy="{last_y}" r="2.5" fill="#1565c0"/>'
+        f'</svg>'
+    )
+
 def macro_trend_html():
     if not macro_trend:
         return '<div style="color:var(--muted);font-size:12px;padding:12px">No trend data available.</div>'
@@ -180,9 +202,24 @@ def macro_trend_html():
             p25 = float(r.get('fy2025_pct') or 0)
         except (ValueError, TypeError):
             p21, p25 = 0, 0
+
+        direction = (r.get('direction') or 'up').lower()
+        delta_cls = 'momentum-delta-down' if direction == 'down' else 'momentum-delta'
+
+        spark = ''
+        traj_raw = (r.get('trajectory') or '').strip()
+        if traj_raw:
+            try:
+                values = [float(v) for v in traj_raw.split(';') if v]
+                spark = sparkline_svg(values)
+            except ValueError:
+                spark = ''
+
+        spark_html = f'<div class="momentum-spark">{spark}<span class="momentum-spark-label">5-yr trend</span></div>' if spark else ''
+
         parts.append(f'''
     <div class="momentum-item">
-      <div class="momentum-label"><span>{esc(r["label"])} {badge}</span><span class="momentum-delta">{esc(r["delta"])}</span></div>
+      <div class="momentum-label"><span>{esc(r["label"])} {badge}</span><span class="{delta_cls}">{esc(r["delta"])}</span></div>
       <div class="momentum-bars">
         <div class="momentum-bar-row">
           <span class="momentum-bar-tag">FY20/21</span>
@@ -195,6 +232,30 @@ def macro_trend_html():
           <span class="momentum-bar-val">{esc(r["fy2025_value"])}</span>
         </div>
       </div>
+      {spark_html}
+    </div>''')
+    return '\n'.join(parts)
+
+def sector_comparison_html(chart_name):
+    sc_file = DATA / 'sector_comparison.csv'
+    if not sc_file.exists():
+        return '<div style="color:var(--muted);font-size:12px">No sector comparison data available.</div>'
+    rows = [r for r in load_csv('sector_comparison.csv') if r['chart'] == chart_name]
+    if not rows:
+        return '<div style="color:var(--muted);font-size:12px">No data for this chart.</div>'
+    max_pct = max(float(r['pct']) for r in rows) or 1
+    parts = []
+    for r in rows:
+        pct = float(r['pct'])
+        width = (pct / max_pct) * 100
+        highlight = r.get('highlight') == '1'
+        bar_cls = 'sector-bar-fill highlight' if highlight else 'sector-bar-fill'
+        label_cls = 'sector-bar-label highlight' if highlight else 'sector-bar-label'
+        parts.append(f'''
+    <div class="sector-bar-row">
+      <span class="{label_cls}">{esc(r["sector"])}</span>
+      <div class="sector-bar-track"><div class="{bar_cls}" style="width:{width}%"></div></div>
+      <span class="sector-bar-val">{r["value_label"]}</span>
     </div>''')
     return '\n'.join(parts)
 
@@ -386,6 +447,8 @@ replacements = {
     '<!--%%GLOSSARY_ITEMS%%-->':      glossary_html(),
     '<!--%%RISK_REGISTER_ROWS%%-->':  risk_register_html(),
     '<!--%%MILESTONES_ITEMS%%-->':    milestones_html(),
+    '<!--%%TAX_SECTOR_BARS%%-->':     sector_comparison_html('tax'),
+    '<!--%%CREDIT_SECTOR_BARS%%-->':  sector_comparison_html('credit'),
     '/*%%CHAINS_DATA%%*/':            chains_js(),
     '/*%%CHAIN_COLORS_DATA%%*/':      chain_colors_js(),
     '/*%%FACTORIES_DATA%%*/':         factories_js(),

@@ -40,6 +40,9 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#f0f2f5;color:#1a1a2e;fo
 .momentum-item{background:#f8f9fa;border-radius:8px;padding:14px 16px;border:1px solid var(--border)}
 .momentum-label{display:flex;justify-content:space-between;align-items:center;font-size:12px;font-weight:700;margin-bottom:10px;flex-wrap:wrap;gap:4px}
 .momentum-delta{background:#e8f5e9;color:#2e7d32;padding:2px 9px;border-radius:10px;font-size:11px;font-weight:700}
+.momentum-delta-down{background:#ffebee;color:#c62828;padding:2px 9px;border-radius:10px;font-size:11px;font-weight:700}
+.momentum-spark{display:flex;align-items:center;gap:8px;margin-top:8px;padding-top:8px;border-top:1px dashed #e0e0e0}
+.momentum-spark-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.3px}
 .momentum-bar-row{display:flex;align-items:center;gap:8px;margin-bottom:6px}
 .momentum-bar-tag{font-size:10px;color:var(--muted);width:54px;flex-shrink:0;font-weight:600}
 .momentum-track{flex:1;height:14px;background:#e8eaf6;border-radius:4px;overflow:hidden}
@@ -47,6 +50,15 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#f0f2f5;color:#1a1a2e;fo
 .momentum-fill.old{background:#b0bec5}
 .momentum-fill.new{background:#1565c0}
 .momentum-bar-val{font-size:11px;font-weight:700;width:90px;text-align:right;flex-shrink:0;color:var(--text)}
+
+/* SECTOR COMPARISON */
+.sector-bar-row{display:flex;align-items:center;gap:10px;margin-bottom:9px}
+.sector-bar-label{font-size:12px;width:150px;flex-shrink:0;color:var(--text)}
+.sector-bar-label.highlight{font-weight:700;color:var(--blue)}
+.sector-bar-track{flex:1;height:16px;background:#f0f0f0;border-radius:4px;overflow:hidden}
+.sector-bar-fill{height:100%;border-radius:4px;background:#b0bec5}
+.sector-bar-fill.highlight{background:#1565c0}
+.sector-bar-val{font-size:11px;color:var(--muted);width:140px;flex-shrink:0;text-align:right}
 
 /* RECENTLY UPDATED */
 .update-item{display:flex;align-items:center;gap:10px;padding:8px 4px;border-bottom:1px solid #f0f0f0;font-size:12px}
@@ -226,6 +238,12 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-t
   body.brief-mode .card .value{ font-size:20px!important }
   body.brief-mode #momentum-panel .momentum-grid{ grid-template-columns:repeat(2,1fr)!important;gap:8px!important }
   body.brief-mode #momentum-panel .momentum-item{ padding:8px 10px!important }
+  body.brief-mode #momentum-panel .momentum-spark{ display:none!important }
+  body.brief-mode #momentum-panel .two-col{ grid-template-columns:1fr 1fr!important;gap:12px!important;margin-top:10px!important }
+  body.brief-mode .sector-bar-label{ width:110px!important;font-size:10px!important }
+  body.brief-mode .sector-bar-val{ width:100px!important;font-size:9px!important }
+  body.brief-mode .sector-bar-row{ margin-bottom:5px!important }
+  body.brief-mode .sector-bar-track{ height:11px!important }
   body.brief-mode table{ font-size:10px!important }
   body.brief-mode th,body.brief-mode td{ padding:5px 7px!important }
   body.brief-mode #sources-panel{ margin-top:10px!important }
@@ -335,6 +353,18 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-t
   <div class="card" id="momentum-panel" style="margin-bottom:24px">
     <div class="momentum-grid">
       <!--%%MACRO_TREND_ITEMS%%-->
+    </div>
+    <div class="two-col" style="margin-top:20px;margin-bottom:0">
+      <div>
+        <h3 style="font-size:13px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px">Tax Contribution by Sector &middot; URA</h3>
+        <!--%%TAX_SECTOR_BARS%%-->
+        <div style="font-size:11px;color:var(--muted);margin-top:6px">Wholesale &amp; retail leads largely because it carries VAT on manufactured goods — underpinned by manufacturing, which also holds the #2 line directly.</div>
+      </div>
+      <div>
+        <h3 style="font-size:13px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px">Private-Sector Credit by Sector, FY24/25 &middot; Bank of Uganda</h3>
+        <!--%%CREDIT_SECTOR_BARS%%-->
+        <div style="font-size:11px;color:var(--muted);margin-top:6px">Bars show FY24/25 stock; labels show FY20/21 &rarr; FY24/25 growth. Manufacturing credit grew faster (+48%) than the sector average.</div>
+      </div>
     </div>
   </div>
 
