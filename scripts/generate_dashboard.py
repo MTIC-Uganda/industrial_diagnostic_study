@@ -120,6 +120,7 @@ if USE_POCKETBASE:
             'delta':        r.get('delta') or '',
             'direction':    r.get('direction') or 'up',
             'trajectory':   r.get('trajectory') or '',
+            'trajectory_labels': r.get('trajectory_labels') or '',
             'confidence':   r.get('confidence') or 'estimated',
             'source':       r.get('source') or '',
         } for r in raw_macro]
@@ -171,23 +172,43 @@ def kpi_cards_html():
         )
     return '\n    '.join(parts)
 
-def sparkline_svg(values, width=120, height=28):
+def sparkline_svg(values, labels=None, width=160, chart_h=28, label_h=12):
     if not values or len(values) < 2:
         return ''
+    height = chart_h + label_h
     lo, hi = min(values), max(values)
     span = (hi - lo) or 1
     n = len(values)
-    pts = []
+    xs, ys = [], []
     for i, v in enumerate(values):
-        x = (i / (n - 1)) * (width - 4) + 2
-        y = height - 2 - ((v - lo) / span) * (height - 4)
-        pts.append(f'{x:.1f},{y:.1f}')
-    points = ' '.join(pts)
-    last_x, last_y = pts[-1].split(',')
+        x = (i / (n - 1)) * (width - 8) + 4
+        y = chart_h - 2 - ((v - lo) / span) * (chart_h - 4)
+        xs.append(x)
+        ys.append(y)
+    points = ' '.join(f'{x:.1f},{y:.1f}' for x, y in zip(xs, ys))
+
+    dots = ''.join(
+        f'<circle cx="{x:.1f}" cy="{y:.1f}" r="{3 if i == n-1 else 2}" '
+        f'fill="{"#1565c0" if i == n-1 else "#90a4ae"}"/>'
+        for i, (x, y) in enumerate(zip(xs, ys))
+    )
+    value_tags = ''.join(
+        f'<text x="{x:.1f}" y="{max(y-6, 8):.1f}" font-size="7" text-anchor="middle" fill="#1565c0" font-weight="700">{values[i]:g}</text>'
+        if i in (0, n-1) else ''
+        for i, (x, y) in enumerate(zip(xs, ys))
+    )
+
+    tick_labels = ''
+    if labels and len(labels) == n:
+        tick_labels = ''.join(
+            f'<text x="{x:.1f}" y="{chart_h + 9}" font-size="7" text-anchor="middle" fill="#999">{esc(lbl)}</text>'
+            for x, lbl in zip(xs, labels)
+        )
+
     return (
         f'<svg class="sparkline" width="{width}" height="{height}" viewBox="0 0 {width} {height}">'
         f'<polyline points="{points}" fill="none" stroke="#1565c0" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>'
-        f'<circle cx="{last_x}" cy="{last_y}" r="2.5" fill="#1565c0"/>'
+        f'{dots}{value_tags}{tick_labels}'
         f'</svg>'
     )
 
@@ -208,14 +229,16 @@ def macro_trend_html():
 
         spark = ''
         traj_raw = (r.get('trajectory') or '').strip()
+        labels_raw = (r.get('trajectory_labels') or '').strip()
         if traj_raw:
             try:
                 values = [float(v) for v in traj_raw.split(';') if v]
-                spark = sparkline_svg(values)
+                labels = [l for l in labels_raw.split(';') if l] if labels_raw else None
+                spark = sparkline_svg(values, labels=labels)
             except ValueError:
                 spark = ''
 
-        spark_html = f'<div class="momentum-spark">{spark}<span class="momentum-spark-label">5-yr trend</span></div>' if spark else ''
+        spark_html = f'<div class="momentum-spark">{spark}</div>' if spark else ''
 
         parts.append(f'''
     <div class="momentum-item">
