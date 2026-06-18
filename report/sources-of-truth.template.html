@@ -28,7 +28,25 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#f0f2f5;color:#1a1a2e;fo
 
 /* CARDS */
 .card{background:var(--card);border-radius:10px;box-shadow:0 1px 6px rgba(0,0,0,.08);padding:20px;border:1px solid var(--border)}
-.card h3{font-size:13px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
+.card h3{font-size:13px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.conf-badge{font-size:9px;font-weight:700;letter-spacing:.2px;text-transform:none;padding:1px 7px;border-radius:8px;cursor:help}
+.conf-exact{background:#e8f5e9;color:#2e7d32}
+.conf-estimated{background:#fff8e1;color:#f57f17}
+.conf-indicative{background:#e3f2fd;color:#1565c0}
+.conf-na{background:#f5f5f5;color:#999}
+
+/* MOMENTUM PANEL */
+.momentum-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+.momentum-item{background:#f8f9fa;border-radius:8px;padding:14px 16px;border:1px solid var(--border)}
+.momentum-label{display:flex;justify-content:space-between;align-items:center;font-size:12px;font-weight:700;margin-bottom:10px;flex-wrap:wrap;gap:4px}
+.momentum-delta{background:#e8f5e9;color:#2e7d32;padding:2px 9px;border-radius:10px;font-size:11px;font-weight:700}
+.momentum-bar-row{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.momentum-bar-tag{font-size:10px;color:var(--muted);width:54px;flex-shrink:0;font-weight:600}
+.momentum-track{flex:1;height:14px;background:#e8eaf6;border-radius:4px;overflow:hidden}
+.momentum-fill{height:100%;border-radius:4px;transition:width .8s ease}
+.momentum-fill.old{background:#b0bec5}
+.momentum-fill.new{background:#1565c0}
+.momentum-bar-val{font-size:11px;font-weight:700;width:90px;text-align:right;flex-shrink:0;color:var(--text)}
 .card .value{font-size:28px;font-weight:700;color:var(--blue)}
 .card .sub-value{font-size:12px;color:var(--muted);margin-top:4px}
 
@@ -158,6 +176,27 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-t
   footer{display:none}
   .card{box-shadow:none;border:1px solid #ddd}
   button{display:none!important}
+
+  /* BRIEF MODE — one-page Economic Brief, triggered by "🧾 Generate Brief" */
+  body.brief-mode #integration-card,
+  body.brief-mode #tab-maps,
+  body.brief-mode #tab-status,
+  body.brief-mode #tab-locations,
+  body.brief-mode #tab-pipeline,
+  body.brief-mode .tenfold-banner,
+  body.brief-mode #tour-progress-card{ display:none!important }
+  body.brief-mode .tab-content{ padding:8px 16px!important }
+  body.brief-mode .section-title{ font-size:14px!important;margin-bottom:2px!important }
+  body.brief-mode .section-sub{ font-size:10px!important;margin-bottom:10px!important }
+  body.brief-mode .kpi-grid{ grid-template-columns:repeat(3,1fr)!important;gap:8px!important;margin-bottom:14px!important }
+  body.brief-mode .card{ padding:10px!important;page-break-inside:avoid }
+  body.brief-mode .card .value{ font-size:20px!important }
+  body.brief-mode #momentum-panel .momentum-grid{ grid-template-columns:repeat(2,1fr)!important;gap:8px!important }
+  body.brief-mode #momentum-panel .momentum-item{ padding:8px 10px!important }
+  body.brief-mode table{ font-size:10px!important }
+  body.brief-mode th,body.brief-mode td{ padding:5px 7px!important }
+  body.brief-mode #sources-panel{ margin-top:10px!important }
+  body.brief-mode .site-header .sub::after{ content:" | Economic Brief — generated for print"; }
 }
 /* TOUR */
 .tour-btn{background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.4);border-radius:6px;padding:7px 16px;font-size:12px;font-weight:600;cursor:pointer;transition:background .2s}
@@ -178,6 +217,7 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-t
   </div>
   <div style="display:flex;align-items:center;gap:10px">
     <button onclick="window.print()" style="background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.4);border-radius:6px;padding:7px 16px;font-size:12px;font-weight:600;cursor:pointer;transition:background .2s" onmouseover="this.style.background='rgba(255,255,255,.25)'" onmouseout="this.style.background='rgba(255,255,255,.15)'">🖨️ Print / Export</button>
+    <button onclick="generateBrief()" class="tour-btn" title="One-page Economic Brief — KPIs, momentum, chain snapshot, sources">🧾 Generate Brief</button>
     <a href="upload-guide.html" class="tour-btn" style="text-decoration:none">📤 Upload Guide</a>
     <a href="pb-guide.html" class="tour-btn" style="text-decoration:none">📋 Data Entry Guide</a>
     <button id="tour-trigger" class="tour-btn" onclick="startTour()">🧭 Take a Tour</button>
@@ -248,6 +288,14 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-t
     </div>
   </div>
 
+  <div class="section-title" style="margin-bottom:6px">📈 Momentum — FY20/21 → FY24/25</div>
+  <div class="section-sub">Four-year actual change, separate from the 2040 targets above — this answers "is Uganda's industrial base actually moving," not just "how far is left to go."</div>
+  <div class="card" id="momentum-panel" style="margin-bottom:24px">
+    <div class="momentum-grid">
+      <!--%%MACRO_TREND_ITEMS%%-->
+    </div>
+  </div>
+
   <div class="section-title" style="margin-bottom:16px">🏭 The 9 Priority Value Chains — Snapshot</div>
   <div class="card" id="tour-chain-table">
     <table>
@@ -258,7 +306,7 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-t
     </table>
   </div>
 
-  <div class="card" style="margin-top:20px;background:linear-gradient(135deg,#0d47a1,#1565c0);color:#fff">
+  <div class="card" id="integration-card" style="margin-top:20px;background:linear-gradient(135deg,#0d47a1,#1565c0);color:#fff">
     <h3 style="color:rgba(255,255,255,.8);margin-bottom:12px">🔗 How The 9 Chains Form One Integrated Industrial System</h3>
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px;font-size:13px">
       <div style="background:rgba(255,255,255,.1);border-radius:8px;padding:12px"><strong>Minerals → Manufacturing:</strong> Iron ore &amp; steel feed Automotive (KMC bus frames ~37,300 t); copper wiring harnesses feed KMC EVs; cobalt feeds EV batteries</div>
@@ -266,6 +314,24 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-t
       <div style="background:rgba(255,255,255,.1);border-radius:8px;padding:12px"><strong>Petrochemicals unlock Plastics:</strong> Kabalega refinery (~2029) → domestic polymer resin → import substitution for USD 37m+ packaging imports</div>
       <div style="background:rgba(255,255,255,.1);border-radius:8px;padding:12px"><strong>Green advantage:</strong> Uganda's hydro grid enables low-carbon steel (scrap-EAF), green ammonia fertiliser, and low-carbon EV buses — a genuine export differentiator</div>
     </div>
+  </div>
+
+  <div class="card" id="sources-panel" style="margin-top:20px">
+    <h3 style="font-size:15px;color:var(--blue);margin-bottom:14px;font-weight:700;text-transform:none;letter-spacing:0">📚 Sources &amp; Methodology</h3>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;font-size:12px;margin-bottom:16px">
+      <div><strong>UBOS</strong><br><span style="color:var(--muted)">Annual GDP estimates (constant 2016/17 prices), national accounts</span></div>
+      <div><strong>Bank of Uganda</strong><br><span style="color:var(--muted)">External trade statistics, private-sector credit by sector</span></div>
+      <div><strong>URA</strong><br><span style="color:var(--muted)">Sector &amp; revenue reports, tax contribution by sector</span></div>
+      <div><strong>ERA</strong><br><span style="color:var(--muted)">Electricity Regulatory Authority — energy sold by customer class</span></div>
+      <div><strong>ITC TradeMap</strong><br><span style="color:var(--muted)">HS-code level import/export figures, used throughout chain status pages</span></div>
+      <div><strong>UNIDO PCP Diagnostics</strong><br><span style="color:var(--muted)">Capacity utilisation, firm-level interviews, field visit observations</span></div>
+    </div>
+    <div style="display:flex;gap:16px;flex-wrap:wrap;font-size:11px;padding-top:12px;border-top:1px solid var(--border)">
+      <span><span class="conf-badge conf-exact">● exact</span> &nbsp;Published figure from named source, current period</span>
+      <span><span class="conf-badge conf-estimated">≈ estimated</span> &nbsp;Derived from interviews, partial data, or analyst projection</span>
+      <span><span class="conf-badge conf-indicative">○ indicative</span> &nbsp;Order-of-magnitude only — directional, not precise</span>
+    </div>
+    <div style="font-size:11px;color:var(--muted);margin-top:10px">Last verified: June 2026. Hover any confidence badge for its specific source. No FY24/25 manufacturing employment survey currently exists nationally — flagged as a data gap.</div>
   </div>
 
 </div>
@@ -1197,6 +1263,14 @@ function closeChapter(){
   document.getElementById('chapter-modal-overlay').classList.remove('open');
   document.body.style.overflow = '';
 }
+
+// ═══════════════════ GENERATE BRIEF (one-page print) ═══════════════════
+function generateBrief(){
+  showTab('overview');
+  document.body.classList.add('brief-mode');
+  window.print();
+}
+window.addEventListener('afterprint', () => document.body.classList.remove('brief-mode'));
 
 document.addEventListener('keydown', e => { if(e.key === 'Escape') closeChapter(); });
 </script>

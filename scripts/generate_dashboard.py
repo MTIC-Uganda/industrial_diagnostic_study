@@ -70,6 +70,8 @@ if USE_POCKETBASE:
         'label':         r['label'],
         'current_value': r.get('current_value') or '',
         'sub_value':     r.get('sub_value') or '',
+        'confidence':    r.get('confidence') or 'estimated',
+        'source':        r.get('source') or '',
     } for r in raw_kpis]
 
     chain_colors = {r['name']: r['color'] for r in raw_chains}
@@ -107,6 +109,22 @@ if USE_POCKETBASE:
         'exports':            f.get('exports') or '',
     } for f in raw_facilities]
 
+    try:
+        raw_macro = pb_get('macro_trend', sort='display_order')
+        macro_trend = [{
+            'label':        r['label'],
+            'fy2021_value': r.get('fy2021_value') or '',
+            'fy2025_value': r.get('fy2025_value') or '',
+            'fy2021_pct':   r.get('fy2021_pct') or 0,
+            'fy2025_pct':   r.get('fy2025_pct') or 0,
+            'delta':        r.get('delta') or '',
+            'confidence':   r.get('confidence') or 'estimated',
+            'source':       r.get('source') or '',
+        } for r in raw_macro]
+    except SystemExit:
+        print('  (no macro_trend collection in PocketBase yet — skipping Momentum panel)')
+        macro_trend = []
+
 else:
     print('Data source: local files (data/dashboard/)')
     chain_summary  = load_csv('chain_summary.csv')
@@ -116,24 +134,69 @@ else:
     raw_fac        = load_csv('factories.csv')
     factories_list = [{**f, 'loc': f.get('loc', '')} for f in raw_fac]
 
+macro_trend_file = DATA / 'macro_trend.csv'
+macro_trend = load_csv('macro_trend.csv') if macro_trend_file.exists() else []
+
 # ── HTML generators ───────────────────────────────────────────────────────────
 
 TAG_COLOR = {'green':'tag-green','amber':'tag-yellow','red':'tag-red','blue':'tag-blue'}
 
+CONFIDENCE_BADGE = {
+    'exact':       ('● exact',       'conf-exact'),
+    'estimated':   ('≈ estimated',   'conf-estimated'),
+    'indicative':  ('○ indicative',  'conf-indicative'),
+    'not_available': ('— not available', 'conf-na'),
+}
+
 def esc(s):
     return str(s).replace('&','&amp;').replace('<','&lt;').replace('>','&gt;')
+
+def confidence_badge_html(confidence, source):
+    label, cls = CONFIDENCE_BADGE.get(confidence, CONFIDENCE_BADGE['estimated'])
+    title = f' title="Source: {esc(source)}"' if source else ''
+    return f'<span class="conf-badge {cls}"{title}>{label}</span>'
 
 def kpi_cards_html():
     parts = []
     for r in overview_kpis:
+        badge = confidence_badge_html(r.get('confidence', 'estimated'), r.get('source', ''))
         parts.append(
             f'<div class="card">'
-            f'<h3>{esc(r["label"])}</h3>'
+            f'<h3>{esc(r["label"])} {badge}</h3>'
             f'<div class="value">{esc(r["current_value"])}</div>'
             f'<div class="sub-value">{r["sub_value"]}</div>'
             f'</div>'
         )
     return '\n    '.join(parts)
+
+def macro_trend_html():
+    if not macro_trend:
+        return '<div style="color:var(--muted);font-size:12px;padding:12px">No trend data available.</div>'
+    parts = []
+    for r in macro_trend:
+        badge = confidence_badge_html(r.get('confidence', 'estimated'), r.get('source', ''))
+        try:
+            p21 = float(r.get('fy2021_pct') or 0)
+            p25 = float(r.get('fy2025_pct') or 0)
+        except (ValueError, TypeError):
+            p21, p25 = 0, 0
+        parts.append(f'''
+    <div class="momentum-item">
+      <div class="momentum-label"><span>{esc(r["label"])} {badge}</span><span class="momentum-delta">{esc(r["delta"])}</span></div>
+      <div class="momentum-bars">
+        <div class="momentum-bar-row">
+          <span class="momentum-bar-tag">FY20/21</span>
+          <div class="momentum-track"><div class="momentum-fill old" style="width:{p21}%"></div></div>
+          <span class="momentum-bar-val">{esc(r["fy2021_value"])}</span>
+        </div>
+        <div class="momentum-bar-row">
+          <span class="momentum-bar-tag">FY24/25</span>
+          <div class="momentum-track"><div class="momentum-fill new" style="width:{p25}%"></div></div>
+          <span class="momentum-bar-val">{esc(r["fy2025_value"])}</span>
+        </div>
+      </div>
+    </div>''')
+    return '\n'.join(parts)
 
 def chain_table_rows_html():
     rows = []
@@ -200,6 +263,7 @@ tmpl = TMPL.read_text('utf-8')
 replacements = {
     '<!--%%OVERVIEW_KPIS_CARDS%%-->': kpi_cards_html(),
     '<!--%%CHAIN_SUMMARY_ROWS%%-->':  chain_table_rows_html(),
+    '<!--%%MACRO_TREND_ITEMS%%-->':   macro_trend_html(),
     '/*%%CHAINS_DATA%%*/':            chains_js(),
     '/*%%CHAIN_COLORS_DATA%%*/':      chain_colors_js(),
     '/*%%FACTORIES_DATA%%*/':         factories_js(),
