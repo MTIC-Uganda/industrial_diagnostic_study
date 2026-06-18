@@ -272,6 +272,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 50   # generate_dashboard.py reads git log for the Recently Updated panel
 
       - uses: actions/setup-node@v4
         with:

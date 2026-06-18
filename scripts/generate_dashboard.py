@@ -16,7 +16,7 @@ Output:
     report/sources-of-truth.html
 """
 
-import csv, json, os, sys, urllib.request, urllib.error
+import csv, json, os, subprocess, sys, urllib.request, urllib.error
 from pathlib import Path
 
 ROOT   = Path(__file__).resolve().parent.parent
@@ -198,6 +198,124 @@ def macro_trend_html():
     </div>''')
     return '\n'.join(parts)
 
+UPDATE_TAGS = {
+    'data:':       ('📊', 'Data'),
+    'ingest:':     ('📥', 'Ingest'),
+    'synthesise:': ('✍️', 'Chapter'),
+    'review:':     ('🔍', 'Review'),
+    'gapfill:':    ('✅', 'Gap-fill'),
+    'feat:':       ('🚀', 'Feature'),
+    'fix:':        ('🛠️', 'Fix'),
+    'publish:':    ('📖', 'Published'),
+}
+
+def recent_updates_html(limit=8):
+    try:
+        raw = subprocess.run(
+            ['git', 'log', '-n', '40', '--pretty=format:%ad|||%s', '--date=short'],
+            cwd=ROOT, capture_output=True, text=True, timeout=20, check=True
+        ).stdout
+    except (subprocess.SubprocessError, FileNotFoundError):
+        return '<div style="color:var(--muted);font-size:12px;padding:8px">No update history available.</div>'
+
+    items = []
+    for line in raw.splitlines():
+        if '|||' not in line:
+            continue
+        date, msg = line.split('|||', 1)
+        for prefix, (icon, tag) in UPDATE_TAGS.items():
+            if msg.lower().startswith(prefix):
+                clean_msg = msg[len(prefix):].strip()
+                items.append((date, icon, tag, clean_msg))
+                break
+        if len(items) >= limit:
+            break
+
+    if not items:
+        return '<div style="color:var(--muted);font-size:12px;padding:8px">No tagged updates yet — updates appear here once the pipeline starts committing data, chapters, and reviews.</div>'
+
+    rows = []
+    for date, icon, tag, msg in items:
+        rows.append(
+            f'<div class="update-item">'
+            f'<span class="update-icon">{icon}</span>'
+            f'<span class="update-tag">{esc(tag)}</span>'
+            f'<span class="update-msg">{esc(msg)}</span>'
+            f'<span class="update-date">{esc(date)}</span>'
+            f'</div>'
+        )
+    return '\n    '.join(rows)
+
+def glossary_html():
+    glossary_file = DATA / 'glossary.csv'
+    if not glossary_file.exists():
+        return '<div style="color:var(--muted);font-size:12px">No glossary available.</div>'
+    rows = load_csv('glossary.csv')
+    parts = []
+    for r in sorted(rows, key=lambda r: r['term'].lower()):
+        parts.append(
+            f'<div class="glossary-item">'
+            f'<div class="glossary-term">{esc(r["term"])}</div>'
+            f'<div class="glossary-def">{esc(r["definition"])}</div>'
+            f'</div>'
+        )
+    return '\n    '.join(parts)
+
+SEVERITY_TAG = {'high': 'tag-red', 'medium': 'tag-yellow', 'low': 'tag-green'}
+
+def risk_register_html():
+    risk_file = DATA / 'risk_register.csv'
+    if not risk_file.exists():
+        return '<tr><td colspan="5" style="color:var(--muted)">No risk register available.</td></tr>'
+    rows = load_csv('risk_register.csv')
+    parts = []
+    for r in rows:
+        sev_cls = SEVERITY_TAG.get(r['severity'].lower(), 'tag-yellow')
+        lik_cls = SEVERITY_TAG.get(r['likelihood'].lower(), 'tag-yellow')
+        parts.append(
+            f'<tr>'
+            f'<td><strong>{esc(r["risk"])}</strong><div style="font-size:11px;color:var(--muted);margin-top:3px">{esc(r["category"])}</div></td>'
+            f'<td><span class="tag {sev_cls}">{esc(r["severity"].title())}</span></td>'
+            f'<td><span class="tag {lik_cls}">{esc(r["likelihood"].title())}</span></td>'
+            f'<td>{esc(r["mitigation"])}</td>'
+            f'<td>{esc(r["owner"])}</td>'
+            f'</tr>'
+        )
+    return '\n        '.join(parts)
+
+STATUS_LABEL = {
+    'complete':   'tag-green',
+    'in_progress':'tag-yellow',
+    'planned':    'tag-blue',
+    'milestone':  'tag-red',
+}
+STATUS_TEXT = {
+    'complete': 'Complete', 'in_progress': 'In Progress',
+    'planned': 'Planned', 'milestone': 'Policy Milestone',
+}
+
+def milestones_html():
+    ms_file = DATA / 'milestones.csv'
+    if not ms_file.exists():
+        return '<div style="color:var(--muted);font-size:12px">No milestone data available.</div>'
+    rows = load_csv('milestones.csv')
+    rows.sort(key=lambda r: int(r['year']))
+    parts = []
+    for r in rows:
+        status = r['status'].lower()
+        dot_cls = status if status in STATUS_LABEL else 'planned'
+        tag_cls = STATUS_LABEL.get(status, 'tag-blue')
+        tag_txt = STATUS_TEXT.get(status, status.title())
+        parts.append(f'''
+    <div class="milestone-item">
+      <div class="milestone-dot {dot_cls}"></div>
+      <div class="milestone-year">{esc(r["year_label"])} &middot; {esc(r["value_chain"])}</div>
+      <div class="milestone-title">{esc(r["project"])}</div>
+      <div class="milestone-meta"><span class="tag {tag_cls}">{esc(tag_txt)}</span><span class="tag tag-blue" style="background:#f5f5f5;color:#666">{esc(r["category"])}</span></div>
+      <div class="milestone-note">{esc(r["note"])}</div>
+    </div>''')
+    return '\n'.join(parts)
+
 def chain_table_rows_html():
     rows = []
     for r in chain_summary:
@@ -264,6 +382,10 @@ replacements = {
     '<!--%%OVERVIEW_KPIS_CARDS%%-->': kpi_cards_html(),
     '<!--%%CHAIN_SUMMARY_ROWS%%-->':  chain_table_rows_html(),
     '<!--%%MACRO_TREND_ITEMS%%-->':   macro_trend_html(),
+    '<!--%%RECENT_UPDATES%%-->':      recent_updates_html(),
+    '<!--%%GLOSSARY_ITEMS%%-->':      glossary_html(),
+    '<!--%%RISK_REGISTER_ROWS%%-->':  risk_register_html(),
+    '<!--%%MILESTONES_ITEMS%%-->':    milestones_html(),
     '/*%%CHAINS_DATA%%*/':            chains_js(),
     '/*%%CHAIN_COLORS_DATA%%*/':      chain_colors_js(),
     '/*%%FACTORIES_DATA%%*/':         factories_js(),

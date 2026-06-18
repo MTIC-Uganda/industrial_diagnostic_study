@@ -47,6 +47,36 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#f0f2f5;color:#1a1a2e;fo
 .momentum-fill.old{background:#b0bec5}
 .momentum-fill.new{background:#1565c0}
 .momentum-bar-val{font-size:11px;font-weight:700;width:90px;text-align:right;flex-shrink:0;color:var(--text)}
+
+/* RECENTLY UPDATED */
+.update-item{display:flex;align-items:center;gap:10px;padding:8px 4px;border-bottom:1px solid #f0f0f0;font-size:12px}
+.update-item:last-child{border-bottom:none}
+.update-icon{font-size:14px;flex-shrink:0}
+.update-tag{background:#e3f2fd;color:#1565c0;padding:2px 8px;border-radius:8px;font-size:10px;font-weight:700;flex-shrink:0;width:64px;text-align:center}
+.update-msg{flex:1;color:var(--text)}
+.update-date{font-size:11px;color:var(--muted);flex-shrink:0}
+
+/* GLOSSARY */
+.glossary-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:2px 24px}
+.glossary-item{padding:9px 0;border-bottom:1px solid #f0f0f0}
+.glossary-term{font-weight:700;font-size:12px;color:var(--blue)}
+.glossary-def{font-size:12px;color:var(--text);margin-top:2px;line-height:1.5}
+#glossary-search{width:100%;padding:9px 14px;border:1px solid var(--border);border-radius:8px;font-size:13px;outline:none;margin-bottom:16px}
+
+/* MILESTONE TIMELINE */
+.milestone-list{position:relative;padding-left:24px;margin-top:4px}
+.milestone-list::before{content:'';position:absolute;left:5px;top:6px;bottom:6px;width:2px;background:#e0e0e0}
+.milestone-item{position:relative;padding-bottom:22px}
+.milestone-item:last-child{padding-bottom:0}
+.milestone-dot{position:absolute;left:-24px;top:2px;width:12px;height:12px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 2px #ccc}
+.milestone-dot.complete{background:#2e7d32;box-shadow:0 0 0 2px #2e7d32}
+.milestone-dot.in_progress{background:#f57f17;box-shadow:0 0 0 2px #f57f17}
+.milestone-dot.planned{background:#1565c0;box-shadow:0 0 0 2px #1565c0}
+.milestone-dot.milestone{background:#6a1b9a;box-shadow:0 0 0 2px #6a1b9a}
+.milestone-year{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.3px}
+.milestone-title{font-size:13px;font-weight:700;margin:3px 0 6px;color:var(--text)}
+.milestone-meta{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px}
+.milestone-note{font-size:12px;color:var(--muted);line-height:1.5}
 .card .value{font-size:28px;font-weight:700;color:var(--blue)}
 .card .sub-value{font-size:12px;color:var(--muted);margin-top:4px}
 
@@ -184,7 +214,10 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-t
   body.brief-mode #tab-locations,
   body.brief-mode #tab-pipeline,
   body.brief-mode .tenfold-banner,
-  body.brief-mode #tour-progress-card{ display:none!important }
+  body.brief-mode #tour-progress-card,
+  body.brief-mode #recent-updates-section,
+  body.brief-mode #risk-register-section,
+  body.brief-mode #milestones-section{ display:none!important }
   body.brief-mode .tab-content{ padding:8px 16px!important }
   body.brief-mode .section-title{ font-size:14px!important;margin-bottom:2px!important }
   body.brief-mode .section-sub{ font-size:10px!important;margin-bottom:10px!important }
@@ -218,6 +251,7 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-t
   <div style="display:flex;align-items:center;gap:10px">
     <button onclick="window.print()" style="background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.4);border-radius:6px;padding:7px 16px;font-size:12px;font-weight:600;cursor:pointer;transition:background .2s" onmouseover="this.style.background='rgba(255,255,255,.25)'" onmouseout="this.style.background='rgba(255,255,255,.15)'">🖨️ Print / Export</button>
     <button onclick="generateBrief()" class="tour-btn" title="One-page Economic Brief — KPIs, momentum, chain snapshot, sources">🧾 Generate Brief</button>
+    <button onclick="openGlossary()" class="tour-btn">📖 Glossary</button>
     <a href="upload-guide.html" class="tour-btn" style="text-decoration:none">📤 Upload Guide</a>
     <a href="pb-guide.html" class="tour-btn" style="text-decoration:none">📋 Data Entry Guide</a>
     <button id="tour-trigger" class="tour-btn" onclick="startTour()">🧭 Take a Tour</button>
@@ -288,6 +322,14 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-t
     </div>
   </div>
 
+  <div id="recent-updates-section">
+    <div class="section-title" style="margin-bottom:6px">🕓 Recently Updated</div>
+    <div class="section-sub">Latest data, chapters, and reviews from the agentic pipeline — newest first.</div>
+    <div class="card" style="margin-bottom:24px">
+      <!--%%RECENT_UPDATES%%-->
+    </div>
+  </div>
+
   <div class="section-title" style="margin-bottom:6px">📈 Momentum — FY20/21 → FY24/25</div>
   <div class="section-sub">Four-year actual change, separate from the 2040 targets above — this answers "is Uganda's industrial base actually moving," not just "how far is left to go."</div>
   <div class="card" id="momentum-panel" style="margin-bottom:24px">
@@ -313,6 +355,35 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-t
       <div style="background:rgba(255,255,255,.1);border-radius:8px;padding:12px"><strong>Circular flows:</strong> Steel slag → cement (SCM); bagasse → grid power; sugar vinasse → bio-fertilizer; plastic waste → cement kilns (alt. fuel)</div>
       <div style="background:rgba(255,255,255,.1);border-radius:8px;padding:12px"><strong>Petrochemicals unlock Plastics:</strong> Kabalega refinery (~2029) → domestic polymer resin → import substitution for USD 37m+ packaging imports</div>
       <div style="background:rgba(255,255,255,.1);border-radius:8px;padding:12px"><strong>Green advantage:</strong> Uganda's hydro grid enables low-carbon steel (scrap-EAF), green ammonia fertiliser, and low-carbon EV buses — a genuine export differentiator</div>
+    </div>
+  </div>
+
+  <div id="risk-register-section">
+    <div class="section-title" style="margin-top:24px;margin-bottom:6px">⚠️ Risk Register</div>
+    <div class="section-sub">Key risks to the Tenfold Growth Strategy, with mitigation and institutional owner. Severity/likelihood are analyst judgement (UNIDO PCP diagnostic), not sourced figures.</div>
+    <div class="card">
+      <table>
+        <thead><tr><th>Risk</th><th>Severity</th><th>Likelihood</th><th>Mitigation</th><th>Owner</th></tr></thead>
+        <tbody>
+          <!--%%RISK_REGISTER_ROWS%%-->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div id="milestones-section">
+    <div class="section-title" style="margin-top:24px;margin-bottom:6px">🛣️ Investment &amp; Milestone Roadmap</div>
+    <div class="section-sub">Committed projects and policy horizons plotted chronologically — what happens when, on the way to 2040.</div>
+    <div class="card">
+      <div class="milestone-list">
+        <!--%%MILESTONES_ITEMS%%-->
+      </div>
+      <div style="display:flex;gap:16px;flex-wrap:wrap;font-size:11px;margin-top:18px;padding-top:14px;border-top:1px solid var(--border)">
+        <span><span class="milestone-dot complete" style="position:static;display:inline-block;margin-right:4px"></span>Complete</span>
+        <span><span class="milestone-dot in_progress" style="position:static;display:inline-block;margin-right:4px"></span>In Progress</span>
+        <span><span class="milestone-dot planned" style="position:static;display:inline-block;margin-right:4px"></span>Planned</span>
+        <span><span class="milestone-dot milestone" style="position:static;display:inline-block;margin-right:4px"></span>Policy Milestone</span>
+      </div>
     </div>
   </div>
 
@@ -409,6 +480,22 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-t
       <button class="chapter-modal-close" onclick="closeChapter()">✕</button>
     </div>
     <div class="chapter-modal-body" id="chapter-modal-body">Loading…</div>
+  </div>
+</div>
+
+<!-- Glossary modal -->
+<div id="glossary-modal-overlay" class="chapter-modal-overlay" onclick="if(event.target===this)closeGlossary()">
+  <div class="chapter-modal">
+    <div class="chapter-modal-header">
+      <span class="chapter-modal-title">📖 Glossary &amp; Abbreviations</span>
+      <button class="chapter-modal-close" onclick="closeGlossary()">✕</button>
+    </div>
+    <div class="chapter-modal-body">
+      <input id="glossary-search" type="search" placeholder="🔍 Search terms…" oninput="filterGlossary(this.value)">
+      <div class="glossary-grid" id="glossary-grid">
+        <!--%%GLOSSARY_ITEMS%%-->
+      </div>
+    </div>
   </div>
 </div>
 
@@ -1264,6 +1351,26 @@ function closeChapter(){
   document.body.style.overflow = '';
 }
 
+// ═══════════════════ GLOSSARY ═══════════════════
+function openGlossary(){
+  document.getElementById('glossary-modal-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  document.getElementById('glossary-search').value = '';
+  filterGlossary('');
+  setTimeout(() => document.getElementById('glossary-search').focus(), 100);
+}
+function closeGlossary(){
+  document.getElementById('glossary-modal-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function filterGlossary(q){
+  q = q.toLowerCase();
+  document.querySelectorAll('#glossary-grid .glossary-item').forEach(item => {
+    const text = item.textContent.toLowerCase();
+    item.style.display = text.includes(q) ? '' : 'none';
+  });
+}
+
 // ═══════════════════ GENERATE BRIEF (one-page print) ═══════════════════
 function generateBrief(){
   showTab('overview');
@@ -1272,7 +1379,7 @@ function generateBrief(){
 }
 window.addEventListener('afterprint', () => document.body.classList.remove('brief-mode'));
 
-document.addEventListener('keydown', e => { if(e.key === 'Escape') closeChapter(); });
+document.addEventListener('keydown', e => { if(e.key === 'Escape'){ closeChapter(); closeGlossary(); } });
 </script>
 </body>
 </html>
