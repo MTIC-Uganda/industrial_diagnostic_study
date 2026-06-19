@@ -172,31 +172,45 @@ def kpi_cards_html():
         )
     return '\n    '.join(parts)
 
-def sparkline_svg(values, labels=None, width=160, chart_h=28, label_h=12):
+def line_chart_svg(values, labels=None, width=190, chart_h=70, label_h=14, y_axis_w=24):
+    """Line/area chart with visible x- and y-axis, and every value labelled
+    (not just endpoints) — labels use edge-safe text-anchor so they never
+    clip outside the viewBox."""
     if not values or len(values) < 2:
         return ''
+    top_pad = 13
+    plot_h = chart_h - top_pad
     height = chart_h + label_h
+    total_w = y_axis_w + width
     lo, hi = min(values), max(values)
     span = (hi - lo) or 1
     n = len(values)
+
     xs, ys = [], []
     for i, v in enumerate(values):
-        x = (i / (n - 1)) * (width - 8) + 4
-        y = chart_h - 2 - ((v - lo) / span) * (chart_h - 4)
+        x = y_axis_w + (i / (n - 1)) * (width - 8) + 4
+        y = top_pad + plot_h - ((v - lo) / span) * plot_h
         xs.append(x)
         ys.append(y)
+
     points = ' '.join(f'{x:.1f},{y:.1f}' for x, y in zip(xs, ys))
+    area = f'{xs[0]:.1f},{chart_h:.1f} ' + points + f' {xs[-1]:.1f},{chart_h:.1f}'
 
     dots = ''.join(
         f'<circle cx="{x:.1f}" cy="{y:.1f}" r="{3 if i == n-1 else 2}" '
-        f'fill="{"#1565c0" if i == n-1 else "#90a4ae"}"/>'
+        f'fill="{"#1565c0" if i == n-1 else "#5e92d4"}"/>'
         for i, (x, y) in enumerate(zip(xs, ys))
     )
-    value_tags = ''.join(
-        f'<text x="{x:.1f}" y="{max(y-6, 8):.1f}" font-size="7" text-anchor="middle" fill="#1565c0" font-weight="700">{values[i]:g}</text>'
-        if i in (0, n-1) else ''
-        for i, (x, y) in enumerate(zip(xs, ys))
-    )
+
+    value_tags = []
+    for i, (x, y) in enumerate(zip(xs, ys)):
+        anchor = 'start' if i == 0 else 'end' if i == n - 1 else 'middle'
+        ty = max(y - 6, top_pad - 5)
+        value_tags.append(
+            f'<text x="{x:.1f}" y="{ty:.1f}" font-size="7" text-anchor="{anchor}" '
+            f'fill="#1565c0" font-weight="700">{values[i]:g}</text>'
+        )
+    value_tags = ''.join(value_tags)
 
     tick_labels = ''
     if labels and len(labels) == n:
@@ -205,8 +219,17 @@ def sparkline_svg(values, labels=None, width=160, chart_h=28, label_h=12):
             for x, lbl in zip(xs, labels)
         )
 
+    axes = (
+        f'<line x1="{y_axis_w}" y1="{top_pad}" x2="{y_axis_w}" y2="{chart_h}" stroke="#ccc" stroke-width="1"/>'
+        f'<line x1="{y_axis_w}" y1="{chart_h}" x2="{total_w-2}" y2="{chart_h}" stroke="#ccc" stroke-width="1"/>'
+        f'<text x="{y_axis_w-4}" y="{top_pad+3}" font-size="6.5" text-anchor="end" fill="#999">{hi:g}</text>'
+        f'<text x="{y_axis_w-4}" y="{chart_h-1}" font-size="6.5" text-anchor="end" fill="#999">{lo:g}</text>'
+    )
+
     return (
-        f'<svg class="sparkline" width="{width}" height="{height}" viewBox="0 0 {width} {height}">'
+        f'<svg class="line-chart" width="{total_w}" height="{height}" viewBox="0 0 {total_w} {height}">'
+        f'<polygon points="{area}" fill="#1565c0" opacity="0.08"/>'
+        f'{axes}'
         f'<polyline points="{points}" fill="none" stroke="#1565c0" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>'
         f'{dots}{value_tags}{tick_labels}'
         f'</svg>'
@@ -222,9 +245,17 @@ _parse_bn = _parse_num
 
 def grouped_bar_svg(categories, old_values, new_values, value_fmt=None,
                      colors=('#b0bec5', '#1565c0'), width=240, height=128):
-    """Clustered vertical bar chart — one FY20/21 + one FY24/25 bar per category."""
+    """Clustered vertical bar chart — one FY20/21 + one FY24/25 bar per category.
+
+    Reserves top_pad above the tallest possible bar so its value label always
+    has room to sit clear of the bar — otherwise the label for the max-value
+    bar gets clamped to a position inside the bar itself, and since the label
+    colour matches the bar fill, it becomes invisible.
+    """
     n = len(categories)
+    top_pad = 14
     chart_h = height - 26
+    usable_h = chart_h - top_pad
     all_vals = [v for v in (old_values + new_values) if v is not None]
     max_v = max(all_vals) if all_vals else 1
     max_v = max_v or 1
@@ -236,15 +267,15 @@ def grouped_bar_svg(categories, old_values, new_values, value_fmt=None,
     for i, cat in enumerate(categories):
         gx = i * group_w
         ov, nv = old_values[i], new_values[i]
-        oh = (ov / max_v) * chart_h
-        nh = (nv / max_v) * chart_h
+        oh = (ov / max_v) * usable_h
+        nh = (nv / max_v) * usable_h
         ox = gx + group_w / 2 - bar_w - gap / 2
         nx = gx + group_w / 2 + gap / 2
         oy, ny = chart_h - oh, chart_h - nh
         parts.append(f'<rect x="{ox:.1f}" y="{oy:.1f}" width="{bar_w:.1f}" height="{max(oh,0):.1f}" fill="{colors[0]}" rx="2"/>')
         parts.append(f'<rect x="{nx:.1f}" y="{ny:.1f}" width="{bar_w:.1f}" height="{max(nh,0):.1f}" fill="{colors[1]}" rx="2"/>')
-        parts.append(f'<text x="{ox+bar_w/2:.1f}" y="{max(oy-4,8):.1f}" font-size="8" text-anchor="middle" fill="#888" font-weight="600">{esc(fmt(ov))}</text>')
-        parts.append(f'<text x="{nx+bar_w/2:.1f}" y="{max(ny-4,8):.1f}" font-size="8" text-anchor="middle" fill="{colors[1]}" font-weight="700">{esc(fmt(nv))}</text>')
+        parts.append(f'<text x="{ox+bar_w/2:.1f}" y="{oy-4:.1f}" font-size="8" text-anchor="middle" fill="#888" font-weight="600">{esc(fmt(ov))}</text>')
+        parts.append(f'<text x="{nx+bar_w/2:.1f}" y="{ny-4:.1f}" font-size="8" text-anchor="middle" fill="{colors[1]}" font-weight="700">{esc(fmt(nv))}</text>')
         parts.append(f'<text x="{gx+group_w/2:.1f}" y="{chart_h+15:.1f}" font-size="8.5" text-anchor="middle" fill="#666" font-weight="600">{esc(cat)}</text>')
     parts.append(f'<line x1="0" y1="{chart_h}" x2="{width}" y2="{chart_h}" stroke="#e0e0e0" stroke-width="1"/>')
     return f'<svg class="grouped-bar-chart" width="{width}" height="{height}" viewBox="0 0 {width} {height}">{"".join(parts)}</svg>'
@@ -324,7 +355,7 @@ def macro_trend_html():
         try:
             values = [float(v) for v in traj_raw.split(';') if v]
             labels = [l for l in labels_raw.split(';') if l] if labels_raw else None
-            line_svg = sparkline_svg(values, labels=labels, width=200, chart_h=70, label_h=14)
+            line_svg = line_chart_svg(values, labels=labels, width=190, chart_h=70, label_h=14)
         except ValueError:
             line_svg = ''
     cards.append(f'''
