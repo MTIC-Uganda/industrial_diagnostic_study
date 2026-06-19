@@ -212,52 +212,203 @@ def sparkline_svg(values, labels=None, width=160, chart_h=28, label_h=12):
         f'</svg>'
     )
 
+def _parse_num(value_str):
+    """'3.5%' -> 3.5, 'USD 1.1bn' -> 1.1, 'Shs 19.6trn' -> 19.6"""
+    import re
+    m = re.search(r'([\d.]+)', value_str or '')
+    return float(m.group(1)) if m else 0.0
+
+_parse_bn = _parse_num
+
+def grouped_bar_svg(categories, old_values, new_values, value_fmt=None,
+                     colors=('#b0bec5', '#1565c0'), width=240, height=128):
+    """Clustered vertical bar chart — one FY20/21 + one FY24/25 bar per category."""
+    n = len(categories)
+    chart_h = height - 26
+    all_vals = [v for v in (old_values + new_values) if v is not None]
+    max_v = max(all_vals) if all_vals else 1
+    max_v = max_v or 1
+    group_w = width / n
+    bar_w = group_w * 0.30
+    gap = group_w * 0.08
+    fmt = value_fmt or (lambda v: f'{v:g}')
+    parts = []
+    for i, cat in enumerate(categories):
+        gx = i * group_w
+        ov, nv = old_values[i], new_values[i]
+        oh = (ov / max_v) * chart_h
+        nh = (nv / max_v) * chart_h
+        ox = gx + group_w / 2 - bar_w - gap / 2
+        nx = gx + group_w / 2 + gap / 2
+        oy, ny = chart_h - oh, chart_h - nh
+        parts.append(f'<rect x="{ox:.1f}" y="{oy:.1f}" width="{bar_w:.1f}" height="{max(oh,0):.1f}" fill="{colors[0]}" rx="2"/>')
+        parts.append(f'<rect x="{nx:.1f}" y="{ny:.1f}" width="{bar_w:.1f}" height="{max(nh,0):.1f}" fill="{colors[1]}" rx="2"/>')
+        parts.append(f'<text x="{ox+bar_w/2:.1f}" y="{max(oy-4,8):.1f}" font-size="8" text-anchor="middle" fill="#888" font-weight="600">{esc(fmt(ov))}</text>')
+        parts.append(f'<text x="{nx+bar_w/2:.1f}" y="{max(ny-4,8):.1f}" font-size="8" text-anchor="middle" fill="{colors[1]}" font-weight="700">{esc(fmt(nv))}</text>')
+        parts.append(f'<text x="{gx+group_w/2:.1f}" y="{chart_h+15:.1f}" font-size="8.5" text-anchor="middle" fill="#666" font-weight="600">{esc(cat)}</text>')
+    parts.append(f'<line x1="0" y1="{chart_h}" x2="{width}" y2="{chart_h}" stroke="#e0e0e0" stroke-width="1"/>')
+    return f'<svg class="grouped-bar-chart" width="{width}" height="{height}" viewBox="0 0 {width} {height}">{"".join(parts)}</svg>'
+
+def donut_svg(slices, size=110, stroke_width=7):
+    """slices: list of (label, pct, color). Uses the r=15.9155 trick so pct maps 1:1 to dash units."""
+    r = 15.91549430918954
+    cx = cy = 21
+    parts = [f'<circle cx="{cx}" cy="{cy}" r="{r}" fill="transparent" stroke="#eee" stroke-width="{stroke_width}"/>']
+    cum = 0
+    for _, pct, color in slices:
+        dashoffset = 25 - cum
+        parts.append(
+            f'<circle cx="{cx}" cy="{cy}" r="{r}" fill="transparent" stroke="{color}" '
+            f'stroke-width="{stroke_width}" stroke-dasharray="{pct} {100-pct}" '
+            f'stroke-dashoffset="{dashoffset}"/>'
+        )
+        cum += pct
+    return f'<svg class="donut-chart" width="{size}" height="{size}" viewBox="0 0 42 42">{"".join(parts)}</svg>'
+
+def donut_legend_html(slices):
+    rows = []
+    for label, pct, color in slices:
+        rows.append(
+            f'<div class="donut-legend-item"><span class="donut-swatch" style="background:{color}"></span>'
+            f'<span class="donut-legend-label">{esc(label)}</span>'
+            f'<span class="donut-legend-pct">{pct:g}%</span></div>'
+        )
+    return '\n'.join(rows)
+
+def donut_card_html(title, slices, caption='', source=''):
+    badge = confidence_badge_html('exact', source) if source else ''
+    return f'''
+    <div class="chart-card">
+      <div class="chart-card-title">{esc(title)} {badge}</div>
+      <div class="donut-wrap">
+        {donut_svg(slices)}
+        <div class="donut-legend">{donut_legend_html(slices)}</div>
+      </div>
+      {f'<div class="chart-card-caption">{caption}</div>' if caption else ''}
+    </div>'''
+
 def macro_trend_html():
     if not macro_trend:
         return '<div style="color:var(--muted);font-size:12px;padding:12px">No trend data available.</div>'
-    parts = []
-    for r in macro_trend:
-        badge = confidence_badge_html(r.get('confidence', 'estimated'), r.get('source', ''))
-        try:
-            p21 = float(r.get('fy2021_pct') or 0)
-            p25 = float(r.get('fy2025_pct') or 0)
-        except (ValueError, TypeError):
-            p21, p25 = 0, 0
+    mt = {r['id']: r for r in macro_trend}
 
-        direction = (r.get('direction') or 'up').lower()
-        delta_cls = 'momentum-delta-down' if direction == 'down' else 'momentum-delta'
+    def badge_for(rid):
+        r = mt.get(rid, {})
+        return confidence_badge_html(r.get('confidence', 'estimated'), r.get('source', ''))
 
-        spark = ''
-        traj_raw = (r.get('trajectory') or '').strip()
-        labels_raw = (r.get('trajectory_labels') or '').strip()
-        if traj_raw:
-            try:
-                values = [float(v) for v in traj_raw.split(';') if v]
-                labels = [l for l in labels_raw.split(';') if l] if labels_raw else None
-                spark = sparkline_svg(values, labels=labels)
-            except ValueError:
-                spark = ''
+    def val(rid, key):
+        return _parse_num(mt.get(rid, {}).get(key, ''))
 
-        spark_html = f'<div class="momentum-spark">{spark}</div>' if spark else ''
+    cards = []
 
-        parts.append(f'''
-    <div class="momentum-item">
-      <div class="momentum-label"><span>{esc(r["label"])} {badge}</span><span class="{delta_cls}">{esc(r["delta"])}</span></div>
-      <div class="momentum-bars">
-        <div class="momentum-bar-row">
-          <span class="momentum-bar-tag">FY20/21</span>
-          <div class="momentum-track"><div class="momentum-fill old" style="width:{p21}%"></div></div>
-          <span class="momentum-bar-val">{esc(r["fy2021_value"])}</span>
-        </div>
-        <div class="momentum-bar-row">
-          <span class="momentum-bar-tag">FY24/25</span>
-          <div class="momentum-track"><div class="momentum-fill new" style="width:{p25}%"></div></div>
-          <span class="momentum-bar-val">{esc(r["fy2025_value"])}</span>
-        </div>
-      </div>
-      {spark_html}
+    # Card 1 — Growth Rates (grouped bar)
+    growth_svg = grouped_bar_svg(
+        ['Industry', 'Manufacturing'],
+        [val('industry_growth', 'fy2021_value'), val('mfg_growth', 'fy2021_value')],
+        [val('industry_growth', 'fy2025_value'), val('mfg_growth', 'fy2025_value')],
+        value_fmt=lambda v: f'{v:.1f}%',
+    )
+    cards.append(f'''
+    <div class="chart-card">
+      <div class="chart-card-title">Growth Rates {badge_for("industry_growth")}</div>
+      {growth_svg}
+      <div class="chart-card-caption">Both rose +3.4 pts — industrial growth is accelerating faster than the wider economy.</div>
     </div>''')
-    return '\n'.join(parts)
+
+    # Card 2 — Manufacturing Value Added (line/area chart)
+    vr = mt.get('mfg_value_added', {})
+    traj_raw = (vr.get('trajectory') or '').strip()
+    labels_raw = (vr.get('trajectory_labels') or '').strip()
+    line_svg = ''
+    if traj_raw:
+        try:
+            values = [float(v) for v in traj_raw.split(';') if v]
+            labels = [l for l in labels_raw.split(';') if l] if labels_raw else None
+            line_svg = sparkline_svg(values, labels=labels, width=200, chart_h=70, label_h=14)
+        except ValueError:
+            line_svg = ''
+    cards.append(f'''
+    <div class="chart-card">
+      <div class="chart-card-title">Mfg Value Added, real Shs trn {badge_for("mfg_value_added")}</div>
+      <div class="line-chart-wrap">{line_svg}</div>
+      <div class="chart-card-caption">{esc(vr.get("delta",""))} over 4 years — rising every single year, not just a one-off jump.</div>
+    </div>''')
+
+    # Card 3 — Share of GDP (declining, grouped bar — amber/red "new" bar)
+    gdp_svg = grouped_bar_svg(
+        ['Industry', 'Manufacturing'],
+        [val('industry_gdp_share', 'fy2021_value'), val('mfg_gdp_share', 'fy2021_value')],
+        [val('industry_gdp_share', 'fy2025_value'), val('mfg_gdp_share', 'fy2025_value')],
+        value_fmt=lambda v: f'{v:.1f}%',
+        colors=('#b0bec5', '#c62828'),
+    )
+    cards.append(f'''
+    <div class="chart-card">
+      <div class="chart-card-title">Share of GDP, current prices {badge_for("industry_gdp_share")}</div>
+      {gdp_svg}
+      <div class="chart-card-caption">Share of GDP fell even as real output grew — other sectors (services) are growing faster, not that industry shrank.</div>
+    </div>''')
+
+    # Card 4 — Manufactured Exports (simple before/after bar, real USD bn values)
+    er = mt.get('mfg_exports', {})
+    exp_old = _parse_bn(er.get('fy2021_value', ''))
+    exp_new = _parse_bn(er.get('fy2025_value', ''))
+    exp_svg = grouped_bar_svg(
+        ['Exports'], [exp_old], [exp_new],
+        value_fmt=lambda v: f'${v:g}bn', width=160,
+    )
+    cards.append(f'''
+    <div class="chart-card">
+      <div class="chart-card-title">Manufactured Exports, USD bn {badge_for("mfg_exports")}</div>
+      {exp_svg}
+      <div class="chart-card-caption">{esc(er.get("delta",""))} — exports more than doubled in four years.</div>
+    </div>''')
+
+    return '\n'.join(cards)
+
+# Non-highlighted slices cycle through this palette; highlighted slices always
+# get the brand blue, so the palette deliberately excludes it to avoid collisions.
+DONUT_PALETTE = ['#b0bec5', '#2e7d32', '#f57f17', '#6a1b9a', '#789262', '#8d6e63']
+
+def tax_donut_html():
+    sc_file = DATA / 'sector_comparison.csv'
+    if not sc_file.exists():
+        return ''
+    rows = [r for r in load_csv('sector_comparison.csv') if r['chart'] == 'tax']
+    if not rows:
+        return ''
+    rows.sort(key=lambda r: -float(r['pct']))
+    slices = []
+    palette_idx = 0
+    for r in rows:
+        if r.get('highlight') == '1':
+            color = '#1565c0'
+        else:
+            color = DONUT_PALETTE[palette_idx % len(DONUT_PALETTE)]
+            palette_idx += 1
+        slices.append((r['sector'], float(r['pct']), color))
+    return donut_card_html(
+        'Tax Contribution by Sector, FY24/25', slices,
+        caption='Manufacturing holds the #2 line directly, behind Wholesale &amp; Retail (which is largely VAT on manufactured goods).',
+        source='URA sector & revenue reports',
+    )
+
+def electricity_donut_html():
+    mt = {r['id']: r for r in macro_trend}
+    er = mt.get('industrial_electricity')
+    if not er:
+        return ''
+    industrial = _parse_num(er.get('fy2025_value', ''))
+    non_industrial = 100 - industrial
+    slices = [
+        ('Industrial customers', industrial, '#1565c0'),
+        ('Non-industrial', non_industrial, '#b0bec5'),
+    ]
+    return donut_card_html(
+        'Electricity Consumed by Customer Class, FY24/25', slices,
+        caption=f'Up from ~{er.get("fy2021_value","60%")} industrial share in FY20/21 — industrial demand is absorbing a growing share of the grid.',
+        source=er.get('source', 'Electricity Regulatory Authority'),
+    )
 
 def sector_comparison_html(chart_name):
     sc_file = DATA / 'sector_comparison.csv'
@@ -470,7 +621,8 @@ replacements = {
     '<!--%%GLOSSARY_ITEMS%%-->':      glossary_html(),
     '<!--%%RISK_REGISTER_ROWS%%-->':  risk_register_html(),
     '<!--%%MILESTONES_ITEMS%%-->':    milestones_html(),
-    '<!--%%TAX_SECTOR_BARS%%-->':     sector_comparison_html('tax'),
+    '<!--%%TAX_DONUT%%-->':           tax_donut_html(),
+    '<!--%%ELECTRICITY_DONUT%%-->':   electricity_donut_html(),
     '<!--%%CREDIT_SECTOR_BARS%%-->':  sector_comparison_html('credit'),
     '/*%%CHAINS_DATA%%*/':            chains_js(),
     '/*%%CHAIN_COLORS_DATA%%*/':      chain_colors_js(),
