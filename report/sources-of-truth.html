@@ -84,6 +84,8 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#f0f2f5;color:#1a1a2e;fo
 .milestone-dot.in_progress{background:#f57f17;box-shadow:0 0 0 2px #f57f17}
 .milestone-dot.planned{background:#1565c0;box-shadow:0 0 0 2px #1565c0}
 .milestone-dot.milestone{background:#6a1b9a;box-shadow:0 0 0 2px #6a1b9a}
+.milestone-dot.proposed{background:#90a4ae;box-shadow:0 0 0 2px #90a4ae}
+.milestone-dot.stalled{background:#c62828;box-shadow:0 0 0 2px #c62828}
 .milestone-year{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.3px}
 .milestone-title{font-size:13px;font-weight:700;margin:3px 0 6px;color:var(--text)}
 .milestone-meta{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px}
@@ -349,7 +351,14 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-t
     <div class="section-title" style="margin-bottom:6px">🕓 Recently Updated</div>
     <div class="section-sub">Latest data, chapters, and reviews from the agentic pipeline — newest first.</div>
     <div class="card" style="margin-bottom:24px">
-      <div style="color:var(--muted);font-size:12px;padding:8px">No update history available.</div>
+      <div class="update-item"><span class="update-icon">🛠️</span><span class="update-tag">Fix</span><span class="update-msg">line chart axes + value-label clipping in Momentum charts</span><span class="update-date">2026-06-19</span></div>
+    <div class="update-item"><span class="update-icon">🚀</span><span class="update-tag">Feature</span><span class="update-msg">redesign Momentum panel with mixed chart types</span><span class="update-date">2026-06-19</span></div>
+    <div class="update-item"><span class="update-icon">🚀</span><span class="update-tag">Feature</span><span class="update-msg">add year-axis labels to the sparkline (x-axis ticks + value tags)</span><span class="update-date">2026-06-19</span></div>
+    <div class="update-item"><span class="update-icon">🚀</span><span class="update-tag">Feature</span><span class="update-msg">deepen Momentum panel â€” GDP share, sparkline, sector comparisons</span><span class="update-date">2026-06-18</span></div>
+    <div class="update-item"><span class="update-icon">🚀</span><span class="update-tag">Feature</span><span class="update-msg">Recently Updated feed, Glossary, Risk Register, Milestone Roadmap</span><span class="update-date">2026-06-18</span></div>
+    <div class="update-item"><span class="update-icon">🚀</span><span class="update-tag">Feature</span><span class="update-msg">confidence badges, Sources panel, Momentum trend, one-page Brief</span><span class="update-date">2026-06-18</span></div>
+    <div class="update-item"><span class="update-icon">🚀</span><span class="update-tag">Feature</span><span class="update-msg">Synthesis Agent + Review Agent (Phase 2 pipeline complete) (#59)</span><span class="update-date">2026-06-15</span></div>
+    <div class="update-item"><span class="update-icon">🚀</span><span class="update-tag">Feature</span><span class="update-msg">close gap-fill loop, chapter viewer, pipeline status seed</span><span class="update-date">2026-06-15</span></div>
     </div>
   </div>
 
@@ -494,11 +503,23 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-t
 
   <div id="milestones-section">
     <div class="section-title" style="margin-top:24px;margin-bottom:6px">🛣️ Investment &amp; Milestone Roadmap</div>
-    <div class="section-sub">Committed projects and policy horizons plotted chronologically — what happens when, on the way to 2040.</div>
+    <div class="section-sub">Committed projects and policy horizons plotted chronologically — what happens when, on the way to 2040. Compiled from internal data and current public reporting; verify before citing externally.</div>
     <div class="card">
-      <div class="milestone-list">
+      <div class="chain-selector" id="milestone-tabs" style="margin-bottom:16px">
+        <button class="chain-btn active" data-chain="__all__" onclick="filterMilestones(this,'__all__')">All Chains</button>
+    <button class="chain-btn" data-chain="Iron &amp; Steel" onclick="filterMilestones(this,'Iron & Steel')">Iron &amp; Steel</button>
+    <button class="chain-btn" data-chain="Copper &amp; Allied Metals" onclick="filterMilestones(this,'Copper & Allied Metals')">Copper &amp; Allied Metals</button>
+    <button class="chain-btn" data-chain="Automotive" onclick="filterMilestones(this,'Automotive')">Automotive</button>
+    <button class="chain-btn" data-chain="Textiles &amp; Garments" onclick="filterMilestones(this,'Textiles & Garments')">Textiles &amp; Garments</button>
+    <button class="chain-btn" data-chain="Pharmaceuticals" onclick="filterMilestones(this,'Pharmaceuticals')">Pharmaceuticals</button>
+    <button class="chain-btn" data-chain="Petrochemicals &amp; Fertilizers" onclick="filterMilestones(this,'Petrochemicals & Fertilizers')">Petrochemicals &amp; Fertilizers</button>
+    <button class="chain-btn" data-chain="Sugar &amp; Confectionery" onclick="filterMilestones(this,'Sugar & Confectionery')">Sugar &amp; Confectionery</button>
+    <button class="chain-btn" data-chain="Plastics &amp; Packaging" onclick="filterMilestones(this,'Plastics & Packaging')">Plastics &amp; Packaging</button>
+    <button class="chain-btn" data-chain="Cement &amp; Building Materials" onclick="filterMilestones(this,'Cement & Building Materials')">Cement &amp; Building Materials</button>
+      </div>
+      <div class="milestone-list" id="milestone-list">
         
-    <div class="milestone-item">
+    <div class="milestone-item" data-chain="Automotive">
       <div class="milestone-dot complete"></div>
       <div class="milestone-year">Sept 2025 &middot; Automotive</div>
       <div class="milestone-title">KMC Bus &amp; EV Plant operational</div>
@@ -506,31 +527,95 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-t
       <div class="milestone-note">Output 2,500 vehicles/yr today; target 10,000+/yr by 2040 plus regional EV-bus supply</div>
     </div>
 
-    <div class="milestone-item">
+    <div class="milestone-item" data-chain="Copper &amp; Allied Metals">
       <div class="milestone-dot in_progress"></div>
-      <div class="milestone-year">2025 &middot; Copper &amp; Allied Metals</div>
+      <div class="milestone-year">3 Mar 2025 &middot; Copper &amp; Allied Metals</div>
       <div class="milestone-title">Kilembe Copper-Cobalt PSA signed</div>
       <div class="milestone-meta"><span class="tag tag-yellow">In Progress</span><span class="tag tag-blue" style="background:#f5f5f5;color:#666">Minerals</span></div>
-      <div class="milestone-note">Production sharing agreement signed; mine still dormant pending development capital</div>
+      <div class="milestone-note">Sarrai Group + Nile Fibreboard signed the production sharing agreement; mine still dormant pending development capital</div>
     </div>
 
-    <div class="milestone-item">
+    <div class="milestone-item" data-chain="Petrochemicals &amp; Fertilizers">
       <div class="milestone-dot in_progress"></div>
-      <div class="milestone-year">2026 &middot; Cement &amp; Building Materials</div>
-      <div class="milestone-title">Two new cement plants under construction</div>
-      <div class="milestone-meta"><span class="tag tag-yellow">In Progress</span><span class="tag tag-blue" style="background:#f5f5f5;color:#666">Manufacturing</span></div>
-      <div class="milestone-note">Closes clinker self-sufficiency gap from &lt;50% toward &gt;90% target</div>
+      <div class="milestone-year">Mar 2025 &middot; Petrochemicals &amp; Fertilizers</div>
+      <div class="milestone-title">Kabaale Refinery PSA signed</div>
+      <div class="milestone-meta"><span class="tag tag-yellow">In Progress</span><span class="tag tag-blue" style="background:#f5f5f5;color:#666">Infrastructure</span></div>
+      <div class="milestone-note">Alpha MBM Investments (UAE) + UNOC (~40% stake); USD 4bn, 60,000 bpd; first oil expected ~2029-30</div>
     </div>
 
-    <div class="milestone-item">
+    <div class="milestone-item" data-chain="Sugar &amp; Confectionery">
+      <div class="milestone-dot complete"></div>
+      <div class="milestone-year">2025 &middot; Sugar &amp; Confectionery</div>
+      <div class="milestone-title">Kakira Sugar ethanol plant commissioned</div>
+      <div class="milestone-meta"><span class="tag tag-green">Complete</span><span class="tag tag-blue" style="background:#f5f5f5;color:#666">Manufacturing</span></div>
+      <div class="milestone-note">Shs130bn (~USD 36.6m) plant built with India's Praj Industries; 20 million litres/year fuel-grade ethanol from molasses — feeds the national E5 blending mandate</div>
+    </div>
+
+    <div class="milestone-item" data-chain="Cement &amp; Building Materials">
+      <div class="milestone-dot in_progress"></div>
+      <div class="milestone-year">2025 &middot; Cement &amp; Building Materials</div>
+      <div class="milestone-title">Buikwe clinker plant (West International Holding)</div>
+      <div class="milestone-meta"><span class="tag tag-yellow">In Progress</span><span class="tag tag-blue" style="background:#f5f5f5;color:#666">Manufacturing</span></div>
+      <div class="milestone-note">USD 200m investment; ~4,000 tonnes/day capacity — part of closing the clinker self-sufficiency gap from &lt;50% toward &gt;90%</div>
+    </div>
+
+    <div class="milestone-item" data-chain="Petrochemicals &amp; Fertilizers">
+      <div class="milestone-dot in_progress"></div>
+      <div class="milestone-year">Q4 2025 &middot; Petrochemicals &amp; Fertilizers</div>
+      <div class="milestone-title">Kabalega Industrial Park substation &amp; airport</div>
+      <div class="milestone-meta"><span class="tag tag-yellow">In Progress</span><span class="tag tag-blue" style="background:#f5f5f5;color:#666">Infrastructure</span></div>
+      <div class="milestone-note">240MW substation under construction; Kabalega International Airport ~95% complete. UNOC has attracted 31 investors across petrochemicals, logistics and agro-processing</div>
+    </div>
+
+    <div class="milestone-item" data-chain="Pharmaceuticals">
+      <div class="milestone-dot complete"></div>
+      <div class="milestone-year">~2025 &middot; Pharmaceuticals</div>
+      <div class="milestone-title">Pharma starch plant commissioned</div>
+      <div class="milestone-meta"><span class="tag tag-green">Complete</span><span class="tag tag-blue" style="background:#f5f5f5;color:#666">Manufacturing</span></div>
+      <div class="milestone-note">USD 50m plant for excipient self-reliance, reducing import dependence on raw materials for medicine manufacturing — complements UPMI's new pharma plant pipeline</div>
+    </div>
+
+    <div class="milestone-item" data-chain="Textiles &amp; Garments">
+      <div class="milestone-dot proposed"></div>
+      <div class="milestone-year">2025 &middot; Textiles &amp; Garments</div>
+      <div class="milestone-title">Lira Spinning Mill revival proposed</div>
+      <div class="milestone-meta"><span class="tag tag-blue">Proposed (unconfirmed)</span><span class="tag tag-blue" style="background:#f5f5f5;color:#666">Manufacturing</span></div>
+      <div class="milestone-note">Lango MPs and President Museveni have called for reviving Africa's former 2nd-largest yarn mill (historical USD 24m + USD 13m Chinese investment); no confirmed new funding as of 2026</div>
+    </div>
+
+    <div class="milestone-item" data-chain="Petrochemicals &amp; Fertilizers">
+      <div class="milestone-dot stalled"></div>
+      <div class="milestone-year">2025 &middot; Petrochemicals &amp; Fertilizers</div>
+      <div class="milestone-title">Sukulu Phosphate Plant stalled</div>
+      <div class="milestone-meta"><span class="tag tag-red">Stalled</span><span class="tag tag-blue" style="background:#f5f5f5;color:#666">Minerals</span></div>
+      <div class="milestone-note">Guangzhou Dongsong's 100,000 tpa Tororo plant shut 2021, briefly resumed 2023, halted again — the single biggest risk to the 1.5-2m tonne fertiliser demand target</div>
+    </div>
+
+    <div class="milestone-item" data-chain="Cement &amp; Building Materials">
+      <div class="milestone-dot in_progress"></div>
+      <div class="milestone-year">2025-26 &middot; Cement &amp; Building Materials</div>
+      <div class="milestone-title">NE Uganda clinker plant under construction</div>
+      <div class="milestone-meta"><span class="tag tag-yellow">In Progress</span><span class="tag tag-blue" style="background:#f5f5f5;color:#666">Manufacturing</span></div>
+      <div class="milestone-note">USD 300m investment; &gt;6,000 tonnes/day — Uganda's largest single clinker investment to date</div>
+    </div>
+
+    <div class="milestone-item" data-chain="Iron &amp; Steel">
+      <div class="milestone-dot in_progress"></div>
+      <div class="milestone-year">end 2027 &middot; Iron &amp; Steel</div>
+      <div class="milestone-title">Devki Tororo Steel Mill production start</div>
+      <div class="milestone-meta"><span class="tag tag-yellow">In Progress</span><span class="tag tag-blue" style="background:#f5f5f5;color:#666">Manufacturing</span></div>
+      <div class="milestone-note">USD 500m blast-furnace mill; groundbreaking 23 Nov 2025 attended by Presidents Museveni, Ruto and Kagame; 1 million tonnes/year, ~15,000 direct jobs — Uganda's first domestic flat/long steel production at scale</div>
+    </div>
+
+    <div class="milestone-item" data-chain="Petrochemicals &amp; Fertilizers">
       <div class="milestone-dot planned"></div>
       <div class="milestone-year">~2029-30 &middot; Petrochemicals &amp; Fertilizers</div>
-      <div class="milestone-title">Kabalega Refinery first oil</div>
+      <div class="milestone-title">Kabaale Refinery first oil</div>
       <div class="milestone-meta"><span class="tag tag-blue">Planned</span><span class="tag tag-blue" style="background:#f5f5f5;color:#666">Infrastructure</span></div>
       <div class="milestone-note">Enables domestic fuel and polymer feedstock — unlocks the Plastics &amp; Packaging chain</div>
     </div>
 
-    <div class="milestone-item">
+    <div class="milestone-item" data-chain="__universal__">
       <div class="milestone-dot milestone"></div>
       <div class="milestone-year">FY2029/30 &middot; All chains</div>
       <div class="milestone-title">NDP IV target horizon</div>
@@ -538,15 +623,15 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-t
       <div class="milestone-note">Manufacturing share of GDP target 21%; capacity utilisation target 60%</div>
     </div>
 
-    <div class="milestone-item">
+    <div class="milestone-item" data-chain="Plastics &amp; Packaging">
       <div class="milestone-dot planned"></div>
       <div class="milestone-year">~2031 &middot; Plastics &amp; Packaging</div>
-      <div class="milestone-title">Kabalega Petrochemical Park operational</div>
+      <div class="milestone-title">Kabalega Petrochemical Park polymer resin operational</div>
       <div class="milestone-meta"><span class="tag tag-blue">Planned</span><span class="tag tag-blue" style="background:#f5f5f5;color:#666">Infrastructure</span></div>
-      <div class="milestone-note">Domestic polymer resin ends 100% import dependency on plastics feedstock</div>
+      <div class="milestone-note">Domestic polymer resin ends 100% import dependency on plastics feedstock — park targets USD 5bn/year in throughput</div>
     </div>
 
-    <div class="milestone-item">
+    <div class="milestone-item" data-chain="__universal__">
       <div class="milestone-dot milestone"></div>
       <div class="milestone-year">2040 &middot; All chains</div>
       <div class="milestone-title">Tenfold Growth target horizon</div>
@@ -558,6 +643,8 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-t
         <span><span class="milestone-dot complete" style="position:static;display:inline-block;margin-right:4px"></span>Complete</span>
         <span><span class="milestone-dot in_progress" style="position:static;display:inline-block;margin-right:4px"></span>In Progress</span>
         <span><span class="milestone-dot planned" style="position:static;display:inline-block;margin-right:4px"></span>Planned</span>
+        <span><span class="milestone-dot proposed" style="position:static;display:inline-block;margin-right:4px"></span>Proposed (unconfirmed)</span>
+        <span><span class="milestone-dot stalled" style="position:static;display:inline-block;margin-right:4px"></span>Stalled</span>
         <span><span class="milestone-dot milestone" style="position:static;display:inline-block;margin-right:4px"></span>Policy Milestone</span>
       </div>
     </div>
@@ -3009,6 +3096,17 @@ function viewChapter(vcId, vcName){
 function closeChapter(){
   document.getElementById('chapter-modal-overlay').classList.remove('open');
   document.body.style.overflow = '';
+}
+
+// ═══════════════════ MILESTONE ROADMAP TABS ═══════════════════
+function filterMilestones(btn, chain){
+  document.querySelectorAll('#milestone-tabs .chain-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('#milestone-list .milestone-item').forEach(item => {
+    const itemChain = item.getAttribute('data-chain');
+    const show = chain === '__all__' || itemChain === chain || itemChain === '__universal__';
+    item.style.display = show ? '' : 'none';
+  });
 }
 
 // ═══════════════════ GLOSSARY ═══════════════════

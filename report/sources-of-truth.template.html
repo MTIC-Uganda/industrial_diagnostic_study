@@ -84,6 +84,8 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#f0f2f5;color:#1a1a2e;fo
 .milestone-dot.in_progress{background:#f57f17;box-shadow:0 0 0 2px #f57f17}
 .milestone-dot.planned{background:#1565c0;box-shadow:0 0 0 2px #1565c0}
 .milestone-dot.milestone{background:#6a1b9a;box-shadow:0 0 0 2px #6a1b9a}
+.milestone-dot.proposed{background:#90a4ae;box-shadow:0 0 0 2px #90a4ae}
+.milestone-dot.stalled{background:#c62828;box-shadow:0 0 0 2px #c62828}
 .milestone-year{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.3px}
 .milestone-title{font-size:13px;font-weight:700;margin:3px 0 6px;color:var(--text)}
 .milestone-meta{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px}
@@ -400,15 +402,20 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-t
 
   <div id="milestones-section">
     <div class="section-title" style="margin-top:24px;margin-bottom:6px">🛣️ Investment &amp; Milestone Roadmap</div>
-    <div class="section-sub">Committed projects and policy horizons plotted chronologically — what happens when, on the way to 2040.</div>
+    <div class="section-sub">Committed projects and policy horizons plotted chronologically — what happens when, on the way to 2040. Compiled from internal data and current public reporting; verify before citing externally.</div>
     <div class="card">
-      <div class="milestone-list">
+      <div class="chain-selector" id="milestone-tabs" style="margin-bottom:16px">
+        <!--%%MILESTONES_TABS%%-->
+      </div>
+      <div class="milestone-list" id="milestone-list">
         <!--%%MILESTONES_ITEMS%%-->
       </div>
       <div style="display:flex;gap:16px;flex-wrap:wrap;font-size:11px;margin-top:18px;padding-top:14px;border-top:1px solid var(--border)">
         <span><span class="milestone-dot complete" style="position:static;display:inline-block;margin-right:4px"></span>Complete</span>
         <span><span class="milestone-dot in_progress" style="position:static;display:inline-block;margin-right:4px"></span>In Progress</span>
         <span><span class="milestone-dot planned" style="position:static;display:inline-block;margin-right:4px"></span>Planned</span>
+        <span><span class="milestone-dot proposed" style="position:static;display:inline-block;margin-right:4px"></span>Proposed (unconfirmed)</span>
+        <span><span class="milestone-dot stalled" style="position:static;display:inline-block;margin-right:4px"></span>Stalled</span>
         <span><span class="milestone-dot milestone" style="position:static;display:inline-block;margin-right:4px"></span>Policy Milestone</span>
       </div>
     </div>
@@ -1376,6 +1383,17 @@ function viewChapter(vcId, vcName){
 function closeChapter(){
   document.getElementById('chapter-modal-overlay').classList.remove('open');
   document.body.style.overflow = '';
+}
+
+// ═══════════════════ MILESTONE ROADMAP TABS ═══════════════════
+function filterMilestones(btn, chain){
+  document.querySelectorAll('#milestone-tabs .chain-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('#milestone-list .milestone-item').forEach(item => {
+    const itemChain = item.getAttribute('data-chain');
+    const show = chain === '__all__' || itemChain === chain || itemChain === '__universal__';
+    item.style.display = show ? '' : 'none';
+  });
 }
 
 // ═══════════════════ GLOSSARY ═══════════════════

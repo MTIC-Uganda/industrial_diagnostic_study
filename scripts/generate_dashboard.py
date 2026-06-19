@@ -553,34 +553,54 @@ STATUS_LABEL = {
     'complete':   'tag-green',
     'in_progress':'tag-yellow',
     'planned':    'tag-blue',
+    'proposed':   'tag-blue',
+    'stalled':    'tag-red',
     'milestone':  'tag-red',
 }
 STATUS_TEXT = {
     'complete': 'Complete', 'in_progress': 'In Progress',
-    'planned': 'Planned', 'milestone': 'Policy Milestone',
+    'planned': 'Planned', 'proposed': 'Proposed (unconfirmed)',
+    'stalled': 'Stalled', 'milestone': 'Policy Milestone',
 }
+
+VC_ORDER = ['Iron & Steel', 'Copper & Allied Metals', 'Automotive',
+            'Textiles & Garments', 'Pharmaceuticals', 'Petrochemicals & Fertilizers',
+            'Sugar & Confectionery', 'Plastics & Packaging', 'Cement & Building Materials']
 
 def milestones_html():
     ms_file = DATA / 'milestones.csv'
     if not ms_file.exists():
-        return '<div style="color:var(--muted);font-size:12px">No milestone data available.</div>'
+        return ('', '<div style="color:var(--muted);font-size:12px">No milestone data available.</div>')
     rows = load_csv('milestones.csv')
     rows.sort(key=lambda r: int(r['year']))
-    parts = []
+
+    present_chains = [vc for vc in VC_ORDER if any(r['value_chain'] == vc for r in rows)]
+    tab_parts = ['<button class="chain-btn active" data-chain="__all__" onclick="filterMilestones(this,\'__all__\')">All Chains</button>']
+    for vc in present_chains:
+        tab_parts.append(
+            f'<button class="chain-btn" data-chain="{esc(vc)}" onclick="filterMilestones(this,\'{js_str(vc)}\')">{esc(vc)}</button>'
+        )
+    tabs_html = '\n    '.join(tab_parts)
+
+    item_parts = []
     for r in rows:
         status = r['status'].lower()
         dot_cls = status if status in STATUS_LABEL else 'planned'
         tag_cls = STATUS_LABEL.get(status, 'tag-blue')
         tag_txt = STATUS_TEXT.get(status, status.title())
-        parts.append(f'''
-    <div class="milestone-item">
+        is_universal = r['value_chain'] == 'All chains'
+        data_chain = '__universal__' if is_universal else esc(r['value_chain'])
+        item_parts.append(f'''
+    <div class="milestone-item" data-chain="{data_chain}">
       <div class="milestone-dot {dot_cls}"></div>
       <div class="milestone-year">{esc(r["year_label"])} &middot; {esc(r["value_chain"])}</div>
       <div class="milestone-title">{esc(r["project"])}</div>
       <div class="milestone-meta"><span class="tag {tag_cls}">{esc(tag_txt)}</span><span class="tag tag-blue" style="background:#f5f5f5;color:#666">{esc(r["category"])}</span></div>
       <div class="milestone-note">{esc(r["note"])}</div>
     </div>''')
-    return '\n'.join(parts)
+    items_html = '\n'.join(item_parts)
+
+    return (tabs_html, items_html)
 
 def chain_table_rows_html():
     rows = []
@@ -644,6 +664,8 @@ if not TMPL.exists():
 
 tmpl = TMPL.read_text('utf-8')
 
+_ms_tabs, _ms_items = milestones_html()
+
 replacements = {
     '<!--%%OVERVIEW_KPIS_CARDS%%-->': kpi_cards_html(),
     '<!--%%CHAIN_SUMMARY_ROWS%%-->':  chain_table_rows_html(),
@@ -651,7 +673,8 @@ replacements = {
     '<!--%%RECENT_UPDATES%%-->':      recent_updates_html(),
     '<!--%%GLOSSARY_ITEMS%%-->':      glossary_html(),
     '<!--%%RISK_REGISTER_ROWS%%-->':  risk_register_html(),
-    '<!--%%MILESTONES_ITEMS%%-->':    milestones_html(),
+    '<!--%%MILESTONES_TABS%%-->':     _ms_tabs,
+    '<!--%%MILESTONES_ITEMS%%-->':    _ms_items,
     '<!--%%TAX_DONUT%%-->':           tax_donut_html(),
     '<!--%%ELECTRICITY_DONUT%%-->':   electricity_donut_html(),
     '<!--%%CREDIT_SECTOR_BARS%%-->':  sector_comparison_html('credit'),
