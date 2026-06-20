@@ -188,7 +188,7 @@ def line_chart_svg(values, labels=None, width=320, chart_h=170, label_h=24,
         axis_hi = axis_lo + 1
     span = axis_hi - axis_lo
 
-    top_pad = 16
+    top_pad = 14
     plot_h = chart_h - top_pad
     height = chart_h + label_h
     total_w = y_axis_w + width
@@ -204,14 +204,14 @@ def line_chart_svg(values, labels=None, width=320, chart_h=170, label_h=24,
     for t in range(axis_lo, axis_hi + 1):
         gy = top_pad + plot_h - ((t - axis_lo) / span) * plot_h
         grid_parts.append(f'<line x1="{y_axis_w}" y1="{gy:.1f}" x2="{total_w-2}" y2="{gy:.1f}" stroke="#eee" stroke-width="1"/>')
-        grid_parts.append(f'<text x="{y_axis_w-6}" y="{gy+3:.1f}" font-size="9" text-anchor="end" fill="#9e9e9e">{t}{unit}</text>')
+        grid_parts.append(f'<text x="{y_axis_w-6}" y="{gy+3:.1f}" font-size="8" text-anchor="end" fill="#9e9e9e">{t}{unit}</text>')
     grid_html = ''.join(grid_parts)
 
     points = ' '.join(f'{x:.1f},{y:.1f}' for x, y in zip(xs, ys))
     base_y = top_pad + plot_h
     area = f'{xs[0]:.1f},{base_y:.1f} ' + points + f' {xs[-1]:.1f},{base_y:.1f}'
 
-    hw = 4.5
+    hw = 4
     diamonds = ''.join(
         f'<polygon points="{x:.1f},{y-hw:.1f} {x+hw:.1f},{y:.1f} {x:.1f},{y+hw:.1f} {x-hw:.1f},{y:.1f}" fill="{color}"/>'
         for x, y in zip(xs, ys)
@@ -220,17 +220,17 @@ def line_chart_svg(values, labels=None, width=320, chart_h=170, label_h=24,
     value_tags = []
     for i, (x, y) in enumerate(zip(xs, ys)):
         anchor = 'start' if i == 0 else 'end' if i == n - 1 else 'middle'
-        ty = max(y - 10, top_pad - 3)
+        ty = max(y - 9, top_pad - 3)
         value_tags.append(
-            f'<text x="{x:.1f}" y="{ty:.1f}" font-size="10.5" text-anchor="{anchor}" '
-            f'fill="#333" font-weight="700">{values[i]:.1f}{unit}</text>'
+            f'<text x="{x:.1f}" y="{ty:.1f}" font-size="8" text-anchor="{anchor}" '
+            f'fill="{color}" font-weight="700">{values[i]:.1f}{unit}</text>'
         )
     value_tags = ''.join(value_tags)
 
     tick_labels = ''
     if labels and len(labels) == n:
         tick_labels = ''.join(
-            f'<text x="{x:.1f}" y="{chart_h + 17}" font-size="11" text-anchor="middle" fill="#666">{esc(lbl)}</text>'
+            f'<text x="{x:.1f}" y="{chart_h + 16}" font-size="8.5" text-anchor="middle" fill="#666" font-weight="600">{esc(lbl)}</text>'
             for x, lbl in zip(xs, labels)
         )
 
@@ -238,7 +238,7 @@ def line_chart_svg(values, labels=None, width=320, chart_h=170, label_h=24,
         f'<svg class="line-chart" width="{total_w}" height="{height}" viewBox="0 0 {total_w} {height}">'
         f'{grid_html}'
         f'<polygon points="{area}" fill="{color}" opacity="0.12"/>'
-        f'<polyline points="{points}" fill="none" stroke="{color}" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>'
+        f'<polyline points="{points}" fill="none" stroke="{color}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>'
         f'{diamonds}{value_tags}{tick_labels}'
         f'</svg>'
     )
