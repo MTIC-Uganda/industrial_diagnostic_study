@@ -1,0 +1,10 @@
+id,label,fy2021_value,fy2025_value,fy2021_pct,fy2025_pct,delta,direction,trajectory,trajectory_labels,confidence,source
+industry_growth,Industry Growth,3.5%,6.9%,35,69,+3.4 pts,up,,,exact,UBOS Annual GDP 2024/25
+mfg_growth,Manufacturing Growth,2.2%,5.6%,22,56,+3.4 pts,up,,,exact,UBOS Annual GDP 2024/25
+mfg_value_added,Mfg Value Added (real),Shs 19.6trn,Shs 23.3trn,82,97,+18.4%,up,19.6;20.4;21.0;22.0;23.3,20/21;21/22;22/23;23/24;24/25,exact,UBOS Annual GDP 2024/25 (constant 2016/17 prices)
+tax_rank,Manufacturing Tax Rank,#3,#2,60,80,▲ moved up,up,,,exact,URA sector & revenue reports
+mfg_exports,Manufactured Exports,USD 1.1bn,USD 2.4bn,46,100,+118%,up,,,estimated,Bank of Uganda external trade statistics (FY20/21 approximate)
+industrial_credit,Private-Sector Credit to Manufacturing,Shs 2.3trn,Shs 3.4trn,68,100,+48%,up,,,exact,Bank of Uganda private-sector credit statistics
+industrial_electricity,Industrial Share of Electricity Sold,60%,65%,60,65,+5 pts,up,,,indicative,Electricity Regulatory Authority (FY20/21 indicative)
+industry_gdp_share,Industry Share of GDP (current prices),27.1%,24.3%,90,81,-2.8 pts,down,,,exact,UBOS Annual GDP 2024/25
+mfg_gdp_share,Manufacturing Share of GDP (current prices),16.4%,14.5%,55,48,-1.9 pts,down,,,exact,UBOS Annual GDP 2024/25

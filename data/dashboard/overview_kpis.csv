@@ -1,7 +1,7 @@
-id,label,current_value,current_pct,ndp_value,ndp_pct,tenfold_value,tenfold_pct,sub_value
-manufacturing_gdp,Manufacturing / GDP,15.2%,30,21%,42,30%,60,NDP IV target: 21% &nbsp;|&nbsp; Tenfold target: 30%
-uganda_gdp,Uganda GDP,USD 53.2B,10,USD 158B,31,~USD 500B,100,NDP IV: USD 158B by 2029/30 &nbsp;|&nbsp; Tenfold: ~USD 500B by 2040
-capacity_util,Capacity Utilisation,~30%,30,60%,60,80%,80,NDP IV target: 60% &nbsp;|&nbsp; Tenfold target: 80%
-per_capita,Per Capita Income,"USD 1,146",12,"USD 2,008",21,"USD 9,500",100,"NDP IV: USD 2,008 &nbsp;|&nbsp; Vision 2040: USD 9,500"
-gdp_growth,GDP Growth Rate,6.6%,44,10.1%,67,12-15% p.a.,100,NDP IV target: 10.1% &nbsp;|&nbsp; Tenfold: 12-15% p.a.
-mfg_exports,Manufactured Exports,~12%,24,35%,70,>50%,100,of total exports &nbsp;|&nbsp; NDP IV target: 35% &nbsp;|&nbsp; Tenfold: >50%
+id,label,current_value,current_pct,ndp_value,ndp_pct,tenfold_value,tenfold_pct,sub_value,confidence,source
+manufacturing_gdp,Manufacturing / GDP,15.2%,30,21%,42,30%,60,NDP IV target: 21% &nbsp;|&nbsp; Tenfold target: 30%,exact,UBOS Annual GDP 2024/25
+uganda_gdp,Uganda GDP,USD 53.2B,10,USD 158B,31,~USD 500B,100,NDP IV: USD 158B by 2029/30 &nbsp;|&nbsp; Tenfold: ~USD 500B by 2040,exact,UBOS Annual GDP 2024/25
+capacity_util,Capacity Utilisation,~30%,30,60%,60,80%,80,NDP IV target: 60% &nbsp;|&nbsp; Tenfold target: 80%,estimated,UNIDO PCP diagnostic interviews
+per_capita,Per Capita Income,"USD 1,146",12,"USD 2,008",21,"USD 9,500",100,"NDP IV: USD 2,008 &nbsp;|&nbsp; Vision 2040: USD 9,500",exact,UBOS Annual GDP 2024/25
+gdp_growth,GDP Growth Rate,6.6%,44,10.1%,67,12-15% p.a.,100,NDP IV target: 10.1% &nbsp;|&nbsp; Tenfold: 12-15% p.a.,exact,UBOS Annual GDP 2024/25
+mfg_exports,Manufactured Exports,~12%,24,35%,70,>50%,100,of total exports &nbsp;|&nbsp; NDP IV target: 35% &nbsp;|&nbsp; Tenfold: >50%,estimated,Bank of Uganda external trade statistics

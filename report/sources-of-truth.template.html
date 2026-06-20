@@ -28,7 +28,71 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#f0f2f5;color:#1a1a2e;fo
 
 /* CARDS */
 .card{background:var(--card);border-radius:10px;box-shadow:0 1px 6px rgba(0,0,0,.08);padding:20px;border:1px solid var(--border)}
-.card h3{font-size:13px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
+.card h3{font-size:13px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.conf-badge{font-size:9px;font-weight:700;letter-spacing:.2px;text-transform:none;padding:1px 7px;border-radius:8px;cursor:help}
+.conf-exact{background:#e8f5e9;color:#2e7d32}
+.conf-estimated{background:#fff8e1;color:#f57f17}
+.conf-indicative{background:#e3f2fd;color:#1565c0}
+.conf-na{background:#f5f5f5;color:#999}
+
+/* MOMENTUM PANEL — mixed chart cards */
+.mixed-chart-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
+.chart-card{background:#f8f9fa;border-radius:8px;padding:14px 16px;border:1px solid var(--border);display:flex;flex-direction:column;align-items:center;text-align:center}
+.chart-card.wide{grid-column:span 2}
+.line-chart{max-width:100%;height:auto}
+@media(max-width:700px){.chart-card.wide{grid-column:span 1}}
+.chart-card-title{font-size:12px;font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:6px;flex-wrap:wrap;justify-content:center}
+.chart-card-caption{font-size:11px;color:var(--muted);margin-top:10px;line-height:1.5}
+.grouped-bar-chart{max-width:100%}
+.line-chart-wrap{display:flex;justify-content:center;padding:4px 0}
+.donut-wrap{display:flex;align-items:center;gap:16px;justify-content:center;flex-wrap:wrap}
+.donut-chart{flex-shrink:0}
+.donut-legend{display:flex;flex-direction:column;gap:6px;text-align:left}
+.donut-legend-item{display:flex;align-items:center;gap:7px;font-size:11px}
+.donut-swatch{width:10px;height:10px;border-radius:2px;flex-shrink:0}
+.donut-legend-label{flex:1;color:var(--text)}
+.donut-legend-pct{font-weight:700;color:var(--text);width:36px;text-align:right}
+
+/* SECTOR COMPARISON */
+.sector-bar-row{display:flex;align-items:center;gap:10px;margin-bottom:9px}
+.sector-bar-label{font-size:12px;width:150px;flex-shrink:0;color:var(--text)}
+.sector-bar-label.highlight{font-weight:700;color:var(--blue)}
+.sector-bar-track{flex:1;height:16px;background:#f0f0f0;border-radius:4px;overflow:hidden}
+.sector-bar-fill{height:100%;border-radius:4px;background:#b0bec5}
+.sector-bar-fill.highlight{background:#1565c0}
+.sector-bar-val{font-size:11px;color:var(--muted);width:140px;flex-shrink:0;text-align:right}
+
+/* RECENTLY UPDATED */
+.update-item{display:flex;align-items:center;gap:10px;padding:8px 4px;border-bottom:1px solid #f0f0f0;font-size:12px}
+.update-item:last-child{border-bottom:none}
+.update-icon{font-size:14px;flex-shrink:0}
+.update-tag{background:#e3f2fd;color:#1565c0;padding:2px 8px;border-radius:8px;font-size:10px;font-weight:700;flex-shrink:0;width:64px;text-align:center}
+.update-msg{flex:1;color:var(--text)}
+.update-date{font-size:11px;color:var(--muted);flex-shrink:0}
+
+/* GLOSSARY */
+.glossary-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:2px 24px}
+.glossary-item{padding:9px 0;border-bottom:1px solid #f0f0f0}
+.glossary-term{font-weight:700;font-size:12px;color:var(--blue)}
+.glossary-def{font-size:12px;color:var(--text);margin-top:2px;line-height:1.5}
+#glossary-search{width:100%;padding:9px 14px;border:1px solid var(--border);border-radius:8px;font-size:13px;outline:none;margin-bottom:16px}
+
+/* MILESTONE TIMELINE */
+.milestone-list{position:relative;padding-left:24px;margin-top:4px}
+.milestone-list::before{content:'';position:absolute;left:5px;top:6px;bottom:6px;width:2px;background:#e0e0e0}
+.milestone-item{position:relative;padding-bottom:22px}
+.milestone-item:last-child{padding-bottom:0}
+.milestone-dot{position:absolute;left:-24px;top:2px;width:12px;height:12px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 2px #ccc}
+.milestone-dot.complete{background:#2e7d32;box-shadow:0 0 0 2px #2e7d32}
+.milestone-dot.in_progress{background:#f57f17;box-shadow:0 0 0 2px #f57f17}
+.milestone-dot.planned{background:#1565c0;box-shadow:0 0 0 2px #1565c0}
+.milestone-dot.milestone{background:#6a1b9a;box-shadow:0 0 0 2px #6a1b9a}
+.milestone-dot.proposed{background:#90a4ae;box-shadow:0 0 0 2px #90a4ae}
+.milestone-dot.stalled{background:#c62828;box-shadow:0 0 0 2px #c62828}
+.milestone-year{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.3px}
+.milestone-title{font-size:13px;font-weight:700;margin:3px 0 6px;color:var(--text)}
+.milestone-meta{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px}
+.milestone-note{font-size:12px;color:var(--muted);line-height:1.5}
 .card .value{font-size:28px;font-weight:700;color:var(--blue)}
 .card .sub-value{font-size:12px;color:var(--muted);margin-top:4px}
 
@@ -158,6 +222,37 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-t
   footer{display:none}
   .card{box-shadow:none;border:1px solid #ddd}
   button{display:none!important}
+
+  /* BRIEF MODE — one-page Economic Brief, triggered by "🧾 Generate Brief" */
+  body.brief-mode #integration-card,
+  body.brief-mode #tab-maps,
+  body.brief-mode #tab-status,
+  body.brief-mode #tab-locations,
+  body.brief-mode #tab-pipeline,
+  body.brief-mode .tenfold-banner,
+  body.brief-mode #tour-progress-card,
+  body.brief-mode #recent-updates-section,
+  body.brief-mode #risk-register-section,
+  body.brief-mode #milestones-section{ display:none!important }
+  body.brief-mode .tab-content{ padding:8px 16px!important }
+  body.brief-mode .section-title{ font-size:14px!important;margin-bottom:2px!important }
+  body.brief-mode .section-sub{ font-size:10px!important;margin-bottom:10px!important }
+  body.brief-mode .kpi-grid{ grid-template-columns:repeat(3,1fr)!important;gap:8px!important;margin-bottom:14px!important }
+  body.brief-mode .card{ padding:10px!important;page-break-inside:avoid }
+  body.brief-mode .card .value{ font-size:20px!important }
+  body.brief-mode #momentum-panel .mixed-chart-grid{ grid-template-columns:repeat(4,1fr)!important;gap:8px!important }
+  body.brief-mode #momentum-panel .chart-card{ padding:8px 10px!important }
+  body.brief-mode #momentum-panel .chart-card-caption{ display:none!important }
+  body.brief-mode #momentum-panel .donut-legend-item{ font-size:9px!important }
+  body.brief-mode #momentum-panel .two-col{ grid-template-columns:1fr 1fr!important;gap:12px!important;margin-top:10px!important }
+  body.brief-mode .sector-bar-label{ width:110px!important;font-size:10px!important }
+  body.brief-mode .sector-bar-val{ width:100px!important;font-size:9px!important }
+  body.brief-mode .sector-bar-row{ margin-bottom:5px!important }
+  body.brief-mode .sector-bar-track{ height:11px!important }
+  body.brief-mode table{ font-size:10px!important }
+  body.brief-mode th,body.brief-mode td{ padding:5px 7px!important }
+  body.brief-mode #sources-panel{ margin-top:10px!important }
+  body.brief-mode .site-header .sub::after{ content:" | Economic Brief — generated for print"; }
 }
 /* TOUR */
 .tour-btn{background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.4);border-radius:6px;padding:7px 16px;font-size:12px;font-weight:600;cursor:pointer;transition:background .2s}
@@ -178,6 +273,8 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-t
   </div>
   <div style="display:flex;align-items:center;gap:10px">
     <button onclick="window.print()" style="background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.4);border-radius:6px;padding:7px 16px;font-size:12px;font-weight:600;cursor:pointer;transition:background .2s" onmouseover="this.style.background='rgba(255,255,255,.25)'" onmouseout="this.style.background='rgba(255,255,255,.15)'">🖨️ Print / Export</button>
+    <button onclick="generateBrief()" class="tour-btn" title="One-page Economic Brief — KPIs, momentum, chain snapshot, sources">🧾 Generate Brief</button>
+    <button onclick="openGlossary()" class="tour-btn">📖 Glossary</button>
     <a href="upload-guide.html" class="tour-btn" style="text-decoration:none">📤 Upload Guide</a>
     <a href="pb-guide.html" class="tour-btn" style="text-decoration:none">📋 Data Entry Guide</a>
     <button id="tour-trigger" class="tour-btn" onclick="startTour()">🧭 Take a Tour</button>
@@ -248,6 +345,31 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-t
     </div>
   </div>
 
+  <div id="recent-updates-section">
+    <div class="section-title" style="margin-bottom:6px">🕓 Recently Updated</div>
+    <div class="section-sub">Latest data, chapters, and reviews from the agentic pipeline — newest first.</div>
+    <div class="card" style="margin-bottom:24px">
+      <!--%%RECENT_UPDATES%%-->
+    </div>
+  </div>
+
+  <div class="section-title" style="margin-bottom:6px">📈 Momentum — FY20/21 → FY24/25</div>
+  <div class="section-sub">Four-year actual change, separate from the 2040 targets above — this answers "is Uganda's industrial base actually moving," not just "how far is left to go."</div>
+  <div class="card" id="momentum-panel" style="margin-bottom:24px">
+    <div class="mixed-chart-grid">
+      <!--%%MACRO_TREND_ITEMS%%-->
+    </div>
+    <div class="two-col" style="margin-top:20px;margin-bottom:0">
+      <!--%%TAX_DONUT%%-->
+      <!--%%ELECTRICITY_DONUT%%-->
+    </div>
+    <div style="margin-top:20px">
+      <h3 style="font-size:13px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px">Private-Sector Credit by Sector, FY24/25 &middot; Bank of Uganda</h3>
+      <!--%%CREDIT_SECTOR_BARS%%-->
+      <div style="font-size:11px;color:var(--muted);margin-top:6px">Bars show FY24/25 stock; labels show FY20/21 &rarr; FY24/25 growth. Manufacturing credit grew faster (+48%) than the sector average.</div>
+    </div>
+  </div>
+
   <div class="section-title" style="margin-bottom:16px">🏭 The 9 Priority Value Chains — Snapshot</div>
   <div class="card" id="tour-chain-table">
     <table>
@@ -258,7 +380,7 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-t
     </table>
   </div>
 
-  <div class="card" style="margin-top:20px;background:linear-gradient(135deg,#0d47a1,#1565c0);color:#fff">
+  <div class="card" id="integration-card" style="margin-top:20px;background:linear-gradient(135deg,#0d47a1,#1565c0);color:#fff">
     <h3 style="color:rgba(255,255,255,.8);margin-bottom:12px">🔗 How The 9 Chains Form One Integrated Industrial System</h3>
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px;font-size:13px">
       <div style="background:rgba(255,255,255,.1);border-radius:8px;padding:12px"><strong>Minerals → Manufacturing:</strong> Iron ore &amp; steel feed Automotive (KMC bus frames ~37,300 t); copper wiring harnesses feed KMC EVs; cobalt feeds EV batteries</div>
@@ -266,6 +388,58 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-t
       <div style="background:rgba(255,255,255,.1);border-radius:8px;padding:12px"><strong>Petrochemicals unlock Plastics:</strong> Kabalega refinery (~2029) → domestic polymer resin → import substitution for USD 37m+ packaging imports</div>
       <div style="background:rgba(255,255,255,.1);border-radius:8px;padding:12px"><strong>Green advantage:</strong> Uganda's hydro grid enables low-carbon steel (scrap-EAF), green ammonia fertiliser, and low-carbon EV buses — a genuine export differentiator</div>
     </div>
+  </div>
+
+  <div id="risk-register-section">
+    <div class="section-title" style="margin-top:24px;margin-bottom:6px">⚠️ Risk Register</div>
+    <div class="section-sub">Key risks to the Tenfold Growth Strategy, with mitigation and institutional owner. Severity/likelihood are analyst judgement (UNIDO PCP diagnostic), not sourced figures.</div>
+    <div class="card">
+      <table>
+        <thead><tr><th>Risk</th><th>Severity</th><th>Likelihood</th><th>Mitigation</th><th>Owner</th></tr></thead>
+        <tbody>
+          <!--%%RISK_REGISTER_ROWS%%-->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div id="milestones-section">
+    <div class="section-title" style="margin-top:24px;margin-bottom:6px">🛣️ Investment &amp; Milestone Roadmap</div>
+    <div class="section-sub">Committed projects and policy horizons plotted chronologically — what happens when, on the way to 2040. Compiled from internal data and current public reporting; verify before citing externally.</div>
+    <div class="card">
+      <div class="chain-selector" id="milestone-tabs" style="margin-bottom:16px">
+        <!--%%MILESTONES_TABS%%-->
+      </div>
+      <div class="milestone-list" id="milestone-list">
+        <!--%%MILESTONES_ITEMS%%-->
+      </div>
+      <div style="display:flex;gap:16px;flex-wrap:wrap;font-size:11px;margin-top:18px;padding-top:14px;border-top:1px solid var(--border)">
+        <span><span class="milestone-dot complete" style="position:static;display:inline-block;margin-right:4px"></span>Complete</span>
+        <span><span class="milestone-dot in_progress" style="position:static;display:inline-block;margin-right:4px"></span>In Progress</span>
+        <span><span class="milestone-dot planned" style="position:static;display:inline-block;margin-right:4px"></span>Planned</span>
+        <span><span class="milestone-dot proposed" style="position:static;display:inline-block;margin-right:4px"></span>Proposed (unconfirmed)</span>
+        <span><span class="milestone-dot stalled" style="position:static;display:inline-block;margin-right:4px"></span>Stalled</span>
+        <span><span class="milestone-dot milestone" style="position:static;display:inline-block;margin-right:4px"></span>Policy Milestone</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" id="sources-panel" style="margin-top:20px">
+    <h3 style="font-size:15px;color:var(--blue);margin-bottom:14px;font-weight:700;text-transform:none;letter-spacing:0">📚 Sources &amp; Methodology</h3>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;font-size:12px;margin-bottom:16px">
+      <div><strong>UBOS</strong><br><span style="color:var(--muted)">Annual GDP estimates (constant 2016/17 prices), national accounts</span></div>
+      <div><strong>Bank of Uganda</strong><br><span style="color:var(--muted)">External trade statistics, private-sector credit by sector</span></div>
+      <div><strong>URA</strong><br><span style="color:var(--muted)">Sector &amp; revenue reports, tax contribution by sector</span></div>
+      <div><strong>ERA</strong><br><span style="color:var(--muted)">Electricity Regulatory Authority — energy sold by customer class</span></div>
+      <div><strong>ITC TradeMap</strong><br><span style="color:var(--muted)">HS-code level import/export figures, used throughout chain status pages</span></div>
+      <div><strong>UNIDO PCP Diagnostics</strong><br><span style="color:var(--muted)">Capacity utilisation, firm-level interviews, field visit observations</span></div>
+    </div>
+    <div style="display:flex;gap:16px;flex-wrap:wrap;font-size:11px;padding-top:12px;border-top:1px solid var(--border)">
+      <span><span class="conf-badge conf-exact">● exact</span> &nbsp;Published figure from named source, current period</span>
+      <span><span class="conf-badge conf-estimated">≈ estimated</span> &nbsp;Derived from interviews, partial data, or analyst projection</span>
+      <span><span class="conf-badge conf-indicative">○ indicative</span> &nbsp;Order-of-magnitude only — directional, not precise</span>
+    </div>
+    <div style="font-size:11px;color:var(--muted);margin-top:10px">Last verified: June 2026. Hover any confidence badge for its specific source. No FY24/25 manufacturing employment survey currently exists nationally — flagged as a data gap.</div>
   </div>
 
 </div>
@@ -346,6 +520,22 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-t
   </div>
 </div>
 
+<!-- Glossary modal -->
+<div id="glossary-modal-overlay" class="chapter-modal-overlay" onclick="if(event.target===this)closeGlossary()">
+  <div class="chapter-modal">
+    <div class="chapter-modal-header">
+      <span class="chapter-modal-title">📖 Glossary &amp; Abbreviations</span>
+      <button class="chapter-modal-close" onclick="closeGlossary()">✕</button>
+    </div>
+    <div class="chapter-modal-body">
+      <input id="glossary-search" type="search" placeholder="🔍 Search terms…" oninput="filterGlossary(this.value)">
+      <div class="glossary-grid" id="glossary-grid">
+        <!--%%GLOSSARY_ITEMS%%-->
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- ═══════════════════════════════════════════════════════════════
      SECTION 5: PIPELINE STATUS
 ═══════════════════════════════════════════════════════════════ -->
@@ -394,6 +584,9 @@ function renderStatus(){
 
 const colorMap={blue:'',green:'green',amber:'amber',red:'red'};
 
+const STRENGTH_TAG={gap:'tag-red',emerging:'tag-yellow',strong:'tag-green'};
+const STRENGTH_TEXT={gap:'Gap',emerging:'Emerging',strong:'Strong'};
+
 function renderStatusDetail(c){
   const s=c.status;
   const statCards=s.current.map(item=>{
@@ -425,13 +618,64 @@ function renderStatusDetail(c){
     </div>
   `).join('');
 
+  // Value Chain Map phases (from c.map) — the upstream→downstream phase breakdown
+  const mapPhaseRows=(c.map && c.map.phases ? c.map.phases : []).map(p=>`
+    <tr>
+      <td><strong>${p.name}</strong><br><span style="font-size:11px;color:var(--muted)">${(p.label||'').replace(/\n/g,' ')}</span></td>
+      <td>${p.detail||''}</td>
+      <td><span class="tag ${STRENGTH_TAG[p.strength]||'tag-blue'}">${STRENGTH_TEXT[p.strength]||p.strength||''}</span></td>
+      <td>${p.stat||''}</td>
+    </tr>
+  `).join('');
+
+  // Full factory/company directory — cross-referenced from FACTORIES by chain name
+  const chainFactories=(typeof FACTORIES!=='undefined'?FACTORIES:[]).filter(f=>f.chain===c.name);
+  const factoryRows=chainFactories.map(f=>`
+    <tr>
+      <td><strong>${f.name}</strong></td>
+      <td>${f.loc||''}</td>
+      <td style="max-width:220px">${f.products||''}</td>
+      <td>${f.capacity_installed||''}</td>
+      <td>${f.capacity_utilised||''}</td>
+      <td>${f.employees||''}</td>
+      <td>${f.est||''}</td>
+      <td style="max-width:160px">${f.ownership||''}</td>
+      <td>${f.exports||''}</td>
+    </tr>
+  `).join('');
+  const factoryTable=chainFactories.length ? `
+    <table style="margin-top:4px">
+      <thead><tr><th>Firm</th><th>Location</th><th>Products</th><th>Installed Capacity</th><th>Utilisation</th><th>Employees</th><th>Est.</th><th>Ownership</th><th>Exports</th></tr></thead>
+      <tbody>${factoryRows}</tbody>
+    </table>` : `<div style="color:var(--muted);font-size:12px;padding:8px">No factory-level records for this chain yet.</div>`;
+
+  const chapterBtn = c.chapter_file ? `
+    <button onclick="viewStaticChapter('${c.chapter_file}','${(c.name||'').replace(/'/g,"\\'")}')"
+      style="background:var(--blue);color:#fff;border:none;border-radius:6px;padding:7px 16px;font-size:12px;font-weight:600;cursor:pointer;flex-shrink:0">
+      📖 View Full Diagnostic Chapter
+    </button>` : '';
+
   document.getElementById('status-display').innerHTML=`
     <div class="card" style="margin-bottom:16px">
-      <h3 style="font-size:16px;font-weight:700;color:var(--blue);margin-bottom:16px">Current Status — ${c.name}</h3>
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:16px">
+        <h3 style="font-size:16px;font-weight:700;color:var(--blue);margin:0">Current Status — ${c.name}</h3>
+        ${chapterBtn}
+      </div>
       <div class="detail-grid">${statCards}</div>
       <h4 style="font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-top:4px;margin-bottom:8px">Key Players</h4>
       <div class="companies-list">${companies}</div>
     </div>
+
+    <div class="card" style="margin-bottom:16px">
+      <h3 style="font-size:15px;font-weight:700;color:var(--blue);margin-bottom:6px">🔗 ${(c.map&&c.map.title)||'Value Chain Map'}</h3>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:14px">${(c.map&&c.map.desc)||''}</div>
+      <table>
+        <thead><tr><th>Phase</th><th>Transformation</th><th>Uganda's Position</th><th>Evidence</th></tr></thead>
+        <tbody>${mapPhaseRows}</tbody>
+      </table>
+      ${c.map&&c.map.gap ? `<div style="margin-top:12px;padding:10px 14px;background:#ffebee;border-left:4px solid var(--red);border-radius:6px;font-size:12px;color:#c62828"><strong>⚠️ ${c.map.gap}</strong></div>` : ''}
+    </div>
+
     <div class="two-col">
       <div class="card">
         <h3 style="font-size:15px;font-weight:700;color:var(--blue);margin-bottom:14px">Binding Constraints (Weighted)</h3>
@@ -447,6 +691,12 @@ function renderStatusDetail(c){
           ${projRows}
         </div>
       </div>
+    </div>
+
+    <div class="card" style="margin-top:16px">
+      <h3 style="font-size:15px;font-weight:700;color:var(--blue);margin-bottom:4px">🏭 Full Factory &amp; Company Directory (${chainFactories.length})</h3>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:12px">All recorded facilities for this chain — also plotted on the 📍 Industry Locations map.</div>
+      <div style="overflow-x:auto">${factoryTable}</div>
     </div>
   `;
 }
@@ -494,7 +744,14 @@ function showTab(id){
   }
 }
 
+// ═══════════════════ INDUSTRY LOCATIONS MAP ═══════════════════
+/*%%CHAIN_COLORS_DATA%%*/
+
+/*%%FACTORIES_DATA%%*/
+
 // ═══════════════════ INIT ═══════════════════
+// renderStatus() must run after FACTORIES is defined above — renderStatusDetail()
+// cross-references FACTORIES by chain name for the full factory directory table.
 renderStatus();
 // Restore the last-visited tab so a refresh keeps you where you were.
 (function(){
@@ -505,12 +762,6 @@ renderStatus();
     window.addEventListener('hashchange',()=>{const h=location.hash.slice(1);if(h&&document.getElementById('tab-'+h))showTab(h);});
   }catch(e){}
 })();
-// factory-names datalist is populated inside initMap() after FACTORIES is defined
-
-// ═══════════════════ INDUSTRY LOCATIONS MAP ═══════════════════
-/*%%CHAIN_COLORS_DATA%%*/
-
-/*%%FACTORIES_DATA%%*/
 
 function initMap(){
   // Catch any unexpected runtime error and display it inside the map container
@@ -1163,34 +1414,42 @@ function startTour(){
 })();
 
 // ═══════════════════ CHAPTER VIEWER ═══════════════════
-function viewChapter(vcId, vcName){
+function _loadChapterInto(filename, title404){
   const overlay = document.getElementById('chapter-modal-overlay');
   const body    = document.getElementById('chapter-modal-body');
-  const title   = document.getElementById('chapter-modal-title');
-  title.textContent = vcName + ' — Diagnostic Chapter';
-  body.innerHTML    = '<div style="text-align:center;padding:40px;color:#999">Loading chapter…</div>';
   overlay.classList.add('open');
   document.body.style.overflow = 'hidden';
 
-  fetch('./chapters/' + vcId + '_diagnostic.md?_=' + Date.now())
+  fetch('./chapters/' + filename + '?_=' + Date.now())
     .then(r => r.ok ? r.text() : Promise.reject(r.status))
     .then(md => {
-      // Remove the HTML comment header written by synthesis_agent
+      // Strip any agent-generated HTML comment header
       md = md.replace(/<!--[\s\S]*?-->\s*/, '');
       if(window.marked){
         body.innerHTML = window.marked.parse(md);
       } else {
-        // Fallback: plain pre
         body.innerHTML = '<pre style="white-space:pre-wrap;font-size:12px">' +
           md.replace(/</g,'&lt;') + '</pre>';
       }
     })
     .catch(status => {
       body.innerHTML = status === 404
-        ? '<div style="padding:24px;color:#999">Chapter not yet published to this server.<br>' +
-          'It will appear here after the review PR is merged and CI re-deploys.</div>'
+        ? '<div style="padding:24px;color:#999">' + title404 + '</div>'
         : '<div style="padding:24px;color:#c62828">Could not load chapter (HTTP ' + status + ').</div>';
     });
+}
+
+function viewChapter(vcId, vcName){
+  document.getElementById('chapter-modal-title').textContent = vcName + ' — Diagnostic Chapter';
+  document.getElementById('chapter-modal-body').innerHTML = '<div style="text-align:center;padding:40px;color:#999">Loading chapter…</div>';
+  _loadChapterInto(vcId + '_diagnostic.md',
+    'Chapter not yet published to this server.<br>It will appear here after the review PR is merged and CI re-deploys.');
+}
+
+function viewStaticChapter(filename, chainName){
+  document.getElementById('chapter-modal-title').textContent = chainName + ' — Full Diagnostic Chapter (Phase 1/2 Report)';
+  document.getElementById('chapter-modal-body').innerHTML = '<div style="text-align:center;padding:40px;color:#999">Loading chapter…</div>';
+  _loadChapterInto(filename, 'Chapter not found on this server.');
 }
 
 function closeChapter(){
@@ -1198,7 +1457,46 @@ function closeChapter(){
   document.body.style.overflow = '';
 }
 
-document.addEventListener('keydown', e => { if(e.key === 'Escape') closeChapter(); });
+// ═══════════════════ MILESTONE ROADMAP TABS ═══════════════════
+function filterMilestones(btn, chain){
+  document.querySelectorAll('#milestone-tabs .chain-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('#milestone-list .milestone-item').forEach(item => {
+    const itemChain = item.getAttribute('data-chain');
+    const show = chain === '__all__' || itemChain === chain || itemChain === '__universal__';
+    item.style.display = show ? '' : 'none';
+  });
+}
+
+// ═══════════════════ GLOSSARY ═══════════════════
+function openGlossary(){
+  document.getElementById('glossary-modal-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  document.getElementById('glossary-search').value = '';
+  filterGlossary('');
+  setTimeout(() => document.getElementById('glossary-search').focus(), 100);
+}
+function closeGlossary(){
+  document.getElementById('glossary-modal-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function filterGlossary(q){
+  q = q.toLowerCase();
+  document.querySelectorAll('#glossary-grid .glossary-item').forEach(item => {
+    const text = item.textContent.toLowerCase();
+    item.style.display = text.includes(q) ? '' : 'none';
+  });
+}
+
+// ═══════════════════ GENERATE BRIEF (one-page print) ═══════════════════
+function generateBrief(){
+  showTab('overview');
+  document.body.classList.add('brief-mode');
+  window.print();
+}
+window.addEventListener('afterprint', () => document.body.classList.remove('brief-mode'));
+
+document.addEventListener('keydown', e => { if(e.key === 'Escape'){ closeChapter(); closeGlossary(); } });
 </script>
 </body>
 </html>

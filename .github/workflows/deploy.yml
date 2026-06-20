@@ -272,6 +272,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 50   # generate_dashboard.py reads git log for the Recently Updated panel
 
       - uses: actions/setup-node@v4
         with:
@@ -308,6 +310,8 @@ jobs:
           [ -f data/pipeline_status.json ] && cp data/pipeline_status.json site/pipeline_status.json || true
           mkdir -p site/chapters
           ls report/chapters/VC*.md 2>/dev/null && cp report/chapters/VC*.md site/chapters/ || true
+          cp report/chapters/report1-*.md site/chapters/ 2>/dev/null || true
+          cp report/chapters/report2-*.md site/chapters/ 2>/dev/null || true
 
       - name: Upload dist
         uses: actions/upload-artifact@v4

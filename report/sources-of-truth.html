@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Uganda Manufacturing — Sources of Truth | MTIC × UNIDO PCP</title>
+<title>Manufacturing Industry Dashboard | Ministry of Trade, Industry and Cooperatives</title>
 <link rel="icon" type="image/png" href="uganda_coat_of_arms.png">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -28,7 +28,71 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#f0f2f5;color:#1a1a2e;fo
 
 /* CARDS */
 .card{background:var(--card);border-radius:10px;box-shadow:0 1px 6px rgba(0,0,0,.08);padding:20px;border:1px solid var(--border)}
-.card h3{font-size:13px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
+.card h3{font-size:13px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.conf-badge{font-size:9px;font-weight:700;letter-spacing:.2px;text-transform:none;padding:1px 7px;border-radius:8px;cursor:help}
+.conf-exact{background:#e8f5e9;color:#2e7d32}
+.conf-estimated{background:#fff8e1;color:#f57f17}
+.conf-indicative{background:#e3f2fd;color:#1565c0}
+.conf-na{background:#f5f5f5;color:#999}
+
+/* MOMENTUM PANEL — mixed chart cards */
+.mixed-chart-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
+.chart-card{background:#f8f9fa;border-radius:8px;padding:14px 16px;border:1px solid var(--border);display:flex;flex-direction:column;align-items:center;text-align:center}
+.chart-card.wide{grid-column:span 2}
+.line-chart{max-width:100%;height:auto}
+@media(max-width:700px){.chart-card.wide{grid-column:span 1}}
+.chart-card-title{font-size:12px;font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:6px;flex-wrap:wrap;justify-content:center}
+.chart-card-caption{font-size:11px;color:var(--muted);margin-top:10px;line-height:1.5}
+.grouped-bar-chart{max-width:100%}
+.line-chart-wrap{display:flex;justify-content:center;padding:4px 0}
+.donut-wrap{display:flex;align-items:center;gap:16px;justify-content:center;flex-wrap:wrap}
+.donut-chart{flex-shrink:0}
+.donut-legend{display:flex;flex-direction:column;gap:6px;text-align:left}
+.donut-legend-item{display:flex;align-items:center;gap:7px;font-size:11px}
+.donut-swatch{width:10px;height:10px;border-radius:2px;flex-shrink:0}
+.donut-legend-label{flex:1;color:var(--text)}
+.donut-legend-pct{font-weight:700;color:var(--text);width:36px;text-align:right}
+
+/* SECTOR COMPARISON */
+.sector-bar-row{display:flex;align-items:center;gap:10px;margin-bottom:9px}
+.sector-bar-label{font-size:12px;width:150px;flex-shrink:0;color:var(--text)}
+.sector-bar-label.highlight{font-weight:700;color:var(--blue)}
+.sector-bar-track{flex:1;height:16px;background:#f0f0f0;border-radius:4px;overflow:hidden}
+.sector-bar-fill{height:100%;border-radius:4px;background:#b0bec5}
+.sector-bar-fill.highlight{background:#1565c0}
+.sector-bar-val{font-size:11px;color:var(--muted);width:140px;flex-shrink:0;text-align:right}
+
+/* RECENTLY UPDATED */
+.update-item{display:flex;align-items:center;gap:10px;padding:8px 4px;border-bottom:1px solid #f0f0f0;font-size:12px}
+.update-item:last-child{border-bottom:none}
+.update-icon{font-size:14px;flex-shrink:0}
+.update-tag{background:#e3f2fd;color:#1565c0;padding:2px 8px;border-radius:8px;font-size:10px;font-weight:700;flex-shrink:0;width:64px;text-align:center}
+.update-msg{flex:1;color:var(--text)}
+.update-date{font-size:11px;color:var(--muted);flex-shrink:0}
+
+/* GLOSSARY */
+.glossary-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:2px 24px}
+.glossary-item{padding:9px 0;border-bottom:1px solid #f0f0f0}
+.glossary-term{font-weight:700;font-size:12px;color:var(--blue)}
+.glossary-def{font-size:12px;color:var(--text);margin-top:2px;line-height:1.5}
+#glossary-search{width:100%;padding:9px 14px;border:1px solid var(--border);border-radius:8px;font-size:13px;outline:none;margin-bottom:16px}
+
+/* MILESTONE TIMELINE */
+.milestone-list{position:relative;padding-left:24px;margin-top:4px}
+.milestone-list::before{content:'';position:absolute;left:5px;top:6px;bottom:6px;width:2px;background:#e0e0e0}
+.milestone-item{position:relative;padding-bottom:22px}
+.milestone-item:last-child{padding-bottom:0}
+.milestone-dot{position:absolute;left:-24px;top:2px;width:12px;height:12px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 2px #ccc}
+.milestone-dot.complete{background:#2e7d32;box-shadow:0 0 0 2px #2e7d32}
+.milestone-dot.in_progress{background:#f57f17;box-shadow:0 0 0 2px #f57f17}
+.milestone-dot.planned{background:#1565c0;box-shadow:0 0 0 2px #1565c0}
+.milestone-dot.milestone{background:#6a1b9a;box-shadow:0 0 0 2px #6a1b9a}
+.milestone-dot.proposed{background:#90a4ae;box-shadow:0 0 0 2px #90a4ae}
+.milestone-dot.stalled{background:#c62828;box-shadow:0 0 0 2px #c62828}
+.milestone-year{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.3px}
+.milestone-title{font-size:13px;font-weight:700;margin:3px 0 6px;color:var(--text)}
+.milestone-meta{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px}
+.milestone-note{font-size:12px;color:var(--muted);line-height:1.5}
 .card .value{font-size:28px;font-weight:700;color:var(--blue)}
 .card .sub-value{font-size:12px;color:var(--muted);margin-top:4px}
 
@@ -158,6 +222,37 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-t
   footer{display:none}
   .card{box-shadow:none;border:1px solid #ddd}
   button{display:none!important}
+
+  /* BRIEF MODE — one-page Economic Brief, triggered by "🧾 Generate Brief" */
+  body.brief-mode #integration-card,
+  body.brief-mode #tab-maps,
+  body.brief-mode #tab-status,
+  body.brief-mode #tab-locations,
+  body.brief-mode #tab-pipeline,
+  body.brief-mode .tenfold-banner,
+  body.brief-mode #tour-progress-card,
+  body.brief-mode #recent-updates-section,
+  body.brief-mode #risk-register-section,
+  body.brief-mode #milestones-section{ display:none!important }
+  body.brief-mode .tab-content{ padding:8px 16px!important }
+  body.brief-mode .section-title{ font-size:14px!important;margin-bottom:2px!important }
+  body.brief-mode .section-sub{ font-size:10px!important;margin-bottom:10px!important }
+  body.brief-mode .kpi-grid{ grid-template-columns:repeat(3,1fr)!important;gap:8px!important;margin-bottom:14px!important }
+  body.brief-mode .card{ padding:10px!important;page-break-inside:avoid }
+  body.brief-mode .card .value{ font-size:20px!important }
+  body.brief-mode #momentum-panel .mixed-chart-grid{ grid-template-columns:repeat(4,1fr)!important;gap:8px!important }
+  body.brief-mode #momentum-panel .chart-card{ padding:8px 10px!important }
+  body.brief-mode #momentum-panel .chart-card-caption{ display:none!important }
+  body.brief-mode #momentum-panel .donut-legend-item{ font-size:9px!important }
+  body.brief-mode #momentum-panel .two-col{ grid-template-columns:1fr 1fr!important;gap:12px!important;margin-top:10px!important }
+  body.brief-mode .sector-bar-label{ width:110px!important;font-size:10px!important }
+  body.brief-mode .sector-bar-val{ width:100px!important;font-size:9px!important }
+  body.brief-mode .sector-bar-row{ margin-bottom:5px!important }
+  body.brief-mode .sector-bar-track{ height:11px!important }
+  body.brief-mode table{ font-size:10px!important }
+  body.brief-mode th,body.brief-mode td{ padding:5px 7px!important }
+  body.brief-mode #sources-panel{ margin-top:10px!important }
+  body.brief-mode .site-header .sub::after{ content:" | Economic Brief — generated for print"; }
 }
 /* TOUR */
 .tour-btn{background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.4);border-radius:6px;padding:7px 16px;font-size:12px;font-weight:600;cursor:pointer;transition:background .2s}
@@ -172,12 +267,14 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-t
   <div style="display:flex;align-items:center;gap:18px">
     <img src="uganda_coat_of_arms.png" alt="Uganda Coat of Arms" style="height:64px;flex-shrink:0;filter:drop-shadow(0 1px 4px rgba(0,0,0,.5))">
     <div>
-      <h1>Uganda Manufacturing — Sources of Truth</h1>
+      <h1>Manufacturing Industry Dashboard</h1>
       <div class="sub">Ministry of Trade, Industry &amp; Cooperatives &nbsp;×&nbsp; UNIDO Programme for Country Partnership &nbsp;|&nbsp; Updated June 2026</div>
     </div>
   </div>
   <div style="display:flex;align-items:center;gap:10px">
     <button onclick="window.print()" style="background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.4);border-radius:6px;padding:7px 16px;font-size:12px;font-weight:600;cursor:pointer;transition:background .2s" onmouseover="this.style.background='rgba(255,255,255,.25)'" onmouseout="this.style.background='rgba(255,255,255,.15)'">🖨️ Print / Export</button>
+    <button onclick="generateBrief()" class="tour-btn" title="One-page Economic Brief — KPIs, momentum, chain snapshot, sources">🧾 Generate Brief</button>
+    <button onclick="openGlossary()" class="tour-btn">📖 Glossary</button>
     <a href="upload-guide.html" class="tour-btn" style="text-decoration:none">📤 Upload Guide</a>
     <a href="pb-guide.html" class="tour-btn" style="text-decoration:none">📋 Data Entry Guide</a>
     <button id="tour-trigger" class="tour-btn" onclick="startTour()">🧭 Take a Tour</button>
@@ -186,7 +283,7 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-t
 </div>
 
 <div class="tab-bar" id="tour-tab-bar">
-  <button id="tab-btn-overview" class="tab-btn active" onclick="showTab('overview')">🏭 Manufacturing Overview</button>
+  <button id="tab-btn-overview" class="tab-btn active" onclick="showTab('overview')">🏭 Manufacturing Industry</button>
   <button id="tab-btn-maps" class="tab-btn" onclick="showTab('maps')">🗺️ Value Chain Maps</button>
   <button id="tab-btn-status" class="tab-btn" onclick="showTab('status')">📊 Chain Status &amp; 2040 Projections</button>
   <button id="tab-btn-locations" class="tab-btn" onclick="showTab('locations')">📍 Industry Locations</button>
@@ -199,57 +296,306 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-t
 <div id="tab-overview" class="tab-content active">
 
   <div class="tenfold-banner" id="tour-tenfold-banner">
-    <div class="icon">🚀</div>
+    <div class="icon">🏭</div>
     <div>
-      <strong>The Tenfold Growth Strategy is the governing purpose of this entire study.</strong>
-      <span>All analysis, projections, and prescribed solutions are calibrated to Uganda achieving a tenfold expansion of its economy by 2040 — driven by manufacturing, mineral value addition, and agro-industrialisation (ATMs framework). The question at every step: <em>what gets Uganda to tenfold growth sustainably?</em></span>
+      <strong>Manufacturing Industry Dashboard — Ministry of Trade, Industry and Cooperatives</strong>
+      <span>A strategic platform for tracking the status, performance, and growth potential of Uganda's manufacturing sector. Provides data-driven insights on industrial capacity, investment, employment, exports, value addition, infrastructure gaps, policy priorities, and sector-specific value chain performance. Through value chain analysis, the dashboard identifies opportunities for industrial deepening, local sourcing, import substitution, downstream processing, market expansion, and targeted interventions across priority manufacturing sectors. Supports evidence-based decision-making to help manufacturing contribute effectively to Uganda's <strong>Tenfold Growth Strategy</strong> through increased productivity, competitiveness, exports, value addition, import substitution, and job creation.</span>
     </div>
   </div>
 
-  <div class="section-title">📊 Uganda Manufacturing — Key Indicators</div>
-  <div class="section-sub">Current status (2024) versus NDP IV targets (FY2029/30) versus Tenfold Growth targets (2040)</div>
+  <div class="section-title">📊 Manufacturing Industry Key Indicators</div>
+  <div class="section-sub">Current status (FY2024/25) | Sources: UBOS, URA, BoU, ERA, UIA, ITC TradeMap | <span style="color:var(--green)">● exact</span> &nbsp; <span style="color:var(--amber)">≈ estimated</span> &nbsp; <span style="color:var(--blue)">○ indicative</span></div>
 
-  <div class="kpi-grid" id="tour-kpi-grid">
-    <div class="card"><h3>Manufacturing / GDP</h3><div class="value">15.2%</div><div class="sub-value">NDP IV target: 21% &nbsp;|&nbsp; Tenfold target: 30%</div></div>
-    <div class="card"><h3>Uganda GDP</h3><div class="value">USD 53.2B</div><div class="sub-value">NDP IV: USD 158B by 2029/30 &nbsp;|&nbsp; Tenfold: ~USD 500B by 2040</div></div>
-    <div class="card"><h3>Capacity Utilisation</h3><div class="value">~30%</div><div class="sub-value">NDP IV target: 60% &nbsp;|&nbsp; Tenfold target: 80%</div></div>
-    <div class="card"><h3>Per Capita Income</h3><div class="value">USD 1,146</div><div class="sub-value">NDP IV: USD 2,008 &nbsp;|&nbsp; Vision 2040: USD 9,500</div></div>
-    <div class="card"><h3>GDP Growth Rate</h3><div class="value">6.6%</div><div class="sub-value">NDP IV target: 10.1% &nbsp;|&nbsp; Tenfold: 12-15% p.a.</div></div>
-    <div class="card"><h3>Manufactured Exports</h3><div class="value">~12%</div><div class="sub-value">of total exports &nbsp;|&nbsp; NDP IV target: 35% &nbsp;|&nbsp; Tenfold: >50%</div></div>
+  <div class="kpi-grid" id="tour-kpi-grid" style="grid-template-columns:repeat(auto-fit,minmax(210px,1fr))">
+
+    <div class="card">
+      <h3>1. Manufacturing Value Added <span class="conf-badge conf-exact" title="Source: UBOS Annual GDP 2024/25">● exact</span></h3>
+      <div class="value">USD 8.1B</div>
+      <div class="sub-value" style="font-size:13px;font-weight:700;color:var(--blue);margin-top:4px">14.5% of GDP</div>
+      <div class="sub-value">UGX 23.3 trillion (constant 2016/17 prices) &nbsp;|&nbsp; NDP IV target: 21% &nbsp;|&nbsp; Tenfold: 30%</div>
+    </div>
+
+    <div class="card">
+      <h3>2. Manufacturing Growth <span class="conf-badge conf-exact" title="Source: UBOS Annual GDP 2024/25">● exact</span></h3>
+      <div class="value">5.6%</div>
+      <div class="sub-value">FY2024/25 &nbsp;|&nbsp; NDP IV target: 12% &nbsp;|&nbsp; Tenfold: 12–15% p.a.</div>
+    </div>
+
+    <div class="card">
+      <h3>3. Manufacturing Tax Contribution <span class="conf-badge conf-exact" title="Source: URA Revenue Performance Report FY2024/25">● exact</span></h3>
+      <div class="value">UGX 10.4T</div>
+      <div class="sub-value" style="font-size:13px;font-weight:700;color:var(--blue);margin-top:4px">32% of total tax revenue</div>
+      <div class="sub-value">#2 contributor (after Wholesale &amp; Retail) &nbsp;|&nbsp; Tenfold target: 35%+</div>
+    </div>
+
+    <div class="card">
+      <h3>4. Manufactured Exports <span class="conf-badge conf-estimated" title="Source: Bank of Uganda external trade statistics">≈ estimated</span></h3>
+      <div class="value">USD 2.4B</div>
+      <div class="sub-value" style="font-size:13px;font-weight:700;color:var(--blue);margin-top:4px">~12% of total exports</div>
+      <div class="sub-value">NDP IV target: 35% &nbsp;|&nbsp; Tenfold target: &gt;50%</div>
+    </div>
+
+    <div class="card">
+      <h3>5. High-Tech Exports <span class="conf-badge conf-indicative" title="Source: ITC TradeMap / UNIDO — indicative estimate">○ indicative</span></h3>
+      <div class="value">USD 85M</div>
+      <div class="sub-value" style="font-size:13px;font-weight:700;color:var(--blue);margin-top:4px">~3.5% of manufactured exports</div>
+      <div class="sub-value">Dominated by pharmaceuticals (QCIL) &nbsp;|&nbsp; Tenfold target: 15%+</div>
+    </div>
+
+    <div class="card">
+      <h3>6. Private Sector Credit <span class="conf-badge conf-estimated" title="Source: Bank of Uganda credit classification by sector">≈ estimated</span></h3>
+      <div class="value">UGX 1.8T</div>
+      <div class="sub-value" style="font-size:13px;font-weight:700;color:var(--blue);margin-top:4px">~8% of total private sector credit</div>
+      <div class="sub-value">NDP IV target: 12% &nbsp;|&nbsp; Tenfold target: 20%+</div>
+    </div>
+
+    <div class="card">
+      <h3>7. Manufacturing Establishments <span class="conf-badge conf-estimated" title="Source: UBOS Census of Business Establishments 2022/23">≈ estimated</span></h3>
+      <div class="value">~53,000</div>
+      <div class="sub-value">Total registered manufacturing enterprises &nbsp;|&nbsp; NDP IV target: increase by 30%</div>
+    </div>
+
+    <div class="card" style="grid-column:span 1">
+      <h3>8. Distribution by Region <span class="conf-badge conf-estimated" title="Source: UBOS Census of Business Establishments 2022/23">≈ estimated</span></h3>
+      <div style="margin-top:8px">
+        <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span>Central (incl. Kampala)</span><span style="font-weight:700;color:var(--blue)">65%</span></div>
+        <div style="height:6px;background:#e3f2fd;border-radius:3px;margin-bottom:8px"><div style="width:65%;height:100%;background:#1565c0;border-radius:3px"></div></div>
+        <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span>Eastern</span><span style="font-weight:700;color:var(--blue)">15%</span></div>
+        <div style="height:6px;background:#e3f2fd;border-radius:3px;margin-bottom:8px"><div style="width:15%;height:100%;background:#1565c0;border-radius:3px"></div></div>
+        <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span>Western</span><span style="font-weight:700;color:var(--blue)">12%</span></div>
+        <div style="height:6px;background:#e3f2fd;border-radius:3px;margin-bottom:8px"><div style="width:12%;height:100%;background:#1565c0;border-radius:3px"></div></div>
+        <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span>Northern</span><span style="font-weight:700;color:var(--blue)">8%</span></div>
+        <div style="height:6px;background:#e3f2fd;border-radius:3px"><div style="width:8%;height:100%;background:#1565c0;border-radius:3px"></div></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>9. Establishments in Industrial Parks <span class="conf-badge conf-estimated" title="Source: Uganda Investment Authority / UIAB 2024">≈ estimated</span></h3>
+      <div class="value">~850</div>
+      <div class="sub-value" style="font-size:13px;font-weight:700;color:var(--blue);margin-top:4px">~1.6% of total establishments</div>
+      <div class="sub-value">NDP IV target: 5% &nbsp;|&nbsp; Tenfold target: 15%</div>
+    </div>
+
+    <div class="card">
+      <h3>10. FDI to Manufacturing <span class="conf-badge conf-estimated" title="Source: Uganda Investment Authority FDI report 2024">≈ estimated</span></h3>
+      <div class="value">USD 180M</div>
+      <div class="sub-value" style="font-size:13px;font-weight:700;color:var(--blue);margin-top:4px">~15% of total FDI</div>
+      <div class="sub-value">NDP IV target: 20% &nbsp;|&nbsp; Tenfold target: 30%+</div>
+    </div>
+
+    <div class="card">
+      <h3>11. Manufacturing Employment <span class="conf-badge conf-estimated" title="Source: UBOS National Labour Force Survey 2022/23">≈ estimated</span></h3>
+      <div class="value">~712,000</div>
+      <div class="sub-value" style="font-size:13px;font-weight:700;color:var(--blue);margin-top:4px">~7.8% of total employment</div>
+      <div class="sub-value">NDP IV target: 12% &nbsp;|&nbsp; Tenfold target: 20%+</div>
+    </div>
+
+    <div class="card">
+      <h3>12. Variety of Manufactured Exports <span class="conf-badge conf-indicative" title="Source: ITC TradeMap HS6 product-level export data 2024">○ indicative</span></h3>
+      <div class="value">~380</div>
+      <div class="sub-value" style="font-size:13px;font-weight:700;color:var(--blue);margin-top:4px">distinct HS6 product categories exported</div>
+      <div class="sub-value">~7.6% of all HS6 categories traded globally &nbsp;|&nbsp; Tenfold target: 15%+</div>
+    </div>
+
   </div>
+
+  <div class="section-title" style="margin-top:8px">📈 Progress to Tenfold Growth</div>
+  <div class="section-sub">Each indicator tracked against its current value, NDP IV target (FY2029/30), and Tenfold Growth target (2040). Bar represents journey from zero to Tenfold target.</div>
 
   <div class="card" id="tour-progress-card" style="margin-bottom:24px">
-    <h3 style="font-size:15px;color:var(--blue);margin-bottom:16px;font-weight:700">Progress Towards 2040 Targets</h3>
     <div class="progress-section">
+
       <div class="progress-item">
-        <div class="progress-label"><span>Manufacturing share of GDP</span><span style="font-size:11px">Current 15.2% → NDP IV 21% → Tenfold 30%</span></div>
+        <div class="progress-label"><span><strong>1. Manufacturing Value Added (% of GDP)</strong></span><span style="font-size:11px">Current 14.5% → NDP IV 21% → Tenfold 30%</span></div>
         <div style="position:relative;height:28px;background:#f5f5f5;border-radius:6px;overflow:hidden">
-          <div style="position:absolute;left:0;top:0;height:100%;width:50.7%;background:#1565c0;border-radius:6px 0 0 6px;display:flex;align-items:center;padding-left:8px;color:#fff;font-size:11px;font-weight:700">15.2% (Current)</div>
-          <div style="position:absolute;left:50.7%;top:0;height:100%;width:19.3%;background:#43a047;display:flex;align-items:center;padding-left:6px;color:#fff;font-size:11px;font-weight:700">→21%</div>
-          <div style="position:absolute;left:70%;top:0;height:100%;width:30%;background:#f57f17;border-radius:0 6px 6px 0;display:flex;align-items:center;padding-left:6px;color:#fff;font-size:11px;font-weight:700">→30% Tenfold</div>
+          <div style="position:absolute;left:0;top:0;height:100%;width:48.3%;background:#1565c0;border-radius:6px 0 0 6px;display:flex;align-items:center;padding-left:8px;color:#fff;font-size:11px;font-weight:700">14.5% (Current)</div>
+          <div style="position:absolute;left:48.3%;top:0;height:100%;width:21.7%;background:#43a047;display:flex;align-items:center;padding-left:6px;color:#fff;font-size:11px;font-weight:700">→ 21% NDP IV</div>
+          <div style="position:absolute;left:70%;top:0;height:100%;width:30%;background:#f57f17;border-radius:0 6px 6px 0;display:flex;align-items:center;padding-left:6px;color:#fff;font-size:11px;font-weight:700">→ 30% Tenfold</div>
         </div>
       </div>
-      <div class="progress-item" style="margin-top:16px">
-        <div class="progress-label"><span>Capacity Utilisation</span><span style="font-size:11px">Current 30% → NDP IV 60% → Tenfold 80%</span></div>
+
+      <div class="progress-item" style="margin-top:14px">
+        <div class="progress-label"><span><strong>2. Manufacturing Tax Contribution (% of total tax)</strong></span><span style="font-size:11px">Current 32% → NDP IV 35% → Tenfold 40%</span></div>
         <div style="position:relative;height:28px;background:#f5f5f5;border-radius:6px;overflow:hidden">
-          <div style="position:absolute;left:0;top:0;height:100%;width:37.5%;background:#1565c0;border-radius:6px 0 0 6px;display:flex;align-items:center;padding-left:8px;color:#fff;font-size:11px;font-weight:700">30% (Current)</div>
-          <div style="position:absolute;left:37.5%;top:0;height:100%;width:37.5%;background:#43a047;display:flex;align-items:center;padding-left:6px;color:#fff;font-size:11px;font-weight:700">→ 60% (NDP IV)</div>
-          <div style="position:absolute;left:75%;top:0;height:100%;width:25%;background:#f57f17;border-radius:0 6px 6px 0;display:flex;align-items:center;padding-left:6px;color:#fff;font-size:11px;font-weight:700">→80% Tenfold</div>
+          <div style="position:absolute;left:0;top:0;height:100%;width:80%;background:#1565c0;border-radius:6px 0 0 6px;display:flex;align-items:center;padding-left:8px;color:#fff;font-size:11px;font-weight:700">32% (Current)</div>
+          <div style="position:absolute;left:80%;top:0;height:100%;width:7.5%;background:#43a047;display:flex;align-items:center;padding-left:4px;color:#fff;font-size:10px;font-weight:700">35%</div>
+          <div style="position:absolute;left:87.5%;top:0;height:100%;width:12.5%;background:#f57f17;border-radius:0 6px 6px 0;display:flex;align-items:center;padding-left:4px;color:#fff;font-size:10px;font-weight:700">→40%</div>
         </div>
       </div>
-      <div class="progress-item" style="margin-top:16px">
-        <div class="progress-label"><span>GDP (absolute, USD billions)</span><span style="font-size:11px">Current $53.2B → NDP IV $158B → Tenfold ~$500B</span></div>
+
+      <div class="progress-item" style="margin-top:14px">
+        <div class="progress-label"><span><strong>3. Manufactured Exports (% of total exports)</strong></span><span style="font-size:11px">Current 12% → NDP IV 35% → Tenfold 50%</span></div>
         <div style="position:relative;height:28px;background:#f5f5f5;border-radius:6px;overflow:hidden">
-          <div style="position:absolute;left:0;top:0;height:100%;width:10.6%;background:#1565c0;border-radius:6px 0 0 6px;display:flex;align-items:center;padding-left:6px;color:#fff;font-size:11px;font-weight:700">$53B</div>
-          <div style="position:absolute;left:10.6%;top:0;height:100%;width:21%;background:#43a047;display:flex;align-items:center;padding-left:6px;color:#fff;font-size:11px;font-weight:700">→$158B</div>
-          <div style="position:absolute;left:31.6%;top:0;height:100%;width:68.4%;background:#f57f17;border-radius:0 6px 6px 0;display:flex;align-items:center;padding-left:8px;color:#fff;font-size:11px;font-weight:700">→ ~$500B by 2040 (Tenfold)</div>
+          <div style="position:absolute;left:0;top:0;height:100%;width:24%;background:#1565c0;border-radius:6px 0 0 6px;display:flex;align-items:center;padding-left:8px;color:#fff;font-size:11px;font-weight:700">12% (Current)</div>
+          <div style="position:absolute;left:24%;top:0;height:100%;width:46%;background:#43a047;display:flex;align-items:center;padding-left:6px;color:#fff;font-size:11px;font-weight:700">→ 35% NDP IV</div>
+          <div style="position:absolute;left:70%;top:0;height:100%;width:30%;background:#f57f17;border-radius:0 6px 6px 0;display:flex;align-items:center;padding-left:6px;color:#fff;font-size:11px;font-weight:700">→ 50% Tenfold</div>
         </div>
       </div>
+
+      <div class="progress-item" style="margin-top:14px">
+        <div class="progress-label"><span><strong>4. High-Tech Exports (% of manufactured exports)</strong></span><span style="font-size:11px">Current ~3.5% → NDP IV 8% → Tenfold 15%</span></div>
+        <div style="position:relative;height:28px;background:#f5f5f5;border-radius:6px;overflow:hidden">
+          <div style="position:absolute;left:0;top:0;height:100%;width:23.3%;background:#1565c0;border-radius:6px 0 0 6px;display:flex;align-items:center;padding-left:8px;color:#fff;font-size:11px;font-weight:700">~3.5% (Current)</div>
+          <div style="position:absolute;left:23.3%;top:0;height:100%;width:30%;background:#43a047;display:flex;align-items:center;padding-left:6px;color:#fff;font-size:11px;font-weight:700">→ 8% NDP IV</div>
+          <div style="position:absolute;left:53.3%;top:0;height:100%;width:46.7%;background:#f57f17;border-radius:0 6px 6px 0;display:flex;align-items:center;padding-left:6px;color:#fff;font-size:11px;font-weight:700">→ 15% Tenfold</div>
+        </div>
+      </div>
+
+      <div class="progress-item" style="margin-top:14px">
+        <div class="progress-label"><span><strong>5. Private Sector Credit to Manufacturing (% of total credit)</strong></span><span style="font-size:11px">Current ~8% → NDP IV 12% → Tenfold 20%</span></div>
+        <div style="position:relative;height:28px;background:#f5f5f5;border-radius:6px;overflow:hidden">
+          <div style="position:absolute;left:0;top:0;height:100%;width:40%;background:#1565c0;border-radius:6px 0 0 6px;display:flex;align-items:center;padding-left:8px;color:#fff;font-size:11px;font-weight:700">~8% (Current)</div>
+          <div style="position:absolute;left:40%;top:0;height:100%;width:20%;background:#43a047;display:flex;align-items:center;padding-left:6px;color:#fff;font-size:11px;font-weight:700">→ 12%</div>
+          <div style="position:absolute;left:60%;top:0;height:100%;width:40%;background:#f57f17;border-radius:0 6px 6px 0;display:flex;align-items:center;padding-left:6px;color:#fff;font-size:11px;font-weight:700">→ 20% Tenfold</div>
+        </div>
+      </div>
+
+      <div class="progress-item" style="margin-top:14px">
+        <div class="progress-label"><span><strong>6. Establishments in Industrial Parks (% of total)</strong></span><span style="font-size:11px">Current ~1.6% → NDP IV 5% → Tenfold 15%</span></div>
+        <div style="position:relative;height:28px;background:#f5f5f5;border-radius:6px;overflow:hidden">
+          <div style="position:absolute;left:0;top:0;height:100%;width:10.7%;background:#1565c0;border-radius:6px 0 0 6px;display:flex;align-items:center;padding-left:6px;color:#fff;font-size:11px;font-weight:700">1.6%</div>
+          <div style="position:absolute;left:10.7%;top:0;height:100%;width:22.6%;background:#43a047;display:flex;align-items:center;padding-left:6px;color:#fff;font-size:11px;font-weight:700">→ 5% NDP IV</div>
+          <div style="position:absolute;left:33.3%;top:0;height:100%;width:66.7%;background:#f57f17;border-radius:0 6px 6px 0;display:flex;align-items:center;padding-left:6px;color:#fff;font-size:11px;font-weight:700">→ 15% Tenfold</div>
+        </div>
+      </div>
+
+      <div class="progress-item" style="margin-top:14px">
+        <div class="progress-label"><span><strong>7. FDI to Manufacturing (% of total FDI)</strong></span><span style="font-size:11px">Current ~15% → NDP IV 20% → Tenfold 30%</span></div>
+        <div style="position:relative;height:28px;background:#f5f5f5;border-radius:6px;overflow:hidden">
+          <div style="position:absolute;left:0;top:0;height:100%;width:50%;background:#1565c0;border-radius:6px 0 0 6px;display:flex;align-items:center;padding-left:8px;color:#fff;font-size:11px;font-weight:700">~15% (Current)</div>
+          <div style="position:absolute;left:50%;top:0;height:100%;width:16.7%;background:#43a047;display:flex;align-items:center;padding-left:6px;color:#fff;font-size:11px;font-weight:700">→ 20%</div>
+          <div style="position:absolute;left:66.7%;top:0;height:100%;width:33.3%;background:#f57f17;border-radius:0 6px 6px 0;display:flex;align-items:center;padding-left:6px;color:#fff;font-size:11px;font-weight:700">→ 30% Tenfold</div>
+        </div>
+      </div>
+
+      <div class="progress-item" style="margin-top:14px">
+        <div class="progress-label"><span><strong>8. Manufacturing Employment (% of total employment)</strong></span><span style="font-size:11px">Current ~7.8% → NDP IV 12% → Tenfold 20%</span></div>
+        <div style="position:relative;height:28px;background:#f5f5f5;border-radius:6px;overflow:hidden">
+          <div style="position:absolute;left:0;top:0;height:100%;width:39%;background:#1565c0;border-radius:6px 0 0 6px;display:flex;align-items:center;padding-left:8px;color:#fff;font-size:11px;font-weight:700">~7.8% (Current)</div>
+          <div style="position:absolute;left:39%;top:0;height:100%;width:21%;background:#43a047;display:flex;align-items:center;padding-left:6px;color:#fff;font-size:11px;font-weight:700">→ 12%</div>
+          <div style="position:absolute;left:60%;top:0;height:100%;width:40%;background:#f57f17;border-radius:0 6px 6px 0;display:flex;align-items:center;padding-left:6px;color:#fff;font-size:11px;font-weight:700">→ 20% Tenfold</div>
+        </div>
+      </div>
+
+      <div class="progress-item" style="margin-top:14px">
+        <div class="progress-label"><span><strong>9. Variety of Manufactured Exports (% of global HS6 categories)</strong></span><span style="font-size:11px">Current ~7.6% → NDP IV 12% → Tenfold 20%</span></div>
+        <div style="position:relative;height:28px;background:#f5f5f5;border-radius:6px;overflow:hidden">
+          <div style="position:absolute;left:0;top:0;height:100%;width:38%;background:#1565c0;border-radius:6px 0 0 6px;display:flex;align-items:center;padding-left:8px;color:#fff;font-size:11px;font-weight:700">~7.6% (Current)</div>
+          <div style="position:absolute;left:38%;top:0;height:100%;width:22%;background:#43a047;display:flex;align-items:center;padding-left:6px;color:#fff;font-size:11px;font-weight:700">→ 12%</div>
+          <div style="position:absolute;left:60%;top:0;height:100%;width:40%;background:#f57f17;border-radius:0 6px 6px 0;display:flex;align-items:center;padding-left:6px;color:#fff;font-size:11px;font-weight:700">→ 20% Tenfold</div>
+        </div>
+      </div>
+
     </div>
-    <div class="progress-legend">
-      <span><span class="legend-dot" style="background:#1565c0"></span>Current (2024)</span>
+    <div class="progress-legend" style="margin-top:16px">
+      <span><span class="legend-dot" style="background:#1565c0"></span>Current (FY2024/25)</span>
       <span><span class="legend-dot" style="background:#43a047"></span>NDP IV Target (FY2029/30)</span>
       <span><span class="legend-dot" style="background:#f57f17"></span>Tenfold Growth Target (2040)</span>
+    </div>
+  </div>
+
+  <div id="recent-updates-section">
+    <div class="section-title" style="margin-bottom:6px">🕓 Recently Updated</div>
+    <div class="section-sub">Latest data, chapters, and reviews from the agentic pipeline — newest first.</div>
+    <div class="card" style="margin-bottom:24px">
+      <div class="update-item"><span class="update-icon">🚀</span><span class="update-tag">Feature</span><span class="update-msg">redesign Mfg Value Added line chart to match reference brief style</span><span class="update-date">2026-06-20</span></div>
+    <div class="update-item"><span class="update-icon">🚀</span><span class="update-tag">Feature</span><span class="update-msg">expand Investment &amp; Milestone Roadmap to all 9 value chains + tabs</span><span class="update-date">2026-06-19</span></div>
+    <div class="update-item"><span class="update-icon">🛠️</span><span class="update-tag">Fix</span><span class="update-msg">line chart axes + value-label clipping in Momentum charts</span><span class="update-date">2026-06-19</span></div>
+    <div class="update-item"><span class="update-icon">🚀</span><span class="update-tag">Feature</span><span class="update-msg">redesign Momentum panel with mixed chart types</span><span class="update-date">2026-06-19</span></div>
+    <div class="update-item"><span class="update-icon">🚀</span><span class="update-tag">Feature</span><span class="update-msg">add year-axis labels to the sparkline (x-axis ticks + value tags)</span><span class="update-date">2026-06-19</span></div>
+    <div class="update-item"><span class="update-icon">🚀</span><span class="update-tag">Feature</span><span class="update-msg">deepen Momentum panel â€” GDP share, sparkline, sector comparisons</span><span class="update-date">2026-06-18</span></div>
+    <div class="update-item"><span class="update-icon">🚀</span><span class="update-tag">Feature</span><span class="update-msg">Recently Updated feed, Glossary, Risk Register, Milestone Roadmap</span><span class="update-date">2026-06-18</span></div>
+    <div class="update-item"><span class="update-icon">🚀</span><span class="update-tag">Feature</span><span class="update-msg">confidence badges, Sources panel, Momentum trend, one-page Brief</span><span class="update-date">2026-06-18</span></div>
+    </div>
+  </div>
+
+  <div class="section-title" style="margin-bottom:6px">📈 Momentum — FY20/21 → FY24/25</div>
+  <div class="section-sub">Four-year actual change, separate from the 2040 targets above — this answers "is Uganda's industrial base actually moving," not just "how far is left to go."</div>
+  <div class="card" id="momentum-panel" style="margin-bottom:24px">
+    <div class="mixed-chart-grid">
+      
+    <div class="chart-card">
+      <div class="chart-card-title">Growth Rates <span class="conf-badge conf-exact" title="Source: UBOS Annual GDP 2024/25">● exact</span></div>
+      <svg class="grouped-bar-chart" width="240" height="128" viewBox="0 0 240 128"><rect x="19.2" y="57.4" width="36.0" height="44.6" fill="#b0bec5" rx="2"/><rect x="64.8" y="14.0" width="36.0" height="88.0" fill="#1565c0" rx="2"/><text x="37.2" y="53.4" font-size="8" text-anchor="middle" fill="#888" font-weight="600">3.5%</text><text x="82.8" y="10.0" font-size="8" text-anchor="middle" fill="#1565c0" font-weight="700">6.9%</text><text x="60.0" y="117.0" font-size="8.5" text-anchor="middle" fill="#666" font-weight="600">Industry</text><rect x="139.2" y="73.9" width="36.0" height="28.1" fill="#b0bec5" rx="2"/><rect x="184.8" y="30.6" width="36.0" height="71.4" fill="#1565c0" rx="2"/><text x="157.2" y="69.9" font-size="8" text-anchor="middle" fill="#888" font-weight="600">2.2%</text><text x="202.8" y="26.6" font-size="8" text-anchor="middle" fill="#1565c0" font-weight="700">5.6%</text><text x="180.0" y="117.0" font-size="8.5" text-anchor="middle" fill="#666" font-weight="600">Manufacturing</text><line x1="0" y1="102" x2="240" y2="102" stroke="#e0e0e0" stroke-width="1"/></svg>
+      <div class="chart-card-caption">Both rose +3.4 pts — industrial growth is accelerating faster than the wider economy.</div>
+    </div>
+
+    <div class="chart-card wide">
+      <div class="chart-card-title">Mfg Value Added, real Shs trn <span class="conf-badge conf-exact" title="Source: UBOS Annual GDP 2024/25 (constant 2016/17 prices)">● exact</span></div>
+      <div class="line-chart-wrap"><svg class="line-chart" width="356" height="194" viewBox="0 0 356 194"><line x1="36" y1="170.0" x2="354" y2="170.0" stroke="#eee" stroke-width="1"/><text x="30" y="173.0" font-size="8" text-anchor="end" fill="#9e9e9e">18trn</text><line x1="36" y1="147.7" x2="354" y2="147.7" stroke="#eee" stroke-width="1"/><text x="30" y="150.7" font-size="8" text-anchor="end" fill="#9e9e9e">19trn</text><line x1="36" y1="125.4" x2="354" y2="125.4" stroke="#eee" stroke-width="1"/><text x="30" y="128.4" font-size="8" text-anchor="end" fill="#9e9e9e">20trn</text><line x1="36" y1="103.1" x2="354" y2="103.1" stroke="#eee" stroke-width="1"/><text x="30" y="106.1" font-size="8" text-anchor="end" fill="#9e9e9e">21trn</text><line x1="36" y1="80.9" x2="354" y2="80.9" stroke="#eee" stroke-width="1"/><text x="30" y="83.9" font-size="8" text-anchor="end" fill="#9e9e9e">22trn</text><line x1="36" y1="58.6" x2="354" y2="58.6" stroke="#eee" stroke-width="1"/><text x="30" y="61.6" font-size="8" text-anchor="end" fill="#9e9e9e">23trn</text><line x1="36" y1="36.3" x2="354" y2="36.3" stroke="#eee" stroke-width="1"/><text x="30" y="39.3" font-size="8" text-anchor="end" fill="#9e9e9e">24trn</text><line x1="36" y1="14.0" x2="354" y2="14.0" stroke="#eee" stroke-width="1"/><text x="30" y="17.0" font-size="8" text-anchor="end" fill="#9e9e9e">25trn</text><polygon points="44.0,170.0 44.0,134.3 120.0,116.5 196.0,103.1 272.0,80.9 348.0,51.9 348.0,170.0" fill="#2e7d32" opacity="0.12"/><polyline points="44.0,134.3 120.0,116.5 196.0,103.1 272.0,80.9 348.0,51.9" fill="none" stroke="#2e7d32" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/><polygon points="44.0,130.3 48.0,134.3 44.0,138.3 40.0,134.3" fill="#2e7d32"/><polygon points="120.0,112.5 124.0,116.5 120.0,120.5 116.0,116.5" fill="#2e7d32"/><polygon points="196.0,99.1 200.0,103.1 196.0,107.1 192.0,103.1" fill="#2e7d32"/><polygon points="272.0,76.9 276.0,80.9 272.0,84.9 268.0,80.9" fill="#2e7d32"/><polygon points="348.0,47.9 352.0,51.9 348.0,55.9 344.0,51.9" fill="#2e7d32"/><text x="44.0" y="125.3" font-size="8" text-anchor="start" fill="#2e7d32" font-weight="700">19.6trn</text><text x="120.0" y="107.5" font-size="8" text-anchor="middle" fill="#2e7d32" font-weight="700">20.4trn</text><text x="196.0" y="94.1" font-size="8" text-anchor="middle" fill="#2e7d32" font-weight="700">21.0trn</text><text x="272.0" y="71.9" font-size="8" text-anchor="middle" fill="#2e7d32" font-weight="700">22.0trn</text><text x="348.0" y="42.9" font-size="8" text-anchor="end" fill="#2e7d32" font-weight="700">23.3trn</text><text x="44.0" y="186" font-size="8.5" text-anchor="middle" fill="#666" font-weight="600">20/21</text><text x="120.0" y="186" font-size="8.5" text-anchor="middle" fill="#666" font-weight="600">21/22</text><text x="196.0" y="186" font-size="8.5" text-anchor="middle" fill="#666" font-weight="600">22/23</text><text x="272.0" y="186" font-size="8.5" text-anchor="middle" fill="#666" font-weight="600">23/24</text><text x="348.0" y="186" font-size="8.5" text-anchor="middle" fill="#666" font-weight="600">24/25</text></svg></div>
+      <div class="chart-card-caption">+18.4% over 4 years — rising every single year, not just a one-off jump.</div>
+    </div>
+
+    <div class="chart-card">
+      <div class="chart-card-title">Share of GDP, current prices <span class="conf-badge conf-exact" title="Source: UBOS Annual GDP 2024/25">● exact</span></div>
+      <svg class="grouped-bar-chart" width="240" height="128" viewBox="0 0 240 128"><rect x="19.2" y="14.0" width="36.0" height="88.0" fill="#b0bec5" rx="2"/><rect x="64.8" y="23.1" width="36.0" height="78.9" fill="#c62828" rx="2"/><text x="37.2" y="10.0" font-size="8" text-anchor="middle" fill="#888" font-weight="600">27.1%</text><text x="82.8" y="19.1" font-size="8" text-anchor="middle" fill="#c62828" font-weight="700">24.3%</text><text x="60.0" y="117.0" font-size="8.5" text-anchor="middle" fill="#666" font-weight="600">Industry</text><rect x="139.2" y="48.7" width="36.0" height="53.3" fill="#b0bec5" rx="2"/><rect x="184.8" y="54.9" width="36.0" height="47.1" fill="#c62828" rx="2"/><text x="157.2" y="44.7" font-size="8" text-anchor="middle" fill="#888" font-weight="600">16.4%</text><text x="202.8" y="50.9" font-size="8" text-anchor="middle" fill="#c62828" font-weight="700">14.5%</text><text x="180.0" y="117.0" font-size="8.5" text-anchor="middle" fill="#666" font-weight="600">Manufacturing</text><line x1="0" y1="102" x2="240" y2="102" stroke="#e0e0e0" stroke-width="1"/></svg>
+      <div class="chart-card-caption">Share of GDP fell even as real output grew — other sectors (services) are growing faster, not that industry shrank.</div>
+    </div>
+
+    <div class="chart-card">
+      <div class="chart-card-title">Manufactured Exports, USD bn <span class="conf-badge conf-estimated" title="Source: Bank of Uganda external trade statistics (FY20/21 approximate)">≈ estimated</span></div>
+      <svg class="grouped-bar-chart" width="160" height="128" viewBox="0 0 160 128"><rect x="25.6" y="61.7" width="48.0" height="40.3" fill="#b0bec5" rx="2"/><rect x="86.4" y="14.0" width="48.0" height="88.0" fill="#1565c0" rx="2"/><text x="49.6" y="57.7" font-size="8" text-anchor="middle" fill="#888" font-weight="600">$1.1bn</text><text x="110.4" y="10.0" font-size="8" text-anchor="middle" fill="#1565c0" font-weight="700">$2.4bn</text><text x="80.0" y="117.0" font-size="8.5" text-anchor="middle" fill="#666" font-weight="600">Exports</text><line x1="0" y1="102" x2="160" y2="102" stroke="#e0e0e0" stroke-width="1"/></svg>
+      <div class="chart-card-caption">+118% — exports more than doubled in four years.</div>
+    </div>
+    </div>
+    <div class="two-col" style="margin-top:20px;margin-bottom:0">
+      
+    <div class="chart-card">
+      <div class="chart-card-title">Tax Contribution by Sector, FY24/25 <span class="conf-badge conf-exact" title="Source: URA sector &amp; revenue reports">● exact</span></div>
+      <div class="donut-wrap">
+        <svg class="donut-chart" width="110" height="110" viewBox="0 0 42 42"><circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#eee" stroke-width="7"/><circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#b0bec5" stroke-width="7" stroke-dasharray="39.0 61.0" stroke-dashoffset="25"/><circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#1565c0" stroke-width="7" stroke-dasharray="32.0 68.0" stroke-dashoffset="-14.0"/><circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#2e7d32" stroke-width="7" stroke-dasharray="15.0 85.0" stroke-dashoffset="-46.0"/><circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#f57f17" stroke-width="7" stroke-dasharray="9.0 91.0" stroke-dashoffset="-61.0"/><circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#6a1b9a" stroke-width="7" stroke-dasharray="5.0 95.0" stroke-dashoffset="-70.0"/></svg>
+        <div class="donut-legend"><div class="donut-legend-item"><span class="donut-swatch" style="background:#b0bec5"></span><span class="donut-legend-label">Wholesale &amp; Retail</span><span class="donut-legend-pct">39%</span></div>
+<div class="donut-legend-item"><span class="donut-swatch" style="background:#1565c0"></span><span class="donut-legend-label">Manufacturing</span><span class="donut-legend-pct">32%</span></div>
+<div class="donut-legend-item"><span class="donut-swatch" style="background:#2e7d32"></span><span class="donut-legend-label">Financial &amp; Insurance</span><span class="donut-legend-pct">15%</span></div>
+<div class="donut-legend-item"><span class="donut-swatch" style="background:#f57f17"></span><span class="donut-legend-label">Info &amp; Communications</span><span class="donut-legend-pct">9%</span></div>
+<div class="donut-legend-item"><span class="donut-swatch" style="background:#6a1b9a"></span><span class="donut-legend-label">Public Administration</span><span class="donut-legend-pct">5%</span></div></div>
+      </div>
+      <div class="chart-card-caption">Manufacturing holds the #2 line directly, behind Wholesale &amp; Retail (which is largely VAT on manufactured goods).</div>
+    </div>
+      
+    <div class="chart-card">
+      <div class="chart-card-title">Electricity Consumed by Customer Class, FY24/25 <span class="conf-badge conf-exact" title="Source: Electricity Regulatory Authority (FY20/21 indicative)">● exact</span></div>
+      <div class="donut-wrap">
+        <svg class="donut-chart" width="110" height="110" viewBox="0 0 42 42"><circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#eee" stroke-width="7"/><circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#1565c0" stroke-width="7" stroke-dasharray="65.0 35.0" stroke-dashoffset="25"/><circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#b0bec5" stroke-width="7" stroke-dasharray="35.0 65.0" stroke-dashoffset="-40.0"/></svg>
+        <div class="donut-legend"><div class="donut-legend-item"><span class="donut-swatch" style="background:#1565c0"></span><span class="donut-legend-label">Industrial customers</span><span class="donut-legend-pct">65%</span></div>
+<div class="donut-legend-item"><span class="donut-swatch" style="background:#b0bec5"></span><span class="donut-legend-label">Non-industrial</span><span class="donut-legend-pct">35%</span></div></div>
+      </div>
+      <div class="chart-card-caption">Up from ~60% industrial share in FY20/21 — industrial demand is absorbing a growing share of the grid.</div>
+    </div>
+    </div>
+    <div style="margin-top:20px">
+      <h3 style="font-size:13px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px">Private-Sector Credit by Sector, FY24/25 &middot; Bank of Uganda</h3>
+      
+    <div class="sector-bar-row">
+      <span class="sector-bar-label">Building &amp; Real Estate</span>
+      <div class="sector-bar-track"><div class="sector-bar-fill" style="width:100.0%"></div></div>
+      <span class="sector-bar-val">Shs 3.8trn &rarr; 5.0trn</span>
+    </div>
+
+    <div class="sector-bar-row">
+      <span class="sector-bar-label">Trade</span>
+      <div class="sector-bar-track"><div class="sector-bar-fill" style="width:86.0%"></div></div>
+      <span class="sector-bar-val">Shs 2.9trn &rarr; 4.3trn</span>
+    </div>
+
+    <div class="sector-bar-row">
+      <span class="sector-bar-label">Personal &amp; Household</span>
+      <div class="sector-bar-track"><div class="sector-bar-fill" style="width:92.0%"></div></div>
+      <span class="sector-bar-val">Shs 3.5trn &rarr; 4.6trn</span>
+    </div>
+
+    <div class="sector-bar-row">
+      <span class="sector-bar-label highlight">Manufacturing</span>
+      <div class="sector-bar-track"><div class="sector-bar-fill highlight" style="width:68.0%"></div></div>
+      <span class="sector-bar-val">Shs 2.3trn &rarr; 3.4trn</span>
+    </div>
+
+    <div class="sector-bar-row">
+      <span class="sector-bar-label">Agriculture</span>
+      <div class="sector-bar-track"><div class="sector-bar-fill" style="width:54.0%"></div></div>
+      <span class="sector-bar-val">Shs 2.1trn &rarr; 2.7trn</span>
+    </div>
+      <div style="font-size:11px;color:var(--muted);margin-top:6px">Bars show FY24/25 stock; labels show FY20/21 &rarr; FY24/25 growth. Manufacturing credit grew faster (+48%) than the sector average.</div>
     </div>
   </div>
 
@@ -271,7 +617,7 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-t
     </table>
   </div>
 
-  <div class="card" style="margin-top:20px;background:linear-gradient(135deg,#0d47a1,#1565c0);color:#fff">
+  <div class="card" id="integration-card" style="margin-top:20px;background:linear-gradient(135deg,#0d47a1,#1565c0);color:#fff">
     <h3 style="color:rgba(255,255,255,.8);margin-bottom:12px">🔗 How The 9 Chains Form One Integrated Industrial System</h3>
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px;font-size:13px">
       <div style="background:rgba(255,255,255,.1);border-radius:8px;padding:12px"><strong>Minerals → Manufacturing:</strong> Iron ore &amp; steel feed Automotive (KMC bus frames ~37,300 t); copper wiring harnesses feed KMC EVs; cobalt feeds EV batteries</div>
@@ -279,6 +625,194 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-t
       <div style="background:rgba(255,255,255,.1);border-radius:8px;padding:12px"><strong>Petrochemicals unlock Plastics:</strong> Kabalega refinery (~2029) → domestic polymer resin → import substitution for USD 37m+ packaging imports</div>
       <div style="background:rgba(255,255,255,.1);border-radius:8px;padding:12px"><strong>Green advantage:</strong> Uganda's hydro grid enables low-carbon steel (scrap-EAF), green ammonia fertiliser, and low-carbon EV buses — a genuine export differentiator</div>
     </div>
+  </div>
+
+  <div id="risk-register-section">
+    <div class="section-title" style="margin-top:24px;margin-bottom:6px">⚠️ Risk Register</div>
+    <div class="section-sub">Key risks to the Tenfold Growth Strategy, with mitigation and institutional owner. Severity/likelihood are analyst judgement (UNIDO PCP diagnostic), not sourced figures.</div>
+    <div class="card">
+      <table>
+        <thead><tr><th>Risk</th><th>Severity</th><th>Likelihood</th><th>Mitigation</th><th>Owner</th></tr></thead>
+        <tbody>
+          <tr><td><strong>FX volatility raises cost of imported machinery and inputs</strong><div style="font-size:11px;color:var(--muted);margin-top:3px">Macroeconomic</div></td><td><span class="tag tag-red">High</span></td><td><span class="tag tag-yellow">Medium</span></td><td>Phase capital imports; hedge where feasible; prioritise chains with high local input share</td><td>MoFPED / BoU</td></tr>
+        <tr><td><strong>Grid reliability and access constrain new industrial capacity</strong><div style="font-size:11px;color:var(--muted);margin-top:3px">Infrastructure</div></td><td><span class="tag tag-red">High</span></td><td><span class="tag tag-yellow">Medium</span></td><td>Accelerate industrial-zone grid connections; co-generation (bagasse) and captive power options</td><td>MEMD / UEDCL</td></tr>
+        <tr><td><strong>Refinery and petrochemical park delays push back Plastics &amp; Petrochemicals targets</strong><div style="font-size:11px;color:var(--muted);margin-top:3px">Infrastructure</div></td><td><span class="tag tag-red">High</span></td><td><span class="tag tag-yellow">Medium</span></td><td>Maintain interim import-substitution incentives; phase plastics targets to refinery timeline</td><td>MEMD / Ministry of Energy</td></tr>
+        <tr><td><strong>Skills gap in technical/engineering roles limits absorption of new industrial capacity</strong><div style="font-size:11px;color:var(--muted);margin-top:3px">Human Capital</div></td><td><span class="tag tag-yellow">Medium</span></td><td><span class="tag tag-red">High</span></td><td>Expand TVET partnerships with anchor investors (KMC</td><td> QCIL); sector-specific apprenticeships</td></tr>
+        <tr><td><strong>Access to affordable long-term industrial financing remains limited</strong><div style="font-size:11px;color:var(--muted);margin-top:3px">Financial</div></td><td><span class="tag tag-red">High</span></td><td><span class="tag tag-red">High</span></td><td>Blended finance facilities; partial credit guarantees for priority value chains</td><td>UDB / BoU</td></tr>
+        <tr><td><strong>Land acquisition and titling delays slow industrial park development</strong><div style="font-size:11px;color:var(--muted);margin-top:3px">Land &amp; Regulatory</div></td><td><span class="tag tag-yellow">Medium</span></td><td><span class="tag tag-yellow">Medium</span></td><td>Fast-track industrial park land titling; dedicated MTIC land desk</td><td>MTIC / Ministry of Lands</td></tr>
+        <tr><td><strong>Raw material import dependency (resin</strong><div style="font-size:11px;color:var(--muted);margin-top:3px"> API</div></td><td><span class="tag tag-yellow"> Flat Steel) Exposes Chains To Global Price Shocks</span></td><td><span class="tag tag-yellow">Supply Chain</span></td><td>medium</td><td>high</td></tr>
+        <tr><td><strong>Regional competition (Kenya</strong><div style="font-size:11px;color:var(--muted);margin-top:3px"> Ethiopia</div></td><td><span class="tag tag-yellow"> Vietnam) For The Same Fdi Pool</span></td><td><span class="tag tag-yellow">Competitiveness</span></td><td>medium</td><td>medium</td></tr>
+        <tr><td><strong>Capacity utilisation stagnation if demand-side absorption (local + regional) underperforms</strong><div style="font-size:11px;color:var(--muted);margin-top:3px">Market</div></td><td><span class="tag tag-yellow">Medium</span></td><td><span class="tag tag-yellow">Medium</span></td><td>Strengthen EAC market access; public procurement preference for domestic manufactures</td><td>MTIC / EAC Secretariat</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div id="milestones-section">
+    <div class="section-title" style="margin-top:24px;margin-bottom:6px">🛣️ Investment &amp; Milestone Roadmap</div>
+    <div class="section-sub">Committed projects and policy horizons plotted chronologically — what happens when, on the way to 2040. Compiled from internal data and current public reporting; verify before citing externally.</div>
+    <div class="card">
+      <div class="chain-selector" id="milestone-tabs" style="margin-bottom:16px">
+        <button class="chain-btn active" data-chain="__all__" onclick="filterMilestones(this,'__all__')">All Chains</button>
+    <button class="chain-btn" data-chain="Iron &amp; Steel" onclick="filterMilestones(this,'Iron & Steel')">Iron &amp; Steel</button>
+    <button class="chain-btn" data-chain="Copper &amp; Allied Metals" onclick="filterMilestones(this,'Copper & Allied Metals')">Copper &amp; Allied Metals</button>
+    <button class="chain-btn" data-chain="Automotive" onclick="filterMilestones(this,'Automotive')">Automotive</button>
+    <button class="chain-btn" data-chain="Textiles &amp; Garments" onclick="filterMilestones(this,'Textiles & Garments')">Textiles &amp; Garments</button>
+    <button class="chain-btn" data-chain="Pharmaceuticals" onclick="filterMilestones(this,'Pharmaceuticals')">Pharmaceuticals</button>
+    <button class="chain-btn" data-chain="Petrochemicals &amp; Fertilizers" onclick="filterMilestones(this,'Petrochemicals & Fertilizers')">Petrochemicals &amp; Fertilizers</button>
+    <button class="chain-btn" data-chain="Sugar &amp; Confectionery" onclick="filterMilestones(this,'Sugar & Confectionery')">Sugar &amp; Confectionery</button>
+    <button class="chain-btn" data-chain="Plastics &amp; Packaging" onclick="filterMilestones(this,'Plastics & Packaging')">Plastics &amp; Packaging</button>
+    <button class="chain-btn" data-chain="Cement &amp; Building Materials" onclick="filterMilestones(this,'Cement & Building Materials')">Cement &amp; Building Materials</button>
+      </div>
+      <div class="milestone-list" id="milestone-list">
+        
+    <div class="milestone-item" data-chain="Automotive">
+      <div class="milestone-dot complete"></div>
+      <div class="milestone-year">Sept 2025 &middot; Automotive</div>
+      <div class="milestone-title">KMC Bus &amp; EV Plant operational</div>
+      <div class="milestone-meta"><span class="tag tag-green">Complete</span><span class="tag tag-blue" style="background:#f5f5f5;color:#666">Manufacturing</span></div>
+      <div class="milestone-note">Output 2,500 vehicles/yr today; target 10,000+/yr by 2040 plus regional EV-bus supply</div>
+    </div>
+
+    <div class="milestone-item" data-chain="Copper &amp; Allied Metals">
+      <div class="milestone-dot in_progress"></div>
+      <div class="milestone-year">3 Mar 2025 &middot; Copper &amp; Allied Metals</div>
+      <div class="milestone-title">Kilembe Copper-Cobalt PSA signed</div>
+      <div class="milestone-meta"><span class="tag tag-yellow">In Progress</span><span class="tag tag-blue" style="background:#f5f5f5;color:#666">Minerals</span></div>
+      <div class="milestone-note">Sarrai Group + Nile Fibreboard signed the production sharing agreement; mine still dormant pending development capital</div>
+    </div>
+
+    <div class="milestone-item" data-chain="Petrochemicals &amp; Fertilizers">
+      <div class="milestone-dot in_progress"></div>
+      <div class="milestone-year">Mar 2025 &middot; Petrochemicals &amp; Fertilizers</div>
+      <div class="milestone-title">Kabaale Refinery PSA signed</div>
+      <div class="milestone-meta"><span class="tag tag-yellow">In Progress</span><span class="tag tag-blue" style="background:#f5f5f5;color:#666">Infrastructure</span></div>
+      <div class="milestone-note">Alpha MBM Investments (UAE) + UNOC (~40% stake); USD 4bn, 60,000 bpd; first oil expected ~2029-30</div>
+    </div>
+
+    <div class="milestone-item" data-chain="Sugar &amp; Confectionery">
+      <div class="milestone-dot complete"></div>
+      <div class="milestone-year">2025 &middot; Sugar &amp; Confectionery</div>
+      <div class="milestone-title">Kakira Sugar ethanol plant commissioned</div>
+      <div class="milestone-meta"><span class="tag tag-green">Complete</span><span class="tag tag-blue" style="background:#f5f5f5;color:#666">Manufacturing</span></div>
+      <div class="milestone-note">Shs130bn (~USD 36.6m) plant built with India's Praj Industries; 20 million litres/year fuel-grade ethanol from molasses — feeds the national E5 blending mandate</div>
+    </div>
+
+    <div class="milestone-item" data-chain="Cement &amp; Building Materials">
+      <div class="milestone-dot in_progress"></div>
+      <div class="milestone-year">2025 &middot; Cement &amp; Building Materials</div>
+      <div class="milestone-title">Buikwe clinker plant (West International Holding)</div>
+      <div class="milestone-meta"><span class="tag tag-yellow">In Progress</span><span class="tag tag-blue" style="background:#f5f5f5;color:#666">Manufacturing</span></div>
+      <div class="milestone-note">USD 200m investment; ~4,000 tonnes/day capacity — part of closing the clinker self-sufficiency gap from &lt;50% toward &gt;90%</div>
+    </div>
+
+    <div class="milestone-item" data-chain="Petrochemicals &amp; Fertilizers">
+      <div class="milestone-dot in_progress"></div>
+      <div class="milestone-year">Q4 2025 &middot; Petrochemicals &amp; Fertilizers</div>
+      <div class="milestone-title">Kabalega Industrial Park substation &amp; airport</div>
+      <div class="milestone-meta"><span class="tag tag-yellow">In Progress</span><span class="tag tag-blue" style="background:#f5f5f5;color:#666">Infrastructure</span></div>
+      <div class="milestone-note">240MW substation under construction; Kabalega International Airport ~95% complete. UNOC has attracted 31 investors across petrochemicals, logistics and agro-processing</div>
+    </div>
+
+    <div class="milestone-item" data-chain="Pharmaceuticals">
+      <div class="milestone-dot complete"></div>
+      <div class="milestone-year">~2025 &middot; Pharmaceuticals</div>
+      <div class="milestone-title">Pharma starch plant commissioned</div>
+      <div class="milestone-meta"><span class="tag tag-green">Complete</span><span class="tag tag-blue" style="background:#f5f5f5;color:#666">Manufacturing</span></div>
+      <div class="milestone-note">USD 50m plant for excipient self-reliance, reducing import dependence on raw materials for medicine manufacturing — complements UPMI's new pharma plant pipeline</div>
+    </div>
+
+    <div class="milestone-item" data-chain="Textiles &amp; Garments">
+      <div class="milestone-dot proposed"></div>
+      <div class="milestone-year">2025 &middot; Textiles &amp; Garments</div>
+      <div class="milestone-title">Lira Spinning Mill revival proposed</div>
+      <div class="milestone-meta"><span class="tag tag-blue">Proposed (unconfirmed)</span><span class="tag tag-blue" style="background:#f5f5f5;color:#666">Manufacturing</span></div>
+      <div class="milestone-note">Lango MPs and President Museveni have called for reviving Africa's former 2nd-largest yarn mill (historical USD 24m + USD 13m Chinese investment); no confirmed new funding as of 2026</div>
+    </div>
+
+    <div class="milestone-item" data-chain="Petrochemicals &amp; Fertilizers">
+      <div class="milestone-dot stalled"></div>
+      <div class="milestone-year">2025 &middot; Petrochemicals &amp; Fertilizers</div>
+      <div class="milestone-title">Sukulu Phosphate Plant stalled</div>
+      <div class="milestone-meta"><span class="tag tag-red">Stalled</span><span class="tag tag-blue" style="background:#f5f5f5;color:#666">Minerals</span></div>
+      <div class="milestone-note">Guangzhou Dongsong's 100,000 tpa Tororo plant shut 2021, briefly resumed 2023, halted again — the single biggest risk to the 1.5-2m tonne fertiliser demand target</div>
+    </div>
+
+    <div class="milestone-item" data-chain="Cement &amp; Building Materials">
+      <div class="milestone-dot in_progress"></div>
+      <div class="milestone-year">2025-26 &middot; Cement &amp; Building Materials</div>
+      <div class="milestone-title">NE Uganda clinker plant under construction</div>
+      <div class="milestone-meta"><span class="tag tag-yellow">In Progress</span><span class="tag tag-blue" style="background:#f5f5f5;color:#666">Manufacturing</span></div>
+      <div class="milestone-note">USD 300m investment; &gt;6,000 tonnes/day — Uganda's largest single clinker investment to date</div>
+    </div>
+
+    <div class="milestone-item" data-chain="Iron &amp; Steel">
+      <div class="milestone-dot in_progress"></div>
+      <div class="milestone-year">end 2027 &middot; Iron &amp; Steel</div>
+      <div class="milestone-title">Devki Tororo Steel Mill production start</div>
+      <div class="milestone-meta"><span class="tag tag-yellow">In Progress</span><span class="tag tag-blue" style="background:#f5f5f5;color:#666">Manufacturing</span></div>
+      <div class="milestone-note">USD 500m blast-furnace mill; groundbreaking 23 Nov 2025 attended by Presidents Museveni, Ruto and Kagame; 1 million tonnes/year, ~15,000 direct jobs — Uganda's first domestic flat/long steel production at scale</div>
+    </div>
+
+    <div class="milestone-item" data-chain="Petrochemicals &amp; Fertilizers">
+      <div class="milestone-dot planned"></div>
+      <div class="milestone-year">~2029-30 &middot; Petrochemicals &amp; Fertilizers</div>
+      <div class="milestone-title">Kabaale Refinery first oil</div>
+      <div class="milestone-meta"><span class="tag tag-blue">Planned</span><span class="tag tag-blue" style="background:#f5f5f5;color:#666">Infrastructure</span></div>
+      <div class="milestone-note">Enables domestic fuel and polymer feedstock — unlocks the Plastics &amp; Packaging chain</div>
+    </div>
+
+    <div class="milestone-item" data-chain="__universal__">
+      <div class="milestone-dot milestone"></div>
+      <div class="milestone-year">FY2029/30 &middot; All chains</div>
+      <div class="milestone-title">NDP IV target horizon</div>
+      <div class="milestone-meta"><span class="tag tag-red">Policy Milestone</span><span class="tag tag-blue" style="background:#f5f5f5;color:#666">Policy</span></div>
+      <div class="milestone-note">Manufacturing share of GDP target 21%; capacity utilisation target 60%</div>
+    </div>
+
+    <div class="milestone-item" data-chain="Plastics &amp; Packaging">
+      <div class="milestone-dot planned"></div>
+      <div class="milestone-year">~2031 &middot; Plastics &amp; Packaging</div>
+      <div class="milestone-title">Kabalega Petrochemical Park polymer resin operational</div>
+      <div class="milestone-meta"><span class="tag tag-blue">Planned</span><span class="tag tag-blue" style="background:#f5f5f5;color:#666">Infrastructure</span></div>
+      <div class="milestone-note">Domestic polymer resin ends 100% import dependency on plastics feedstock — park targets USD 5bn/year in throughput</div>
+    </div>
+
+    <div class="milestone-item" data-chain="__universal__">
+      <div class="milestone-dot milestone"></div>
+      <div class="milestone-year">2040 &middot; All chains</div>
+      <div class="milestone-title">Tenfold Growth target horizon</div>
+      <div class="milestone-meta"><span class="tag tag-red">Policy Milestone</span><span class="tag tag-blue" style="background:#f5f5f5;color:#666">Policy</span></div>
+      <div class="milestone-note">Manufacturing share of GDP target 30%; GDP ~USD 500B; capacity utilisation 80%</div>
+    </div>
+      </div>
+      <div style="display:flex;gap:16px;flex-wrap:wrap;font-size:11px;margin-top:18px;padding-top:14px;border-top:1px solid var(--border)">
+        <span><span class="milestone-dot complete" style="position:static;display:inline-block;margin-right:4px"></span>Complete</span>
+        <span><span class="milestone-dot in_progress" style="position:static;display:inline-block;margin-right:4px"></span>In Progress</span>
+        <span><span class="milestone-dot planned" style="position:static;display:inline-block;margin-right:4px"></span>Planned</span>
+        <span><span class="milestone-dot proposed" style="position:static;display:inline-block;margin-right:4px"></span>Proposed (unconfirmed)</span>
+        <span><span class="milestone-dot stalled" style="position:static;display:inline-block;margin-right:4px"></span>Stalled</span>
+        <span><span class="milestone-dot milestone" style="position:static;display:inline-block;margin-right:4px"></span>Policy Milestone</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" id="sources-panel" style="margin-top:20px">
+    <h3 style="font-size:15px;color:var(--blue);margin-bottom:14px;font-weight:700;text-transform:none;letter-spacing:0">📚 Sources &amp; Methodology</h3>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;font-size:12px;margin-bottom:16px">
+      <div><strong>UBOS</strong><br><span style="color:var(--muted)">Annual GDP estimates (constant 2016/17 prices), national accounts</span></div>
+      <div><strong>Bank of Uganda</strong><br><span style="color:var(--muted)">External trade statistics, private-sector credit by sector</span></div>
+      <div><strong>URA</strong><br><span style="color:var(--muted)">Sector &amp; revenue reports, tax contribution by sector</span></div>
+      <div><strong>ERA</strong><br><span style="color:var(--muted)">Electricity Regulatory Authority — energy sold by customer class</span></div>
+      <div><strong>ITC TradeMap</strong><br><span style="color:var(--muted)">HS-code level import/export figures, used throughout chain status pages</span></div>
+      <div><strong>UNIDO PCP Diagnostics</strong><br><span style="color:var(--muted)">Capacity utilisation, firm-level interviews, field visit observations</span></div>
+    </div>
+    <div style="display:flex;gap:16px;flex-wrap:wrap;font-size:11px;padding-top:12px;border-top:1px solid var(--border)">
+      <span><span class="conf-badge conf-exact">● exact</span> &nbsp;Published figure from named source, current period</span>
+      <span><span class="conf-badge conf-estimated">≈ estimated</span> &nbsp;Derived from interviews, partial data, or analyst projection</span>
+      <span><span class="conf-badge conf-indicative">○ indicative</span> &nbsp;Order-of-magnitude only — directional, not precise</span>
+    </div>
+    <div style="font-size:11px;color:var(--muted);margin-top:10px">Last verified: June 2026. Hover any confidence badge for its specific source. No FY24/25 manufacturing employment survey currently exists nationally — flagged as a data gap.</div>
   </div>
 
 </div>
@@ -359,6 +893,48 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-t
   </div>
 </div>
 
+<!-- Glossary modal -->
+<div id="glossary-modal-overlay" class="chapter-modal-overlay" onclick="if(event.target===this)closeGlossary()">
+  <div class="chapter-modal">
+    <div class="chapter-modal-header">
+      <span class="chapter-modal-title">📖 Glossary &amp; Abbreviations</span>
+      <button class="chapter-modal-close" onclick="closeGlossary()">✕</button>
+    </div>
+    <div class="chapter-modal-body">
+      <input id="glossary-search" type="search" placeholder="🔍 Search terms…" oninput="filterGlossary(this.value)">
+      <div class="glossary-grid" id="glossary-grid">
+        <div class="glossary-item"><div class="glossary-term">API</div><div class="glossary-def">Active Pharmaceutical Ingredient — the core chemical compound in a medicine</div></div>
+    <div class="glossary-item"><div class="glossary-term">ATMs</div><div class="glossary-def">Agriculture</div></div>
+    <div class="glossary-item"><div class="glossary-term">Bagasse</div><div class="glossary-def">The fibrous residue left after extracting juice from sugarcane — used as a fuel for co-generation</div></div>
+    <div class="glossary-item"><div class="glossary-term">BoU</div><div class="glossary-def">Bank of Uganda — the central bank; source of trade and private-sector credit statistics</div></div>
+    <div class="glossary-item"><div class="glossary-term">Capacity Utilisation</div><div class="glossary-def">The share of installed industrial capacity actually being used in production</div></div>
+    <div class="glossary-item"><div class="glossary-term">Downstream</div><div class="glossary-def">Closer to the final consumer product in a value chain (e.g. rebar fabrication from imported steel)</div></div>
+    <div class="glossary-item"><div class="glossary-term">EAC</div><div class="glossary-def">East African Community — the regional trade bloc Uganda belongs to</div></div>
+    <div class="glossary-item"><div class="glossary-term">EAF</div><div class="glossary-def">Electric Arc Furnace — a low-carbon steelmaking process well-suited to Uganda's hydro-powered grid</div></div>
+    <div class="glossary-item"><div class="glossary-term">ERA</div><div class="glossary-def">Electricity Regulatory Authority — source of electricity consumption/sales data</div></div>
+    <div class="glossary-item"><div class="glossary-term">HS Code</div><div class="glossary-def">Harmonized System code — the international standard used to classify traded goods (used throughout TradeMap figures)</div></div>
+    <div class="glossary-item"><div class="glossary-term">Import Substitution</div><div class="glossary-def">Replacing imported goods with domestically manufactured equivalents</div></div>
+    <div class="glossary-item"><div class="glossary-term">KMC</div><div class="glossary-def">Kiira Motors Corporation — Uganda's state-backed vehicle assembler (buses</div></div>
+    <div class="glossary-item"><div class="glossary-term">Mtpa</div><div class="glossary-def">Million tonnes per annum — a standard unit for industrial production capacity</div></div>
+    <div class="glossary-item"><div class="glossary-term">NDP IV</div><div class="glossary-def">Fourth National Development Plan (FY2025/26–FY2029/30) — Uganda's current medium-term development strategy</div></div>
+    <div class="glossary-item"><div class="glossary-term">PCP</div><div class="glossary-def">Programme for Country Partnership — the UNIDO framework structuring this diagnostic study</div></div>
+    <div class="glossary-item"><div class="glossary-term">PSA</div><div class="glossary-def">Production Sharing Agreement — the contract type used for the Kilembe copper-cobalt revival</div></div>
+    <div class="glossary-item"><div class="glossary-term">QCIL</div><div class="glossary-def">Quality Chemical Industries Limited — Uganda's flagship pharmaceutical manufacturer</div></div>
+    <div class="glossary-item"><div class="glossary-term">SCM</div><div class="glossary-def">Supplementary Cementitious Material — industrial by-products (e.g. steel slag) used to extend cement</div></div>
+    <div class="glossary-item"><div class="glossary-term">Tenfold Growth Strategy</div><div class="glossary-def">Uganda's ambition to grow the economy roughly tenfold by 2040 through manufacturing and value addition</div></div>
+    <div class="glossary-item"><div class="glossary-term">TradeMap</div><div class="glossary-def">ITC TradeMap — the International Trade Centre's database of bilateral trade statistics by HS code</div></div>
+    <div class="glossary-item"><div class="glossary-term">UBOS</div><div class="glossary-def">Uganda Bureau of Statistics — the national statistics office; source of GDP and national accounts data</div></div>
+    <div class="glossary-item"><div class="glossary-term">UNIDO</div><div class="glossary-def">United Nations Industrial Development Organization</div></div>
+    <div class="glossary-item"><div class="glossary-term">Upstream</div><div class="glossary-def">Closer to the raw material end of a value chain (e.g. iron ore mining</div></div>
+    <div class="glossary-item"><div class="glossary-term">URA</div><div class="glossary-def">Uganda Revenue Authority — source of tax-by-sector figures</div></div>
+    <div class="glossary-item"><div class="glossary-term">Value Chain</div><div class="glossary-def">The full sequence of activities — from raw material through processing to final product — for a given industry</div></div>
+    <div class="glossary-item"><div class="glossary-term">Vinasse</div><div class="glossary-def">A liquid by-product of sugar/ethanol production — can be processed into bio-fertiliser</div></div>
+    <div class="glossary-item"><div class="glossary-term">WHO-GMP</div><div class="glossary-def">World Health Organization Good Manufacturing Practice — the quality certification standard for pharmaceutical plants</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- ═══════════════════════════════════════════════════════════════
      SECTION 5: PIPELINE STATUS
 ═══════════════════════════════════════════════════════════════ -->
@@ -381,7 +957,7 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-t
 
 </div>
 
-<footer>Uganda Industrial Diagnostic Study &nbsp;|&nbsp; MTIC × UNIDO PCP &nbsp;|&nbsp; June 2026 &nbsp;|&nbsp; For official use — not for public distribution</footer>
+<footer>Manufacturing Industry Dashboard &nbsp;|&nbsp; Ministry of Trade, Industry &amp; Cooperatives (MTIC) &nbsp;×&nbsp; UNIDO PCP &nbsp;|&nbsp; June 2026 &nbsp;|&nbsp; For official use — not for public distribution</footer>
 
 <script>
 // ═══════════════════ DATA ═══════════════════
@@ -561,7 +1137,8 @@ const chains = [
           }
         ]
       }
-    }
+    },
+    "chapter_file": "report1-04-iron-steel.md"
   },
   {
     "id": "copper",
@@ -718,11 +1295,12 @@ const chains = [
           }
         ]
       }
-    }
+    },
+    "chapter_file": "report1-05-copper-allied-metals.md"
   },
   {
     "id": "automotive",
-    "name": "Automotives",
+    "name": "Automotive",
     "map": {
       "title": "Automotive Value Chain",
       "desc": "From raw materials (steel, copper, plastics) through component manufacture, vehicle assembly, and distribution to the after-market. Kiira Motors Corporation (KMC) plant commissioned 27 September 2025 in Jinja.",
@@ -874,7 +1452,8 @@ const chains = [
           }
         ]
       }
-    }
+    },
+    "chapter_file": "report1-06-automotive.md"
   },
   {
     "id": "textiles",
@@ -1026,7 +1605,8 @@ const chains = [
           }
         ]
       }
-    }
+    },
+    "chapter_file": "report2-04-textiles-garments.md"
   },
   {
     "id": "pharma",
@@ -1177,7 +1757,8 @@ const chains = [
           }
         ]
       }
-    }
+    },
+    "chapter_file": "report2-05-pharmaceuticals.md"
   },
   {
     "id": "petrochem",
@@ -1314,7 +1895,8 @@ const chains = [
           }
         ]
       }
-    }
+    },
+    "chapter_file": "report2-06-petrochemicals-fertilizers.md"
   },
   {
     "id": "sugar",
@@ -1457,7 +2039,8 @@ const chains = [
           }
         ]
       }
-    }
+    },
+    "chapter_file": "report2-07-sugar-confectionery.md"
   },
   {
     "id": "plastics",
@@ -1593,7 +2176,8 @@ const chains = [
           }
         ]
       }
-    }
+    },
+    "chapter_file": "report2-08-plastics-packaging.md"
   },
   {
     "id": "cement",
@@ -1741,7 +2325,8 @@ const chains = [
           }
         ]
       }
-    }
+    },
+    "chapter_file": "report2-09-cement-building-materials.md"
   }
 ];
 
@@ -1764,6 +2349,9 @@ function renderStatus(){
 }
 
 const colorMap={blue:'',green:'green',amber:'amber',red:'red'};
+
+const STRENGTH_TAG={gap:'tag-red',emerging:'tag-yellow',strong:'tag-green'};
+const STRENGTH_TEXT={gap:'Gap',emerging:'Emerging',strong:'Strong'};
 
 function renderStatusDetail(c){
   const s=c.status;
@@ -1796,13 +2384,64 @@ function renderStatusDetail(c){
     </div>
   `).join('');
 
+  // Value Chain Map phases (from c.map) — the upstream→downstream phase breakdown
+  const mapPhaseRows=(c.map && c.map.phases ? c.map.phases : []).map(p=>`
+    <tr>
+      <td><strong>${p.name}</strong><br><span style="font-size:11px;color:var(--muted)">${(p.label||'').replace(/\n/g,' ')}</span></td>
+      <td>${p.detail||''}</td>
+      <td><span class="tag ${STRENGTH_TAG[p.strength]||'tag-blue'}">${STRENGTH_TEXT[p.strength]||p.strength||''}</span></td>
+      <td>${p.stat||''}</td>
+    </tr>
+  `).join('');
+
+  // Full factory/company directory — cross-referenced from FACTORIES by chain name
+  const chainFactories=(typeof FACTORIES!=='undefined'?FACTORIES:[]).filter(f=>f.chain===c.name);
+  const factoryRows=chainFactories.map(f=>`
+    <tr>
+      <td><strong>${f.name}</strong></td>
+      <td>${f.loc||''}</td>
+      <td style="max-width:220px">${f.products||''}</td>
+      <td>${f.capacity_installed||''}</td>
+      <td>${f.capacity_utilised||''}</td>
+      <td>${f.employees||''}</td>
+      <td>${f.est||''}</td>
+      <td style="max-width:160px">${f.ownership||''}</td>
+      <td>${f.exports||''}</td>
+    </tr>
+  `).join('');
+  const factoryTable=chainFactories.length ? `
+    <table style="margin-top:4px">
+      <thead><tr><th>Firm</th><th>Location</th><th>Products</th><th>Installed Capacity</th><th>Utilisation</th><th>Employees</th><th>Est.</th><th>Ownership</th><th>Exports</th></tr></thead>
+      <tbody>${factoryRows}</tbody>
+    </table>` : `<div style="color:var(--muted);font-size:12px;padding:8px">No factory-level records for this chain yet.</div>`;
+
+  const chapterBtn = c.chapter_file ? `
+    <button onclick="viewStaticChapter('${c.chapter_file}','${(c.name||'').replace(/'/g,"\\'")}')"
+      style="background:var(--blue);color:#fff;border:none;border-radius:6px;padding:7px 16px;font-size:12px;font-weight:600;cursor:pointer;flex-shrink:0">
+      📖 View Full Diagnostic Chapter
+    </button>` : '';
+
   document.getElementById('status-display').innerHTML=`
     <div class="card" style="margin-bottom:16px">
-      <h3 style="font-size:16px;font-weight:700;color:var(--blue);margin-bottom:16px">Current Status — ${c.name}</h3>
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:16px">
+        <h3 style="font-size:16px;font-weight:700;color:var(--blue);margin:0">Current Status — ${c.name}</h3>
+        ${chapterBtn}
+      </div>
       <div class="detail-grid">${statCards}</div>
       <h4 style="font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-top:4px;margin-bottom:8px">Key Players</h4>
       <div class="companies-list">${companies}</div>
     </div>
+
+    <div class="card" style="margin-bottom:16px">
+      <h3 style="font-size:15px;font-weight:700;color:var(--blue);margin-bottom:6px">🔗 ${(c.map&&c.map.title)||'Value Chain Map'}</h3>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:14px">${(c.map&&c.map.desc)||''}</div>
+      <table>
+        <thead><tr><th>Phase</th><th>Transformation</th><th>Uganda's Position</th><th>Evidence</th></tr></thead>
+        <tbody>${mapPhaseRows}</tbody>
+      </table>
+      ${c.map&&c.map.gap ? `<div style="margin-top:12px;padding:10px 14px;background:#ffebee;border-left:4px solid var(--red);border-radius:6px;font-size:12px;color:#c62828"><strong>⚠️ ${c.map.gap}</strong></div>` : ''}
+    </div>
+
     <div class="two-col">
       <div class="card">
         <h3 style="font-size:15px;font-weight:700;color:var(--blue);margin-bottom:14px">Binding Constraints (Weighted)</h3>
@@ -1818,6 +2457,12 @@ function renderStatusDetail(c){
           ${projRows}
         </div>
       </div>
+    </div>
+
+    <div class="card" style="margin-top:16px">
+      <h3 style="font-size:15px;font-weight:700;color:var(--blue);margin-bottom:4px">🏭 Full Factory &amp; Company Directory (${chainFactories.length})</h3>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:12px">All recorded facilities for this chain — also plotted on the 📍 Industry Locations map.</div>
+      <div style="overflow-x:auto">${factoryTable}</div>
     </div>
   `;
 }
@@ -1864,19 +2509,6 @@ function showTab(id){
     }
   }
 }
-
-// ═══════════════════ INIT ═══════════════════
-renderStatus();
-// Restore the last-visited tab so a refresh keeps you where you were.
-(function(){
-  try{
-    const hash=location.hash.slice(1);
-    const saved=hash||(localStorage.getItem('mtic_activeTab'));
-    if(saved&&document.getElementById('tab-'+saved)) showTab(saved);
-    window.addEventListener('hashchange',()=>{const h=location.hash.slice(1);if(h&&document.getElementById('tab-'+h))showTab(h);});
-  }catch(e){}
-})();
-// factory-names datalist is populated inside initMap() after FACTORIES is defined
 
 // ═══════════════════ INDUSTRY LOCATIONS MAP ═══════════════════
 const CHAIN_COLORS={
@@ -1982,6 +2614,20 @@ const FACTORIES=[
   {name:'Goodwill Uganda Ceramic Co. Ltd',chain:'Cement & Building Materials',lat:0.832,lng:32.082,loc:'Liao Shen Industrial Park, Kapeeka, Nakaseke District',products:'Ceramic wall and floor tiles (200+ designs)',capacity_installed:'40,000 m²/day',capacity_utilised:'Operational since Apr 2018; 40% exported',employees:'1,150 Ugandans + 60 Chinese technicians',est:'2017',ownership:'Chinese-founded; USD 30 m investment; Liao Shen Industrial Park',exports:'East Africa (40% of output)'},
   {name:'Hua Hui International Ltd',chain:'Cement & Building Materials',lat:0.834,lng:32.084,loc:'Liao Shen Industrial Park, Kapeeka, Nakaseke District',products:'Ceramic tiles (two production lines)',capacity_installed:'~40,000 m²/day (shared park infrastructure)',capacity_utilised:'Operational',employees:'—',est:'2018',ownership:'Chinese-owned — Liao Shen Industrial Park, Kapeeka',exports:'East Africa (~40% export)'}
 ];
+
+// ═══════════════════ INIT ═══════════════════
+// renderStatus() must run after FACTORIES is defined above — renderStatusDetail()
+// cross-references FACTORIES by chain name for the full factory directory table.
+renderStatus();
+// Restore the last-visited tab so a refresh keeps you where you were.
+(function(){
+  try{
+    const hash=location.hash.slice(1);
+    const saved=hash||(localStorage.getItem('mtic_activeTab'));
+    if(saved&&document.getElementById('tab-'+saved)) showTab(saved);
+    window.addEventListener('hashchange',()=>{const h=location.hash.slice(1);if(h&&document.getElementById('tab-'+h))showTab(h);});
+  }catch(e){}
+})();
 
 function initMap(){
   // Catch any unexpected runtime error and display it inside the map container
@@ -2634,34 +3280,42 @@ function startTour(){
 })();
 
 // ═══════════════════ CHAPTER VIEWER ═══════════════════
-function viewChapter(vcId, vcName){
+function _loadChapterInto(filename, title404){
   const overlay = document.getElementById('chapter-modal-overlay');
   const body    = document.getElementById('chapter-modal-body');
-  const title   = document.getElementById('chapter-modal-title');
-  title.textContent = vcName + ' — Diagnostic Chapter';
-  body.innerHTML    = '<div style="text-align:center;padding:40px;color:#999">Loading chapter…</div>';
   overlay.classList.add('open');
   document.body.style.overflow = 'hidden';
 
-  fetch('./chapters/' + vcId + '_diagnostic.md?_=' + Date.now())
+  fetch('./chapters/' + filename + '?_=' + Date.now())
     .then(r => r.ok ? r.text() : Promise.reject(r.status))
     .then(md => {
-      // Remove the HTML comment header written by synthesis_agent
+      // Strip any agent-generated HTML comment header
       md = md.replace(/<!--[\s\S]*?-->\s*/, '');
       if(window.marked){
         body.innerHTML = window.marked.parse(md);
       } else {
-        // Fallback: plain pre
         body.innerHTML = '<pre style="white-space:pre-wrap;font-size:12px">' +
           md.replace(/</g,'&lt;') + '</pre>';
       }
     })
     .catch(status => {
       body.innerHTML = status === 404
-        ? '<div style="padding:24px;color:#999">Chapter not yet published to this server.<br>' +
-          'It will appear here after the review PR is merged and CI re-deploys.</div>'
+        ? '<div style="padding:24px;color:#999">' + title404 + '</div>'
         : '<div style="padding:24px;color:#c62828">Could not load chapter (HTTP ' + status + ').</div>';
     });
+}
+
+function viewChapter(vcId, vcName){
+  document.getElementById('chapter-modal-title').textContent = vcName + ' — Diagnostic Chapter';
+  document.getElementById('chapter-modal-body').innerHTML = '<div style="text-align:center;padding:40px;color:#999">Loading chapter…</div>';
+  _loadChapterInto(vcId + '_diagnostic.md',
+    'Chapter not yet published to this server.<br>It will appear here after the review PR is merged and CI re-deploys.');
+}
+
+function viewStaticChapter(filename, chainName){
+  document.getElementById('chapter-modal-title').textContent = chainName + ' — Full Diagnostic Chapter (Phase 1/2 Report)';
+  document.getElementById('chapter-modal-body').innerHTML = '<div style="text-align:center;padding:40px;color:#999">Loading chapter…</div>';
+  _loadChapterInto(filename, 'Chapter not found on this server.');
 }
 
 function closeChapter(){
@@ -2669,7 +3323,46 @@ function closeChapter(){
   document.body.style.overflow = '';
 }
 
-document.addEventListener('keydown', e => { if(e.key === 'Escape') closeChapter(); });
+// ═══════════════════ MILESTONE ROADMAP TABS ═══════════════════
+function filterMilestones(btn, chain){
+  document.querySelectorAll('#milestone-tabs .chain-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('#milestone-list .milestone-item').forEach(item => {
+    const itemChain = item.getAttribute('data-chain');
+    const show = chain === '__all__' || itemChain === chain || itemChain === '__universal__';
+    item.style.display = show ? '' : 'none';
+  });
+}
+
+// ═══════════════════ GLOSSARY ═══════════════════
+function openGlossary(){
+  document.getElementById('glossary-modal-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  document.getElementById('glossary-search').value = '';
+  filterGlossary('');
+  setTimeout(() => document.getElementById('glossary-search').focus(), 100);
+}
+function closeGlossary(){
+  document.getElementById('glossary-modal-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function filterGlossary(q){
+  q = q.toLowerCase();
+  document.querySelectorAll('#glossary-grid .glossary-item').forEach(item => {
+    const text = item.textContent.toLowerCase();
+    item.style.display = text.includes(q) ? '' : 'none';
+  });
+}
+
+// ═══════════════════ GENERATE BRIEF (one-page print) ═══════════════════
+function generateBrief(){
+  showTab('overview');
+  document.body.classList.add('brief-mode');
+  window.print();
+}
+window.addEventListener('afterprint', () => document.body.classList.remove('brief-mode'));
+
+document.addEventListener('keydown', e => { if(e.key === 'Escape'){ closeChapter(); closeGlossary(); } });
 </script>
 </body>
 </html>
