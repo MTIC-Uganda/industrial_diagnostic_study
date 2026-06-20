@@ -159,6 +159,9 @@ def confidence_badge_html(confidence, source):
     title = f' title="Source: {esc(source)}"' if source else ''
     return f'<span class="conf-badge {cls}"{title}>{label}</span>'
 
+# Unused since Jerome's 2026-06-20 rebrand (12 KPI cards + 9 Tenfold bars,
+# hardcoded directly in the template like the progress bars always were).
+# Kept for now in case the CSV-driven approach is revived for a future KPI set.
 def kpi_cards_html():
     parts = []
     for r in overview_kpis:
@@ -675,7 +678,6 @@ tmpl = TMPL.read_text('utf-8')
 _ms_tabs, _ms_items = milestones_html()
 
 replacements = {
-    '<!--%%OVERVIEW_KPIS_CARDS%%-->': kpi_cards_html(),
     '<!--%%CHAIN_SUMMARY_ROWS%%-->':  chain_table_rows_html(),
     '<!--%%MACRO_TREND_ITEMS%%-->':   macro_trend_html(),
     '<!--%%RECENT_UPDATES%%-->':      recent_updates_html(),
