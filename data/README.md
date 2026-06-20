@@ -77,6 +77,7 @@ Cross-cutting reference for iron & steel, copper, and other mineral-based chains
 - `phosphates-value-chain-analysis-jan2014.pdf` — Phosphates value chain analysis report, January 2014.
 
 ## sugar-confectionery/
+- `sugarcane-value-chain-analysis.pdf` — Analysis of Uganda's sugarcane value chain. Primary reference document for the Sugar & Confectionery chapter.
 - `sugar-industry-brief-may2026.docx` — Brief on the sugar industry, May 2026.
 - `usma-sugar-industry-annual-report-2024.pdf` — Uganda Sugar Manufacturers Association: sugar industry annual report 2024.
 - `national-sugar-policy-2010.docx` — National Sugar Policy 2010.
