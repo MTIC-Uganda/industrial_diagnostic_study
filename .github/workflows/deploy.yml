@@ -65,7 +65,7 @@ jobs:
             git push origin ${{ github.ref_name }}
           fi
 
-            - name: Open gap-fill PR if proposals exist
+      - name: Open gap-fill PR if proposals exist
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
