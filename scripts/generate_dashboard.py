@@ -490,7 +490,7 @@ def recent_updates_html(limit=8):
     try:
         raw = subprocess.run(
             ['git', 'log', '-n', '40', '--pretty=format:%ad|||%s', '--date=short'],
-            cwd=ROOT, capture_output=True, text=True, timeout=20, check=True
+            cwd=ROOT, capture_output=True, encoding='utf-8', timeout=20, check=True
         ).stdout
     except (subprocess.SubprocessError, FileNotFoundError):
         return '<div style="color:var(--muted);font-size:12px;padding:8px">No update history available.</div>'
