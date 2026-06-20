@@ -584,6 +584,9 @@ function renderStatus(){
 
 const colorMap={blue:'',green:'green',amber:'amber',red:'red'};
 
+const STRENGTH_TAG={gap:'tag-red',emerging:'tag-yellow',strong:'tag-green'};
+const STRENGTH_TEXT={gap:'Gap',emerging:'Emerging',strong:'Strong'};
+
 function renderStatusDetail(c){
   const s=c.status;
   const statCards=s.current.map(item=>{
@@ -615,13 +618,64 @@ function renderStatusDetail(c){
     </div>
   `).join('');
 
+  // Value Chain Map phases (from c.map) — the upstream→downstream phase breakdown
+  const mapPhaseRows=(c.map && c.map.phases ? c.map.phases : []).map(p=>`
+    <tr>
+      <td><strong>${p.name}</strong><br><span style="font-size:11px;color:var(--muted)">${(p.label||'').replace(/\n/g,' ')}</span></td>
+      <td>${p.detail||''}</td>
+      <td><span class="tag ${STRENGTH_TAG[p.strength]||'tag-blue'}">${STRENGTH_TEXT[p.strength]||p.strength||''}</span></td>
+      <td>${p.stat||''}</td>
+    </tr>
+  `).join('');
+
+  // Full factory/company directory — cross-referenced from FACTORIES by chain name
+  const chainFactories=(typeof FACTORIES!=='undefined'?FACTORIES:[]).filter(f=>f.chain===c.name);
+  const factoryRows=chainFactories.map(f=>`
+    <tr>
+      <td><strong>${f.name}</strong></td>
+      <td>${f.loc||''}</td>
+      <td style="max-width:220px">${f.products||''}</td>
+      <td>${f.capacity_installed||''}</td>
+      <td>${f.capacity_utilised||''}</td>
+      <td>${f.employees||''}</td>
+      <td>${f.est||''}</td>
+      <td style="max-width:160px">${f.ownership||''}</td>
+      <td>${f.exports||''}</td>
+    </tr>
+  `).join('');
+  const factoryTable=chainFactories.length ? `
+    <table style="margin-top:4px">
+      <thead><tr><th>Firm</th><th>Location</th><th>Products</th><th>Installed Capacity</th><th>Utilisation</th><th>Employees</th><th>Est.</th><th>Ownership</th><th>Exports</th></tr></thead>
+      <tbody>${factoryRows}</tbody>
+    </table>` : `<div style="color:var(--muted);font-size:12px;padding:8px">No factory-level records for this chain yet.</div>`;
+
+  const chapterBtn = c.chapter_file ? `
+    <button onclick="viewStaticChapter('${c.chapter_file}','${(c.name||'').replace(/'/g,"\\'")}')"
+      style="background:var(--blue);color:#fff;border:none;border-radius:6px;padding:7px 16px;font-size:12px;font-weight:600;cursor:pointer;flex-shrink:0">
+      📖 View Full Diagnostic Chapter
+    </button>` : '';
+
   document.getElementById('status-display').innerHTML=`
     <div class="card" style="margin-bottom:16px">
-      <h3 style="font-size:16px;font-weight:700;color:var(--blue);margin-bottom:16px">Current Status — ${c.name}</h3>
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:16px">
+        <h3 style="font-size:16px;font-weight:700;color:var(--blue);margin:0">Current Status — ${c.name}</h3>
+        ${chapterBtn}
+      </div>
       <div class="detail-grid">${statCards}</div>
       <h4 style="font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-top:4px;margin-bottom:8px">Key Players</h4>
       <div class="companies-list">${companies}</div>
     </div>
+
+    <div class="card" style="margin-bottom:16px">
+      <h3 style="font-size:15px;font-weight:700;color:var(--blue);margin-bottom:6px">🔗 ${(c.map&&c.map.title)||'Value Chain Map'}</h3>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:14px">${(c.map&&c.map.desc)||''}</div>
+      <table>
+        <thead><tr><th>Phase</th><th>Transformation</th><th>Uganda's Position</th><th>Evidence</th></tr></thead>
+        <tbody>${mapPhaseRows}</tbody>
+      </table>
+      ${c.map&&c.map.gap ? `<div style="margin-top:12px;padding:10px 14px;background:#ffebee;border-left:4px solid var(--red);border-radius:6px;font-size:12px;color:#c62828"><strong>⚠️ ${c.map.gap}</strong></div>` : ''}
+    </div>
+
     <div class="two-col">
       <div class="card">
         <h3 style="font-size:15px;font-weight:700;color:var(--blue);margin-bottom:14px">Binding Constraints (Weighted)</h3>
@@ -637,6 +691,12 @@ function renderStatusDetail(c){
           ${projRows}
         </div>
       </div>
+    </div>
+
+    <div class="card" style="margin-top:16px">
+      <h3 style="font-size:15px;font-weight:700;color:var(--blue);margin-bottom:4px">🏭 Full Factory &amp; Company Directory (${chainFactories.length})</h3>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:12px">All recorded facilities for this chain — also plotted on the 📍 Industry Locations map.</div>
+      <div style="overflow-x:auto">${factoryTable}</div>
     </div>
   `;
 }
@@ -684,7 +744,14 @@ function showTab(id){
   }
 }
 
+// ═══════════════════ INDUSTRY LOCATIONS MAP ═══════════════════
+/*%%CHAIN_COLORS_DATA%%*/
+
+/*%%FACTORIES_DATA%%*/
+
 // ═══════════════════ INIT ═══════════════════
+// renderStatus() must run after FACTORIES is defined above — renderStatusDetail()
+// cross-references FACTORIES by chain name for the full factory directory table.
 renderStatus();
 // Restore the last-visited tab so a refresh keeps you where you were.
 (function(){
@@ -695,12 +762,6 @@ renderStatus();
     window.addEventListener('hashchange',()=>{const h=location.hash.slice(1);if(h&&document.getElementById('tab-'+h))showTab(h);});
   }catch(e){}
 })();
-// factory-names datalist is populated inside initMap() after FACTORIES is defined
-
-// ═══════════════════ INDUSTRY LOCATIONS MAP ═══════════════════
-/*%%CHAIN_COLORS_DATA%%*/
-
-/*%%FACTORIES_DATA%%*/
 
 function initMap(){
   // Catch any unexpected runtime error and display it inside the map container
@@ -1353,34 +1414,42 @@ function startTour(){
 })();
 
 // ═══════════════════ CHAPTER VIEWER ═══════════════════
-function viewChapter(vcId, vcName){
+function _loadChapterInto(filename, title404){
   const overlay = document.getElementById('chapter-modal-overlay');
   const body    = document.getElementById('chapter-modal-body');
-  const title   = document.getElementById('chapter-modal-title');
-  title.textContent = vcName + ' — Diagnostic Chapter';
-  body.innerHTML    = '<div style="text-align:center;padding:40px;color:#999">Loading chapter…</div>';
   overlay.classList.add('open');
   document.body.style.overflow = 'hidden';
 
-  fetch('./chapters/' + vcId + '_diagnostic.md?_=' + Date.now())
+  fetch('./chapters/' + filename + '?_=' + Date.now())
     .then(r => r.ok ? r.text() : Promise.reject(r.status))
     .then(md => {
-      // Remove the HTML comment header written by synthesis_agent
+      // Strip any agent-generated HTML comment header
       md = md.replace(/<!--[\s\S]*?-->\s*/, '');
       if(window.marked){
         body.innerHTML = window.marked.parse(md);
       } else {
-        // Fallback: plain pre
         body.innerHTML = '<pre style="white-space:pre-wrap;font-size:12px">' +
           md.replace(/</g,'&lt;') + '</pre>';
       }
     })
     .catch(status => {
       body.innerHTML = status === 404
-        ? '<div style="padding:24px;color:#999">Chapter not yet published to this server.<br>' +
-          'It will appear here after the review PR is merged and CI re-deploys.</div>'
+        ? '<div style="padding:24px;color:#999">' + title404 + '</div>'
         : '<div style="padding:24px;color:#c62828">Could not load chapter (HTTP ' + status + ').</div>';
     });
+}
+
+function viewChapter(vcId, vcName){
+  document.getElementById('chapter-modal-title').textContent = vcName + ' — Diagnostic Chapter';
+  document.getElementById('chapter-modal-body').innerHTML = '<div style="text-align:center;padding:40px;color:#999">Loading chapter…</div>';
+  _loadChapterInto(vcId + '_diagnostic.md',
+    'Chapter not yet published to this server.<br>It will appear here after the review PR is merged and CI re-deploys.');
+}
+
+function viewStaticChapter(filename, chainName){
+  document.getElementById('chapter-modal-title').textContent = chainName + ' — Full Diagnostic Chapter (Phase 1/2 Report)';
+  document.getElementById('chapter-modal-body').innerHTML = '<div style="text-align:center;padding:40px;color:#999">Loading chapter…</div>';
+  _loadChapterInto(filename, 'Chapter not found on this server.');
 }
 
 function closeChapter(){

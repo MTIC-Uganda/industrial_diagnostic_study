@@ -174,7 +174,8 @@
           }
         ]
       }
-    }
+    },
+    "chapter_file": "report1-04-iron-steel.md"
   },
   {
     "id": "copper",
@@ -331,11 +332,12 @@
           }
         ]
       }
-    }
+    },
+    "chapter_file": "report1-05-copper-allied-metals.md"
   },
   {
     "id": "automotive",
-    "name": "Automotives",
+    "name": "Automotive",
     "map": {
       "title": "Automotive Value Chain",
       "desc": "From raw materials (steel, copper, plastics) through component manufacture, vehicle assembly, and distribution to the after-market. Kiira Motors Corporation (KMC) plant commissioned 27 September 2025 in Jinja.",
@@ -487,7 +489,8 @@
           }
         ]
       }
-    }
+    },
+    "chapter_file": "report1-06-automotive.md"
   },
   {
     "id": "textiles",
@@ -639,7 +642,8 @@
           }
         ]
       }
-    }
+    },
+    "chapter_file": "report2-04-textiles-garments.md"
   },
   {
     "id": "pharma",
@@ -790,7 +794,8 @@
           }
         ]
       }
-    }
+    },
+    "chapter_file": "report2-05-pharmaceuticals.md"
   },
   {
     "id": "petrochem",
@@ -927,7 +932,8 @@
           }
         ]
       }
-    }
+    },
+    "chapter_file": "report2-06-petrochemicals-fertilizers.md"
   },
   {
     "id": "sugar",
@@ -1070,7 +1076,8 @@
           }
         ]
       }
-    }
+    },
+    "chapter_file": "report2-07-sugar-confectionery.md"
   },
   {
     "id": "plastics",
@@ -1206,7 +1213,8 @@
           }
         ]
       }
-    }
+    },
+    "chapter_file": "report2-08-plastics-packaging.md"
   },
   {
     "id": "cement",
@@ -1354,6 +1362,7 @@
           }
         ]
       }
-    }
+    },
+    "chapter_file": "report2-09-cement-building-materials.md"
   }
 ]
