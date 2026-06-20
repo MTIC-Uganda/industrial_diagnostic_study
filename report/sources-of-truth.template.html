@@ -38,6 +38,9 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#f0f2f5;color:#1a1a2e;fo
 /* MOMENTUM PANEL — mixed chart cards */
 .mixed-chart-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
 .chart-card{background:#f8f9fa;border-radius:8px;padding:14px 16px;border:1px solid var(--border);display:flex;flex-direction:column;align-items:center;text-align:center}
+.chart-card.wide{grid-column:span 2}
+.line-chart{max-width:100%;height:auto}
+@media(max-width:700px){.chart-card.wide{grid-column:span 1}}
 .chart-card-title{font-size:12px;font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:6px;flex-wrap:wrap;justify-content:center}
 .chart-card-caption{font-size:11px;color:var(--muted);margin-top:10px;line-height:1.5}
 .grouped-bar-chart{max-width:100%}

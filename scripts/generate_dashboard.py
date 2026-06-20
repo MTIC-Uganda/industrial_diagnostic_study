@@ -16,7 +16,7 @@ Output:
     report/sources-of-truth.html
 """
 
-import csv, json, os, subprocess, sys, urllib.request, urllib.error
+import csv, json, math, os, subprocess, sys, urllib.request, urllib.error
 from pathlib import Path
 
 ROOT   = Path(__file__).resolve().parent.parent
@@ -172,66 +172,74 @@ def kpi_cards_html():
         )
     return '\n    '.join(parts)
 
-def line_chart_svg(values, labels=None, width=190, chart_h=70, label_h=14, y_axis_w=24):
-    """Line/area chart with visible x- and y-axis, and every value labelled
-    (not just endpoints) — labels use edge-safe text-anchor so they never
-    clip outside the viewBox."""
+def line_chart_svg(values, labels=None, width=320, chart_h=170, label_h=24,
+                    y_axis_w=36, unit='trn', color='#2e7d32'):
+    """Full-gridline line/area chart — diamond markers, a labelled y-axis tick
+    at every whole unit, every value labelled above its point, x-axis category
+    labels below. Modelled on a UBOS/URA/BoU economic-brief reference chart."""
     if not values or len(values) < 2:
         return ''
-    top_pad = 13
+    n = len(values)
+    lo_val, hi_val = min(values), max(values)
+
+    axis_lo = math.floor(lo_val) - 1
+    axis_hi = math.ceil(hi_val) + 1
+    if axis_hi <= axis_lo:
+        axis_hi = axis_lo + 1
+    span = axis_hi - axis_lo
+
+    top_pad = 16
     plot_h = chart_h - top_pad
     height = chart_h + label_h
     total_w = y_axis_w + width
-    lo, hi = min(values), max(values)
-    span = (hi - lo) or 1
-    n = len(values)
 
     xs, ys = [], []
     for i, v in enumerate(values):
-        x = y_axis_w + (i / (n - 1)) * (width - 8) + 4
-        y = top_pad + plot_h - ((v - lo) / span) * plot_h
+        x = y_axis_w + (i / (n - 1)) * (width - 16) + 8
+        y = top_pad + plot_h - ((v - axis_lo) / span) * plot_h
         xs.append(x)
         ys.append(y)
 
-    points = ' '.join(f'{x:.1f},{y:.1f}' for x, y in zip(xs, ys))
-    area = f'{xs[0]:.1f},{chart_h:.1f} ' + points + f' {xs[-1]:.1f},{chart_h:.1f}'
+    grid_parts = []
+    for t in range(axis_lo, axis_hi + 1):
+        gy = top_pad + plot_h - ((t - axis_lo) / span) * plot_h
+        grid_parts.append(f'<line x1="{y_axis_w}" y1="{gy:.1f}" x2="{total_w-2}" y2="{gy:.1f}" stroke="#eee" stroke-width="1"/>')
+        grid_parts.append(f'<text x="{y_axis_w-6}" y="{gy+3:.1f}" font-size="9" text-anchor="end" fill="#9e9e9e">{t}{unit}</text>')
+    grid_html = ''.join(grid_parts)
 
-    dots = ''.join(
-        f'<circle cx="{x:.1f}" cy="{y:.1f}" r="{3 if i == n-1 else 2}" '
-        f'fill="{"#1565c0" if i == n-1 else "#5e92d4"}"/>'
-        for i, (x, y) in enumerate(zip(xs, ys))
+    points = ' '.join(f'{x:.1f},{y:.1f}' for x, y in zip(xs, ys))
+    base_y = top_pad + plot_h
+    area = f'{xs[0]:.1f},{base_y:.1f} ' + points + f' {xs[-1]:.1f},{base_y:.1f}'
+
+    hw = 4.5
+    diamonds = ''.join(
+        f'<polygon points="{x:.1f},{y-hw:.1f} {x+hw:.1f},{y:.1f} {x:.1f},{y+hw:.1f} {x-hw:.1f},{y:.1f}" fill="{color}"/>'
+        for x, y in zip(xs, ys)
     )
 
     value_tags = []
     for i, (x, y) in enumerate(zip(xs, ys)):
         anchor = 'start' if i == 0 else 'end' if i == n - 1 else 'middle'
-        ty = max(y - 6, top_pad - 5)
+        ty = max(y - 10, top_pad - 3)
         value_tags.append(
-            f'<text x="{x:.1f}" y="{ty:.1f}" font-size="7" text-anchor="{anchor}" '
-            f'fill="#1565c0" font-weight="700">{values[i]:g}</text>'
+            f'<text x="{x:.1f}" y="{ty:.1f}" font-size="10.5" text-anchor="{anchor}" '
+            f'fill="#333" font-weight="700">{values[i]:.1f}{unit}</text>'
         )
     value_tags = ''.join(value_tags)
 
     tick_labels = ''
     if labels and len(labels) == n:
         tick_labels = ''.join(
-            f'<text x="{x:.1f}" y="{chart_h + 9}" font-size="7" text-anchor="middle" fill="#999">{esc(lbl)}</text>'
+            f'<text x="{x:.1f}" y="{chart_h + 17}" font-size="11" text-anchor="middle" fill="#666">{esc(lbl)}</text>'
             for x, lbl in zip(xs, labels)
         )
 
-    axes = (
-        f'<line x1="{y_axis_w}" y1="{top_pad}" x2="{y_axis_w}" y2="{chart_h}" stroke="#ccc" stroke-width="1"/>'
-        f'<line x1="{y_axis_w}" y1="{chart_h}" x2="{total_w-2}" y2="{chart_h}" stroke="#ccc" stroke-width="1"/>'
-        f'<text x="{y_axis_w-4}" y="{top_pad+3}" font-size="6.5" text-anchor="end" fill="#999">{hi:g}</text>'
-        f'<text x="{y_axis_w-4}" y="{chart_h-1}" font-size="6.5" text-anchor="end" fill="#999">{lo:g}</text>'
-    )
-
     return (
         f'<svg class="line-chart" width="{total_w}" height="{height}" viewBox="0 0 {total_w} {height}">'
-        f'<polygon points="{area}" fill="#1565c0" opacity="0.08"/>'
-        f'{axes}'
-        f'<polyline points="{points}" fill="none" stroke="#1565c0" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>'
-        f'{dots}{value_tags}{tick_labels}'
+        f'{grid_html}'
+        f'<polygon points="{area}" fill="{color}" opacity="0.12"/>'
+        f'<polyline points="{points}" fill="none" stroke="{color}" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>'
+        f'{diamonds}{value_tags}{tick_labels}'
         f'</svg>'
     )
 
@@ -355,11 +363,11 @@ def macro_trend_html():
         try:
             values = [float(v) for v in traj_raw.split(';') if v]
             labels = [l for l in labels_raw.split(';') if l] if labels_raw else None
-            line_svg = line_chart_svg(values, labels=labels, width=190, chart_h=70, label_h=14)
+            line_svg = line_chart_svg(values, labels=labels)
         except ValueError:
             line_svg = ''
     cards.append(f'''
-    <div class="chart-card">
+    <div class="chart-card wide">
       <div class="chart-card-title">Mfg Value Added, real Shs trn {badge_for("mfg_value_added")}</div>
       <div class="line-chart-wrap">{line_svg}</div>
       <div class="chart-card-caption">{esc(vr.get("delta",""))} over 4 years — rising every single year, not just a one-off jump.</div>
