@@ -1,11 +1,11 @@
-chart,sector,value_label,pct,highlight
-tax,Wholesale & Retail,39% &middot; Shs 6.1trn,39,
-tax,Manufacturing,32% &middot; Shs 5.0trn,32,1
-tax,Financial & Insurance,15% &middot; Shs 2.3trn,15,
-tax,Info & Communications,9% &middot; Shs 1.4trn,9,
-tax,Public Administration,5% &middot; Shs 0.8trn,5,
-credit,Building & Real Estate,Shs 3.8trn &rarr; 5.0trn,5.0,
-credit,Trade,Shs 2.9trn &rarr; 4.3trn,4.3,
-credit,Personal & Household,Shs 3.5trn &rarr; 4.6trn,4.6,
-credit,Manufacturing,Shs 2.3trn &rarr; 3.4trn,3.4,1
-credit,Agriculture,Shs 2.1trn &rarr; 2.7trn,2.7,
+chart,sector,value_label,usd_label,pct,highlight
+tax,Wholesale & Retail,39% &middot; Shs 6.1trn,USD 1.65B,39,
+tax,Manufacturing,32% &middot; Shs 5.0trn,USD 1.35B,32,1
+tax,Financial & Insurance,15% &middot; Shs 2.3trn,USD 0.62B,15,
+tax,Info & Communications,9% &middot; Shs 1.4trn,USD 0.38B,9,
+tax,Public Administration,5% &middot; Shs 0.8trn,USD 0.22B,5,
+credit,Building & Real Estate,Shs 3.8trn &rarr; 5.0trn,,5.0,
+credit,Trade,Shs 2.9trn &rarr; 4.3trn,,4.3,
+credit,Personal & Household,Shs 3.5trn &rarr; 4.6trn,,4.6,
+credit,Manufacturing,Shs 2.3trn &rarr; 3.4trn,,3.4,1
+credit,Agriculture,Shs 2.1trn &rarr; 2.7trn,,2.7,

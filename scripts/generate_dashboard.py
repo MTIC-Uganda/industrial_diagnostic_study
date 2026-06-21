@@ -350,6 +350,7 @@ def kpi_tax_donut_compact():
         return ''
     rows.sort(key=lambda r: -float(r['pct']))
     slices = []
+    usd_labels = {}
     palette_idx = 0
     for r in rows:
         if r.get('highlight') == '1':
@@ -358,13 +359,16 @@ def kpi_tax_donut_compact():
             color = DONUT_PALETTE[palette_idx % len(DONUT_PALETTE)]
             palette_idx += 1
         slices.append((r['sector'], float(r['pct']), color))
+        usd_labels[r['sector']] = r.get('usd_label', '')
     legend_rows = []
     for label, pct, color in slices:
         weight = '700' if color == '#1565c0' else '400'
+        usd = usd_labels.get(label, '')
+        usd_html = f' &middot; {esc(usd)}' if usd else ''
         legend_rows.append(
             f'<div class="kpi-donut-legend-item" style="font-weight:{weight}">'
             f'<span class="donut-swatch" style="background:{color}"></span>'
-            f'{esc(label)} <strong>{pct:g}%</strong></div>'
+            f'{esc(label)} <strong>{pct:g}%{usd_html}</strong></div>'
         )
     return (
         f'<div class="kpi-donut-row">'
