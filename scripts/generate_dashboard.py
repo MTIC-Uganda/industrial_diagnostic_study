@@ -159,6 +159,9 @@ def confidence_badge_html(confidence, source):
     title = f' title="Source: {esc(source)}"' if source else ''
     return f'<span class="conf-badge {cls}"{title}>{label}</span>'
 
+# Unused since Jerome's 2026-06-20 rebrand (12 KPI cards + 9 Tenfold bars,
+# hardcoded directly in the template like the progress bars always were).
+# Kept for now in case the CSV-driven approach is revived for a future KPI set.
 def kpi_cards_html():
     parts = []
     for r in overview_kpis:
@@ -487,7 +490,7 @@ def recent_updates_html(limit=8):
     try:
         raw = subprocess.run(
             ['git', 'log', '-n', '40', '--pretty=format:%ad|||%s', '--date=short'],
-            cwd=ROOT, capture_output=True, text=True, timeout=20, check=True
+            cwd=ROOT, capture_output=True, encoding='utf-8', timeout=20, check=True
         ).stdout
     except (subprocess.SubprocessError, FileNotFoundError):
         return '<div style="color:var(--muted);font-size:12px;padding:8px">No update history available.</div>'
@@ -662,6 +665,20 @@ def chain_colors_js():
     body = ',\n'.join(f"  '{js_str(k)}':'{v}'" for k, v in chain_colors.items())
     return f'const CHAIN_COLORS={{\n{body}\n}};'
 
+def treemap_data_js():
+    """Embeds the establishment-distribution datasets (region->district for
+    Spatial Distribution, sector->subsector for Sector Distribution) extracted
+    from Jerome's National Industries Register (Aug 2025) by
+    scripts/extract_industries_register.py."""
+    sector_file   = DATA / 'treemap_sector.json'
+    district_file = DATA / 'treemap_district.json'
+    sector_data   = json.loads(sector_file.read_text('utf-8')) if sector_file.exists() else {}
+    district_data = json.loads(district_file.read_text('utf-8')) if district_file.exists() else {}
+    return (
+        'const TREEMAP_SECTOR_DATA = ' + json.dumps(sector_data, ensure_ascii=False) + ';\n'
+        'const TREEMAP_DISTRICT_DATA = ' + json.dumps(district_data, ensure_ascii=False) + ';'
+    )
+
 def chains_js():
     return 'const chains = ' + json.dumps(chains, ensure_ascii=False, indent=2) + ';'
 
@@ -675,7 +692,6 @@ tmpl = TMPL.read_text('utf-8')
 _ms_tabs, _ms_items = milestones_html()
 
 replacements = {
-    '<!--%%OVERVIEW_KPIS_CARDS%%-->': kpi_cards_html(),
     '<!--%%CHAIN_SUMMARY_ROWS%%-->':  chain_table_rows_html(),
     '<!--%%MACRO_TREND_ITEMS%%-->':   macro_trend_html(),
     '<!--%%RECENT_UPDATES%%-->':      recent_updates_html(),
@@ -689,6 +705,7 @@ replacements = {
     '/*%%CHAINS_DATA%%*/':            chains_js(),
     '/*%%CHAIN_COLORS_DATA%%*/':      chain_colors_js(),
     '/*%%FACTORIES_DATA%%*/':         factories_js(),
+    '/*%%TREEMAP_DATA%%*/':           treemap_data_js(),
 }
 
 out = tmpl

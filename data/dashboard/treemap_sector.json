@@ -1,0 +1,134 @@
+{
+  "Food Products": {
+    "Meat": 86,
+    "Fish": 34,
+    "Fruits and Vegetables": 305,
+    "Vegetable Oil, Animal Oil and Fats": 165,
+    "Dairy products": 203,
+    "Grain mill products": 358,
+    "Starch and starch products": 32,
+    "Bakery Products": 404,
+    "Sugar": 16,
+    "Cocoa, Chocolate and Sugar Confectionary": 49,
+    "Macaroni and Noodles": 6,
+    "Prepared meals and dishes": 5,
+    "Other food products": 171,
+    "Animal Feeds": 30,
+    "Tea": 88
+  },
+  "Beverages": {
+    "Distilled and Blended spirits": 360,
+    "Wines": 197,
+    "Malt Liquors and Malt": 36,
+    "Soft Drinks, Mineral Water and other waters": 572
+  },
+  "Tobacco": {
+    "Tobacco Products": 8
+  },
+  "Textiles": {
+    "Textiles": 21
+  },
+  "Leather and Leather Products": {
+    "Tanning": 23,
+    "Luggage, Handbags, Saddlery And Harness": 41,
+    "Footwear": 112
+  },
+  "Wood and Wood Products": {
+    "Sawmilling": 28,
+    "Veneer": 5,
+    "Carpentry": 79,
+    "Wooden Containers": 5,
+    "Other wood products": 97,
+    "Furniture": 57
+  },
+  "Paper and Paper Products": {
+    "Pulp, Paper and Paperboard": 77,
+    "Corrugated paper and Paperboard": 24,
+    "Other articles of Paper": 122
+  },
+  "Printing and Reproduction of Recorded Media": {
+    "Printing": 643,
+    "Services related to Printing": 161,
+    "Reproduction of recorded media": 4
+  },
+  "Coke and Petroleum Products": {
+    "Refined Petroleum Products": 93
+  },
+  "Chemical and Chemical Products": {
+    "Fertilizers": 3,
+    "Pesticides and Agro chemicals": 26,
+    "Paints & Vanishes": 117,
+    "Soap & Detergents": 505,
+    "Other Chemical Products": 95,
+    "Man made Fibres": 2
+  },
+  "Pharmaceutical, Medical Chemicals and Botanical Products": {
+    "Pharmaceuticals, Medicinal Chemical and Botanical Products": 98
+  },
+  "Rubber and Plastic Products": {
+    "Tyres": 9,
+    "Other Rubber products": 21,
+    "Plastics": 336
+  },
+  "Other Non-Metallic Mineral Products": {
+    "Glass": 20,
+    "Refractory Products": 2,
+    "Clay building materials": 52,
+    "Porcelain & Ceramic": 6,
+    "Cement": 21,
+    "Concrete & Cement Products": 99,
+    "Stone": 8,
+    "Other non-metallic mineral products n.e.c.": 64
+  },
+  "Basic Metals": {
+    "Iron & Steel": 161,
+    "Basic precious and other non-ferrous metals": 12,
+    "Iron & Steel Casting": 18,
+    "Non Ferrous metals casting": 3
+  },
+  "Fabricated Metal Products Except Machinery and Equipment": {
+    "Structural metal fabrication": 131,
+    "Tanks, reservoirs and containers of metal": 7,
+    "Steam generators, except central heating hot water boilers": 2,
+    "Forging, pressing, stamping and roll-forming of metal; powder metallurgy": 8,
+    "Treatment and coating of metals; machining": 6,
+    "Cutlery, hand tools and general hardware": 10,
+    "Other fabricated metal products": 285
+  },
+  "Computer, Electronic and Optical Products": {
+    "Communication equipment": 2
+  },
+  "Electrical Equipment": {
+    "Electric motors, generators, transformers and electricity distribution and control apparatus": 1,
+    "Batteries and accumulators": 11,
+    "Fibre optical cables": 2,
+    "Other electronic and electric wires and cables": 15,
+    "Electric lighting equipment": 9,
+    "Domestic Home Appliances": 7,
+    "Other electrical equipment": 47
+  },
+  "Machinery and Equipment": {
+    "Agricultural and forestry machinery": 4,
+    "Food, beverage and tobacco processing machinery": 1,
+    "Other special-purpose machinery": 3
+  },
+  "Motor Vehicles, Trailers and Semi-Trailers": {
+    "Passenger motor vehicles (buses, coaches, trolleybuses)": 4,
+    "Bodies (Coach Work) For Motor vehicles, Manufacture Of Trailers And Semi-Trailers": 6,
+    "Parts and accessories for motor vehicles": 9
+  },
+  "Other Transport Equipment": {
+    "Ships & floating structures": 1,
+    "Pleasure & sporting boats": 1,
+    "Air & Spacecraft": 10,
+    "Motorcycles": 10,
+    "Bicycles": 2,
+    "Other transport equipment": 5
+  },
+  "Other Manufacturing": {
+    "Jewellery": 2,
+    "Games & Toys": 2,
+    "Medical & Dental instruments": 6,
+    "Other Manufacturing": 7
+  }
+}
