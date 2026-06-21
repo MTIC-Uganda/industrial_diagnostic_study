@@ -122,6 +122,13 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#f0f2f5;color:#1a1a2e;fo
 .kpi-pct-row{display:flex;align-items:center;justify-content:space-between;gap:8px}
 .kpi-pct-row .sub-value{margin-top:0}
 .kpi-pct-row .donut-chart{flex-shrink:0}
+.kpi-pct-row .kpi-bar{flex-shrink:0}
+.kpi-pct-row .line-chart{flex-shrink:0}
+.kpi-credit-row{display:flex;align-items:center;gap:8px;margin-bottom:5px}
+.kpi-credit-row:last-child{margin-bottom:0}
+.kpi-credit-label{font-size:11px;width:120px;flex-shrink:0;color:var(--text)}
+.kpi-credit-track{flex:1;height:10px;background:#f0f0f0;border-radius:3px;overflow:hidden}
+.kpi-credit-fill{height:100%;border-radius:3px}
 .kpi-donut-row{display:flex;align-items:center;gap:10px;margin-top:6px}
 .kpi-donut-row .donut-chart{flex-shrink:0}
 .kpi-donut-legend{display:flex;flex-direction:column;gap:2px;font-size:10px}
@@ -363,14 +370,17 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-t
       <div class="kpi-value-row"><span class="kpi-icon">💰</span><div class="value">USD 8.1B</div></div>
       <div class="kpi-pct-row" style="margin-top:4px">
         <div class="sub-value" style="font-size:13px;font-weight:700;color:var(--blue);margin-top:0">14.5% of GDP (~USD 55.9B total)</div>
-        <svg class="donut-chart" width="46" height="46" viewBox="0 0 42 42"><circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#eee" stroke-width="6"/><circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#1565c0" stroke-width="6" stroke-dasharray="14.5 85.5" stroke-dashoffset="25"/><circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#e0e0e0" stroke-width="6" stroke-dasharray="85.5 14.5" stroke-dashoffset="10.5"/></svg>
+        <svg class="kpi-bar" width="120" height="8" viewBox="0 0 120 8"><rect x="0" y="0" width="120" height="8" rx="4.0" fill="#e8eaf6"/><rect x="0" y="0" width="17.4" height="8" rx="4.0" fill="#1565c0"/></svg>
       </div>
     </div>
 
     <div class="card">
       <h3>2. Manufacturing Growth <span class="conf-badge conf-exact" title="Source: UBOS Annual GDP 2024/25">● exact</span></h3>
-      <div class="kpi-value-row"><span class="kpi-icon">📈</span><div class="value">5.6%</div></div>
-      <div class="sub-value">FY2024/25</div>
+      <div class="kpi-pct-row">
+        <div class="kpi-value-row"><span class="kpi-icon">📈</span><div class="value">5.6%</div></div>
+        <svg class="line-chart" width="132" height="58" viewBox="0 0 132 58"><line x1="22" y1="44.0" x2="130" y2="44.0" stroke="#eee" stroke-width="1"/><text x="16" y="47.0" font-size="8" text-anchor="end" fill="#9e9e9e">1%</text><line x1="22" y1="39.0" x2="130" y2="39.0" stroke="#eee" stroke-width="1"/><text x="16" y="42.0" font-size="8" text-anchor="end" fill="#9e9e9e">2%</text><line x1="22" y1="34.0" x2="130" y2="34.0" stroke="#eee" stroke-width="1"/><text x="16" y="37.0" font-size="8" text-anchor="end" fill="#9e9e9e">3%</text><line x1="22" y1="29.0" x2="130" y2="29.0" stroke="#eee" stroke-width="1"/><text x="16" y="32.0" font-size="8" text-anchor="end" fill="#9e9e9e">4%</text><line x1="22" y1="24.0" x2="130" y2="24.0" stroke="#eee" stroke-width="1"/><text x="16" y="27.0" font-size="8" text-anchor="end" fill="#9e9e9e">5%</text><line x1="22" y1="19.0" x2="130" y2="19.0" stroke="#eee" stroke-width="1"/><text x="16" y="22.0" font-size="8" text-anchor="end" fill="#9e9e9e">6%</text><line x1="22" y1="14.0" x2="130" y2="14.0" stroke="#eee" stroke-width="1"/><text x="16" y="17.0" font-size="8" text-anchor="end" fill="#9e9e9e">7%</text><polygon points="30.0,44.0 30.0,38.0 124.0,21.0 124.0,44.0" fill="#2e7d32" opacity="0.12"/><polyline points="30.0,38.0 124.0,21.0" fill="none" stroke="#2e7d32" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/><polygon points="30.0,34.0 34.0,38.0 30.0,42.0 26.0,38.0" fill="#2e7d32"/><polygon points="124.0,17.0 128.0,21.0 124.0,25.0 120.0,21.0" fill="#2e7d32"/><text x="30.0" y="29.0" font-size="8" text-anchor="start" fill="#2e7d32" font-weight="700">2.2%</text><text x="124.0" y="12.0" font-size="8" text-anchor="end" fill="#2e7d32" font-weight="700">5.6%</text><text x="30.0" y="60" font-size="8.5" text-anchor="middle" fill="#666" font-weight="600">20/21</text><text x="124.0" y="60" font-size="8.5" text-anchor="middle" fill="#666" font-weight="600">24/25</text></svg>
+      </div>
+      <div class="sub-value">FY2024/25, up from 2.2% in FY20/21</div>
     </div>
 
     <div class="card">
@@ -383,7 +393,7 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-t
       <div class="kpi-value-row"><span class="kpi-icon">🚢</span><div class="value">USD 2.4B</div></div>
       <div class="kpi-pct-row" style="margin-top:4px">
         <div class="sub-value" style="font-size:13px;font-weight:700;color:var(--blue);margin-top:0">~12% of total exports (~USD 20.0B)</div>
-        <svg class="donut-chart" width="46" height="46" viewBox="0 0 42 42"><circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#eee" stroke-width="6"/><circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#2e7d32" stroke-width="6" stroke-dasharray="12.0 88.0" stroke-dashoffset="25"/><circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#e0e0e0" stroke-width="6" stroke-dasharray="88.0 12.0" stroke-dashoffset="13.0"/></svg>
+        <svg class="kpi-bar" width="120" height="8" viewBox="0 0 120 8"><rect x="0" y="0" width="120" height="8" rx="4.0" fill="#e8eaf6"/><rect x="0" y="0" width="14.4" height="8" rx="4.0" fill="#2e7d32"/></svg>
       </div>
     </div>
 
@@ -392,16 +402,16 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-t
       <div class="kpi-value-row"><span class="kpi-icon">🔬</span><div class="value">USD 85M</div></div>
       <div class="kpi-pct-row" style="margin-top:4px">
         <div class="sub-value" style="font-size:13px;font-weight:700;color:var(--blue);margin-top:0">~3.5% of manufactured exports (USD 2.4B)</div>
-        <svg class="donut-chart" width="46" height="46" viewBox="0 0 42 42"><circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#eee" stroke-width="6"/><circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#6a1b9a" stroke-width="6" stroke-dasharray="3.5 96.5" stroke-dashoffset="25"/><circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#e0e0e0" stroke-width="6" stroke-dasharray="96.5 3.5" stroke-dashoffset="21.5"/></svg>
+        <svg class="kpi-bar" width="120" height="8" viewBox="0 0 120 8"><rect x="0" y="0" width="120" height="8" rx="4.0" fill="#e8eaf6"/><rect x="0" y="0" width="4.2" height="8" rx="4.0" fill="#6a1b9a"/></svg>
       </div>
     </div>
 
     <div class="card">
       <h3>6. Private Sector Credit <span class="conf-badge conf-estimated" title="Source: Bank of Uganda credit classification by sector (UGX 1.8T converted at ~UGX 3,700/USD)">≈ estimated</span></h3>
       <div class="kpi-value-row"><span class="kpi-icon">🏦</span><div class="value">USD 487M</div></div>
-      <div class="kpi-pct-row" style="margin-top:4px">
-        <div class="sub-value" style="font-size:13px;font-weight:700;color:var(--blue);margin-top:0">~8% of total private sector credit (~USD 6.1B)</div>
-        <svg class="donut-chart" width="46" height="46" viewBox="0 0 42 42"><circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#eee" stroke-width="6"/><circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#f57f17" stroke-width="6" stroke-dasharray="8.0 92.0" stroke-dashoffset="25"/><circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#e0e0e0" stroke-width="6" stroke-dasharray="92.0 8.0" stroke-dashoffset="17.0"/></svg>
+      <div class="sub-value" style="font-size:13px;font-weight:700;color:var(--blue);margin-top:4px">~8% of total private sector credit</div>
+      <div style="margin-top:8px">
+        <div class="kpi-credit-row"><span class="kpi-credit-label" style="font-weight:400">Building &amp; Real Estate</span><div class="kpi-credit-track"><div class="kpi-credit-fill" style="width:100%;background:#90a4ae"></div></div></div><div class="kpi-credit-row"><span class="kpi-credit-label" style="font-weight:400">Trade</span><div class="kpi-credit-track"><div class="kpi-credit-fill" style="width:86%;background:#789262"></div></div></div><div class="kpi-credit-row"><span class="kpi-credit-label" style="font-weight:400">Personal &amp; Household</span><div class="kpi-credit-track"><div class="kpi-credit-fill" style="width:92%;background:#8d6e63"></div></div></div><div class="kpi-credit-row"><span class="kpi-credit-label" style="font-weight:700">Manufacturing</span><div class="kpi-credit-track"><div class="kpi-credit-fill" style="width:68%;background:#1565c0"></div></div></div><div class="kpi-credit-row"><span class="kpi-credit-label" style="font-weight:400">Agriculture</span><div class="kpi-credit-track"><div class="kpi-credit-fill" style="width:54%;background:#558b2f"></div></div></div>
       </div>
     </div>
 
@@ -411,25 +421,25 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-t
     </div>
 
     <div class="card" style="grid-column:span 1">
-      <h3>8. Distribution by Region <span class="conf-badge conf-estimated" title="Source: UBOS Census of Business Establishments 2022/23">≈ estimated</span></h3>
+      <h3>8. Distribution by Region <span class="conf-badge conf-exact" title="Source: MTIC National Industries Register, August 2025 (7,011 establishments; 163 unspecified district omitted)">● exact</span></h3>
       <div style="margin-top:8px">
-        <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span>Central (incl. Kampala)</span><span style="font-weight:700;color:var(--blue)">65%</span></div>
-        <div style="height:6px;background:#e3f2fd;border-radius:3px;margin-bottom:8px"><div style="width:65%;height:100%;background:#1565c0;border-radius:3px"></div></div>
-        <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span>Eastern</span><span style="font-weight:700;color:var(--blue)">15%</span></div>
-        <div style="height:6px;background:#e3f2fd;border-radius:3px;margin-bottom:8px"><div style="width:15%;height:100%;background:#1565c0;border-radius:3px"></div></div>
-        <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span>Western</span><span style="font-weight:700;color:var(--blue)">12%</span></div>
-        <div style="height:6px;background:#e3f2fd;border-radius:3px;margin-bottom:8px"><div style="width:12%;height:100%;background:#1565c0;border-radius:3px"></div></div>
-        <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span>Northern</span><span style="font-weight:700;color:var(--blue)">8%</span></div>
-        <div style="height:6px;background:#e3f2fd;border-radius:3px"><div style="width:8%;height:100%;background:#1565c0;border-radius:3px"></div></div>
+        <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span>Central (incl. Kampala)</span><span style="font-weight:700;color:var(--blue)">77.7%</span></div>
+        <div style="height:6px;background:#e3f2fd;border-radius:3px;margin-bottom:8px"><div style="width:77.7%;height:100%;background:#1565c0;border-radius:3px"></div></div>
+        <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span>Western</span><span style="font-weight:700;color:var(--blue)">8.1%</span></div>
+        <div style="height:6px;background:#e3f2fd;border-radius:3px;margin-bottom:8px"><div style="width:8.1%;height:100%;background:#1565c0;border-radius:3px"></div></div>
+        <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span>Eastern</span><span style="font-weight:700;color:var(--blue)">7.7%</span></div>
+        <div style="height:6px;background:#e3f2fd;border-radius:3px;margin-bottom:8px"><div style="width:7.7%;height:100%;background:#1565c0;border-radius:3px"></div></div>
+        <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span>Northern</span><span style="font-weight:700;color:var(--blue)">4.2%</span></div>
+        <div style="height:6px;background:#e3f2fd;border-radius:3px"><div style="width:4.2%;height:100%;background:#1565c0;border-radius:3px"></div></div>
       </div>
     </div>
 
     <div class="card">
-      <h3>9. Establishments in Industrial Parks <span class="conf-badge conf-estimated" title="Source: Uganda Investment Authority / UIAB 2024">≈ estimated</span></h3>
-      <div class="kpi-value-row"><span class="kpi-icon">🏗️</span><div class="value">~850</div></div>
+      <h3>9. Establishments in Industrial Parks <span class="conf-badge conf-exact" title="Source: Uganda Investment Authority — 11 operational industrial/business parks, 166 operating industries (2025)">● exact</span></h3>
+      <div class="kpi-value-row"><span class="kpi-icon">🏗️</span><div class="value">166</div></div>
       <div class="kpi-pct-row" style="margin-top:4px">
-        <div class="sub-value" style="font-size:13px;font-weight:700;color:var(--blue);margin-top:0">~1.6% of total establishments (~53,000)</div>
-        <svg class="donut-chart" width="46" height="46" viewBox="0 0 42 42"><circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#eee" stroke-width="6"/><circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#00838f" stroke-width="6" stroke-dasharray="1.6 98.4" stroke-dashoffset="25"/><circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#e0e0e0" stroke-width="6" stroke-dasharray="98.4 1.5999999999999943" stroke-dashoffset="23.4"/></svg>
+        <div class="sub-value" style="font-size:13px;font-weight:700;color:var(--blue);margin-top:0">~2.4% of 7,011 registered establishments</div>
+        <svg class="kpi-bar" width="120" height="8" viewBox="0 0 120 8"><rect x="0" y="0" width="120" height="8" rx="4.0" fill="#e8eaf6"/><rect x="0" y="0" width="2.9" height="8" rx="4.0" fill="#00838f"/></svg>
       </div>
     </div>
 
@@ -438,7 +448,7 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-t
       <div class="kpi-value-row"><span class="kpi-icon">🌍</span><div class="value">USD 180M</div></div>
       <div class="kpi-pct-row" style="margin-top:4px">
         <div class="sub-value" style="font-size:13px;font-weight:700;color:var(--blue);margin-top:0">~15% of total FDI (~USD 1.2B)</div>
-        <svg class="donut-chart" width="46" height="46" viewBox="0 0 42 42"><circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#eee" stroke-width="6"/><circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#c62828" stroke-width="6" stroke-dasharray="15.0 85.0" stroke-dashoffset="25"/><circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#e0e0e0" stroke-width="6" stroke-dasharray="85.0 15.0" stroke-dashoffset="10.0"/></svg>
+        <svg class="kpi-bar" width="120" height="8" viewBox="0 0 120 8"><rect x="0" y="0" width="120" height="8" rx="4.0" fill="#e8eaf6"/><rect x="0" y="0" width="18.0" height="8" rx="4.0" fill="#c62828"/></svg>
       </div>
     </div>
 
@@ -447,7 +457,7 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-t
       <div class="kpi-value-row"><span class="kpi-icon">👷</span><div class="value">~712,000</div></div>
       <div class="kpi-pct-row" style="margin-top:4px">
         <div class="sub-value" style="font-size:13px;font-weight:700;color:var(--blue);margin-top:0">~7.8% of total employment (~9.1M)</div>
-        <svg class="donut-chart" width="46" height="46" viewBox="0 0 42 42"><circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#eee" stroke-width="6"/><circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#558b2f" stroke-width="6" stroke-dasharray="7.8 92.2" stroke-dashoffset="25"/><circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#e0e0e0" stroke-width="6" stroke-dasharray="92.2 7.799999999999997" stroke-dashoffset="17.2"/></svg>
+        <svg class="kpi-bar" width="120" height="8" viewBox="0 0 120 8"><rect x="0" y="0" width="120" height="8" rx="4.0" fill="#e8eaf6"/><rect x="0" y="0" width="9.4" height="8" rx="4.0" fill="#558b2f"/></svg>
       </div>
     </div>
 
@@ -457,7 +467,7 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-t
       <div class="sub-value" style="font-size:13px;font-weight:700;color:var(--blue);margin-top:4px">distinct HS6 product categories exported</div>
       <div class="kpi-pct-row">
         <div class="sub-value" style="margin-top:0">~7.6% of all HS6 categories traded globally (~5,000)</div>
-        <svg class="donut-chart" width="46" height="46" viewBox="0 0 42 42"><circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#eee" stroke-width="6"/><circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#4527a0" stroke-width="6" stroke-dasharray="7.6 92.4" stroke-dashoffset="25"/><circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#e0e0e0" stroke-width="6" stroke-dasharray="92.4 7.599999999999994" stroke-dashoffset="17.4"/></svg>
+        <svg class="kpi-bar" width="120" height="8" viewBox="0 0 120 8"><rect x="0" y="0" width="120" height="8" rx="4.0" fill="#e8eaf6"/><rect x="0" y="0" width="9.1" height="8" rx="4.0" fill="#4527a0"/></svg>
       </div>
     </div>
 
@@ -604,14 +614,14 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-t
     <div class="section-title" style="margin-bottom:6px">🕓 Recently Updated</div>
     <div class="section-sub">Latest data, chapters, and reviews from the agentic pipeline — newest first.</div>
     <div class="card" style="margin-bottom:24px">
-      <div class="update-item"><span class="update-icon">🚀</span><span class="update-tag">Feature</span><span class="update-msg">card 7 exact PDF figure, card 3 figures-in-legend, card 8 no icon, relocate non-core sections</span><span class="update-date">2026-06-22</span></div>
+      <div class="update-item"><span class="update-icon">🛠️</span><span class="update-tag">Fix</span><span class="update-msg">remove two redundant sub-value lines from KPI cards</span><span class="update-date">2026-06-22</span></div>
+    <div class="update-item"><span class="update-icon">🚀</span><span class="update-tag">Feature</span><span class="update-msg">card 7 exact PDF figure, card 3 figures-in-legend, card 8 no icon, relocate non-core sections</span><span class="update-date">2026-06-22</span></div>
     <div class="update-item"><span class="update-icon">🚀</span><span class="update-tag">Feature</span><span class="update-msg">add donut charts to KPI cards + absolute figures alongside every %</span><span class="update-date">2026-06-22</span></div>
     <div class="update-item"><span class="update-icon">🛠️</span><span class="update-tag">Fix</span><span class="update-msg">remove NDP IV/Tenfold target notes from the 12 Key Indicator cards</span><span class="update-date">2026-06-21</span></div>
     <div class="update-item"><span class="update-icon">🚀</span><span class="update-tag">Feature</span><span class="update-msg">move KPI icons before the figure, make them much bigger</span><span class="update-date">2026-06-21</span></div>
     <div class="update-item"><span class="update-icon">🚀</span><span class="update-tag">Feature</span><span class="update-msg">add an icon to each of the 12 Key Indicator cards</span><span class="update-date">2026-06-21</span></div>
     <div class="update-item"><span class="update-icon">🛠️</span><span class="update-tag">Fix</span><span class="update-msg">12 Key Indicators — USD figures only, no UGX</span><span class="update-date">2026-06-21</span></div>
     <div class="update-item"><span class="update-icon">🛠️</span><span class="update-tag">Fix</span><span class="update-msg">12 Key Indicators grid — 4 per row instead of 5</span><span class="update-date">2026-06-21</span></div>
-    <div class="update-item"><span class="update-icon">🚀</span><span class="update-tag">Feature</span><span class="update-msg">split banner paragraph into 4 callout cards, 2x2 grid</span><span class="update-date">2026-06-21</span></div>
     </div>
   </div>
 

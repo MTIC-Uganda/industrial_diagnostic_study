@@ -329,15 +329,69 @@ def donut_card_html(title, slices, caption='', source=''):
       {f'<div class="chart-card-caption">{caption}</div>' if caption else ''}
     </div>'''
 
-def kpi_mini_donut(pct, color='#1565c0', size=46):
-    """Compact 2-slice 'this share vs rest' donut for a KPI card — no legend,
-    the percentage is already shown as text right next to it."""
+def kpi_progress_bar(pct, color='#1565c0', width=120, height=8):
+    """Simple horizontal fill bar for a KPI card's share-of-whole percentage —
+    replaces the 2-slice donut (per feedback: donuts only make sense for the
+    Tax Contribution card's real multi-sector breakdown, not a generic
+    this-vs-rest split)."""
     try:
-        pct = float(pct)
+        pct = max(0, min(100, float(pct)))
     except (TypeError, ValueError):
         return ''
-    slices = [('', pct, color), ('', 100 - pct, '#e0e0e0')]
-    return donut_svg(slices, size=size, stroke_width=6)
+    fill_w = width * pct / 100
+    return (
+        f'<svg class="kpi-bar" width="{width}" height="{height}" viewBox="0 0 {width} {height}">'
+        f'<rect x="0" y="0" width="{width}" height="{height}" rx="{height/2}" fill="#e8eaf6"/>'
+        f'<rect x="0" y="0" width="{fill_w:.1f}" height="{height}" rx="{height/2}" fill="{color}"/>'
+        f'</svg>'
+    )
+
+def kpi_mfg_growth_trend():
+    """Small before/after line for Manufacturing Growth, reusing the same
+    2.2% -> 5.6% trend already sourced in macro_trend.csv for the Momentum
+    panel — a genuinely different chart type (line, not donut/bar)."""
+    mt = {r['id']: r for r in macro_trend}
+    r = mt.get('mfg_growth')
+    if not r:
+        return ''
+    try:
+        old, new = _parse_num(r['fy2021_value']), _parse_num(r['fy2025_value'])
+    except (KeyError, ValueError):
+        return ''
+    return line_chart_svg([old, new], labels=['20/21', '24/25'], width=110,
+                          chart_h=44, label_h=14, y_axis_w=22, unit='%', color='#2e7d32')
+
+CREDIT_COLOR_MAP = {
+    'Building & Real Estate': '#90a4ae', 'Trade': '#789262',
+    'Personal & Household': '#8d6e63', 'Manufacturing': '#1565c0',
+    'Agriculture': '#558b2f',
+}
+
+def kpi_credit_comparison_bar():
+    """Horizontal bar comparing Manufacturing's private-sector credit against
+    other sectors — reuses the same data as the Momentum panel's credit
+    chart, giving genuine context instead of a generic share-of-whole shape."""
+    sc_file = DATA / 'sector_comparison.csv'
+    if not sc_file.exists():
+        return ''
+    rows = [r for r in load_csv('sector_comparison.csv') if r['chart'] == 'credit']
+    if not rows:
+        return ''
+    max_pct = max(float(r['pct']) for r in rows) or 1
+    parts = []
+    for r in rows:
+        pct = float(r['pct'])
+        width_pct = (pct / max_pct) * 100
+        highlight = r.get('highlight') == '1'
+        color = '#1565c0' if highlight else CREDIT_COLOR_MAP.get(r['sector'], '#b0bec5')
+        weight = '700' if highlight else '400'
+        parts.append(
+            f'<div class="kpi-credit-row">'
+            f'<span class="kpi-credit-label" style="font-weight:{weight}">{esc(r["sector"])}</span>'
+            f'<div class="kpi-credit-track"><div class="kpi-credit-fill" style="width:{width_pct:.0f}%;background:{color}"></div></div>'
+            f'</div>'
+        )
+    return ''.join(parts)
 
 def kpi_tax_donut_compact():
     """Compact version of the Tax Contribution by Sector donut for the KPI
@@ -749,15 +803,16 @@ replacements = {
     '<!--%%MILESTONES_ITEMS%%-->':    _ms_items,
     '<!--%%TAX_DONUT%%-->':           tax_donut_html(),
     '<!--%%ELECTRICITY_DONUT%%-->':   electricity_donut_html(),
-    '<!--%%KPI1_DONUT%%-->':          kpi_mini_donut(14.5),
+    '<!--%%KPI1_BAR%%-->':            kpi_progress_bar(14.5, color='#1565c0'),
+    '<!--%%KPI2_TREND%%-->':          kpi_mfg_growth_trend(),
     '<!--%%KPI3_DONUT%%-->':          kpi_tax_donut_compact(),
-    '<!--%%KPI4_DONUT%%-->':          kpi_mini_donut(12, color='#2e7d32'),
-    '<!--%%KPI5_DONUT%%-->':          kpi_mini_donut(3.5, color='#6a1b9a'),
-    '<!--%%KPI6_DONUT%%-->':          kpi_mini_donut(8, color='#f57f17'),
-    '<!--%%KPI9_DONUT%%-->':          kpi_mini_donut(1.6, color='#00838f'),
-    '<!--%%KPI10_DONUT%%-->':         kpi_mini_donut(15, color='#c62828'),
-    '<!--%%KPI11_DONUT%%-->':         kpi_mini_donut(7.8, color='#558b2f'),
-    '<!--%%KPI12_DONUT%%-->':         kpi_mini_donut(7.6, color='#4527a0'),
+    '<!--%%KPI4_BAR%%-->':            kpi_progress_bar(12, color='#2e7d32'),
+    '<!--%%KPI5_BAR%%-->':            kpi_progress_bar(3.5, color='#6a1b9a'),
+    '<!--%%KPI6_CREDIT_BARS%%-->':    kpi_credit_comparison_bar(),
+    '<!--%%KPI9_BAR%%-->':            kpi_progress_bar(2.4, color='#00838f'),
+    '<!--%%KPI10_BAR%%-->':           kpi_progress_bar(15, color='#c62828'),
+    '<!--%%KPI11_BAR%%-->':           kpi_progress_bar(7.8, color='#558b2f'),
+    '<!--%%KPI12_BAR%%-->':           kpi_progress_bar(7.6, color='#4527a0'),
     '<!--%%CREDIT_SECTOR_BARS%%-->':  sector_comparison_html('credit'),
     '/*%%CHAINS_DATA%%*/':            chains_js(),
     '/*%%CHAIN_COLORS_DATA%%*/':      chain_colors_js(),
