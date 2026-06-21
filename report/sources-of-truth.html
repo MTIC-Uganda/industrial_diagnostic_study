@@ -131,6 +131,10 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#f0f2f5;color:#1a1a2e;fo
 .tenfold-banner .icon{font-size:32px}
 .tenfold-banner strong{font-size:15px;display:block;margin-bottom:4px}
 .tenfold-banner span{font-size:12px;opacity:.9}
+.tenfold-banner-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px 24px;align-items:stretch}
+.tenfold-callout{display:flex;align-items:flex-start;gap:12px}
+.tenfold-callout .icon{font-size:24px;flex-shrink:0;line-height:1.2}
+@media(max-width:700px){.tenfold-banner-grid{grid-template-columns:1fr}}
 
 /* PROGRESS BARS */
 .progress-section{margin-bottom:24px}
@@ -317,11 +321,22 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-t
 ═══════════════════════════════════════════════════════════════ -->
 <div id="tab-overview" class="tab-content active">
 
-  <div class="tenfold-banner" id="tour-tenfold-banner">
-    <div class="icon">🏭</div>
-    <div>
-      <strong>Tracking Uganda's Manufacturing Sector</strong>
-      <span>A strategic platform for tracking the status, performance, and growth potential of Uganda's manufacturing sector. Provides data-driven insights on industrial capacity, investment, employment, exports, value addition, infrastructure gaps, policy priorities, and sector-specific value chain performance. Through value chain analysis, the dashboard identifies opportunities for industrial deepening, local sourcing, import substitution, downstream processing, market expansion, and targeted interventions across priority manufacturing sectors. Supports evidence-based decision-making to help manufacturing contribute effectively to Uganda's <strong>Tenfold Growth Strategy</strong> through increased productivity, competitiveness, exports, value addition, import substitution, and job creation.</span>
+  <div class="tenfold-banner tenfold-banner-grid" id="tour-tenfold-banner">
+    <div class="tenfold-callout">
+      <div class="icon">📊</div>
+      <div><strong>Strategic Platform</strong><span>Tracks the status, performance, and growth potential of Uganda's manufacturing sector.</span></div>
+    </div>
+    <div class="tenfold-callout">
+      <div class="icon">🏭</div>
+      <div><strong>Data-Driven Insights</strong><span>Capacity, investment, employment, exports, and value chain performance in one place.</span></div>
+    </div>
+    <div class="tenfold-callout">
+      <div class="icon">🔗</div>
+      <div><strong>Value Chain Analysis</strong><span>Identifies opportunities for local sourcing, import substitution, and downstream processing.</span></div>
+    </div>
+    <div class="tenfold-callout">
+      <div class="icon">🚀</div>
+      <div><strong>Tenfold Growth Strategy</strong><span>Evidence-based decisions to drive productivity, exports, and job creation.</span></div>
     </div>
   </div>
 
@@ -538,14 +553,14 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-t
     <div class="section-title" style="margin-bottom:6px">🕓 Recently Updated</div>
     <div class="section-sub">Latest data, chapters, and reviews from the agentic pipeline — newest first.</div>
     <div class="card" style="margin-bottom:24px">
-      <div class="update-item"><span class="update-icon">🛠️</span><span class="update-tag">Fix</span><span class="update-msg">remove UNIDO Programme line from top bar subtitle</span><span class="update-date">2026-06-21</span></div>
+      <div class="update-item"><span class="update-icon">🛠️</span><span class="update-tag">Fix</span><span class="update-msg">change banner intro text to avoid repeating the page title</span><span class="update-date">2026-06-21</span></div>
+    <div class="update-item"><span class="update-icon">🛠️</span><span class="update-tag">Fix</span><span class="update-msg">remove UNIDO Programme line from top bar subtitle</span><span class="update-date">2026-06-21</span></div>
     <div class="update-item"><span class="update-icon">🚀</span><span class="update-tag">Feature</span><span class="update-msg">Manufacturing Industry Distribution treemaps (spatial + sector)</span><span class="update-date">2026-06-21</span></div>
     <div class="update-item"><span class="update-icon">📊</span><span class="update-tag">Data</span><span class="update-msg">add manufacturing overview layout document</span><span class="update-date">2026-06-21</span></div>
     <div class="update-item"><span class="update-icon">📊</span><span class="update-tag">Data</span><span class="update-msg">add industries register Aug 2025 for dashboard distribution treemaps</span><span class="update-date">2026-06-21</span></div>
     <div class="update-item"><span class="update-icon">🛠️</span><span class="update-tag">Fix</span><span class="update-msg">port footer rebrand + fix mojibake in Recently Updated feed</span><span class="update-date">2026-06-21</span></div>
     <div class="update-item"><span class="update-icon">🛠️</span><span class="update-tag">Fix</span><span class="update-msg">port Jerome's KPI/rebrand work into the template, not just the generated HTML</span><span class="update-date">2026-06-21</span></div>
     <div class="update-item"><span class="update-icon">🚀</span><span class="update-tag">Feature</span><span class="update-msg">apply rebrand to template (Manufacturing Industry Dashboard)</span><span class="update-date">2026-06-20</span></div>
-    <div class="update-item"><span class="update-icon">🛠️</span><span class="update-tag">Fix</span><span class="update-msg">broken needs reference — review job referenced non-existent 'synthesise' job</span><span class="update-date">2026-06-20</span></div>
     </div>
   </div>
 
