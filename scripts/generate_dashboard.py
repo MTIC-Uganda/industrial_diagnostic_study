@@ -665,6 +665,20 @@ def chain_colors_js():
     body = ',\n'.join(f"  '{js_str(k)}':'{v}'" for k, v in chain_colors.items())
     return f'const CHAIN_COLORS={{\n{body}\n}};'
 
+def treemap_data_js():
+    """Embeds the establishment-distribution datasets (region->district for
+    Spatial Distribution, sector->subsector for Sector Distribution) extracted
+    from Jerome's National Industries Register (Aug 2025) by
+    scripts/extract_industries_register.py."""
+    sector_file   = DATA / 'treemap_sector.json'
+    district_file = DATA / 'treemap_district.json'
+    sector_data   = json.loads(sector_file.read_text('utf-8')) if sector_file.exists() else {}
+    district_data = json.loads(district_file.read_text('utf-8')) if district_file.exists() else {}
+    return (
+        'const TREEMAP_SECTOR_DATA = ' + json.dumps(sector_data, ensure_ascii=False) + ';\n'
+        'const TREEMAP_DISTRICT_DATA = ' + json.dumps(district_data, ensure_ascii=False) + ';'
+    )
+
 def chains_js():
     return 'const chains = ' + json.dumps(chains, ensure_ascii=False, indent=2) + ';'
 
@@ -691,6 +705,7 @@ replacements = {
     '/*%%CHAINS_DATA%%*/':            chains_js(),
     '/*%%CHAIN_COLORS_DATA%%*/':      chain_colors_js(),
     '/*%%FACTORIES_DATA%%*/':         factories_js(),
+    '/*%%TREEMAP_DATA%%*/':           treemap_data_js(),
 }
 
 out = tmpl
