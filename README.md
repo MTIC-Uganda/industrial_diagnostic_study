@@ -64,3 +64,4 @@ CLAUDE.md               Claude Code project instructions
 ## Daily Check-ins
 
 8:00 PM EAT every day. Format: progress, blockers, who resolves.
+# Re-trigger CI with secrets fix

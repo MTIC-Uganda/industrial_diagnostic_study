@@ -1,3 +1,4 @@
+# Test
 name: Deploy MTIC Value Chains App
 
 # Every push to any branch:
@@ -73,43 +74,9 @@ jobs:
           BRANCH="propose/web-gap-fill-$(date +%Y%m%d)"
           git checkout -b $BRANCH
           git add data/proposed/
-          git commit -m "propose: web gap-fill candidates — review and merge to approve"
+          git commit -m "propose: web gap-fill candidates - review and merge to approve"
           git push origin $BRANCH
-          gh pr create \
-            --title "Data review: web gap-fill proposals $(date +%Y-%m-%d)" \
-            --body "$(cat <<'PREOF'
-  ## Gap-fill proposals for review
-
-  The ingestion agent could not find values for some mandatory fields in the uploaded
-  documents or trusted sources. It has proposed candidate values from general knowledge.
-
-  **Your merge of this PR = approval.** These values enter the dataset only if you merge.
-  Closing without merging = rejection; nothing enters the dataset.
-
-  Review each proposed value in `data/proposed/web_gap_fill_*.json`:
-  - Check the `source_url` to verify the figure
-  - If correct: merge this PR
-  - If wrong: edit the value and source_url before merging, or close to reject
-
-  /cc @jnuwabaasa-spec @arihosolomon @arindahills
-  PREOF
-  )" \
-            --base main \
-            --head $BRANCH
-
-  # ── B. Synthesis Agent (after ingest, same condition) ────────────────────
-  synthesise:
-    name: Synthesis Agent
-    runs-on: ubuntu-latest
-    needs: ingest
-    if: needs.ingest.result == 'success'
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
-
+          gh pr create --title "Gap-fill proposals for review" --body "Ingestion agent found gaps and proposed values. See data/proposed/ and review before merging." --base main --head $BRANCH
       - name: Run synthesis agent
         env:
           PB_URL:            ${{ secrets.PB_URL }}
@@ -132,8 +99,8 @@ jobs:
   review:
     name: Review Agent
     runs-on: ubuntu-latest
-    needs: synthesise
-    if: needs.synthesise.result == 'success'
+    needs: ingest
+    if: needs.ingest.result == 'success'
     steps:
       - uses: actions/checkout@v4
 
