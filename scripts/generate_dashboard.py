@@ -329,6 +329,50 @@ def donut_card_html(title, slices, caption='', source=''):
       {f'<div class="chart-card-caption">{caption}</div>' if caption else ''}
     </div>'''
 
+def kpi_mini_donut(pct, color='#1565c0', size=46):
+    """Compact 2-slice 'this share vs rest' donut for a KPI card — no legend,
+    the percentage is already shown as text right next to it."""
+    try:
+        pct = float(pct)
+    except (TypeError, ValueError):
+        return ''
+    slices = [('', pct, color), ('', 100 - pct, '#e0e0e0')]
+    return donut_svg(slices, size=size, stroke_width=6)
+
+def kpi_tax_donut_compact():
+    """Compact version of the Tax Contribution by Sector donut for the KPI
+    card — same data as tax_donut_html(), smaller, with a condensed legend."""
+    sc_file = DATA / 'sector_comparison.csv'
+    if not sc_file.exists():
+        return ''
+    rows = [r for r in load_csv('sector_comparison.csv') if r['chart'] == 'tax']
+    if not rows:
+        return ''
+    rows.sort(key=lambda r: -float(r['pct']))
+    slices = []
+    palette_idx = 0
+    for r in rows:
+        if r.get('highlight') == '1':
+            color = '#1565c0'
+        else:
+            color = DONUT_PALETTE[palette_idx % len(DONUT_PALETTE)]
+            palette_idx += 1
+        slices.append((r['sector'], float(r['pct']), color))
+    legend_rows = []
+    for label, pct, color in slices:
+        weight = '700' if color == '#1565c0' else '400'
+        legend_rows.append(
+            f'<div class="kpi-donut-legend-item" style="font-weight:{weight}">'
+            f'<span class="donut-swatch" style="background:{color}"></span>'
+            f'{esc(label)} <strong>{pct:g}%</strong></div>'
+        )
+    return (
+        f'<div class="kpi-donut-row">'
+        f'{donut_svg(slices, size=72, stroke_width=8)}'
+        f'<div class="kpi-donut-legend">{"".join(legend_rows)}</div>'
+        f'</div>'
+    )
+
 def macro_trend_html():
     if not macro_trend:
         return '<div style="color:var(--muted);font-size:12px;padding:12px">No trend data available.</div>'
@@ -701,6 +745,15 @@ replacements = {
     '<!--%%MILESTONES_ITEMS%%-->':    _ms_items,
     '<!--%%TAX_DONUT%%-->':           tax_donut_html(),
     '<!--%%ELECTRICITY_DONUT%%-->':   electricity_donut_html(),
+    '<!--%%KPI1_DONUT%%-->':          kpi_mini_donut(14.5),
+    '<!--%%KPI3_DONUT%%-->':          kpi_tax_donut_compact(),
+    '<!--%%KPI4_DONUT%%-->':          kpi_mini_donut(12, color='#2e7d32'),
+    '<!--%%KPI5_DONUT%%-->':          kpi_mini_donut(3.5, color='#6a1b9a'),
+    '<!--%%KPI6_DONUT%%-->':          kpi_mini_donut(8, color='#f57f17'),
+    '<!--%%KPI9_DONUT%%-->':          kpi_mini_donut(1.6, color='#00838f'),
+    '<!--%%KPI10_DONUT%%-->':         kpi_mini_donut(15, color='#c62828'),
+    '<!--%%KPI11_DONUT%%-->':         kpi_mini_donut(7.8, color='#558b2f'),
+    '<!--%%KPI12_DONUT%%-->':         kpi_mini_donut(7.6, color='#4527a0'),
     '<!--%%CREDIT_SECTOR_BARS%%-->':  sector_comparison_html('credit'),
     '/*%%CHAINS_DATA%%*/':            chains_js(),
     '/*%%CHAIN_COLORS_DATA%%*/':      chain_colors_js(),
