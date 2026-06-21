@@ -94,5 +94,11 @@ Cross-cutting reference for iron & steel, copper, and other mineral-based chains
 - `cement-sector-status-report-2025.docx` — Status report on the cement sector, 2025.
 - `cement-sector-information.html` — Cement sector information overview.
 
+## manufacturing-overview/
+Reference documents for the Manufacturing Industry Dashboard overview and distribution sections.
+
+- `industries-register-aug2025.pdf` — Uganda Industries Register, August 2025. Primary data source for the Manufacturing Industry Distribution treemaps (~7,000 establishments by sector, subsector, and region).
+- `manufacturing-overview-layout.docx` — Jerome Nuwabaasa's layout specification for the Manufacturing Industry Dashboard redesign (4 core components: Overview callout cards, 12 Key Indicators, Progress to Tenfold, Distribution treemaps).
+
 ---
 
