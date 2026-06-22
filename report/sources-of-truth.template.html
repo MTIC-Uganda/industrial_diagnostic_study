@@ -308,6 +308,7 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-t
 .tour-btn:hover{background:rgba(255,255,255,.28)}
 </style>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/driver.js@1.3.1/dist/driver.css"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"/>
 <script src="https://cdn.jsdelivr.net/npm/marked@12/marked.min.js"></script>
 </head>
 <body>
@@ -998,23 +999,29 @@ const TREEMAP_REGION_COLORS = {
   'Central':'#1565c0', 'Eastern':'#2e7d32', 'Northern':'#f57f17',
   'Western':'#6a1b9a', 'Unclassified':'#9e9e9e'
 };
+// Monochrome icon-font classes (Bootstrap Icons) — colour is set per-badge
+// at render time based on background luminance (treemapIconColor()), since
+// these glyphs inherit `color` rather than carrying their own colour like
+// emoji do.
 const TREEMAP_REGION_ICONS = {
-  'Central':'🏙️', 'Eastern':'🌅', 'Northern':'🏞️', 'Western':'⛰️', 'Unclassified':'❔'
+  'Central':'bi-buildings-fill', 'Eastern':'bi-sunrise-fill',
+  'Northern':'bi-compass-fill', 'Western':'bi-geo-alt-fill',
+  'Unclassified':'bi-question-circle-fill'
 };
 const TREEMAP_SECTOR_ICONS = {
-  'Food Products':'🌾', 'Beverages':'🥤',
-  'Printing and Reproduction of Recorded Media':'🖨️',
-  'Chemical and Chemical Products':'⚗️',
-  'Fabricated Metal Products Except Machinery and Equipment':'🔧',
-  'Rubber and Plastic Products':'♻️', 'Other Non-Metallic Mineral Products':'🧱',
-  'Wood and Wood Products':'🪵', 'Paper and Paper Products':'📄',
-  'Basic Metals':'⚙️', 'Leather and Leather Products':'👞',
-  'Pharmaceutical, Medical Chemicals and Botanical Products':'💊',
-  'Coke and Petroleum Products':'⛽', 'Electrical Equipment':'🔌',
-  'Other Transport Equipment':'🚤', 'Textiles':'🧵',
-  'Motor Vehicles, Trailers and Semi-Trailers':'🚗',
-  'Other Manufacturing':'🏭', 'Tobacco':'🌿',
-  'Machinery and Equipment':'🛠️', 'Computer, Electronic and Optical Products':'💻'
+  'Food Products':'bi-egg-fried', 'Beverages':'bi-cup-straw',
+  'Printing and Reproduction of Recorded Media':'bi-printer-fill',
+  'Chemical and Chemical Products':'bi-flask',
+  'Fabricated Metal Products Except Machinery and Equipment':'bi-tools',
+  'Rubber and Plastic Products':'bi-recycle', 'Other Non-Metallic Mineral Products':'bi-bricks',
+  'Wood and Wood Products':'bi-tree-fill', 'Paper and Paper Products':'bi-file-earmark-fill',
+  'Basic Metals':'bi-gear-fill', 'Leather and Leather Products':'bi-bag-fill',
+  'Pharmaceutical, Medical Chemicals and Botanical Products':'bi-capsule',
+  'Coke and Petroleum Products':'bi-fuel-pump-fill', 'Electrical Equipment':'bi-plug-fill',
+  'Other Transport Equipment':'bi-truck', 'Textiles':'bi-scissors',
+  'Motor Vehicles, Trailers and Semi-Trailers':'bi-car-front-fill',
+  'Other Manufacturing':'bi-building-fill', 'Tobacco':'bi-flower1',
+  'Machinery and Equipment':'bi-gear-wide-connected', 'Computer, Electronic and Optical Products':'bi-cpu-fill'
 };
 const TREEMAP_SECTOR_PALETTE = [
   '#1565c0','#2e7d32','#f57f17','#6a1b9a','#c62828','#00838f',
@@ -1149,11 +1156,65 @@ function escTreemapLabel(name, cellW, fontSize){
   return safe.slice(0, Math.max(maxChars - 1, 3)) + '…';
 }
 
+function treemapIconColor(hex){
+  // Relative luminance (WCAG-style) — pick white or black, whichever reads
+  // better against this badge's background colour.
+  const num = parseInt(hex.slice(1), 16);
+  const r = (num >> 16) & 0xFF, g = (num >> 8) & 0xFF, b = num & 0xFF;
+  const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+  return luminance > 0.55 ? '#000' : '#fff';
+}
+
 function treemapLegend(colorMap, names, iconMap){
   return names.map(n => {
-    const icon = (iconMap && iconMap[n]) || '';
-    return `<span><span class="sw" style="background:${colorMap[n]}">${icon}</span>${n}</span>`;
+    const bg = colorMap[n];
+    const iconClass = (iconMap && iconMap[n]) || '';
+    const icon = iconClass ? `<i class="bi ${iconClass}" style="color:${treemapIconColor(bg)}"></i>` : '';
+    return `<span><span class="sw" style="background:${bg}">${icon}</span>${n}</span>`;
   }).join('');
+}
+
+// ── Spatial Distribution treemap (Region -> District) ────────────────────────
+// ── Cross-filtering between the two treemaps ──────────────────────────────────
+// Clicking a region or district updates Sector Distribution to that area's
+// sector mix; clicking a sector updates Spatial Distribution to that sector's
+// regional mix. There's no subsector-level cross-filter — the source data
+// doesn't track subsector alongside district, only sector alongside district.
+function crossFilterSectorByMix(areaLabel, sectorMix, scopeWord){
+  const breadcrumbEl = document.getElementById('treemap-sector-breadcrumb');
+  const legendEl = document.getElementById('treemap-sector-legend');
+  const names = Object.keys(sectorMix || {});
+  legendEl.innerHTML = '';
+  if (!names.length){
+    breadcrumbEl.innerHTML = `<span class="crumb" onclick="window._treemapSectorShowTop()">All Sectors</span><span class="sep">›</span><span style="color:var(--text)">No data for ${areaLabel}</span>`;
+    document.getElementById('treemap-sector-wrap').innerHTML = '';
+    return;
+  }
+  const nodes = names.map(name => ({
+    name, value: sectorMix[name],
+    color: TREEMAP_SECTOR_COLOR_MAP[name] || '#90a4ae', leaf: true
+  })).sort((a,b) => b.value - a.value);
+  const total = nodes.reduce((s,n)=>s+n.value,0);
+  breadcrumbEl.innerHTML = `<span class="crumb" onclick="window._treemapSectorShowTop()">All Sectors</span><span class="sep">›</span><span style="color:var(--text)">${scopeWord}: ${areaLabel}</span>`;
+  renderTreemapSVG('treemap-sector-wrap', nodes, total, () => {});
+}
+
+function crossFilterRegionBySector(sectorName){
+  const breadcrumbEl = document.getElementById('treemap-region-breadcrumb');
+  const legendEl = document.getElementById('treemap-region-legend');
+  legendEl.innerHTML = '';
+  const regionNames = Object.keys(TREEMAP_REGION_SECTOR_DATA);
+  const nodes = regionNames.map(name => ({
+    name, value: (TREEMAP_REGION_SECTOR_DATA[name] && TREEMAP_REGION_SECTOR_DATA[name][sectorName]) || 0,
+    color: TREEMAP_REGION_COLORS[name] || '#90a4ae', leaf: true
+  })).filter(n => n.value > 0).sort((a,b) => b.value - a.value);
+  breadcrumbEl.innerHTML = `<span class="crumb" onclick="window._treemapRegionShowTop()">All Regions</span><span class="sep">›</span><span style="color:var(--text)">Sector: ${sectorName}</span>`;
+  if (!nodes.length){
+    document.getElementById('treemap-region-wrap').innerHTML = '';
+    return;
+  }
+  const total = nodes.reduce((s,n)=>s+n.value,0);
+  renderTreemapSVG('treemap-region-wrap', nodes, total, () => {});
 }
 
 // ── Spatial Distribution treemap (Region -> District) ────────────────────────
@@ -1179,12 +1240,15 @@ function initRegionTreemap(){
     const baseColor = TREEMAP_REGION_COLORS[regionName] || '#90a4ae';
     const nodes = names.map((name, i) => ({
       name, value: districts[name],
-      color: shadeColor(baseColor, (i % 6) * 0.09), leaf: true
+      color: shadeColor(baseColor, (i % 6) * 0.09), leaf: false  // clickable: cross-filters Sector Distribution
     })).sort((a,b) => b.value - a.value);
     const total = nodes.reduce((s,n)=>s+n.value,0);
     breadcrumbEl.innerHTML = `<span class="crumb" onclick="window._treemapRegionShowTop()">All Regions</span><span class="sep">›</span><span style="color:var(--text)">${regionName}</span>`;
     legendEl.innerHTML = '';
-    renderTreemapSVG('treemap-region-wrap', nodes, total, () => {});
+    renderTreemapSVG('treemap-region-wrap', nodes, total, districtName => {
+      crossFilterSectorByMix(districtName, TREEMAP_DISTRICT_SECTOR_DATA[districtName], 'District');
+    });
+    crossFilterSectorByMix(regionName, TREEMAP_REGION_SECTOR_DATA[regionName], 'Region');
   }
 
   window._treemapRegionShowTop = showTop;
@@ -1220,6 +1284,7 @@ function initSectorTreemap(){
     breadcrumbEl.innerHTML = `<span class="crumb" onclick="window._treemapSectorShowTop()">All Sectors</span><span class="sep">›</span><span style="color:var(--text)">${sectorName}</span>`;
     legendEl.innerHTML = '';
     renderTreemapSVG('treemap-sector-wrap', nodes, total, () => {});
+    crossFilterRegionBySector(sectorName);
   }
 
   window._treemapSectorShowTop = showTop;
