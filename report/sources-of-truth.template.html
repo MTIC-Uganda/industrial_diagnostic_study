@@ -1243,6 +1243,53 @@ function crossFilterDistrictBySectorAndRegion(sectorName, regionName){
   renderTreemapSVG('treemap-region-wrap', nodes, total, () => {});
 }
 
+// Same cross-filter pattern, one level deeper: clicking an individual
+// product/sub-sector (e.g. "Bakery Products" under Food Products) drills
+// Spatial Distribution down to that specific product's region/district mix.
+function crossFilterRegionBySubsector(subsectorName){
+  const breadcrumbEl = document.getElementById('treemap-region-breadcrumb');
+  const legendEl = document.getElementById('treemap-region-legend');
+  legendEl.innerHTML = '';
+  const regionNames = Object.keys(TREEMAP_REGION_SUBSECTOR_DATA);
+  const nodes = regionNames.map(name => ({
+    name, value: (TREEMAP_REGION_SUBSECTOR_DATA[name] && TREEMAP_REGION_SUBSECTOR_DATA[name][subsectorName]) || 0,
+    color: TREEMAP_REGION_COLORS[name] || '#90a4ae', leaf: false
+  })).filter(n => n.value > 0).sort((a,b) => b.value - a.value);
+  breadcrumbEl.innerHTML = `<span class="crumb" onclick="window._treemapRegionShowTop()">All Regions</span><span class="sep">›</span><span style="color:var(--text)">Product: ${subsectorName}</span>`;
+  if (!nodes.length){
+    document.getElementById('treemap-region-wrap').innerHTML = '';
+    return;
+  }
+  const total = nodes.reduce((s,n)=>s+n.value,0);
+  renderTreemapSVG('treemap-region-wrap', nodes, total, regionName => {
+    crossFilterDistrictBySubsectorAndRegion(subsectorName, regionName);
+  });
+}
+
+function crossFilterDistrictBySubsectorAndRegion(subsectorName, regionName){
+  const breadcrumbEl = document.getElementById('treemap-region-breadcrumb');
+  const legendEl = document.getElementById('treemap-region-legend');
+  legendEl.innerHTML = '';
+  const districtNames = Object.keys(TREEMAP_DISTRICT_DATA[regionName] || {});
+  const baseColor = TREEMAP_REGION_COLORS[regionName] || '#90a4ae';
+  const nodes = districtNames.map((name, i) => ({
+    name,
+    value: (TREEMAP_DISTRICT_SUBSECTOR_DATA[name] && TREEMAP_DISTRICT_SUBSECTOR_DATA[name][subsectorName]) || 0,
+    color: shadeColor(baseColor, (i % 6) * 0.09), leaf: true
+  })).filter(n => n.value > 0).sort((a,b) => b.value - a.value);
+  breadcrumbEl.innerHTML =
+    `<span class="crumb" onclick="window._treemapRegionShowTop()">All Regions</span><span class="sep">›</span>` +
+    `<span class="crumb" onclick="crossFilterRegionBySubsector('${subsectorName.replace(/'/g,"\\'")}')">Product: ${subsectorName}</span><span class="sep">›</span>` +
+    `<span style="color:var(--text)">${regionName}</span>`;
+  if (!nodes.length){
+    document.getElementById('treemap-region-wrap').innerHTML =
+      `<div style="padding:20px;color:var(--muted);font-size:12px">No ${subsectorName} establishments recorded in ${regionName}'s districts.</div>`;
+    return;
+  }
+  const total = nodes.reduce((s,n)=>s+n.value,0);
+  renderTreemapSVG('treemap-region-wrap', nodes, total, () => {});
+}
+
 // ── Spatial Distribution treemap (Region -> District) ────────────────────────
 function initRegionTreemap(){
   const breadcrumbEl = document.getElementById('treemap-region-breadcrumb');
@@ -1304,12 +1351,14 @@ function initSectorTreemap(){
     const baseColor = TREEMAP_SECTOR_COLOR_MAP[sectorName];
     const nodes = names.map((name, i) => ({
       name, value: subsectors[name],
-      color: shadeColor(baseColor, (i % 5) * 0.12), leaf: true
+      color: shadeColor(baseColor, (i % 5) * 0.12), leaf: false  // clickable: cross-filters Spatial Distribution to this product
     })).sort((a,b) => b.value - a.value);
     const total = nodes.reduce((s,n)=>s+n.value,0);
     breadcrumbEl.innerHTML = `<span class="crumb" onclick="window._treemapSectorShowTop()">All Sectors</span><span class="sep">›</span><span style="color:var(--text)">${sectorName}</span>`;
     legendEl.innerHTML = '';
-    renderTreemapSVG('treemap-sector-wrap', nodes, total, () => {});
+    renderTreemapSVG('treemap-sector-wrap', nodes, total, subsectorName => {
+      crossFilterRegionBySubsector(subsectorName);
+    });
     crossFilterRegionBySector(sectorName);
   }
 

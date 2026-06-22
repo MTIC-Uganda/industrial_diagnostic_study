@@ -799,22 +799,29 @@ def treemap_data_js():
     National Industries Register (Aug 2025) by scripts/extract_industries_register.py:
       - region->district (Spatial Distribution)
       - sector->subsector (Sector Distribution)
-      - region->sector and district->sector (cross-filtering between the two
-        treemaps: selecting a region/district updates Sector Distribution to
-        that area's sector mix; selecting a sector updates Spatial Distribution
-        to that sector's regional mix, derived client-side from region->sector)."""
+      - region->sector and district->sector (cross-filtering: selecting a
+        region/district updates Sector Distribution to that area's sector mix;
+        selecting a sector updates Spatial Distribution to that sector's
+        regional/district mix)
+      - region->subsector and district->subsector (same cross-filter, one
+        level deeper: selecting an individual product like "Bakery Products"
+        updates Spatial Distribution to that specific product's mix)."""
     def _load(name):
         f = DATA / name
         return json.loads(f.read_text('utf-8')) if f.exists() else {}
-    sector_data          = _load('treemap_sector.json')
-    district_data        = _load('treemap_district.json')
-    region_sector_data   = _load('treemap_region.json')
-    district_sector_data = _load('treemap_district_sector.json')
+    sector_data             = _load('treemap_sector.json')
+    district_data           = _load('treemap_district.json')
+    region_sector_data      = _load('treemap_region.json')
+    district_sector_data    = _load('treemap_district_sector.json')
+    region_subsector_data   = _load('treemap_region_subsector.json')
+    district_subsector_data = _load('treemap_district_subsector.json')
     return (
         'const TREEMAP_SECTOR_DATA = ' + json.dumps(sector_data, ensure_ascii=False) + ';\n'
         'const TREEMAP_DISTRICT_DATA = ' + json.dumps(district_data, ensure_ascii=False) + ';\n'
         'const TREEMAP_REGION_SECTOR_DATA = ' + json.dumps(region_sector_data, ensure_ascii=False) + ';\n'
-        'const TREEMAP_DISTRICT_SECTOR_DATA = ' + json.dumps(district_sector_data, ensure_ascii=False) + ';'
+        'const TREEMAP_DISTRICT_SECTOR_DATA = ' + json.dumps(district_sector_data, ensure_ascii=False) + ';\n'
+        'const TREEMAP_REGION_SUBSECTOR_DATA = ' + json.dumps(region_subsector_data, ensure_ascii=False) + ';\n'
+        'const TREEMAP_DISTRICT_SUBSECTOR_DATA = ' + json.dumps(district_subsector_data, ensure_ascii=False) + ';'
     )
 
 def chains_js():
