@@ -1205,12 +1205,13 @@ function crossFilterSectorByMix(areaLabel, sectorMix, scopeWord){
   }
   const nodes = names.map(name => ({
     name, value: sectorMix[name],
-    color: TREEMAP_SECTOR_COLOR_MAP[name] || '#90a4ae', leaf: true
+    color: TREEMAP_SECTOR_COLOR_MAP[name] || '#90a4ae', leaf: false  // clickable: drills into that sector's own subsectors (leaves the area filter)
   })).sort((a,b) => b.value - a.value);
   const total = nodes.reduce((s,n)=>s+n.value,0);
   breadcrumbEl.innerHTML = `<span class="crumb" onclick="window._treemapSectorShowTop()">All Sectors</span><span class="sep">›</span><span style="color:var(--text)">${scopeWord}: ${areaLabel}</span>`;
-  renderTreemapSVG('treemap-sector-wrap', nodes, total, () => {});
-  renderTreemapLegend(legendEl, nodes, TREEMAP_SECTOR_ICONS, null);
+  const onClick = sectorName => window._treemapSectorShowSector(sectorName);
+  renderTreemapSVG('treemap-sector-wrap', nodes, total, onClick);
+  renderTreemapLegend(legendEl, nodes, TREEMAP_SECTOR_ICONS, onClick);
 }
 
 function crossFilterRegionBySector(sectorName){
@@ -1380,6 +1381,7 @@ function initSectorTreemap(){
   }
 
   window._treemapSectorShowTop = showTop;
+  window._treemapSectorShowSector = showSector;
   showTop();
 }
 
