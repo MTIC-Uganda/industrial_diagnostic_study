@@ -13,6 +13,13 @@ Distribution by 2-digit/4-digit ISIC classification"):
   data/dashboard/treemap_district_sector.json — District -> Sector -> count
                                                  (cross-filter: clicking a district shows that
                                                  district's sector mix)
+  data/dashboard/treemap_region_subsector.json   — Region -> Sub-sector -> count
+  data/dashboard/treemap_district_subsector.json — District -> Sub-sector -> count
+                                                 (cross-filter: clicking a sub-sector — e.g.
+                                                 "Bakery Products" under Food Products — drills
+                                                 Spatial Distribution down to that specific
+                                                 product's region/district mix, same pattern as
+                                                 the sector-level cross-filter)
 
 Approach:
   1. The summary table (PDF pages 4-5) gives each sub-sector's starting "Ref Number"
@@ -238,6 +245,8 @@ def main():
     region_sector_counts = {}      # region -> {sector_name: count}  (cross-filter: region -> sector)
     region_district_counts = {}    # region -> {district_name: count}  (spatial treemap)
     district_sector_counts = {}    # district -> {sector_name: count}  (cross-filter: district -> sector)
+    region_subsector_counts = {}   # region -> {subsector_name: count}  (cross-filter: region -> subsector)
+    district_subsector_counts = {} # district -> {subsector_name: count}  (cross-filter: district -> subsector)
     unmatched_district_rows = 0
     seen_rows = set()
 
@@ -273,6 +282,14 @@ def main():
         district_sector_counts[district_display][sector_name] = \
             district_sector_counts[district_display].get(sector_name, 0) + 1
 
+        region_subsector_counts.setdefault(region, {})
+        region_subsector_counts[region][subsector_name] = \
+            region_subsector_counts[region].get(subsector_name, 0) + 1
+
+        district_subsector_counts.setdefault(district_display, {})
+        district_subsector_counts[district_display][subsector_name] = \
+            district_subsector_counts[district_display].get(subsector_name, 0) + 1
+
     total_rows = len(seen_rows)
     print(f'Parsed {total_rows} / {TOTAL_EXPECTED} expected establishment rows')
     print(f'Rows with unmatched district: {unmatched_district_rows} '
@@ -291,8 +308,13 @@ def main():
         json.dumps(region_district_counts, indent=2, ensure_ascii=False), encoding='utf-8')
     (OUT / 'treemap_district_sector.json').write_text(
         json.dumps(district_sector_counts, indent=2, ensure_ascii=False), encoding='utf-8')
+    (OUT / 'treemap_region_subsector.json').write_text(
+        json.dumps(region_subsector_counts, indent=2, ensure_ascii=False), encoding='utf-8')
+    (OUT / 'treemap_district_subsector.json').write_text(
+        json.dumps(district_subsector_counts, indent=2, ensure_ascii=False), encoding='utf-8')
     print(f'Wrote treemap_sector.json, treemap_region.json, treemap_district.json, '
-          f'treemap_district_sector.json to {OUT}')
+          f'treemap_district_sector.json, treemap_region_subsector.json, '
+          f'treemap_district_subsector.json to {OUT}')
 
 if __name__ == '__main__':
     main()
