@@ -833,26 +833,26 @@ const STRENGTH_TEXT={gap:'Gap',emerging:'Emerging',strong:'Strong'};
 
 function renderStatusDetail(c){
   const s=c.status;
-  const statCards=s.current.map(item=>{
+  const statCards=(s.current||[]).map(item=>{
     const pct=(item.value.match(/\((\d+(?:\.\d+)?)%\)/)||[])[1];
     const bar=pct?`<div style="margin-top:8px;background:#e8eaf6;border-radius:4px;height:7px;overflow:hidden"><div style="width:${Math.min(parseFloat(pct),100)}%;height:100%;border-radius:4px;background:${item.color==='green'?'#2e7d32':item.color==='amber'?'#f57f17':item.color==='red'?'#c62828':'#1565c0'}"></div></div>`:'';
     return `<div class="stat-box ${colorMap[item.color]||''}"><h4>${item.label}</h4><p>${item.value}</p>${bar}</div>`;
   }).join('');
 
-  const companies=s.companies.map(co=>`<span class="company-chip">${co}</span>`).join('');
+  const companies=(s.companies||[]).map(co=>`<span class="company-chip">${co}</span>`).join('');
 
-  const constraints=s.constraints.map(con=>`
+  const constraints=(s.constraints||[]).map(con=>`
     <div class="constraint-bar">
       <div class="constraint-label"><span>${con.label}</span><span style="font-weight:700;color:var(--blue)">${{w5:'Critical',w4:'High',w3:'Medium',w2:'Low'}[con.w]}</span></div>
       <div class="constraint-track"><div class="constraint-fill ${con.w}"></div></div>
     </div>
   `).join('');
 
-  const priorities=s.priorities.map((p,i)=>`
+  const priorities=(s.priorities||[]).map((p,i)=>`
     <li><div class="priority-num">${i+1}</div><span>${p}</span></li>
   `).join('');
 
-  const projRows=s.proj.rows.map(r=>`
+  const projRows=(s.proj && s.proj.rows ? s.proj.rows : []).map(r=>`
     <div class="proj-row">
       <span>${r.label}</span>
       <div style="text-align:right">
