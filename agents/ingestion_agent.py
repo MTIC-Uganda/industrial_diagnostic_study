@@ -189,21 +189,89 @@ RECORD ENVELOPE (output format for each datapoint):
 OUTPUT: Return ONLY a JSON array of record envelope objects. No prose, no markdown fences.
 """).strip()
 
+# ── Document text extraction ──────────────────────────────────────────────────
+
+def extract_text(filepath: Path) -> str:
+    """
+    Extract readable text from a source document.
+
+    Handles the formats Jerome actually uploads — PDF, DOCX, XLSX — plus plain
+    text/markdown/CSV/HTML. The old code used filepath.read_text('utf-8') for
+    everything, which turned a PDF into mojibake and silently broke mining. We
+    extract per type and raise a clear error on failure rather than feed garbage
+    to Claude.
+    """
+    suffix = filepath.suffix.lower()
+    if suffix == '.pdf':
+        try:
+            import pdfplumber
+            with pdfplumber.open(filepath) as pdf:
+                return '\n'.join((page.extract_text() or '') for page in pdf.pages)
+        except Exception:
+            from pypdf import PdfReader            # fallback extractor
+            reader = PdfReader(str(filepath))
+            return '\n'.join((page.extract_text() or '') for page in reader.pages)
+    if suffix == '.docx':
+        try:
+            from docx import Document
+            doc = Document(str(filepath))
+            parts = [p.text for p in doc.paragraphs]
+            for table in doc.tables:               # tables hold most of the data
+                for row in table.rows:
+                    parts.append('\t'.join(cell.text for cell in row.cells))
+            return '\n'.join(parts)
+        except Exception:
+            # Some DOCX files have malformed internal paths that break python-docx.
+            # Fall back to pulling text straight from word/document.xml in the zip.
+            import zipfile, re
+            with zipfile.ZipFile(str(filepath)) as z:
+                xml = z.read('word/document.xml').decode('utf-8', errors='replace')
+            xml = re.sub(r'</w:p>', '\n', xml)     # paragraph breaks
+            return re.sub(r'<[^>]+>', '', xml)     # strip all tags
+    if suffix in ('.xlsx', '.xlsm'):
+        from openpyxl import load_workbook
+        wb = load_workbook(str(filepath), read_only=True, data_only=True)
+        lines = []
+        for ws in wb.worksheets:
+            lines.append(f'# Sheet: {ws.title}')
+            for row in ws.iter_rows(values_only=True):
+                cells = ['' if c is None else str(c) for c in row]
+                if any(cells):
+                    lines.append('\t'.join(cells))
+        return '\n'.join(lines)
+    # txt, md, csv, html, and anything else: read as text
+    return filepath.read_text(encoding='utf-8', errors='replace')
+
 # ── Method 1: Upload mining ───────────────────────────────────────────────────
+
+def read_task_sidecar(filepath: Path) -> str:
+    """
+    Read a per-document instruction sidecar `<document>.task.md` if present.
+
+    Intent travels with the document instead of living in a PR body the agent
+    never reads (ADR-010). Returns '' when no sidecar exists.
+    """
+    sidecar = filepath.with_suffix(filepath.suffix + '.task.md')
+    if sidecar.exists():
+        return sidecar.read_text(encoding='utf-8', errors='replace').strip()
+    return ''
 
 def mine_upload(filepath: Path, value_chain_id: str) -> list[dict]:
     """Send file content to Claude and get back structured datapoints."""
     vc_name = VC_NAMES.get(value_chain_id, value_chain_id)
-    content = filepath.read_text(encoding='utf-8', errors='replace')
+    content = extract_text(filepath)
 
     # Truncate very large files — keep first 80k chars (Claude context limit buffer)
     if len(content) > 80_000:
         content = content[:80_000] + '\n\n[... document truncated at 80,000 chars ...]'
 
+    task = read_task_sidecar(filepath)
+    task_block = f'\n    OPERATOR INSTRUCTION (from {filepath.name}.task.md):\n    {task}\n' if task else ''
+
     user_prompt = textwrap.dedent(f"""
     VALUE CHAIN: {vc_name} ({value_chain_id})
     SOURCE FILE: {filepath.name}
-
+    {task_block}
     Extract all diagnostic data you can find for the {vc_name} value chain from this document.
     Map each fact to the appropriate field_id from the schema.
     Return a JSON array of record envelope objects.
@@ -379,14 +447,33 @@ def run(upload_files: list[Path] | None = None, value_chain_id: str | None = Non
         print('  Tip: drop a document into data/uploads/ and push to trigger ingestion.')
         return
 
-    # Determine which value chains to process
-    # Filename convention: VC01_iron_steel_report.pdf  or  iron_steel_*.txt
+    # Determine which value chains to process.
+    # Primary signal is the containing sector folder (data/<value-chain>/), which
+    # is where Jerome and the README already file documents — far more reliable
+    # than guessing from the filename (ADR-010). Filename keywords are a fallback.
+    FOLDER_VC = {
+        'iron-steel': 'VC01',
+        'copper-allied-metals': 'VC02',
+        'automotive': 'VC03',
+        'textiles-garments': 'VC04',
+        'pharmaceuticals': 'VC05',
+        'petrochemicals-fertilizers': 'VC06',
+        'sugar-confectionery': 'VC07',
+        'plastics-packaging': 'VC08',
+        'cement-building-materials': 'VC09',
+    }
+
     def infer_vc(path: Path) -> str | None:
+        # 1. Folder-based routing (most reliable)
+        folder = path.parent.name.lower()
+        if folder in FOLDER_VC:
+            return FOLDER_VC[folder]
+        # 2. Explicit VC id in the filename (e.g. VC07_sugarcane.pdf)
         name = path.stem.upper()
         for vc_id in VC_NAMES:
             if vc_id in name:
                 return vc_id
-        # Try matching chain name keywords
+        # 3. Chain-name keywords in the filename
         lower = path.stem.lower()
         kw_map = {
             'iron': 'VC01', 'steel': 'VC01',
@@ -417,8 +504,13 @@ def run(upload_files: list[Path] | None = None, value_chain_id: str | None = Non
                   f'Rename to include VC01..VC09 or a chain keyword.')
             continue
 
-        # Method 1: mine the upload
-        mined = mine_upload(filepath, vc)
+        # Method 1: mine the upload. One unreadable document must not abort the
+        # whole batch — log it and move on (ADR-010: visible gap, not a crash).
+        try:
+            mined = mine_upload(filepath, vc)
+        except Exception as e:
+            print(f'  SKIP {filepath.name} — could not extract/mine: {e}')
+            continue
         all_approved.extend(mined)
         chains_processed.add(vc)
         print(f'    Mined {len(mined)} datapoints from {filepath.name}')
@@ -472,7 +564,7 @@ def run(upload_files: list[Path] | None = None, value_chain_id: str | None = Non
             'gaps_proposed': len(chain_props),
             'source_files': [f.name for f in (upload_files or list(UPLOADS_DIR.glob('*')))
                              if f.suffix.lower() in {'.pdf', '.docx', '.xlsx', '.csv'}
-                             and infer_vc(f.name) == vc],
+                             and infer_vc(f) == vc],
         })
 
 
