@@ -615,14 +615,14 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-t
     <div class="section-title" style="margin-bottom:6px">🕓 Recently Updated</div>
     <div class="section-sub">Latest data, chapters, and reviews from the agentic pipeline — newest first.</div>
     <div class="card" style="margin-bottom:24px">
-      <div class="update-item"><span class="update-icon">🚀</span><span class="update-tag">Feature</span><span class="update-msg">pictographic icons in the Manufacturing Distribution legends</span><span class="update-date">2026-06-22</span></div>
+      <div class="update-item"><span class="update-icon">🚀</span><span class="update-tag">Feature</span><span class="update-msg">cross-filter Spatial &lt;-&gt; Sector Distribution treemaps; monochrome icons</span><span class="update-date">2026-06-22</span></div>
+    <div class="update-item"><span class="update-icon">🚀</span><span class="update-tag">Feature</span><span class="update-msg">pictographic icons in the Manufacturing Distribution legends</span><span class="update-date">2026-06-22</span></div>
     <div class="update-item"><span class="update-icon">🛠️</span><span class="update-tag">Fix</span><span class="update-msg">restore strict 4-per-row KPI grid, simplify card 4, USD on card 6</span><span class="update-date">2026-06-22</span></div>
     <div class="update-item"><span class="update-icon">🚀</span><span class="update-tag">Feature</span><span class="update-msg">KPI cards 1-6 — bigger charts, real export/high-tech composition, recolored highlights</span><span class="update-date">2026-06-22</span></div>
     <div class="update-item"><span class="update-icon">🛠️</span><span class="update-tag">Fix</span><span class="update-msg">reconcile Tax/FDI/Employment figures with better-sourced totals</span><span class="update-date">2026-06-22</span></div>
     <div class="update-item"><span class="update-icon">🚀</span><span class="update-tag">Feature</span><span class="update-msg">absolute figures on Progress to Tenfold bars, per Jerome's formula</span><span class="update-date">2026-06-22</span></div>
     <div class="update-item"><span class="update-icon">🚀</span><span class="update-tag">Feature</span><span class="update-msg">mix chart types in KPI cards — bars, line, comparison chart, donut</span><span class="update-date">2026-06-22</span></div>
     <div class="update-item"><span class="update-icon">🛠️</span><span class="update-tag">Fix</span><span class="update-msg">remove two redundant sub-value lines from KPI cards</span><span class="update-date">2026-06-22</span></div>
-    <div class="update-item"><span class="update-icon">🚀</span><span class="update-tag">Feature</span><span class="update-msg">card 7 exact PDF figure, card 3 figures-in-legend, card 8 no icon, relocate non-core sections</span><span class="update-date">2026-06-22</span></div>
     </div>
   </div>
 
@@ -2926,11 +2926,37 @@ function crossFilterRegionBySector(sectorName){
   const regionNames = Object.keys(TREEMAP_REGION_SECTOR_DATA);
   const nodes = regionNames.map(name => ({
     name, value: (TREEMAP_REGION_SECTOR_DATA[name] && TREEMAP_REGION_SECTOR_DATA[name][sectorName]) || 0,
-    color: TREEMAP_REGION_COLORS[name] || '#90a4ae', leaf: true
+    color: TREEMAP_REGION_COLORS[name] || '#90a4ae', leaf: false  // clickable: drills into that region's districts for this sector
   })).filter(n => n.value > 0).sort((a,b) => b.value - a.value);
   breadcrumbEl.innerHTML = `<span class="crumb" onclick="window._treemapRegionShowTop()">All Regions</span><span class="sep">›</span><span style="color:var(--text)">Sector: ${sectorName}</span>`;
   if (!nodes.length){
     document.getElementById('treemap-region-wrap').innerHTML = '';
+    return;
+  }
+  const total = nodes.reduce((s,n)=>s+n.value,0);
+  renderTreemapSVG('treemap-region-wrap', nodes, total, regionName => {
+    crossFilterDistrictBySectorAndRegion(sectorName, regionName);
+  });
+}
+
+function crossFilterDistrictBySectorAndRegion(sectorName, regionName){
+  const breadcrumbEl = document.getElementById('treemap-region-breadcrumb');
+  const legendEl = document.getElementById('treemap-region-legend');
+  legendEl.innerHTML = '';
+  const districtNames = Object.keys(TREEMAP_DISTRICT_DATA[regionName] || {});
+  const baseColor = TREEMAP_REGION_COLORS[regionName] || '#90a4ae';
+  const nodes = districtNames.map((name, i) => ({
+    name,
+    value: (TREEMAP_DISTRICT_SECTOR_DATA[name] && TREEMAP_DISTRICT_SECTOR_DATA[name][sectorName]) || 0,
+    color: shadeColor(baseColor, (i % 6) * 0.09), leaf: true
+  })).filter(n => n.value > 0).sort((a,b) => b.value - a.value);
+  breadcrumbEl.innerHTML =
+    `<span class="crumb" onclick="window._treemapRegionShowTop()">All Regions</span><span class="sep">›</span>` +
+    `<span class="crumb" onclick="crossFilterRegionBySector('${sectorName.replace(/'/g,"\\'")}')">Sector: ${sectorName}</span><span class="sep">›</span>` +
+    `<span style="color:var(--text)">${regionName}</span>`;
+  if (!nodes.length){
+    document.getElementById('treemap-region-wrap').innerHTML =
+      `<div style="padding:20px;color:var(--muted);font-size:12px">No ${sectorName} establishments recorded in ${regionName}'s districts.</div>`;
     return;
   }
   const total = nodes.reduce((s,n)=>s+n.value,0);
