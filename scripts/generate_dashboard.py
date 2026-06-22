@@ -350,7 +350,8 @@ UGX_PER_USD = 3700
 
 def kpi_value_added_trend():
     """Same 5-year Mfg Value Added trend as the Momentum panel's line chart
-    (19.6trn -> 23.3trn), converted from Shs trillions to USD billions."""
+    (19.6trn -> 23.3trn), converted from Shs trillions to USD billions. Sized
+    to fit a single KPI grid column (4-per-row layout is fixed)."""
     mt = {r['id']: r for r in macro_trend}
     r = mt.get('mfg_value_added')
     if not r:
@@ -365,12 +366,13 @@ def kpi_value_added_trend():
         labels = [l for l in labels_raw.split(';') if l] if labels_raw else None
     except ValueError:
         return ''
-    return line_chart_svg(usd_values, labels=labels, unit='B', color='#2e7d32')
+    return line_chart_svg(usd_values, labels=labels, unit='B', color='#2e7d32',
+                          width=210, chart_h=110, label_h=18, y_axis_w=28)
 
 def kpi_mfg_growth_trend():
     """Manufacturing Growth before/after line, reusing the same 2.2% -> 5.6%
-    trend already sourced in macro_trend.csv for the Momentum panel — sized
-    to match the Value Added chart since this card now shows the chart only."""
+    trend already sourced in macro_trend.csv for the Momentum panel. Sized
+    to fit a single KPI grid column (4-per-row layout is fixed)."""
     mt = {r['id']: r for r in macro_trend}
     r = mt.get('mfg_growth')
     if not r:
@@ -379,7 +381,8 @@ def kpi_mfg_growth_trend():
         old, new = _parse_num(r['fy2021_value']), _parse_num(r['fy2025_value'])
     except (KeyError, ValueError):
         return ''
-    return line_chart_svg([old, new], labels=['FY20/21', 'FY24/25'], unit='%', color='#2e7d32')
+    return line_chart_svg([old, new], labels=['FY20/21', 'FY24/25'], unit='%', color='#2e7d32',
+                          width=210, chart_h=110, label_h=18, y_axis_w=28)
 
 def kpi_credit_comparison_bar():
     """Horizontal bar comparing Manufacturing's private-sector credit against
@@ -398,13 +401,14 @@ def kpi_credit_comparison_bar():
     max_val = max(float(r['pct']) for r in rows) or 1
     parts = []
     for r in rows:
-        val = float(r['pct'])
+        val = float(r['pct'])  # Shs trillions, FY24/25 stock
         share = val / total * 100
         width_pct = (val / max_val) * 100
         highlight = r.get('highlight') == '1'
         color = '#1565c0' if highlight else '#b0bec5'
         weight = '700' if highlight else '400'
-        fy25 = r['value_label'].split('&rarr;')[-1].strip() if '&rarr;' in r['value_label'] else r['value_label']
+        usd_bn = val * 1e12 / UGX_PER_USD / 1e9
+        fy25 = f'USD {usd_bn:.2f}B'
         parts.append(
             f'<div class="kpi-credit-row">'
             f'<span class="kpi-credit-label" style="font-weight:{weight}">{esc(r["sector"])}</span>'
