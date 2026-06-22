@@ -1,0 +1,738 @@
+{
+  "Wakiso": {
+    "Food Products": 369,
+    "Beverages": 272,
+    "Tobacco": 3,
+    "Textiles": 2,
+    "Leather and Leather Products": 32,
+    "Wood and Wood Products": 26,
+    "Paper and Paper Products": 38,
+    "Printing and Reproduction of Recorded Media": 19,
+    "Coke and Petroleum Products": 13,
+    "Chemical and Chemical Products": 197,
+    "Pharmaceutical, Medical Chemicals and Botanical Products": 21,
+    "Rubber and Plastic Products": 76,
+    "Other Non-Metallic Mineral Products": 79,
+    "Basic Metals": 23,
+    "Fabricated Metal Products Except Machinery and Equipment": 75,
+    "Electrical Equipment": 8,
+    "Machinery and Equipment": 1,
+    "Motor Vehicles, Trailers and Semi-Trailers": 2,
+    "Other Transport Equipment": 3,
+    "Other Manufacturing": 1
+  },
+  "Tororo": {
+    "Food Products": 11,
+    "Beverages": 6,
+    "Coke and Petroleum Products": 1,
+    "Chemical and Chemical Products": 3,
+    "Other Non-Metallic Mineral Products": 2,
+    "Basic Metals": 1,
+    "Fabricated Metal Products Except Machinery and Equipment": 2
+  },
+  "Kampala": {
+    "Food Products": 693,
+    "Beverages": 296,
+    "Tobacco": 2,
+    "Textiles": 11,
+    "Leather and Leather Products": 80,
+    "Wood and Wood Products": 125,
+    "Paper and Paper Products": 119,
+    "Printing and Reproduction of Recorded Media": 746,
+    "Coke and Petroleum Products": 46,
+    "Chemical and Chemical Products": 367,
+    "Pharmaceutical, Medical Chemicals and Botanical Products": 47,
+    "Rubber and Plastic Products": 198,
+    "Other Non-Metallic Mineral Products": 102,
+    "Basic Metals": 108,
+    "Fabricated Metal Products Except Machinery and Equipment": 236,
+    "Computer, Electronic and Optical Products": 2,
+    "Electrical Equipment": 59,
+    "Machinery and Equipment": 3,
+    "Motor Vehicles, Trailers and Semi-Trailers": 7,
+    "Other Transport Equipment": 20,
+    "Other Manufacturing": 13
+  },
+  "Mukono": {
+    "Food Products": 105,
+    "Beverages": 54,
+    "Leather and Leather Products": 15,
+    "Wood and Wood Products": 14,
+    "Paper and Paper Products": 27,
+    "Printing and Reproduction of Recorded Media": 5,
+    "Coke and Petroleum Products": 6,
+    "Chemical and Chemical Products": 49,
+    "Pharmaceutical, Medical Chemicals and Botanical Products": 12,
+    "Rubber and Plastic Products": 45,
+    "Other Non-Metallic Mineral Products": 25,
+    "Basic Metals": 17,
+    "Fabricated Metal Products Except Machinery and Equipment": 27,
+    "Electrical Equipment": 4,
+    "Machinery and Equipment": 1,
+    "Motor Vehicles, Trailers and Semi-Trailers": 3,
+    "Other Transport Equipment": 5
+  },
+  "Luwero": {
+    "Food Products": 27,
+    "Beverages": 12,
+    "Leather and Leather Products": 3,
+    "Wood and Wood Products": 1,
+    "Paper and Paper Products": 3,
+    "Coke and Petroleum Products": 2,
+    "Chemical and Chemical Products": 4,
+    "Pharmaceutical, Medical Chemicals and Botanical Products": 1,
+    "Rubber and Plastic Products": 2,
+    "Other Non-Metallic Mineral Products": 1,
+    "Fabricated Metal Products Except Machinery and Equipment": 2,
+    "Electrical Equipment": 1
+  },
+  "Nakaseke": {
+    "Food Products": 7,
+    "Beverages": 7,
+    "Leather and Leather Products": 1,
+    "Chemical and Chemical Products": 1,
+    "Rubber and Plastic Products": 1,
+    "Other Non-Metallic Mineral Products": 3,
+    "Basic Metals": 2,
+    "Fabricated Metal Products Except Machinery and Equipment": 1,
+    "Electrical Equipment": 3
+  },
+  "Masaka": {
+    "Food Products": 18,
+    "Beverages": 19,
+    "Leather and Leather Products": 1,
+    "Wood and Wood Products": 3,
+    "Paper and Paper Products": 2,
+    "Printing and Reproduction of Recorded Media": 2,
+    "Coke and Petroleum Products": 1,
+    "Chemical and Chemical Products": 4,
+    "Pharmaceutical, Medical Chemicals and Botanical Products": 2,
+    "Other Non-Metallic Mineral Products": 3,
+    "Basic Metals": 1,
+    "Fabricated Metal Products Except Machinery and Equipment": 1
+  },
+  "Lyantonde": {
+    "Food Products": 4,
+    "Pharmaceutical, Medical Chemicals and Botanical Products": 2
+  },
+  "Jinja": {
+    "Food Products": 67,
+    "Beverages": 27,
+    "Tobacco": 1,
+    "Textiles": 2,
+    "Leather and Leather Products": 13,
+    "Wood and Wood Products": 11,
+    "Paper and Paper Products": 10,
+    "Printing and Reproduction of Recorded Media": 5,
+    "Coke and Petroleum Products": 6,
+    "Chemical and Chemical Products": 12,
+    "Pharmaceutical, Medical Chemicals and Botanical Products": 5,
+    "Rubber and Plastic Products": 16,
+    "Other Non-Metallic Mineral Products": 14,
+    "Basic Metals": 19,
+    "Fabricated Metal Products Except Machinery and Equipment": 11,
+    "Electrical Equipment": 6,
+    "Machinery and Equipment": 2,
+    "Motor Vehicles, Trailers and Semi-Trailers": 2,
+    "Other Manufacturing": 2
+  },
+  "Ntoroko": {
+    "Food Products": 2
+  },
+  "Soroti": {
+    "Food Products": 20,
+    "Beverages": 5,
+    "Printing and Reproduction of Recorded Media": 1,
+    "Chemical and Chemical Products": 3,
+    "Other Non-Metallic Mineral Products": 1,
+    "Basic Metals": 1,
+    "Fabricated Metal Products Except Machinery and Equipment": 3,
+    "Electrical Equipment": 1,
+    "Machinery and Equipment": 1,
+    "Other Manufacturing": 1
+  },
+  "Buikwe": {
+    "Food Products": 16,
+    "Beverages": 17,
+    "Leather and Leather Products": 1,
+    "Wood and Wood Products": 3,
+    "Paper and Paper Products": 2,
+    "Coke and Petroleum Products": 3,
+    "Chemical and Chemical Products": 8,
+    "Pharmaceutical, Medical Chemicals and Botanical Products": 1,
+    "Rubber and Plastic Products": 8,
+    "Other Non-Metallic Mineral Products": 2,
+    "Basic Metals": 6,
+    "Fabricated Metal Products Except Machinery and Equipment": 6,
+    "Electrical Equipment": 4,
+    "Other Transport Equipment": 1
+  },
+  "Nakasongola": {
+    "Food Products": 4,
+    "Beverages": 2,
+    "Wood and Wood Products": 1,
+    "Other Non-Metallic Mineral Products": 1,
+    "Motor Vehicles, Trailers and Semi-Trailers": 1
+  },
+  "Gulu": {
+    "Food Products": 28,
+    "Beverages": 9,
+    "Textiles": 1,
+    "Leather and Leather Products": 2,
+    "Wood and Wood Products": 1,
+    "Chemical and Chemical Products": 4,
+    "Basic Metals": 2,
+    "Fabricated Metal Products Except Machinery and Equipment": 2
+  },
+  "Busia": {
+    "Food Products": 11,
+    "Beverages": 4,
+    "Leather and Leather Products": 1,
+    "Wood and Wood Products": 2,
+    "Chemical and Chemical Products": 2,
+    "Pharmaceutical, Medical Chemicals and Botanical Products": 1,
+    "Other Non-Metallic Mineral Products": 2,
+    "Fabricated Metal Products Except Machinery and Equipment": 1
+  },
+  "Lira": {
+    "Food Products": 78,
+    "Beverages": 23,
+    "Leather and Leather Products": 1,
+    "Wood and Wood Products": 2,
+    "Printing and Reproduction of Recorded Media": 6,
+    "Coke and Petroleum Products": 1,
+    "Other Non-Metallic Mineral Products": 1,
+    "Basic Metals": 1,
+    "Fabricated Metal Products Except Machinery and Equipment": 7
+  },
+  "Mityana": {
+    "Food Products": 22,
+    "Beverages": 29,
+    "Leather and Leather Products": 1,
+    "Wood and Wood Products": 7,
+    "Paper and Paper Products": 1,
+    "Printing and Reproduction of Recorded Media": 1,
+    "Chemical and Chemical Products": 2
+  },
+  "Mbale": {
+    "Food Products": 44,
+    "Beverages": 11,
+    "Textiles": 2,
+    "Leather and Leather Products": 1,
+    "Wood and Wood Products": 1,
+    "Paper and Paper Products": 4,
+    "Printing and Reproduction of Recorded Media": 1,
+    "Chemical and Chemical Products": 4,
+    "Rubber and Plastic Products": 3,
+    "Other Non-Metallic Mineral Products": 5,
+    "Basic Metals": 2,
+    "Fabricated Metal Products Except Machinery and Equipment": 6,
+    "Electrical Equipment": 3,
+    "Motor Vehicles, Trailers and Semi-Trailers": 1
+  },
+  "Unspecified": {
+    "Food Products": 39,
+    "Beverages": 43,
+    "Tobacco": 1,
+    "Leather and Leather Products": 8,
+    "Wood and Wood Products": 6,
+    "Paper and Paper Products": 9,
+    "Printing and Reproduction of Recorded Media": 1,
+    "Coke and Petroleum Products": 4,
+    "Chemical and Chemical Products": 26,
+    "Pharmaceutical, Medical Chemicals and Botanical Products": 2,
+    "Rubber and Plastic Products": 4,
+    "Other Non-Metallic Mineral Products": 7,
+    "Basic Metals": 3,
+    "Fabricated Metal Products Except Machinery and Equipment": 8,
+    "Electrical Equipment": 1,
+    "Motor Vehicles, Trailers and Semi-Trailers": 1
+  },
+  "Kaberamaido": {
+    "Food Products": 1
+  },
+  "Nwoya": {
+    "Food Products": 2,
+    "Beverages": 2
+  },
+  "Mbarara": {
+    "Food Products": 51,
+    "Beverages": 80,
+    "Leather and Leather Products": 3,
+    "Wood and Wood Products": 5,
+    "Printing and Reproduction of Recorded Media": 4,
+    "Chemical and Chemical Products": 11,
+    "Pharmaceutical, Medical Chemicals and Botanical Products": 2,
+    "Rubber and Plastic Products": 2,
+    "Other Non-Metallic Mineral Products": 6,
+    "Basic Metals": 3,
+    "Fabricated Metal Products Except Machinery and Equipment": 3
+  },
+  "Kasese": {
+    "Food Products": 14,
+    "Beverages": 27,
+    "Wood and Wood Products": 2,
+    "Printing and Reproduction of Recorded Media": 2,
+    "Coke and Petroleum Products": 1,
+    "Chemical and Chemical Products": 5,
+    "Rubber and Plastic Products": 1,
+    "Other Non-Metallic Mineral Products": 1,
+    "Fabricated Metal Products Except Machinery and Equipment": 4,
+    "Motor Vehicles, Trailers and Semi-Trailers": 1
+  },
+  "Kyotera": {
+    "Food Products": 4,
+    "Beverages": 3,
+    "Printing and Reproduction of Recorded Media": 1,
+    "Chemical and Chemical Products": 1,
+    "Rubber and Plastic Products": 2,
+    "Other Non-Metallic Mineral Products": 1,
+    "Basic Metals": 1,
+    "Fabricated Metal Products Except Machinery and Equipment": 1
+  },
+  "Pader": {
+    "Food Products": 1
+  },
+  "Sironko": {
+    "Food Products": 4,
+    "Beverages": 1,
+    "Chemical and Chemical Products": 1
+  },
+  "Kassanda": {
+    "Food Products": 4,
+    "Beverages": 1,
+    "Wood and Wood Products": 3,
+    "Chemical and Chemical Products": 1
+  },
+  "Bududa": {
+    "Food Products": 1
+  },
+  "Rubirizi": {
+    "Food Products": 3,
+    "Beverages": 3
+  },
+  "Hoima": {
+    "Food Products": 10,
+    "Beverages": 16,
+    "Wood and Wood Products": 3,
+    "Paper and Paper Products": 1,
+    "Coke and Petroleum Products": 1,
+    "Chemical and Chemical Products": 3,
+    "Pharmaceutical, Medical Chemicals and Botanical Products": 1,
+    "Rubber and Plastic Products": 1,
+    "Other Non-Metallic Mineral Products": 2
+  },
+  "Kabarole": {
+    "Food Products": 15,
+    "Beverages": 7,
+    "Leather and Leather Products": 1,
+    "Wood and Wood Products": 5,
+    "Printing and Reproduction of Recorded Media": 2,
+    "Coke and Petroleum Products": 1,
+    "Chemical and Chemical Products": 3,
+    "Other Non-Metallic Mineral Products": 1,
+    "Basic Metals": 1,
+    "Fabricated Metal Products Except Machinery and Equipment": 3
+  },
+  "Mpigi": {
+    "Food Products": 11,
+    "Beverages": 10,
+    "Leather and Leather Products": 2,
+    "Wood and Wood Products": 5,
+    "Paper and Paper Products": 3,
+    "Coke and Petroleum Products": 2,
+    "Chemical and Chemical Products": 3,
+    "Rubber and Plastic Products": 6,
+    "Other Non-Metallic Mineral Products": 2,
+    "Fabricated Metal Products Except Machinery and Equipment": 2
+  },
+  "Ntungamo": {
+    "Food Products": 7,
+    "Beverages": 6
+  },
+  "Arua": {
+    "Food Products": 6,
+    "Beverages": 11,
+    "Tobacco": 1,
+    "Wood and Wood Products": 2,
+    "Printing and Reproduction of Recorded Media": 3,
+    "Chemical and Chemical Products": 1,
+    "Other Non-Metallic Mineral Products": 1,
+    "Fabricated Metal Products Except Machinery and Equipment": 8
+  },
+  "Ibanda": {
+    "Food Products": 8,
+    "Beverages": 2,
+    "Wood and Wood Products": 1,
+    "Chemical and Chemical Products": 1
+  },
+  "Bushenyi": {
+    "Food Products": 20,
+    "Beverages": 11,
+    "Wood and Wood Products": 2,
+    "Printing and Reproduction of Recorded Media": 1,
+    "Basic Metals": 1
+  },
+  "Kayunga": {
+    "Food Products": 7,
+    "Beverages": 8,
+    "Leather and Leather Products": 1,
+    "Wood and Wood Products": 4,
+    "Other Non-Metallic Mineral Products": 2,
+    "Fabricated Metal Products Except Machinery and Equipment": 4
+  },
+  "Kyenjojo": {
+    "Food Products": 9,
+    "Beverages": 2,
+    "Wood and Wood Products": 1,
+    "Basic Metals": 1
+  },
+  "Kitgum": {
+    "Food Products": 2,
+    "Beverages": 3,
+    "Wood and Wood Products": 2
+  },
+  "Kamuli": {
+    "Food Products": 6,
+    "Beverages": 2,
+    "Wood and Wood Products": 1,
+    "Printing and Reproduction of Recorded Media": 1,
+    "Coke and Petroleum Products": 1,
+    "Chemical and Chemical Products": 1
+  },
+  "Kalungu": {
+    "Food Products": 4,
+    "Beverages": 3,
+    "Chemical and Chemical Products": 1
+  },
+  "Yumbe": {
+    "Food Products": 4,
+    "Wood and Wood Products": 2,
+    "Fabricated Metal Products Except Machinery and Equipment": 2
+  },
+  "Masindi": {
+    "Food Products": 12,
+    "Beverages": 2,
+    "Wood and Wood Products": 1,
+    "Printing and Reproduction of Recorded Media": 2,
+    "Chemical and Chemical Products": 2,
+    "Other Non-Metallic Mineral Products": 1,
+    "Fabricated Metal Products Except Machinery and Equipment": 1
+  },
+  "Agago": {
+    "Food Products": 1
+  },
+  "Butaleja": {
+    "Food Products": 1
+  },
+  "Kabale": {
+    "Food Products": 13,
+    "Beverages": 13,
+    "Wood and Wood Products": 1,
+    "Paper and Paper Products": 1,
+    "Printing and Reproduction of Recorded Media": 1,
+    "Chemical and Chemical Products": 5,
+    "Fabricated Metal Products Except Machinery and Equipment": 2
+  },
+  "Kole": {
+    "Food Products": 6,
+    "Beverages": 1
+  },
+  "Apac": {
+    "Food Products": 2,
+    "Beverages": 1,
+    "Leather and Leather Products": 1
+  },
+  "Oyam": {
+    "Food Products": 4,
+    "Fabricated Metal Products Except Machinery and Equipment": 1
+  },
+  "Kalangala": {
+    "Food Products": 2
+  },
+  "Koboko": {
+    "Food Products": 3,
+    "Wood and Wood Products": 3,
+    "Printing and Reproduction of Recorded Media": 1,
+    "Chemical and Chemical Products": 1,
+    "Fabricated Metal Products Except Machinery and Equipment": 4
+  },
+  "Kibuku": {
+    "Food Products": 2,
+    "Chemical and Chemical Products": 1
+  },
+  "Kiryandongo": {
+    "Food Products": 5,
+    "Beverages": 2,
+    "Leather and Leather Products": 1
+  },
+  "Kapchorwa": {
+    "Food Products": 5
+  },
+  "Namutumba": {
+    "Food Products": 2,
+    "Beverages": 1
+  },
+  "Bukedea": {
+    "Food Products": 3,
+    "Chemical and Chemical Products": 1
+  },
+  "Amuru": {
+    "Food Products": 2,
+    "Fabricated Metal Products Except Machinery and Equipment": 1
+  },
+  "Lamwo": {
+    "Food Products": 2,
+    "Coke and Petroleum Products": 2
+  },
+  "Obongi": {
+    "Food Products": 1
+  },
+  "Ssembabule": {
+    "Food Products": 4,
+    "Fabricated Metal Products Except Machinery and Equipment": 2
+  },
+  "Kiruhura": {
+    "Food Products": 10,
+    "Beverages": 1,
+    "Paper and Paper Products": 1
+  },
+  "Isingiro": {
+    "Food Products": 11,
+    "Beverages": 12,
+    "Chemical and Chemical Products": 1,
+    "Rubber and Plastic Products": 1
+  },
+  "Manafwa": {
+    "Food Products": 3,
+    "Beverages": 1,
+    "Chemical and Chemical Products": 1
+  },
+  "Kisoro": {
+    "Food Products": 3,
+    "Beverages": 5,
+    "Fabricated Metal Products Except Machinery and Equipment": 3
+  },
+  "Adjumani": {
+    "Food Products": 2,
+    "Wood and Wood Products": 1,
+    "Chemical and Chemical Products": 2,
+    "Fabricated Metal Products Except Machinery and Equipment": 3
+  },
+  "Kiboga": {
+    "Food Products": 5,
+    "Beverages": 1,
+    "Wood and Wood Products": 2
+  },
+  "Rakai": {
+    "Food Products": 3,
+    "Beverages": 5,
+    "Wood and Wood Products": 1,
+    "Chemical and Chemical Products": 1
+  },
+  "Sheema": {
+    "Food Products": 4,
+    "Beverages": 3,
+    "Leather and Leather Products": 1,
+    "Paper and Paper Products": 1,
+    "Chemical and Chemical Products": 1,
+    "Fabricated Metal Products Except Machinery and Equipment": 2
+  },
+  "Gomba": {
+    "Food Products": 1
+  },
+  "Kyegegwa": {
+    "Food Products": 1,
+    "Chemical and Chemical Products": 1,
+    "Other Non-Metallic Mineral Products": 1
+  },
+  "Kamwenge": {
+    "Food Products": 2,
+    "Beverages": 5
+  },
+  "Rukungiri": {
+    "Food Products": 3,
+    "Beverages": 3,
+    "Leather and Leather Products": 1,
+    "Printing and Reproduction of Recorded Media": 1
+  },
+  "Kibaale": {
+    "Food Products": 2,
+    "Beverages": 2,
+    "Other Non-Metallic Mineral Products": 1,
+    "Basic Metals": 1,
+    "Fabricated Metal Products Except Machinery and Equipment": 1
+  },
+  "Kumi": {
+    "Food Products": 1,
+    "Textiles": 1,
+    "Fabricated Metal Products Except Machinery and Equipment": 1
+  },
+  "Ngora": {
+    "Food Products": 1
+  },
+  "Kagadi": {
+    "Food Products": 4,
+    "Beverages": 2,
+    "Wood and Wood Products": 2
+  },
+  "Mubende": {
+    "Food Products": 8,
+    "Beverages": 25,
+    "Wood and Wood Products": 7,
+    "Coke and Petroleum Products": 1
+  },
+  "Namayingo": {
+    "Food Products": 3,
+    "Beverages": 1
+  },
+  "Iganga": {
+    "Food Products": 14,
+    "Beverages": 5,
+    "Leather and Leather Products": 2,
+    "Wood and Wood Products": 7,
+    "Printing and Reproduction of Recorded Media": 1,
+    "Coke and Petroleum Products": 1,
+    "Chemical and Chemical Products": 6,
+    "Other Non-Metallic Mineral Products": 1,
+    "Fabricated Metal Products Except Machinery and Equipment": 4,
+    "Electrical Equipment": 2
+  },
+  "Bugiri": {
+    "Food Products": 5,
+    "Beverages": 1,
+    "Wood and Wood Products": 1,
+    "Fabricated Metal Products Except Machinery and Equipment": 3
+  },
+  "Kween": {
+    "Food Products": 1,
+    "Wood and Wood Products": 1
+  },
+  "Buyende": {
+    "Food Products": 2,
+    "Wood and Wood Products": 1,
+    "Chemical and Chemical Products": 1
+  },
+  "Nebbi": {
+    "Food Products": 2,
+    "Beverages": 2
+  },
+  "Bukomansimbi": {
+    "Food Products": 1,
+    "Beverages": 1,
+    "Chemical and Chemical Products": 1
+  },
+  "Kaabong": {
+    "Food Products": 7
+  },
+  "Bunyangabu": {
+    "Food Products": 1,
+    "Beverages": 7,
+    "Textiles": 1
+  },
+  "Lwengo": {
+    "Food Products": 2,
+    "Beverages": 3,
+    "Paper and Paper Products": 1
+  },
+  "Budaka": {
+    "Food Products": 2,
+    "Beverages": 1,
+    "Leather and Leather Products": 1
+  },
+  "Mayuge": {
+    "Food Products": 3,
+    "Beverages": 4,
+    "Fabricated Metal Products Except Machinery and Equipment": 3
+  },
+  "Namisindwa": {
+    "Food Products": 1
+  },
+  "Rubanda": {
+    "Food Products": 1
+  },
+  "Kanungu": {
+    "Food Products": 4,
+    "Beverages": 5,
+    "Fabricated Metal Products Except Machinery and Equipment": 1
+  },
+  "Rwampara": {
+    "Food Products": 1
+  },
+  "Bukwo": {
+    "Food Products": 1
+  },
+  "Abim": {
+    "Food Products": 1
+  },
+  "Pallisa": {
+    "Food Products": 2,
+    "Other Non-Metallic Mineral Products": 1
+  },
+  "Kyankwanzi": {
+    "Food Products": 1,
+    "Wood and Wood Products": 2,
+    "Chemical and Chemical Products": 1
+  },
+  "Kaliro": {
+    "Food Products": 1
+  },
+  "Buhweju": {
+    "Food Products": 1
+  },
+  "Kikuube": {
+    "Food Products": 2
+  },
+  "Mitooma": {
+    "Beverages": 3
+  },
+  "Kakumiro": {
+    "Beverages": 4,
+    "Fabricated Metal Products Except Machinery and Equipment": 1
+  },
+  "Zombo": {
+    "Beverages": 2,
+    "Leather and Leather Products": 2
+  },
+  "Amolatar": {
+    "Beverages": 2
+  },
+  "Nakapiripirit": {
+    "Beverages": 1
+  },
+  "Maracha": {
+    "Beverages": 1
+  },
+  "Omoro": {
+    "Beverages": 2
+  },
+  "Luuka": {
+    "Beverages": 1,
+    "Other Non-Metallic Mineral Products": 1
+  },
+  "Katakwi": {
+    "Textiles": 1
+  },
+  "Butambala": {
+    "Printing and Reproduction of Recorded Media": 1,
+    "Motor Vehicles, Trailers and Semi-Trailers": 1
+  },
+  "Dokolo": {
+    "Chemical and Chemical Products": 1,
+    "Other Non-Metallic Mineral Products": 1
+  },
+  "Amuria": {
+    "Chemical and Chemical Products": 1
+  },
+  "Otuke": {
+    "Chemical and Chemical Products": 1
+  },
+  "Moyo": {
+    "Chemical and Chemical Products": 1,
+    "Other Non-Metallic Mineral Products": 1
+  },
+  "Bundibugyo": {
+    "Pharmaceutical, Medical Chemicals and Botanical Products": 1,
+    "Fabricated Metal Products Except Machinery and Equipment": 1
+  }
+}

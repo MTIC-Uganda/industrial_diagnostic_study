@@ -795,17 +795,26 @@ def chain_colors_js():
     return f'const CHAIN_COLORS={{\n{body}\n}};'
 
 def treemap_data_js():
-    """Embeds the establishment-distribution datasets (region->district for
-    Spatial Distribution, sector->subsector for Sector Distribution) extracted
-    from Jerome's National Industries Register (Aug 2025) by
-    scripts/extract_industries_register.py."""
-    sector_file   = DATA / 'treemap_sector.json'
-    district_file = DATA / 'treemap_district.json'
-    sector_data   = json.loads(sector_file.read_text('utf-8')) if sector_file.exists() else {}
-    district_data = json.loads(district_file.read_text('utf-8')) if district_file.exists() else {}
+    """Embeds the establishment-distribution datasets extracted from Jerome's
+    National Industries Register (Aug 2025) by scripts/extract_industries_register.py:
+      - region->district (Spatial Distribution)
+      - sector->subsector (Sector Distribution)
+      - region->sector and district->sector (cross-filtering between the two
+        treemaps: selecting a region/district updates Sector Distribution to
+        that area's sector mix; selecting a sector updates Spatial Distribution
+        to that sector's regional mix, derived client-side from region->sector)."""
+    def _load(name):
+        f = DATA / name
+        return json.loads(f.read_text('utf-8')) if f.exists() else {}
+    sector_data          = _load('treemap_sector.json')
+    district_data        = _load('treemap_district.json')
+    region_sector_data   = _load('treemap_region.json')
+    district_sector_data = _load('treemap_district_sector.json')
     return (
         'const TREEMAP_SECTOR_DATA = ' + json.dumps(sector_data, ensure_ascii=False) + ';\n'
-        'const TREEMAP_DISTRICT_DATA = ' + json.dumps(district_data, ensure_ascii=False) + ';'
+        'const TREEMAP_DISTRICT_DATA = ' + json.dumps(district_data, ensure_ascii=False) + ';\n'
+        'const TREEMAP_REGION_SECTOR_DATA = ' + json.dumps(region_sector_data, ensure_ascii=False) + ';\n'
+        'const TREEMAP_DISTRICT_SECTOR_DATA = ' + json.dumps(district_sector_data, ensure_ascii=False) + ';'
     )
 
 def chains_js():

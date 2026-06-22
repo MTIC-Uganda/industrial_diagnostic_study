@@ -5,12 +5,14 @@ into structured JSON datasets for the Manufacturing Industry Distribution treema
 (per Jerome's spec: "Spatial Distribution by region and district" + "Sector
 Distribution by 2-digit/4-digit ISIC classification"):
 
-  data/dashboard/treemap_district.json — Region -> District -> count (Spatial Distribution, used)
-  data/dashboard/treemap_sector.json   — Sector -> Sub-sector -> count (Sector Distribution, used)
-  data/dashboard/treemap_region.json   — Region -> Sector -> count (supplementary cross-tab, not
-                                          currently rendered by the dashboard — kept since it's
-                                          free to compute from the same pass and may be useful
-                                          for future analysis)
+  data/dashboard/treemap_district.json        — Region -> District -> count (Spatial Distribution)
+  data/dashboard/treemap_sector.json          — Sector -> Sub-sector -> count (Sector Distribution)
+  data/dashboard/treemap_region.json          — Region -> Sector -> count
+                                                 (cross-filter: clicking a region in Spatial
+                                                 Distribution shows that region's sector mix)
+  data/dashboard/treemap_district_sector.json — District -> Sector -> count
+                                                 (cross-filter: clicking a district shows that
+                                                 district's sector mix)
 
 Approach:
   1. The summary table (PDF pages 4-5) gives each sub-sector's starting "Ref Number"
@@ -233,8 +235,9 @@ def main():
     reader = pypdf.PdfReader(PDF)
 
     sector_subsector_counts = {}   # sector_name -> {subsector_name: count}
-    region_sector_counts = {}      # region -> {sector_name: count}  (kept for reference)
+    region_sector_counts = {}      # region -> {sector_name: count}  (cross-filter: region -> sector)
     region_district_counts = {}    # region -> {district_name: count}  (spatial treemap)
+    district_sector_counts = {}    # district -> {sector_name: count}  (cross-filter: district -> sector)
     unmatched_district_rows = 0
     seen_rows = set()
 
@@ -266,6 +269,10 @@ def main():
         region_district_counts[region][district_display] = \
             region_district_counts[region].get(district_display, 0) + 1
 
+        district_sector_counts.setdefault(district_display, {})
+        district_sector_counts[district_display][sector_name] = \
+            district_sector_counts[district_display].get(sector_name, 0) + 1
+
     total_rows = len(seen_rows)
     print(f'Parsed {total_rows} / {TOTAL_EXPECTED} expected establishment rows')
     print(f'Rows with unmatched district: {unmatched_district_rows} '
@@ -282,7 +289,10 @@ def main():
         json.dumps(region_sector_counts, indent=2, ensure_ascii=False), encoding='utf-8')
     (OUT / 'treemap_district.json').write_text(
         json.dumps(region_district_counts, indent=2, ensure_ascii=False), encoding='utf-8')
-    print(f'Wrote treemap_sector.json, treemap_region.json, treemap_district.json to {OUT}')
+    (OUT / 'treemap_district_sector.json').write_text(
+        json.dumps(district_sector_counts, indent=2, ensure_ascii=False), encoding='utf-8')
+    print(f'Wrote treemap_sector.json, treemap_region.json, treemap_district.json, '
+          f'treemap_district_sector.json to {OUT}')
 
 if __name__ == '__main__':
     main()
