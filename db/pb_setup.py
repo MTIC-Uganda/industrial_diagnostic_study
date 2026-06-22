@@ -260,9 +260,18 @@ collection_ids = {}
 for col in COLLECTIONS:
     name = col['name']
     if name in existing:
+        # Do NOT PATCH an existing collection with our hand-built schema.
+        # PocketBase 0.22 diffs a collection's fields by id, and our text()/num()/
+        # sel() helpers emit fields with no id (and without system/presentable/
+        # unique), so any PATCH is read as "drop every existing field and add new
+        # ones". That is destructive: it regenerates field ids and WIPES the
+        # column data of every existing record (and on some states 400s outright,
+        # which is what was breaking CI). Existing collections already have the
+        # correct schema, so we just reuse the id and re-seed the records below.
+        # To genuinely change an existing collection's schema, edit it in the
+        # PocketBase admin UI (or add a dedicated, id-preserving migration).
         cid = existing[name]
-        pb('PATCH', f'/api/collections/{cid}', col)
-        print(f'  Updated  {name}')
+        print(f'  Exists   {name}  (schema left intact)')
     else:
         result = pb('POST', '/api/collections', col)
         cid = result.get('id', '')
