@@ -1400,8 +1400,7 @@ function shadeColor(hex, amt){
 // renderStatus() must run after FACTORIES is defined above — renderStatusDetail()
 // cross-references FACTORIES by chain name for the full factory directory table.
 renderStatus();
-initRegionTreemap();
-initSectorTreemap();
+requestAnimationFrame(() => { initRegionTreemap(); initSectorTreemap(); });
 let _treemapResizeTimer;
 window.addEventListener('resize', () => {
   clearTimeout(_treemapResizeTimer);
