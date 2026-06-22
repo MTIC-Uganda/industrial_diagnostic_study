@@ -175,6 +175,41 @@ COLLECTIONS = [
         ],
     },
     {
+        # One record per registered manufacturing establishment (7,011 total).
+        # Populated by db/seed_industries.py after running scripts/extract_industries_to_records.py.
+        # This is the SINGLE SOURCE OF TRUTH for all manufacturing establishment data.
+        'name': 'industries',
+        'type': 'base',
+        'listRule': '',
+        'viewRule': '',
+        'createRule': None,
+        'updateRule': None,
+        'deleteRule': None,
+        'schema': [
+            text('reg_number', required=True),    # NIR-2025-XXXXXX
+            num('row_no'),
+            text('name_products'),                # raw combined text from PDF (editable)
+            text('name'),                         # editable: industry/company name
+            text('products'),                     # editable: specific products manufactured
+            text('district'),
+            sel('region', ['Central', 'Eastern', 'Northern', 'Western', 'Unclassified']),
+            text('contact'),
+            num('latitude'),
+            num('longitude'),
+            text('isic_4digit'),
+            text('isic_4digit_desc'),
+            text('isic_2digit'),
+            text('isic_2digit_desc'),
+            num('subsector_num'),
+            text('subsector_name'),
+            num('sector_num'),
+            text('sector_name'),
+            sel('status', ['active', 'inactive', 'unverified']),
+            text('source'),
+            text('notes'),                        # free-text field for manual corrections/annotations
+        ],
+    },
+    {
         # One row per field × value-chain datapoint collected by the agents.
         # Schema mirrors the record envelope in diagnostic_schema.json.
         'name': 'diagnostic_datapoints',
