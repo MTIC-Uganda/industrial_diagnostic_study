@@ -211,27 +211,33 @@ jobs:
         with:
           fetch-depth: 2
 
-      - name: Warn if architecture changed without DSL update
+      - name: Enforce ADR<->DSL coupling; warn on architecture drift
         run: |
-          ARCH_PATTERNS=".github/workflows app/backend app/frontend/src scripts agents"
           DSL="docs/architecture.dsl"
+          ADR_CHANGED=$(git diff --name-only HEAD~1 HEAD -- docs/adr/ 2>/dev/null | grep -c . || true)
+          DSL_CHANGED=$(git diff --name-only HEAD~1 HEAD -- "$DSL" 2>/dev/null | grep -c . || true)
+
+          # HARD GATE (fails the run): an ADR is an architecture decision, so the
+          # C4 model must move with it. This is the repo-level, ships-with-the-code
+          # equivalent of Hillary's local doc-guardian hook — it runs for every
+          # contributor and survives a move to another server/host.
+          if [ "$ADR_CHANGED" -gt 0 ] && [ "$DSL_CHANGED" -eq 0 ]; then
+            echo "::error::An ADR changed but docs/architecture.dsl did not. Update the C4 model to reflect the decision."
+            exit 1
+          fi
+
+          # SOFT WARNING: other architecture code changed without a DSL update.
+          ARCH_PATTERNS=".github/workflows app/backend app/frontend/src scripts agents uploader midd-brain db"
           ARCH_CHANGED=false
           for pattern in $ARCH_PATTERNS; do
             if git diff --name-only HEAD~1 HEAD -- "$pattern" 2>/dev/null | grep -q .; then
-              ARCH_CHANGED=true
-              echo "Architecture-relevant change in: $pattern"
+              ARCH_CHANGED=true; echo "Architecture-relevant change in: $pattern"
             fi
           done
-          if $ARCH_CHANGED; then
-            if git diff --name-only HEAD~1 HEAD -- "$DSL" 2>/dev/null | grep -q .; then
-              echo "docs/architecture.dsl updated — good."
-            else
-              echo "::warning::Architecture files changed but docs/architecture.dsl was NOT updated."
-              echo "::warning::Run: update docs/architecture.dsl and docs/adr/ to document what changed."
-            fi
-          else
-            echo "No architecture-relevant changes — doc check skipped."
+          if $ARCH_CHANGED && [ "$DSL_CHANGED" -eq 0 ]; then
+            echo "::warning::Architecture code changed but docs/architecture.dsl was NOT updated — confirm the C4 model doesn't need it."
           fi
+          echo "doc-check passed"
 
   # ── 1. Build React frontend ───────────────────────────────────────────────
   build:
