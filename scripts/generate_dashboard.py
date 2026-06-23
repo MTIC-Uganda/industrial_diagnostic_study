@@ -941,20 +941,22 @@ tmpl = TMPL.read_text('utf-8')
 _ms_tabs, _ms_items = milestones_html()
 
 def tools_nav_html():
-    """Env-aware header links to the internal tools (gated by Cloudflare Access).
-    Prod build -> prod tool URLs; staging build -> staging URLs; local build (no
-    PocketBase) -> nothing, since there are no public tools to point at."""
+    """Team tool links in the header — STAGING ONLY (the workshop view, for Jerome).
+    The public prod dashboard carries the public Ask MIDD bubble instead, never
+    team-tool links. Local build -> nothing."""
     pb = PB_URL
     if '8091' in pb or 'staging' in pb:
         up, ask = 'https://staging-upload.midd-ug.com', 'https://staging-ask.midd-ug.com'
-    elif pb:
-        up, ask = 'https://upload.midd-ug.com', 'https://ask.midd-ug.com'
-    else:
-        return ''
-    return ('<a href="' + up + '" class="tour-btn" target="_blank" rel="noopener" '
-            'title="Upload a document (team login required)">&#128228; Upload</a>'
-            '<a href="' + ask + '" class="tour-btn" target="_blank" rel="noopener" '
-            'title="Ask the MIDD assistant (team login required)">&#128172; Ask MIDD</a>')
+        return ('<a href="' + up + '" class="tour-btn" target="_blank" rel="noopener" '
+                'title="Upload a document (team login required)">&#128228; Upload</a>'
+                '<a href="' + ask + '" class="tour-btn" target="_blank" rel="noopener" '
+                'title="Ask the MIDD assistant (team login required)">&#128172; Ask MIDD</a>')
+    return ''  # prod / local: public dashboard carries the chat bubble, not team links
+
+
+def is_prod_build():
+    """Prod build = PocketBase points at the prod instance (:8090), not staging/local."""
+    return bool(PB_URL) and '8091' not in PB_URL and 'staging' not in PB_URL
 
 replacements = {
     '<!--%%CHAIN_SUMMARY_ROWS%%-->':  chain_table_rows_html(),
@@ -988,6 +990,16 @@ for marker, content in replacements.items():
     if marker not in out:
         print(f'WARNING: marker not found: {marker}', file=sys.stderr)
     out = out.replace(marker, content, 1)
+
+# Public Ask MIDD chat bubble: PROD only. Strip it on staging/local (the team
+# uses the header Ask MIDD link there, not a public bubble).
+import re as _re
+if is_prod_build():
+    out = out.replace('<!--CHAT_BUBBLE_START-->', '').replace('<!--CHAT_BUBBLE_END-->', '')
+    print('  Chat bubble: included (prod build)')
+else:
+    out = _re.sub(r'<!--CHAT_BUBBLE_START-->.*?<!--CHAT_BUBBLE_END-->', '', out, flags=_re.DOTALL)
+    print('  Chat bubble: stripped (staging/local build)')
 
 OUTPUT.write_text(out, 'utf-8')
 print(f'Generated {OUTPUT}  ({len(out):,} bytes, {out.count(chr(10)):,} lines)')
