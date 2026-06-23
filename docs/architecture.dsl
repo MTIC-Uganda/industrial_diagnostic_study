@@ -70,9 +70,10 @@ workspace "MIDD — Manufacturing Industry Diagnostics Dashboard" "As-built 2026
         askmidd -> record "Answers strictly from the project records"
         jerome -> pocketbase "DOES NOT edit directly (ADR-012: corrections go through the LLM)"
 
-        # ── Environment model (ADR-013): code up, data down, data never up ──
-        ci -> dashboard "CODE promotes UP: staging dashboard -> prod dashboard on health"
-        pocketbase -> pocketbase "DATA refreshes DOWN only: prod PocketBase -> staging (refresh_staging_from_prod.sh); never staging -> prod"
+        # ── Environment model (ADR-013 rev): code auto-promotes, data promotes on approval ──
+        ci -> dashboard "CODE promotes UP automatically: staging dashboard -> prod on health-check"
+        uploader -> pocketbase "DATA promotes UP on approval: Jerome clicks 'Apply to production' -> promote_staging_to_prod.sh copies approved staging PocketBase -> prod + rebuilds (never re-runs the LLM)"
+        pocketbase -> pocketbase "RESET DOWN: refresh_staging_from_prod.sh mirrors prod -> staging, discarding staging experiments. Both PBs use their own empty migrationsDir (shared dir caused a prod outage)"
 
         # ── Code loop + sync ──────────────────────────────────────────────
         github -> ci "Push triggers build/deploy/promote/seed"

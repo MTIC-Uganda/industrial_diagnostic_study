@@ -15,6 +15,9 @@ echo "[promote] stopping prod PocketBase..."
 systemctl stop pocketbase
 sleep 1
 
+echo "[promote] backing up current prod data (recoverable rollback)..."
+cp -a "$PROD/data.db" "$PROD/data.db.pre-promote"
+
 echo "[promote] copying staging data -> prod..."
 cp -a "$STG/data.db" "$PROD/data.db"
 cp -a "$STG/logs.db" "$PROD/logs.db" 2>/dev/null || true

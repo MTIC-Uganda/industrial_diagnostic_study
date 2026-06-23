@@ -1,35 +1,38 @@
-# ADR-013: Environment Model — Code Up, Data Down
+# ADR-013: Environment Model — Code Auto-Promotes, Data Promotes on Approval
 
-## Status: Accepted (2026-06-23)
+## Status: Accepted (2026-06-23), revised (2026-06-24)
 
 ## Context
 
-Staging and production exist for all three planes (dashboard, uploader, PocketBase), but the promotion semantics differ by plane and were unclear. The dashboard/code path has a real staging→prod promotion (CI), so that one felt clear. But "what does staging mean for the uploader?" and "how do the two PocketBases relate?" were muddled, which made it risky to use staging confidently.
+Staging and production exist for all three planes (dashboard, uploader, PocketBase). The first version of this ADR said "code up, data down, data never up": a tested document was re-uploaded to prod rather than promoted. In practice that loses the refinement — re-running the LLM in prod can extract differently than the version Jerome approved in staging, and any corrections he made in staging would not carry over. Hillary's clearer model: **staging is the workshop, production is the showroom; nothing reaches prod except by an explicit "Apply to production" that promotes the exact approved state.**
 
 ## Decision
 
-One rule: **code flows up, data flows down, data never flows up.**
+Two promotions, gated differently because "good" means different things.
 
-1. **Code / dashboard — promotion is real (up).** Solomon pushes a branch; CI builds and deploys to the staging dashboard; if healthy it is promoted to the prod dashboard and merged to main (ADR-006/008). What is promoted is the built dashboard (UI/code).
+1. **Code / dashboard — auto-promotes, health-gated (up).** Solomon pushes (a branch normally, or main for a hotfix). CI always builds → deploys to the **staging** dashboard → health-check → if healthy, promotes to **prod** and merges to main (ADR-006/008). Staging is always in the path; there is no way to skip it. "Good" is objective (does it build and deploy healthy), so the machine decides. Solomon never manually promotes and is never blocked.
 
-2. **Uploads — no promotion; staging is a rehearsal.** The staging uploader lets Jerome rehearse a document: confirm it extracts correctly and renders right on the staging dashboard, against a copy of prod data, with zero effect on live data. The prod uploader is the real action: it lands the document in the repo and the live datastore and rebuilds the public dashboard. A staging upload is never promoted; when Jerome is satisfied, he re-uploads the same document to the prod uploader. The extraction is deterministic, so prod matches the staging rehearsal. Re-running a cheap, deterministic upload is safer than promoting half-processed data.
+2. **Data — promotes on approval, judgment-gated (up).** All document work happens in staging: upload → LLM extracts → review → feedback → corrections → preview, repeatedly, against the disposable staging PocketBase. When Jerome is satisfied, he clicks **"Apply to production"** in the staging uploader. That runs `scripts/promote_staging_to_prod.sh`: it backs up prod, copies the approved staging PocketBase to prod, recreates the prod admin, and rebuilds the prod dashboard. It is one-way, deterministic, and **never re-runs the LLM** — what was approved in staging is byte-for-byte what goes live. "Good" is Jerome's judgment (is this extraction correct?), which a machine cannot decide, so it waits for the click.
 
-3. **PocketBase — refresh down only.** Prod PocketBase is the single source of truth for live data. Staging PocketBase is a disposable copy that staging rehearsals write to harmlessly. Sync is prod→staging only, via `scripts/refresh_staging_from_prod.sh` (copies prod data into staging and rebuilds the staging dashboard). There is no staging→prod data path; prod data changes only through a real prod upload or the prod admin UI.
+3. **Reset (down) — `refresh_staging_from_prod.sh`.** Resets the staging datastore + staging dashboard to mirror current prod, discarding staging experiments. Run it before a meaningful rehearsal, or any time staging should be a clean copy of live. Prod is untouched.
+
+**Staging is therefore exactly like a Git feature branch:** refine until good, promote to "main" (prod); un-promoted chaff is thrown away on the next reset. Experiments you do NOT want in prod stay in staging simply by not clicking Apply.
 
 ## Consequences
 
 **Better:**
-- A single memorable rule removes the confusion: code up, data down, never data up.
-- Staging is a safe, faithful sandbox: refresh it from prod, rehearse, and nothing you do there can harm live data.
-- No fragile "promote half-processed data" machinery; the real action is simply re-done in prod, deterministically.
+- The refined, corrected, human-approved state is what goes live — no second LLM run, no drift between what Jerome saw and what publishes.
+- The brain/LLM mess is contained to staging (its own PocketBase, its own per-env feedback log). Prod only ever receives an approved promotion, so it stays clean.
+- One mental model for the team: code self-promotes on health; data promotes on Jerome's approval; reset wipes staging back to prod.
 
 **Worse / watch for:**
-- Staging data drifts from prod between refreshes (staging uploads accumulate there). Run `refresh_staging_from_prod.sh` to reset to current prod before a meaningful rehearsal.
-- The staging admin account is overwritten by the prod copy on refresh; the refresh script recreates it.
-- A document must be uploaded twice (staging then prod) for a "tested then live" flow. Acceptable; it is the safe trade.
+- Promotion overwrites the whole prod datastore with staging's. Therefore **staging must be a refresh of prod before refinement** — otherwise stale staging data would clobber prod. The promote script keeps a `data.db.pre-promote` backup for rollback.
+- **PocketBase migration trap (caused a prod outage on 2026-06-24):** both PocketBases MUST run with their own empty `--migrationsDir`. Prod was reading the shared `/var/lib/pb_migrations`; copying a db in made it replay an old auto-migration (`duplicate column: established`) and prod PB would not start. Fix: prod now runs `--migrationsDir=/var/lib/pocketbase/pb_migrations` (its own, empty), mirroring the staging fix. Never let either PB read the shared migrations dir.
+- The staging admin (and, after promotion, prod's admin table) is overwritten by the copied db; both scripts recreate the automation admin afterward.
 
 ## Relationship to other ADRs
 
-- ADR-006 (staging/prod deploy pipeline) — the code promotion path.
-- ADR-009 / ADR-011 (PocketBase, single source) — the data this governs.
-- ADR-010 (uploader / intake) — the upload action that this says is re-done in prod rather than promoted.
+- ADR-006 / ADR-008 — the code auto-promotion + self-heal path.
+- ADR-009 / ADR-011 — PocketBase, single source of truth — the data this governs.
+- ADR-010 — the uploader / intake action; "Apply to production" now lives in the staging uploader.
+- ADR-012 — Ask MIDD feedback is logged per-env; routing it into TASKS/CORRECTIONS is still future work.
