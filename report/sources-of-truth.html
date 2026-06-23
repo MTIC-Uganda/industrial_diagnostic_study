@@ -94,10 +94,10 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#f0f2f5;color:#1a1a2e;fo
 .treemap-tooltip{position:fixed;display:none;background:#1a1a2e;color:#fff;padding:8px 12px;border-radius:6px;font-size:12px;pointer-events:none;z-index:2000;box-shadow:0 4px 16px rgba(0,0,0,.3);max-width:220px}
 .treemap-tooltip strong{display:block;margin-bottom:2px;font-size:13px}
 .treemap-tooltip .tt-pct{color:#90caf9}
-.treemap-legend{display:flex;gap:12px;flex-wrap:wrap;font-size:11px;margin-top:10px;color:var(--muted)}
-.treemap-legend span{display:flex;align-items:center;gap:6px}
+.treemap-legend{display:flex;gap:6px 10px;flex-wrap:wrap;font-size:9px;margin-top:10px;color:var(--muted);max-height:74px;overflow-y:auto}
+.treemap-legend span{display:flex;align-items:center;gap:4px}
 .treemap-legend .tl-item[style*="cursor:pointer"]:hover{color:var(--blue);text-decoration:underline}
-.treemap-legend .sw{width:22px;height:22px;border-radius:6px;display:inline-flex;align-items:center;justify-content:center;font-size:13px;line-height:1;flex-shrink:0}
+.treemap-legend .sw{width:14px;height:14px;border-radius:4px;display:inline-flex;align-items:center;justify-content:center;font-size:8px;line-height:1;flex-shrink:0}
 @media(max-width:800px){.treemap-wrap{height:320px}}
 
 /* MILESTONE TIMELINE */
@@ -171,6 +171,11 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#f0f2f5;color:#1a1a2e;fo
 .p-tenfold{background:#f57f17}
 .progress-legend{display:flex;gap:20px;margin-top:8px;font-size:11px}
 .legend-dot{width:10px;height:10px;border-radius:50%;display:inline-block;margin-right:4px;vertical-align:middle}
+.tenfold-view-toggle{display:flex;gap:8px;margin-bottom:12px}
+.tv-btn{padding:7px 16px;border:2px solid var(--border);border-radius:20px;background:#fff;cursor:pointer;font-size:12px;font-weight:600;color:var(--muted);transition:all .2s}
+.tv-btn:hover{border-color:var(--blue)}
+.tv-btn.active{border-color:var(--blue);background:var(--blue);color:#fff}
+.tenfold-fig-note{font-size:11px;color:var(--muted);background:#fff8e1;border-left:3px solid var(--amber);padding:8px 12px;border-radius:6px;margin-bottom:12px;line-height:1.5}
 
 /* TABLES */
 table{width:100%;border-collapse:collapse;font-size:13px}
@@ -326,8 +331,6 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-t
     <button onclick="window.print()" style="background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.4);border-radius:6px;padding:7px 16px;font-size:12px;font-weight:600;cursor:pointer;transition:background .2s" onmouseover="this.style.background='rgba(255,255,255,.25)'" onmouseout="this.style.background='rgba(255,255,255,.15)'">🖨️ Print / Export</button>
     <button onclick="generateBrief()" class="tour-btn" title="One-page Economic Brief — KPIs, momentum, chain snapshot, sources">🧾 Generate Brief</button>
     <button onclick="openGlossary()" class="tour-btn">📖 Glossary</button>
-    <a href="upload-guide.html" class="tour-btn" style="text-decoration:none">📤 Upload Guide</a>
-    <a href="pb-guide.html" class="tour-btn" style="text-decoration:none">📋 Data Entry Guide</a>
     <button id="tour-trigger" class="tour-btn" onclick="startTour()">🧭 Take a Tour</button>
     <div class="badge">TENFOLD GROWTH FRAMEWORK</div>
   </div>
@@ -478,15 +481,26 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-t
   <div class="section-title" style="margin-top:8px">📈 Progress to Tenfold Growth</div>
   <div class="section-sub">Each indicator tracked against its current value, NDP IV target (FY2029/30), and Tenfold Growth target (2040). Bar represents journey from zero to Tenfold target.</div>
 
+  <div class="tenfold-view-toggle" id="tenfold-view-toggle">
+    <button class="tv-btn active" onclick="setTenfoldView('pct', this)">📊 View by Percentage</button>
+    <button class="tv-btn" onclick="setTenfoldView('fig', this)">💰 View by Figure</button>
+  </div>
+  <div class="tenfold-fig-note" id="tenfold-fig-note" style="display:none">
+    Figure view changes <strong>Manufacturing Value Added</strong> (#1) — the one indicator where the denominator (Uganda's GDP) itself grows roughly 10× by the Tenfold horizon, so % progress and $ progress tell different stories. Bars #2–9 don't yet have confirmed absolute NDP IV/Tenfold targets for their own totals (total tax revenue, total exports, etc.), so they show the same percentage progress in both views until those figures are confirmed.
+  </div>
+
   <div class="card" id="tour-progress-card" style="margin-bottom:24px">
     <div class="progress-section">
 
-      <div class="progress-item">
+      <div class="progress-item" id="tenfold-bar-1"
+           data-pct-widths="48.3,21.7,30" data-fig-widths="5.1,17.0,77.9"
+           data-pct-labels="USD 7.7B / 14.5%|→ USD 33.2B / 21%|→ USD 150.0B / 30%"
+           data-fig-labels="USD 7.7B|→ USD 33.2B|→ USD 150.0B">
         <div class="progress-label"><span><strong>1. Manufacturing Value Added (% of GDP)</strong></span><span style="font-size:11px">USD 7.7B (14.5%) → USD 33.2B (21%) → USD 150.0B (30%)</span></div>
         <div style="position:relative;height:28px;background:#f5f5f5;border-radius:6px;overflow:hidden">
-          <div style="position:absolute;left:0;top:0;height:100%;width:48.3%;background:#1565c0;border-radius:6px 0 0 6px;display:flex;align-items:center;padding-left:8px;color:#fff;font-size:11px;font-weight:700">USD 7.7B / 14.5%</div>
-          <div style="position:absolute;left:48.3%;top:0;height:100%;width:21.7%;background:#43a047;display:flex;align-items:center;padding-left:6px;color:#fff;font-size:11px;font-weight:700">→ USD 33.2B / 21%</div>
-          <div style="position:absolute;left:70%;top:0;height:100%;width:30%;background:#f57f17;border-radius:0 6px 6px 0;display:flex;align-items:center;padding-left:6px;color:#fff;font-size:11px;font-weight:700">→ USD 150.0B / 30%</div>
+          <div class="tb-seg" style="position:absolute;left:0;top:0;height:100%;width:48.3%;background:#1565c0;border-radius:6px 0 0 6px;display:flex;align-items:center;padding-left:8px;color:#fff;font-size:11px;font-weight:700">USD 7.7B / 14.5%</div>
+          <div class="tb-seg" style="position:absolute;left:48.3%;top:0;height:100%;width:21.7%;background:#43a047;display:flex;align-items:center;padding-left:6px;color:#fff;font-size:11px;font-weight:700">→ USD 33.2B / 21%</div>
+          <div class="tb-seg" style="position:absolute;left:70%;top:0;height:100%;width:30%;background:#f57f17;border-radius:0 6px 6px 0;display:flex;align-items:center;padding-left:6px;color:#fff;font-size:11px;font-weight:700">→ USD 150.0B / 30%</div>
         </div>
       </div>
 
@@ -616,14 +630,14 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-t
     <div class="section-title" style="margin-bottom:6px">🕓 Recently Updated</div>
     <div class="section-sub">Latest data, chapters, and reviews from the agentic pipeline — newest first.</div>
     <div class="card" style="margin-bottom:24px">
-      <div class="update-item"><span class="update-icon">🛠️</span><span class="update-tag">Fix</span><span class="update-msg">make Sector Distribution legend clickable in cross-filtered view</span><span class="update-date">2026-06-22</span></div>
+      <div class="update-item"><span class="update-icon">🚀</span><span class="update-tag">Feature</span><span class="update-msg">refresh_status.py — brain keeps STATUS.md live counts current (ADR-012) [skip ci]</span><span class="update-date">2026-06-24</span></div>
+    <div class="update-item"><span class="update-icon">🚀</span><span class="update-tag">Feature</span><span class="update-msg">Ask MIDD scoped brain UI (read-only Q&amp;A over project records, feedback logged) [skip ci]</span><span class="update-date">2026-06-23</span></div>
+    <div class="update-item"><span class="update-icon">🚀</span><span class="update-tag">Feature</span><span class="update-msg">ADR-011 single-source DB structure + uploader content-hash dedup [skip ci]</span><span class="update-date">2026-06-23</span></div>
+    <div class="update-item"><span class="update-icon">🛠️</span><span class="update-tag">Fix</span><span class="update-msg">guard renderStatusDetail against null/empty chain status fields</span><span class="update-date">2026-06-22</span></div>
+    <div class="update-item"><span class="update-icon">🛠️</span><span class="update-tag">Fix</span><span class="update-msg">defer treemap init to requestAnimationFrame — getBoundingClientRect returns 0 width on inline script execution</span><span class="update-date">2026-06-23</span></div>
+    <div class="update-item"><span class="update-icon">🛠️</span><span class="update-tag">Fix</span><span class="update-msg">make Sector Distribution legend clickable in cross-filtered view</span><span class="update-date">2026-06-22</span></div>
     <div class="update-item"><span class="update-icon">🚀</span><span class="update-tag">Feature</span><span class="update-msg">legend always visible and clickable at every treemap drill level</span><span class="update-date">2026-06-22</span></div>
     <div class="update-item"><span class="update-icon">🚀</span><span class="update-tag">Feature</span><span class="update-msg">cross-filter Spatial Distribution by individual product (sub-sector)</span><span class="update-date">2026-06-22</span></div>
-    <div class="update-item"><span class="update-icon">🚀</span><span class="update-tag">Feature</span><span class="update-msg">drill sector cross-filter down to district level</span><span class="update-date">2026-06-22</span></div>
-    <div class="update-item"><span class="update-icon">🚀</span><span class="update-tag">Feature</span><span class="update-msg">cross-filter Spatial &lt;-&gt; Sector Distribution treemaps; monochrome icons</span><span class="update-date">2026-06-22</span></div>
-    <div class="update-item"><span class="update-icon">🚀</span><span class="update-tag">Feature</span><span class="update-msg">pictographic icons in the Manufacturing Distribution legends</span><span class="update-date">2026-06-22</span></div>
-    <div class="update-item"><span class="update-icon">🛠️</span><span class="update-tag">Fix</span><span class="update-msg">restore strict 4-per-row KPI grid, simplify card 4, USD on card 6</span><span class="update-date">2026-06-22</span></div>
-    <div class="update-item"><span class="update-icon">🚀</span><span class="update-tag">Feature</span><span class="update-msg">KPI cards 1-6 — bigger charts, real export/high-tech composition, recolored highlights</span><span class="update-date">2026-06-22</span></div>
     </div>
   </div>
 
@@ -1038,8 +1052,7 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-t
   <div class="section-title">🔄 Agentic Pipeline Status</div>
   <div class="section-sub">
     Live status of the Ingest → Synthesise → Review loop. Upload a document to
-    <code>data/uploads/</code> to trigger the pipeline.
-    <a href="upload-guide.html" style="color:var(--blue);font-weight:600">📤 How to upload →</a>
+    the uploader to trigger the pipeline.
   </div>
 
   <div id="pipeline-updated" style="font-size:12px;color:var(--muted);margin-bottom:20px"></div>
@@ -2450,26 +2463,26 @@ const STRENGTH_TEXT={gap:'Gap',emerging:'Emerging',strong:'Strong'};
 
 function renderStatusDetail(c){
   const s=c.status;
-  const statCards=s.current.map(item=>{
+  const statCards=(s.current||[]).map(item=>{
     const pct=(item.value.match(/\((\d+(?:\.\d+)?)%\)/)||[])[1];
     const bar=pct?`<div style="margin-top:8px;background:#e8eaf6;border-radius:4px;height:7px;overflow:hidden"><div style="width:${Math.min(parseFloat(pct),100)}%;height:100%;border-radius:4px;background:${item.color==='green'?'#2e7d32':item.color==='amber'?'#f57f17':item.color==='red'?'#c62828':'#1565c0'}"></div></div>`:'';
     return `<div class="stat-box ${colorMap[item.color]||''}"><h4>${item.label}</h4><p>${item.value}</p>${bar}</div>`;
   }).join('');
 
-  const companies=s.companies.map(co=>`<span class="company-chip">${co}</span>`).join('');
+  const companies=(s.companies||[]).map(co=>`<span class="company-chip">${co}</span>`).join('');
 
-  const constraints=s.constraints.map(con=>`
+  const constraints=(s.constraints||[]).map(con=>`
     <div class="constraint-bar">
       <div class="constraint-label"><span>${con.label}</span><span style="font-weight:700;color:var(--blue)">${{w5:'Critical',w4:'High',w3:'Medium',w2:'Low'}[con.w]}</span></div>
       <div class="constraint-track"><div class="constraint-fill ${con.w}"></div></div>
     </div>
   `).join('');
 
-  const priorities=s.priorities.map((p,i)=>`
+  const priorities=(s.priorities||[]).map((p,i)=>`
     <li><div class="priority-num">${i+1}</div><span>${p}</span></li>
   `).join('');
 
-  const projRows=s.proj.rows.map(r=>`
+  const projRows=(s.proj && s.proj.rows ? s.proj.rows : []).map(r=>`
     <div class="proj-row">
       <span>${r.label}</span>
       <div style="text-align:right">
@@ -2859,11 +2872,18 @@ function renderTreemapSVG(wrapId, nodes, total, onCellClick){
     g.addEventListener('mouseenter', e => {
       tooltip.style.display = 'block';
       const pct = ((n.value / total) * 100).toFixed(1);
-      tooltip.innerHTML = `<strong>${n.name}</strong>${n.value.toLocaleString()} establishments<br><span class="tt-pct">${pct}% of this view</span>`;
+      tooltip.innerHTML = `<strong>${n.name}</strong>${n.value.toLocaleString()} establishments<br><span class="tt-pct">${pct}%</span>`;
     });
     g.addEventListener('mousemove', e => {
-      tooltip.style.left = (e.clientX + 14) + 'px';
-      tooltip.style.top  = (e.clientY + 10) + 'px';
+      const margin = 14;
+      const tw = tooltip.offsetWidth || 220;
+      const th = tooltip.offsetHeight || 50;
+      let left = e.clientX + margin;
+      let top  = e.clientY + 10;
+      if (left + tw > window.innerWidth)  left = e.clientX - tw - margin;
+      if (top + th > window.innerHeight)  top  = e.clientY - th - 10;
+      tooltip.style.left = Math.max(4, left) + 'px';
+      tooltip.style.top  = Math.max(4, top) + 'px';
     });
     g.addEventListener('mouseleave', () => { tooltip.style.display = 'none'; });
     if (!n.leaf){
@@ -2877,6 +2897,25 @@ function escTreemapLabel(name, cellW, fontSize){
   const safe = name.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
   if (safe.length <= maxChars) return safe;
   return safe.slice(0, Math.max(maxChars - 1, 3)) + '…';
+}
+
+// ── Progress to Tenfold: percentage view / figure view toggle ────────────────
+function setTenfoldView(mode, btnEl){
+  document.querySelectorAll('#tenfold-view-toggle .tv-btn').forEach(b => b.classList.remove('active'));
+  btnEl.classList.add('active');
+  document.getElementById('tenfold-fig-note').style.display = mode === 'fig' ? 'block' : 'none';
+
+  const bar1 = document.getElementById('tenfold-bar-1');
+  const widths = (mode === 'fig' ? bar1.dataset.figWidths : bar1.dataset.pctWidths).split(',');
+  const labels = (mode === 'fig' ? bar1.dataset.figLabels : bar1.dataset.pctLabels).split('|');
+  const segs = bar1.querySelectorAll('.tb-seg');
+  let cum = 0;
+  segs.forEach((seg, i) => {
+    seg.style.left = cum + '%';
+    seg.style.width = widths[i] + '%';
+    seg.textContent = labels[i];
+    cum += parseFloat(widths[i]);
+  });
 }
 
 function treemapIconColor(hex){
@@ -3034,7 +3073,7 @@ function initRegionTreemap(){
   const breadcrumbEl = document.getElementById('treemap-region-breadcrumb');
   const legendEl = document.getElementById('treemap-region-legend');
 
-  function showTop(){
+  function showTop(resetOther){
     const names = Object.keys(TREEMAP_DISTRICT_DATA);
     const nodes = names.map(name => ({
       name, value: Object.values(TREEMAP_DISTRICT_DATA[name]).reduce((a,b)=>a+b,0),
@@ -3044,6 +3083,10 @@ function initRegionTreemap(){
     breadcrumbEl.innerHTML = `<span class="crumb" style="cursor:default;color:var(--text)">All Regions</span>`;
     renderTreemapSVG('treemap-region-wrap', nodes, total, regionName => showRegion(regionName));
     renderTreemapLegend(legendEl, nodes, TREEMAP_REGION_ICONS, regionName => showRegion(regionName));
+    // Going back to "All Regions" must also clear any cross-filter left on
+    // Sector Distribution (e.g. from clicking a district/region here) —
+    // otherwise it stays stuck showing that filtered breakdown.
+    if (resetOther !== false && window._treemapSectorShowTop) window._treemapSectorShowTop(false);
   }
 
   function showRegion(regionName){
@@ -3073,7 +3116,7 @@ function initSectorTreemap(){
   const breadcrumbEl = document.getElementById('treemap-sector-breadcrumb');
   const legendEl = document.getElementById('treemap-sector-legend');
 
-  function showTop(){
+  function showTop(resetOther){
     const names = TREEMAP_ALL_SECTORS;
     const nodes = names.map(name => ({
       name, value: Object.values(TREEMAP_SECTOR_DATA[name]).reduce((a,b)=>a+b,0),
@@ -3083,7 +3126,10 @@ function initSectorTreemap(){
     breadcrumbEl.innerHTML = `<span class="crumb" style="cursor:default;color:var(--text)">All Sectors</span>`;
     const onClick = sectorName => showSector(sectorName);
     renderTreemapSVG('treemap-sector-wrap', nodes, total, onClick);
-    renderTreemapLegend(legendEl, nodes.slice(0, 8), TREEMAP_SECTOR_ICONS, onClick);
+    renderTreemapLegend(legendEl, nodes, TREEMAP_SECTOR_ICONS, onClick);
+    // Symmetric fix: going back to "All Sectors" must also clear any
+    // cross-filter left on Spatial Distribution.
+    if (resetOther !== false && window._treemapRegionShowTop) window._treemapRegionShowTop(false);
   }
 
   function showSector(sectorName){
@@ -3705,8 +3751,7 @@ function startTour(){
     if(order.length === 0){
       container.innerHTML = `<div class="pipe-empty">No pipeline runs yet.<br>
         <span style="font-size:11px;margin-top:6px;display:block">
-          Upload a document to <code>data/uploads/</code> on GitHub to trigger the pipeline.
-          <a href="upload-guide.html" style="color:var(--blue)">See upload guide →</a>
+          Upload a document to the uploader to trigger the pipeline.
         </span></div>`;
       return;
     }
@@ -3780,7 +3825,6 @@ function startTour(){
           `<div class="pipe-empty">No pipeline status file yet.<br>
           <span style="font-size:11px;margin-top:6px;display:block">
             Pipeline status will appear here after the first CI run.
-            <a href="upload-guide.html" style="color:var(--blue)">Upload a document to start →</a>
           </span></div>`;
       });
   }
