@@ -12,7 +12,7 @@ Last updated: 2026-06-23 (live counts auto-refreshed)
 |---|---|---|
 | Dashboard | https://midd-ug.com (:8201) | https://staging.midd-ug.com (:8200) |
 | Uploader | https://upload.midd-ug.com (:8211) | https://staging-upload.midd-ug.com (:8210) |
-| Ask MIDD | :8221 (friendly URL pending) | :8220 (friendly URL pending) |
+| Ask MIDD | https://ask.midd-ug.com (:8221) | https://staging-ask.midd-ug.com (:8220) |
 | PocketBase | https://db.midd-ug.com (:8090) | https://staging-db.midd-ug.com (:8091) |
 
 Rule: all development and Jerome's experimentation happen on staging first, then promote.
@@ -73,3 +73,9 @@ Then a commit that changes an ADR without docs/architecture.dsl is blocked at co
 - UPLOADS: no promotion. Staging uploader = rehearsal; prod uploader = real. Re-upload the same doc to prod when happy (deterministic, so it matches staging).
 - POCKETBASE: prod is the source of truth; staging is a disposable copy. Refresh prod -> staging with scripts/refresh_staging_from_prod.sh. Never staging -> prod.
 - Rule: code flows up, data flows down, data never flows up.
+
+## Access & navigation
+
+- Dashboards (midd-ug.com, staging.midd-ug.com) are PUBLIC. The four tools (upload, ask, staging-upload, staging-ask) are behind Cloudflare Access — allow-list: arinda.hillary@, jnuwabaasa@, arihosolomon@ (email one-time-PIN login). PocketBase (db, staging-db) keeps its own admin login.
+- Each dashboard header has env-aware Upload + Ask MIDD links (prod->prod tools, staging->staging tools), gated by Access.
+- The internal Pipeline status tab was removed from the public dashboard.
