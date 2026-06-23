@@ -104,28 +104,31 @@ def pb_seed(datapoints):
 
 # ── Claude API call ───────────────────────────────────────────────────────────
 
-def claude(system_prompt, user_prompt, model='claude-sonnet-4-6'):
-    if not ANTHROPIC_API_KEY:
-        sys.exit('ERROR: ANTHROPIC_API_KEY environment variable not set.')
-    payload = {
-        'model': model,
-        'max_tokens': 8192,
-        'system': system_prompt,
-        'messages': [{'role': 'user', 'content': user_prompt}],
-    }
-    req = urllib.request.Request(
-        'https://api.anthropic.com/v1/messages',
-        data=json.dumps(payload).encode(),
-        method='POST',
-        headers={
-            'Content-Type': 'application/json',
-            'x-api-key': ANTHROPIC_API_KEY,
-            'anthropic-version': '2023-06-01',
-        }
-    )
-    with urllib.request.urlopen(req) as resp:
-        result = json.loads(resp.read())
-    return result['content'][0]['text']
+def claude(system_prompt, user_prompt, model=None):
+    """
+    Call the Claude CLI installed on the Hetzner host (the standing setup; there
+    is no Anthropic API key). Runs headless: prompt in on stdin, text answer out.
+    The CLI carries the Max-plan auth under HOME=/root, the same way
+    /opt/whatsapp-agent/code_dispatch.py drives it. CLAUDE_BIN lets a different
+    host override the path.
+    """
+    import subprocess
+    claude_bin = os.environ.get('CLAUDE_BIN', 'claude')
+    full = f'{system_prompt}\n\n{user_prompt}'
+    env = dict(os.environ)
+    env.setdefault('HOME', '/root')
+    cmd = [claude_bin, '-p', '--output-format', 'text']
+    if model:
+        cmd += ['--model', model]
+    try:
+        r = subprocess.run(cmd, input=full, capture_output=True, text=True,
+                           env=env, timeout=600)
+    except FileNotFoundError:
+        sys.exit('ERROR: Claude CLI not found. Set CLAUDE_BIN or install the CLI '
+                 '(this agent runs on Hetzner, not in CI).')
+    if r.returncode != 0:
+        raise RuntimeError(f'Claude CLI failed (exit {r.returncode}): {r.stderr[:500]}')
+    return r.stdout.strip()
 
 # ── System prompt shared by all mining calls ──────────────────────────────────
 

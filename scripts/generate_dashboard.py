@@ -794,9 +794,48 @@ def chain_colors_js():
     body = ',\n'.join(f"  '{js_str(k)}':'{v}'" for k, v in chain_colors.items())
     return f'const CHAIN_COLORS={{\n{body}\n}};'
 
+def _treemaps_from_pocketbase():
+    """Aggregate the six treemap views live from the PocketBase `industries`
+    collection (the datastore). Returns None if PocketBase is unreachable or the
+    collection is empty, so the caller falls back to static JSON."""
+    from collections import defaultdict
+    records, page = [], 1
+    while True:
+        url = f'{PB_URL}/api/collections/industries/records?perPage=500&page={page}'
+        try:
+            with urllib.request.urlopen(url) as r:
+                payload = json.loads(r.read())
+        except Exception:
+            return None
+        items = payload.get('items', [])
+        records.extend(items)
+        if page >= payload.get('totalPages', 1) or not items:
+            break
+        page += 1
+    if not records:
+        return None
+    def nd(): return defaultdict(int)
+    sector, district = defaultdict(nd), defaultdict(nd)
+    rsec, dsec, rsub, dsub = defaultdict(nd), defaultdict(nd), defaultdict(nd), defaultdict(nd)
+    for r in records:
+        reg  = r.get('region') or 'Unclassified'
+        dist = r.get('district') or 'Unspecified'
+        sec  = r.get('sector_name') or 'Unclassified'
+        sub  = r.get('subsector_name') or 'Unspecified'
+        sector[sec][sub] += 1
+        district[reg][dist] += 1
+        rsec[reg][sec] += 1
+        dsec[dist][sec] += 1
+        rsub[reg][sub] += 1
+        dsub[dist][sub] += 1
+    f = lambda d: {k: dict(v) for k, v in d.items()}
+    return f(sector), f(district), f(rsec), f(dsec), f(rsub), f(dsub)
+
 def treemap_data_js():
-    """Embeds the establishment-distribution datasets extracted from Jerome's
-    National Industries Register (Aug 2025) by scripts/extract_industries_register.py:
+    """Embeds the establishment-distribution datasets. Preferred source is the
+    PocketBase `industries` collection (the datastore); falls back to the static
+    treemap_*.json committed in data/dashboard/ when PocketBase is off/empty.
+    Original static files were produced by scripts/extract_industries_register.py:
       - region->district (Spatial Distribution)
       - sector->subsector (Sector Distribution)
       - region->sector and district->sector (cross-filtering: selecting a
@@ -809,12 +848,22 @@ def treemap_data_js():
     def _load(name):
         f = DATA / name
         return json.loads(f.read_text('utf-8')) if f.exists() else {}
-    sector_data             = _load('treemap_sector.json')
-    district_data           = _load('treemap_district.json')
-    region_sector_data      = _load('treemap_region.json')
-    district_sector_data    = _load('treemap_district_sector.json')
-    region_subsector_data   = _load('treemap_region_subsector.json')
-    district_subsector_data = _load('treemap_district_subsector.json')
+
+    agg = _treemaps_from_pocketbase() if USE_POCKETBASE else None
+    if agg:
+        (sector_data, district_data, region_sector_data,
+         district_sector_data, region_subsector_data, district_subsector_data) = agg
+        print(f'  Treemaps: {sum(sum(v.values()) for v in district_data.values())} '
+              f'establishments from PocketBase industries collection')
+    else:
+        sector_data             = _load('treemap_sector.json')
+        district_data           = _load('treemap_district.json')
+        region_sector_data      = _load('treemap_region.json')
+        district_sector_data    = _load('treemap_district_sector.json')
+        region_subsector_data   = _load('treemap_region_subsector.json')
+        district_subsector_data = _load('treemap_district_subsector.json')
+        if USE_POCKETBASE:
+            print('  Treemaps: PocketBase industries empty — static JSON fallback')
     return (
         'const TREEMAP_SECTOR_DATA = ' + json.dumps(sector_data, ensure_ascii=False) + ';\n'
         'const TREEMAP_DISTRICT_DATA = ' + json.dumps(district_data, ensure_ascii=False) + ';\n'
