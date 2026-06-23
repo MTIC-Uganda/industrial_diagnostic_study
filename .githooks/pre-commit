@@ -1,0 +1,18 @@
+#!/bin/bash
+# Proactive, ships-with-the-repo gate: an ADR is an architecture decision, so the
+# C4 model (docs/architecture.dsl) must move with it. Blocks the commit (like
+# Hillary's local Claude hook does for his turn), for ANY contributor who has the
+# repo hooks enabled (git config core.hooksPath .githooks). Escape: --no-verify.
+staged=$(git diff --cached --name-only)
+adr=$(printf '%s\n' "$staged" | grep -c '^docs/adr/' || true)
+dsl=$(printf '%s\n' "$staged" | grep -c '^docs/architecture\.dsl$' || true)
+if [ "$adr" -gt 0 ] && [ "$dsl" -eq 0 ]; then
+  echo "------------------------------------------------------------------"
+  echo "BLOCKED: you staged an ADR change but NOT docs/architecture.dsl."
+  echo "An ADR is an architecture decision; update the C4 model in the SAME"
+  echo "commit so the design record never drifts."
+  echo "If this ADR genuinely changes no structure:  git commit --no-verify"
+  echo "------------------------------------------------------------------"
+  exit 1
+fi
+exit 0

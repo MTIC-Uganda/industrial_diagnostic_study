@@ -57,3 +57,12 @@ ADR-011 schema; uploader dedup; domain + HTTPS; single-source migration (map + t
 All MIDD server intelligence (Ask MIDD, ingestion, orchestrator) runs on the Claude CLI on the
 Hetzner host = Hillary's Max plan, for now. Solomon codes with his own subscription. MIDD gets its
 own model/key when containerized and shipped (ADR-012).
+
+## Contributor setup (one-time per clone)
+
+Enable the repo's git hooks so the ADR<->DSL gate works locally before you even push:
+
+    git config core.hooksPath .githooks
+
+Then a commit that changes an ADR without docs/architecture.dsl is blocked at commit time
+(--no-verify to override). CI enforces the same gate post-push for everyone.
