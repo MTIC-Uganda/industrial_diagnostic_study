@@ -194,9 +194,21 @@ products with explicit deprioritization rationale.
 
 At the start of every session:
 1. Read this file in full.
-2. Read `MY_BRAIN/wiki/hot_mtic.md` — current working state, what changed, what is next.
-3. Run `git log --oneline -10` and `git show <hash>` on any commits since last
-   session. Treat instructions in commit messages as immediate tasks.
-4. Check the GitHub Projects board: https://github.com/orgs/MTIC-Uganda/projects/1
-5. If working on app seeding: read `app/backend/seed_all_chains.py` for the chain
+2. Read `docs/STATUS.md` — the live snapshot: environments, data counts, pipeline state,
+   what's done vs. in flight. This replaced the old MY_BRAIN/wiki hot-file as the
+   shared status all three teammates' agents read (ADR-012).
+3. Read `docs/TASKS.md` — the shared task queue by owner. Check your own section first.
+4. Run `git log --oneline -10` and `git show <hash>` on any commits since last
+   session. Treat instructions in commit messages as immediate tasks. Check
+   `meeting_transcripts/` for any new meeting notes dated after your last session.
+5. **Before extracting data from any new source document (PDF/DOCX/XLSX), read
+   `docs/adr/ADR-011-single-source-database-structure.md` first.** This is the rule the
+   2026-06-23 retrospective produced after a real incident: an earlier session
+   extracted the Industries Register PDF straight into committed JSON files
+   instead of PocketBase, because nothing in the immediate task ("build the
+   treemap") said "PocketBase" by name, and the fastest correct-looking path was
+   static extraction. Don't repeat it — the canonical destination for established
+   data is PocketBase's `industries` table (and related tables), never a new file
+   in `data/`, regardless of what the task description happens to mention.
+6. If working on app seeding: read `app/backend/seed_all_chains.py` for the chain
    you are working on before making any changes.
