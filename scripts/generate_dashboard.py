@@ -16,7 +16,7 @@ Output:
     report/sources-of-truth.html
 """
 
-import csv, json, math, os, subprocess, sys, urllib.request, urllib.error
+import csv, json, math, os, subprocess, sys, urllib.request, urllib.error, urllib.parse
 from pathlib import Path
 
 ROOT   = Path(__file__).resolve().parent.parent
@@ -29,11 +29,13 @@ USE_POCKETBASE = bool(PB_URL)
 
 # ── Data loading ──────────────────────────────────────────────────────────────
 
-def pb_get(collection, sort=None, per_page=500):
+def pb_get(collection, sort=None, per_page=500, filter=None):
     """Fetch all records from a PocketBase collection (public read)."""
     url = f'{PB_URL}/api/collections/{collection}/records?perPage={per_page}'
     if sort:
         url += f'&sort={sort}'
+    if filter:
+        url += f'&filter={urllib.parse.quote(filter)}'
     try:
         with urllib.request.urlopen(url) as r:
             return json.loads(r.read()).get('items', [])
@@ -51,7 +53,29 @@ if USE_POCKETBASE:
 
     raw_chains    = pb_get('value_chains', sort='display_order')
     raw_kpis      = pb_get('kpi_indicators', sort='display_order')
-    raw_facilities = pb_get('facilities', sort='chain_name,name')
+    # Locations map reads from the single `industries` table (ADR-011): every
+    # establishment that has GPS, not a separate facilities table. Falls back to
+    # the facilities collection if industries has no located rows yet.
+    located = pb_get('industries', sort='chain_name,name',
+                     filter='latitude != 0 || longitude != 0')
+    if located:
+        raw_facilities = [{
+            'name': r.get('name') or r.get('name_products') or '',
+            'chain_name': r.get('chain_name') or '',
+            'lat': r.get('latitude') or 0, 'lng': r.get('longitude') or 0,
+            'location': r.get('location') or r.get('district') or '',
+            'products': r.get('products') or r.get('name_products') or '',
+            'capacity_installed': r.get('capacity_installed') or '',
+            'capacity_utilised': r.get('capacity_utilised') or '',
+            'employees': r.get('employees') or '',
+            'established': r.get('established') or '',
+            'ownership': r.get('ownership') or '',
+            'exports': r.get('exports') or '',
+        } for r in located]
+        print(f'  Locations map: {len(raw_facilities)} establishments from industries (GPS present)')
+    else:
+        raw_facilities = pb_get('facilities', sort='chain_name,name')
+        print('  Locations map: industries has no GPS rows — facilities fallback')
 
     # Reshape for the generators below
     chain_summary = [{
