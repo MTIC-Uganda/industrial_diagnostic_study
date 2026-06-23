@@ -49,3 +49,4 @@ Last updated: 2026-06-23
 ## From Ask MIDD — feature requests (auto-logged)
 
 <!-- ASKMIDD-FEATURES -->
+- [ ] (2026-06-23, staging) Add dashboard bar chart of manufacturing employment by district; needs structured district field + normalised numeric employee basis from factories.csv — via Ask MIDD
