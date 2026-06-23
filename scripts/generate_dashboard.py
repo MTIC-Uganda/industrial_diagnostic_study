@@ -850,6 +850,12 @@ def _treemaps_from_pocketbase():
     sector, district = defaultdict(nd), defaultdict(nd)
     rsec, dsec, rsub, dsub = defaultdict(nd), defaultdict(nd), defaultdict(nd), defaultdict(nd)
     for r in records:
+        # The treemaps are the distribution of REGISTERED establishments (the
+        # 7,011 register). The curated map factories merged in for the locations
+        # map (reg_number FAC-*) are not register rows, so exclude them here so
+        # the headline count and the sector/region mix stay accurate.
+        if (r.get('reg_number') or '').startswith('FAC-'):
+            continue
         reg  = r.get('region') or 'Unclassified'
         dist = r.get('district') or 'Unspecified'
         sec  = r.get('sector_name') or 'Unclassified'
