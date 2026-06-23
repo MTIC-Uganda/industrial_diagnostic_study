@@ -45,3 +45,7 @@ Last updated: 2026-06-23
 - [ ] Containerize (Dockerfile) + MIDD's own model/subscription.
 - [ ] Cleanup: delete stale branches data/fix-sugar-upload, data/schema-and-quality-gate,
       data/schema-and-quality-matrix.
+
+## From Ask MIDD — feature requests (auto-logged)
+
+<!-- ASKMIDD-FEATURES -->
