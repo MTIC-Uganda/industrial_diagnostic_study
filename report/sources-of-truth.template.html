@@ -326,8 +326,6 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-t
     <button onclick="window.print()" style="background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.4);border-radius:6px;padding:7px 16px;font-size:12px;font-weight:600;cursor:pointer;transition:background .2s" onmouseover="this.style.background='rgba(255,255,255,.25)'" onmouseout="this.style.background='rgba(255,255,255,.15)'">🖨️ Print / Export</button>
     <button onclick="generateBrief()" class="tour-btn" title="One-page Economic Brief — KPIs, momentum, chain snapshot, sources">🧾 Generate Brief</button>
     <button onclick="openGlossary()" class="tour-btn">📖 Glossary</button>
-    <a href="upload-guide.html" class="tour-btn" style="text-decoration:none">📤 Upload Guide</a>
-    <a href="pb-guide.html" class="tour-btn" style="text-decoration:none">📋 Data Entry Guide</a>
     <button id="tour-trigger" class="tour-btn" onclick="startTour()">🧭 Take a Tour</button>
     <div class="badge">TENFOLD GROWTH FRAMEWORK</div>
   </div>
@@ -788,8 +786,7 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-t
   <div class="section-title">🔄 Agentic Pipeline Status</div>
   <div class="section-sub">
     Live status of the Ingest → Synthesise → Review loop. Upload a document to
-    <code>data/uploads/</code> to trigger the pipeline.
-    <a href="upload-guide.html" style="color:var(--blue);font-weight:600">📤 How to upload →</a>
+    the uploader to trigger the pipeline.
   </div>
 
   <div id="pipeline-updated" style="font-size:12px;color:var(--muted);margin-bottom:20px"></div>
@@ -1983,8 +1980,7 @@ function startTour(){
     if(order.length === 0){
       container.innerHTML = `<div class="pipe-empty">No pipeline runs yet.<br>
         <span style="font-size:11px;margin-top:6px;display:block">
-          Upload a document to <code>data/uploads/</code> on GitHub to trigger the pipeline.
-          <a href="upload-guide.html" style="color:var(--blue)">See upload guide →</a>
+          Upload a document to the uploader to trigger the pipeline.
         </span></div>`;
       return;
     }
@@ -2058,7 +2054,6 @@ function startTour(){
           `<div class="pipe-empty">No pipeline status file yet.<br>
           <span style="font-size:11px;margin-top:6px;display:block">
             Pipeline status will appear here after the first CI run.
-            <a href="upload-guide.html" style="color:var(--blue)">Upload a document to start →</a>
           </span></div>`;
       });
   }
