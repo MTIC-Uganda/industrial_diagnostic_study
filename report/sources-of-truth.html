@@ -118,26 +118,27 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#f0f2f5;color:#1a1a2e;fo
 .milestone-note{font-size:12px;color:var(--muted);line-height:1.5}
 .card .value{font-size:28px;font-weight:700;color:var(--blue)}
 .card .sub-value{font-size:12px;color:var(--muted);margin-top:4px}
-.kpi-value-row{display:flex;align-items:center;gap:12px}
+.kpi-value-row{display:flex;align-items:center;justify-content:center;gap:12px}
 .kpi-icon{font-size:42px;line-height:1;flex-shrink:0}
+.kpi-icon-top{font-size:40px;line-height:1;text-align:center;margin-bottom:6px}
 .kpi-pct-row{display:flex;align-items:center;justify-content:space-between;gap:8px}
 .kpi-pct-row .sub-value{margin-top:0}
-.kpi-pct-row .donut-chart{flex-shrink:0}
 .kpi-pct-row .kpi-bar{flex-shrink:0}
-.kpi-pct-row .line-chart{flex-shrink:0}
-.kpi-credit-row{display:flex;align-items:center;gap:8px;margin-bottom:7px;flex-wrap:wrap}
-.kpi-credit-row:last-child{margin-bottom:0}
-.kpi-credit-label{font-size:11px;width:130px;flex-shrink:0;color:var(--text)}
-.kpi-credit-figure{font-size:11px;color:var(--text);margin-left:auto;flex-shrink:0}
-.kpi-credit-track{flex:0 0 100%;height:10px;background:#f0f0f0;border-radius:3px;overflow:hidden;order:3}
-.kpi-credit-fill{height:100%;border-radius:3px}
-.kpi-trend-wrap{display:flex;justify-content:center}
-.kpi-trend-wrap.large svg{max-width:100%}
-.kpi-donut-row{display:flex;align-items:center;gap:10px;margin-top:6px}
-.kpi-donut-row .donut-chart{flex-shrink:0}
-.kpi-donut-legend{display:flex;flex-direction:column;gap:2px;font-size:10px}
+/* Circle/pie ABOVE, legend/value BELOW — per 2026-06-23 review ("circle is
+   above and the key is below the circle") — used for every donut/pie card. */
+.kpi-donut-col{display:flex;flex-direction:column;align-items:center;gap:8px;margin-top:4px}
+.kpi-donut-col .donut-chart{flex-shrink:0}
+.kpi-donut-legend{display:flex;flex-direction:column;gap:3px;font-size:10px;width:100%}
 .kpi-donut-legend-item{display:flex;align-items:center;gap:5px;color:var(--text)}
 .kpi-donut-legend-item .donut-swatch{width:8px;height:8px;border-radius:2px;flex-shrink:0;display:inline-block}
+.kpi-pie-wrap{display:flex;justify-content:center;margin:4px 0}
+.kpi-source-line{font-size:10px;color:var(--muted);margin-top:10px;padding-top:8px;border-top:1px solid #f0f0f0}
+.kpi-region-strip{display:flex;height:32px;border-radius:6px;overflow:hidden;margin-top:6px}
+.kpi-region-seg{transition:opacity .15s}
+.kpi-region-seg:hover{opacity:.8}
+.kpi-region-legend{display:flex;flex-wrap:wrap;gap:8px 12px;font-size:10px;margin-top:8px;color:var(--text)}
+.kpi-region-leg-item{display:flex;align-items:center;gap:4px}
+.kpi-region-leg-item .sw{width:8px;height:8px;border-radius:2px;flex-shrink:0;display:inline-block}
 
 /* GRIDS */
 .kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-bottom:24px}
@@ -369,111 +370,108 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-t
   </div>
 
   <div class="section-title">📊 Manufacturing Industry Key Indicators</div>
-  <div class="section-sub">Current status (FY2024/25) | Sources: UBOS, URA, BoU, ERA, UIA, ITC TradeMap | <span style="color:var(--green)">● exact</span> &nbsp; <span style="color:var(--amber)">≈ estimated</span> &nbsp; <span style="color:var(--blue)">○ indicative</span></div>
+  <div class="section-sub">Current status | Each indicator uses its latest available figure, with year and source shown on the card | <span style="color:var(--green)">● exact</span> &nbsp; <span style="color:var(--amber)">≈ estimated</span> &nbsp; <span style="color:var(--blue)">○ indicative</span></div>
 
   <div class="kpi-grid kpi-grid-4col" id="tour-kpi-grid">
 
-    <div class="card">
-      <h3>1. Manufacturing Value Added <span class="conf-badge conf-exact" title="Source: UBOS Annual GDP 2024/25">● exact</span></h3>
-      <div class="value">USD 8.1B</div>
-      <div class="kpi-pct-row" style="margin-top:4px">
-        <div class="sub-value" style="font-size:13px;font-weight:700;color:var(--blue);margin-top:0">14.5% of GDP (~USD 55.9B total)</div>
-        <svg class="kpi-bar" width="120" height="8" viewBox="0 0 120 8"><rect x="0" y="0" width="120" height="8" rx="4.0" fill="#e8eaf6"/><rect x="0" y="0" width="17.4" height="8" rx="4.0" fill="#1565c0"/></svg>
+    <div class="card" style="text-align:center">
+      <h3 style="justify-content:center">1. Manufacturing Value Added <span class="conf-badge conf-exact" title="Source: UBOS Annual GDP 2024/25">● exact</span></h3>
+      <div class="kpi-donut-col">
+        <div class="kpi-pie-wrap"><svg class="donut-chart" width="88" height="88" viewBox="0 0 42 42"><circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#eee" stroke-width="20"/><circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#1565c0" stroke-width="20" stroke-dasharray="14.5 85.5" stroke-dashoffset="25"/><circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#e3f2fd" stroke-width="20" stroke-dasharray="85.5 14.5" stroke-dashoffset="10.5"/></svg></div>
+        <div class="value">USD 8.1B</div>
+        <div class="sub-value" style="font-size:15px;font-weight:700;color:var(--blue)">14.5% of GDP</div>
       </div>
-      <div class="kpi-trend-wrap" style="margin-top:8px">
-        <svg class="line-chart" width="238" height="128" viewBox="0 0 238 128"><line x1="28" y1="110.0" x2="236" y2="110.0" stroke="#eee" stroke-width="1"/><text x="22" y="113.0" font-size="8" text-anchor="end" fill="#9e9e9e">4B</text><line x1="28" y1="86.0" x2="236" y2="86.0" stroke="#eee" stroke-width="1"/><text x="22" y="89.0" font-size="8" text-anchor="end" fill="#9e9e9e">5B</text><line x1="28" y1="62.0" x2="236" y2="62.0" stroke="#eee" stroke-width="1"/><text x="22" y="65.0" font-size="8" text-anchor="end" fill="#9e9e9e">6B</text><line x1="28" y1="38.0" x2="236" y2="38.0" stroke="#eee" stroke-width="1"/><text x="22" y="41.0" font-size="8" text-anchor="end" fill="#9e9e9e">7B</text><line x1="28" y1="14.0" x2="236" y2="14.0" stroke="#eee" stroke-width="1"/><text x="22" y="17.0" font-size="8" text-anchor="end" fill="#9e9e9e">8B</text><polygon points="36.0,110.0 36.0,78.9 84.5,73.7 133.0,69.8 181.5,63.3 230.0,54.9 230.0,110.0" fill="#2e7d32" opacity="0.12"/><polyline points="36.0,78.9 84.5,73.7 133.0,69.8 181.5,63.3 230.0,54.9" fill="none" stroke="#2e7d32" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/><polygon points="36.0,74.9 40.0,78.9 36.0,82.9 32.0,78.9" fill="#2e7d32"/><polygon points="84.5,69.7 88.5,73.7 84.5,77.7 80.5,73.7" fill="#2e7d32"/><polygon points="133.0,65.8 137.0,69.8 133.0,73.8 129.0,69.8" fill="#2e7d32"/><polygon points="181.5,59.3 185.5,63.3 181.5,67.3 177.5,63.3" fill="#2e7d32"/><polygon points="230.0,50.9 234.0,54.9 230.0,58.9 226.0,54.9" fill="#2e7d32"/><text x="36.0" y="69.9" font-size="8" text-anchor="start" fill="#2e7d32" font-weight="700">5.3B</text><text x="84.5" y="64.7" font-size="8" text-anchor="middle" fill="#2e7d32" font-weight="700">5.5B</text><text x="133.0" y="60.8" font-size="8" text-anchor="middle" fill="#2e7d32" font-weight="700">5.7B</text><text x="181.5" y="54.3" font-size="8" text-anchor="middle" fill="#2e7d32" font-weight="700">5.9B</text><text x="230.0" y="45.9" font-size="8" text-anchor="end" fill="#2e7d32" font-weight="700">6.3B</text><text x="36.0" y="126" font-size="8.5" text-anchor="middle" fill="#666" font-weight="600">20/21</text><text x="84.5" y="126" font-size="8.5" text-anchor="middle" fill="#666" font-weight="600">21/22</text><text x="133.0" y="126" font-size="8.5" text-anchor="middle" fill="#666" font-weight="600">22/23</text><text x="181.5" y="126" font-size="8.5" text-anchor="middle" fill="#666" font-weight="600">23/24</text><text x="230.0" y="126" font-size="8.5" text-anchor="middle" fill="#666" font-weight="600">24/25</text></svg>
-      </div>
+      <div class="kpi-source-line">FY2024/25 &middot; Source: UBOS</div>
     </div>
 
-    <div class="card">
-      <h3>2. Manufacturing Growth <span class="conf-badge conf-exact" title="Source: UBOS Annual GDP 2024/25">● exact</span></h3>
-      <div class="kpi-trend-wrap large">
-        <svg class="line-chart" width="238" height="128" viewBox="0 0 238 128"><line x1="28" y1="110.0" x2="236" y2="110.0" stroke="#eee" stroke-width="1"/><text x="22" y="113.0" font-size="8" text-anchor="end" fill="#9e9e9e">1%</text><line x1="28" y1="94.0" x2="236" y2="94.0" stroke="#eee" stroke-width="1"/><text x="22" y="97.0" font-size="8" text-anchor="end" fill="#9e9e9e">2%</text><line x1="28" y1="78.0" x2="236" y2="78.0" stroke="#eee" stroke-width="1"/><text x="22" y="81.0" font-size="8" text-anchor="end" fill="#9e9e9e">3%</text><line x1="28" y1="62.0" x2="236" y2="62.0" stroke="#eee" stroke-width="1"/><text x="22" y="65.0" font-size="8" text-anchor="end" fill="#9e9e9e">4%</text><line x1="28" y1="46.0" x2="236" y2="46.0" stroke="#eee" stroke-width="1"/><text x="22" y="49.0" font-size="8" text-anchor="end" fill="#9e9e9e">5%</text><line x1="28" y1="30.0" x2="236" y2="30.0" stroke="#eee" stroke-width="1"/><text x="22" y="33.0" font-size="8" text-anchor="end" fill="#9e9e9e">6%</text><line x1="28" y1="14.0" x2="236" y2="14.0" stroke="#eee" stroke-width="1"/><text x="22" y="17.0" font-size="8" text-anchor="end" fill="#9e9e9e">7%</text><polygon points="36.0,110.0 36.0,90.8 230.0,36.4 230.0,110.0" fill="#2e7d32" opacity="0.12"/><polyline points="36.0,90.8 230.0,36.4" fill="none" stroke="#2e7d32" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/><polygon points="36.0,86.8 40.0,90.8 36.0,94.8 32.0,90.8" fill="#2e7d32"/><polygon points="230.0,32.4 234.0,36.4 230.0,40.4 226.0,36.4" fill="#2e7d32"/><text x="36.0" y="81.8" font-size="8" text-anchor="start" fill="#2e7d32" font-weight="700">2.2%</text><text x="230.0" y="27.4" font-size="8" text-anchor="end" fill="#2e7d32" font-weight="700">5.6%</text><text x="36.0" y="126" font-size="8.5" text-anchor="middle" fill="#666" font-weight="600">FY20/21</text><text x="230.0" y="126" font-size="8.5" text-anchor="middle" fill="#666" font-weight="600">FY24/25</text></svg>
+    <div class="card" style="text-align:center">
+      <h3 style="justify-content:center">2. Manufacturing Growth <span class="conf-badge conf-exact" title="Source: UBOS Annual GDP 2024/25">● exact</span></h3>
+      <div class="kpi-value-row" style="margin-top:12px">
+        <span class="kpi-icon" style="color:#2e7d32">📈</span>
+        <div class="value">5.6%</div>
       </div>
+      <div class="sub-value" style="margin-top:6px">year-on-year, up from 2.2% in FY20/21</div>
+      <div class="kpi-source-line">FY2024/25 &middot; Source: UBOS</div>
     </div>
 
-    <div class="card">
-      <h3>3. Manufacturing Tax Contribution <span class="conf-badge conf-estimated" title="Source: URA Revenue Performance Report FY2024/25 (UGX converted at ~UGX 3,700/USD)">≈ estimated</span></h3>
-      <div class="kpi-donut-row"><svg class="donut-chart" width="72" height="72" viewBox="0 0 42 42"><circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#eee" stroke-width="8"/><circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#b0bec5" stroke-width="8" stroke-dasharray="39.0 61.0" stroke-dashoffset="25"/><circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#e65100" stroke-width="8" stroke-dasharray="34.0 66.0" stroke-dashoffset="-14.0"/><circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#2e7d32" stroke-width="8" stroke-dasharray="15.0 85.0" stroke-dashoffset="-48.0"/><circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#f57f17" stroke-width="8" stroke-dasharray="9.0 91.0" stroke-dashoffset="-63.0"/><circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#6a1b9a" stroke-width="8" stroke-dasharray="5.0 95.0" stroke-dashoffset="-72.0"/></svg><div class="kpi-donut-legend"><div class="kpi-donut-legend-item" style="font-weight:400"><span class="donut-swatch" style="background:#b0bec5"></span>Wholesale &amp; Retail <strong>39% &middot; USD 1.65B</strong></div><div class="kpi-donut-legend-item" style="font-weight:700"><span class="donut-swatch" style="background:#e65100"></span>Manufacturing <strong>34% &middot; USD 1.94B</strong></div><div class="kpi-donut-legend-item" style="font-weight:400"><span class="donut-swatch" style="background:#2e7d32"></span>Financial &amp; Insurance <strong>15% &middot; USD 0.62B</strong></div><div class="kpi-donut-legend-item" style="font-weight:400"><span class="donut-swatch" style="background:#f57f17"></span>Info &amp; Communications <strong>9% &middot; USD 0.38B</strong></div><div class="kpi-donut-legend-item" style="font-weight:400"><span class="donut-swatch" style="background:#6a1b9a"></span>Public Administration <strong>5% &middot; USD 0.22B</strong></div></div></div>
+    <div class="card" style="text-align:center">
+      <h3 style="justify-content:center">3. Manufacturing Tax Contribution <span class="conf-badge conf-estimated" title="Source: URA Revenue Performance Report FY2024/25">≈ estimated</span></h3>
+      <div class="kpi-donut-col"><svg class="donut-chart" width="72" height="72" viewBox="0 0 42 42"><circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#eee" stroke-width="8"/><circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#b0bec5" stroke-width="8" stroke-dasharray="39.0 61.0" stroke-dashoffset="25"/><circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#e65100" stroke-width="8" stroke-dasharray="34.0 66.0" stroke-dashoffset="-14.0"/><circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#2e7d32" stroke-width="8" stroke-dasharray="15.0 85.0" stroke-dashoffset="-48.0"/><circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#f57f17" stroke-width="8" stroke-dasharray="9.0 91.0" stroke-dashoffset="-63.0"/><circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#6a1b9a" stroke-width="8" stroke-dasharray="5.0 95.0" stroke-dashoffset="-72.0"/></svg><div class="kpi-donut-legend"><div class="kpi-donut-legend-item" style="font-weight:400"><span class="donut-swatch" style="background:#b0bec5"></span>Wholesale &amp; Retail <strong>39% &middot; Shs 6.1trn</strong></div><div class="kpi-donut-legend-item" style="font-weight:700"><span class="donut-swatch" style="background:#e65100"></span>Manufacturing <strong>34% &middot; Shs 7.19trn</strong></div><div class="kpi-donut-legend-item" style="font-weight:400"><span class="donut-swatch" style="background:#2e7d32"></span>Financial &amp; Insurance <strong>15% &middot; Shs 2.3trn</strong></div><div class="kpi-donut-legend-item" style="font-weight:400"><span class="donut-swatch" style="background:#f57f17"></span>Info &amp; Communications <strong>9% &middot; Shs 1.4trn</strong></div><div class="kpi-donut-legend-item" style="font-weight:400"><span class="donut-swatch" style="background:#6a1b9a"></span>Public Administration <strong>5% &middot; Shs 0.8trn</strong></div></div></div>
+      <div class="kpi-source-line">FY2024/25 &middot; Source: URA</div>
     </div>
 
-    <div class="card">
-      <h3>4. Manufactured Exports <span class="conf-badge conf-estimated" title="Source: Bank of Uganda external trade statistics; export composition is indicative, not official OEC/UBOS breakdown">≈ estimated</span></h3>
-      <div style="margin-top:8px">
-        <div class="kpi-donut-row"><svg class="donut-chart" width="72" height="72" viewBox="0 0 42 42"><circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#eee" stroke-width="8"/><circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#b0bec5" stroke-width="8" stroke-dasharray="35.0 65.0" stroke-dashoffset="25"/><circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#2e7d32" stroke-width="8" stroke-dasharray="31.0 69.0" stroke-dashoffset="-10.0"/><circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#f57f17" stroke-width="8" stroke-dasharray="22.0 78.0" stroke-dashoffset="-41.0"/><circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#e65100" stroke-width="8" stroke-dasharray="12.0 88.0" stroke-dashoffset="-63.0"/></svg><div class="kpi-donut-legend"><div class="kpi-donut-legend-item" style="font-weight:400"><span class="donut-swatch" style="background:#b0bec5"></span>Gold <strong>35% &middot; USD 7.0B</strong></div><div class="kpi-donut-legend-item" style="font-weight:400"><span class="donut-swatch" style="background:#2e7d32"></span>Other (tea/cotton/copper/oil/fish/etc) <strong>31% &middot; USD 6.2B</strong></div><div class="kpi-donut-legend-item" style="font-weight:400"><span class="donut-swatch" style="background:#f57f17"></span>Coffee <strong>22% &middot; USD 4.4B</strong></div><div class="kpi-donut-legend-item" style="font-weight:700"><span class="donut-swatch" style="background:#e65100"></span>Manufactured Goods <strong>12% &middot; USD 2.4B</strong></div></div></div>
+    <div class="card" style="text-align:center">
+      <h3 style="justify-content:center">4. Manufactured Exports <span class="conf-badge conf-estimated" title="Source: ITC TradeMap / Bank of Uganda. Manufactured-export classification (soluble vs raw coffee, yarn/fabric vs raw cotton, etc.) follows TradeMap's manufactured-goods HS code grouping — pending Jerome's confirmation of the exact figure.">≈ estimated</span></h3>
+      <div class="kpi-value-row" style="margin-top:12px">
+        <span class="kpi-icon">🚢</span>
+        <div class="value">USD 2.4B</div>
       </div>
+      <div class="sub-value" style="font-size:15px;font-weight:700;color:var(--blue);margin-top:6px">~12% of total exports</div>
+      <div class="kpi-source-line">2024 &middot; Source: ITC TradeMap</div>
     </div>
 
-    <div class="card">
-      <h3>5. High-Tech Exports <span class="conf-badge conf-indicative" title="Composition is indicative — ICT goods figure is sourced (UNCTAD, USD 9.3M, 2023); pharma/other split estimated using QCIL as the anchor since no official high-tech breakdown exists">○ indicative</span></h3>
-      <div class="kpi-value-row"><span class="kpi-icon">🔬</span><div class="value">USD 85M</div></div>
-      <div class="sub-value" style="font-size:13px;font-weight:700;color:var(--blue);margin-top:4px">~3.5% of manufactured exports (USD 2.4B)</div>
-      <div style="margin-top:8px">
-        <div class="kpi-donut-row"><svg class="donut-chart" width="60" height="60" viewBox="0 0 42 42"><circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#eee" stroke-width="7"/><circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#e65100" stroke-width="7" stroke-dasharray="75.0 25.0" stroke-dashoffset="25"/><circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#b0bec5" stroke-width="7" stroke-dasharray="14.0 86.0" stroke-dashoffset="-50.0"/><circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#2e7d32" stroke-width="7" stroke-dasharray="11.0 89.0" stroke-dashoffset="-64.0"/></svg><div class="kpi-donut-legend"><div class="kpi-donut-legend-item" style="font-weight:700"><span class="donut-swatch" style="background:#e65100"></span>Pharmaceuticals (QCIL + others) <strong>75% &middot; USD 64M</strong></div><div class="kpi-donut-legend-item" style="font-weight:400"><span class="donut-swatch" style="background:#b0bec5"></span>Other high-tech <strong>14% &middot; USD 12M</strong></div><div class="kpi-donut-legend-item" style="font-weight:400"><span class="donut-swatch" style="background:#2e7d32"></span>ICT Goods <strong>11% &middot; USD 9.3M</strong></div></div></div>
-      </div>
+    <div class="card" style="text-align:center">
+      <h3 style="justify-content:center">5. High-Tech Exports <span class="conf-badge conf-indicative" title="Composition is indicative — ICT goods figure is sourced (UNCTAD, USD 9.3M, 2023); pharma/other split estimated using QCIL as the anchor since no official high-tech breakdown exists">○ indicative</span></h3>
+      <div class="kpi-donut-col"><svg class="donut-chart" width="60" height="60" viewBox="0 0 42 42"><circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#eee" stroke-width="7"/><circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#e65100" stroke-width="7" stroke-dasharray="75.0 25.0" stroke-dashoffset="25"/><circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#b0bec5" stroke-width="7" stroke-dasharray="14.0 86.0" stroke-dashoffset="-50.0"/><circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#2e7d32" stroke-width="7" stroke-dasharray="11.0 89.0" stroke-dashoffset="-64.0"/></svg><div class="kpi-donut-legend"><div class="kpi-donut-legend-item" style="font-weight:700"><span class="donut-swatch" style="background:#e65100"></span>Pharmaceuticals (QCIL + others) <strong>75% &middot; USD 64M</strong></div><div class="kpi-donut-legend-item" style="font-weight:400"><span class="donut-swatch" style="background:#b0bec5"></span>Other high-tech <strong>14% &middot; USD 12M</strong></div><div class="kpi-donut-legend-item" style="font-weight:400"><span class="donut-swatch" style="background:#2e7d32"></span>ICT Goods <strong>11% &middot; USD 9.3M</strong></div></div></div>
+      <div class="sub-value" style="font-size:14px;font-weight:700;color:var(--blue);margin-top:6px">~3.5% of manufactured exports, USD 85M</div>
+      <div class="kpi-source-line">2023/24 &middot; Source: ITC TradeMap / UNCTAD</div>
     </div>
 
-    <div class="card">
-      <h3>6. Private Sector Credit <span class="conf-badge conf-estimated" title="Source: Bank of Uganda credit classification by sector (UGX 1.8T converted at ~UGX 3,700/USD)">≈ estimated</span></h3>
-      <div style="margin-top:8px">
-        <div class="kpi-credit-row"><span class="kpi-credit-label" style="font-weight:400">Building &amp; Real Estate</span><span class="kpi-credit-figure" style="font-weight:400">USD 1.35B (25%)</span><div class="kpi-credit-track"><div class="kpi-credit-fill" style="width:100%;background:#b0bec5"></div></div></div><div class="kpi-credit-row"><span class="kpi-credit-label" style="font-weight:400">Trade</span><span class="kpi-credit-figure" style="font-weight:400">USD 1.16B (22%)</span><div class="kpi-credit-track"><div class="kpi-credit-fill" style="width:86%;background:#b0bec5"></div></div></div><div class="kpi-credit-row"><span class="kpi-credit-label" style="font-weight:400">Personal &amp; Household</span><span class="kpi-credit-figure" style="font-weight:400">USD 1.24B (23%)</span><div class="kpi-credit-track"><div class="kpi-credit-fill" style="width:92%;background:#b0bec5"></div></div></div><div class="kpi-credit-row"><span class="kpi-credit-label" style="font-weight:700">Manufacturing</span><span class="kpi-credit-figure" style="font-weight:700">USD 0.92B (17%)</span><div class="kpi-credit-track"><div class="kpi-credit-fill" style="width:68%;background:#1565c0"></div></div></div><div class="kpi-credit-row"><span class="kpi-credit-label" style="font-weight:400">Agriculture</span><span class="kpi-credit-figure" style="font-weight:400">USD 0.73B (14%)</span><div class="kpi-credit-track"><div class="kpi-credit-fill" style="width:54%;background:#b0bec5"></div></div></div>
-      </div>
+    <div class="card" style="text-align:center">
+      <h3 style="justify-content:center">6. Private Sector Credit <span class="conf-badge conf-estimated" title="Source: Bank of Uganda credit classification by sector">≈ estimated</span></h3>
+      <div class="kpi-donut-col"><svg class="donut-chart" width="72" height="72" viewBox="0 0 42 42"><circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#eee" stroke-width="8"/><circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#b0bec5" stroke-width="8" stroke-dasharray="25.0 75.0" stroke-dashoffset="25"/><circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#2e7d32" stroke-width="8" stroke-dasharray="23.0 77.0" stroke-dashoffset="0.0"/><circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#f57f17" stroke-width="8" stroke-dasharray="21.5 78.5" stroke-dashoffset="-23.0"/><circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#e65100" stroke-width="8" stroke-dasharray="17.0 83.0" stroke-dashoffset="-44.5"/><circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#6a1b9a" stroke-width="8" stroke-dasharray="13.5 86.5" stroke-dashoffset="-61.5"/></svg><div class="kpi-donut-legend"><div class="kpi-donut-legend-item" style="font-weight:400"><span class="donut-swatch" style="background:#b0bec5"></span>Building &amp; Real Estate <strong>25% &middot; USD 1.35B</strong></div><div class="kpi-donut-legend-item" style="font-weight:400"><span class="donut-swatch" style="background:#2e7d32"></span>Personal &amp; Household <strong>23% &middot; USD 1.24B</strong></div><div class="kpi-donut-legend-item" style="font-weight:400"><span class="donut-swatch" style="background:#f57f17"></span>Trade <strong>22% &middot; USD 1.16B</strong></div><div class="kpi-donut-legend-item" style="font-weight:700"><span class="donut-swatch" style="background:#e65100"></span>Manufacturing <strong>17% &middot; USD 0.92B</strong></div><div class="kpi-donut-legend-item" style="font-weight:400"><span class="donut-swatch" style="background:#6a1b9a"></span>Agriculture <strong>14% &middot; USD 0.73B</strong></div></div></div>
+      <div class="kpi-source-line">FY2024/25 &middot; Source: Bank of Uganda</div>
     </div>
 
-    <div class="card">
-      <h3>7. Registered Manufacturing Establishments <span class="conf-badge conf-exact" title="Source: MTIC National Industries Register, August 2025">● exact</span></h3>
-      <div class="kpi-value-row"><span class="kpi-icon">🏭</span><div class="value">7,011</div></div>
+    <div class="card" style="text-align:center">
+      <h3 style="justify-content:center">7. Registered Manufacturing Establishments <span class="conf-badge conf-exact" title="Source: MTIC National Industries Register, August 2025">● exact</span></h3>
+      <div class="kpi-icon-top">🏭</div>
+      <div class="value">7,011</div>
+      <div class="kpi-source-line">August 2025 &middot; Source: MTIC National Industries Register</div>
     </div>
 
     <div class="card" style="grid-column:span 1">
       <h3>8. Distribution by Region <span class="conf-badge conf-exact" title="Source: MTIC National Industries Register, August 2025 (7,011 establishments; 163 unspecified district omitted)">● exact</span></h3>
-      <div style="margin-top:8px">
-        <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span>Central (incl. Kampala)</span><span style="font-weight:700;color:var(--blue)">77.7%</span></div>
-        <div style="height:6px;background:#e3f2fd;border-radius:3px;margin-bottom:8px"><div style="width:77.7%;height:100%;background:#1565c0;border-radius:3px"></div></div>
-        <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span>Western</span><span style="font-weight:700;color:var(--blue)">8.1%</span></div>
-        <div style="height:6px;background:#e3f2fd;border-radius:3px;margin-bottom:8px"><div style="width:8.1%;height:100%;background:#1565c0;border-radius:3px"></div></div>
-        <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span>Eastern</span><span style="font-weight:700;color:var(--blue)">7.7%</span></div>
-        <div style="height:6px;background:#e3f2fd;border-radius:3px;margin-bottom:8px"><div style="width:7.7%;height:100%;background:#1565c0;border-radius:3px"></div></div>
-        <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span>Northern</span><span style="font-weight:700;color:var(--blue)">4.2%</span></div>
-        <div style="height:6px;background:#e3f2fd;border-radius:3px"><div style="width:4.2%;height:100%;background:#1565c0;border-radius:3px"></div></div>
-      </div>
+      <div class="kpi-region-strip"><div class="kpi-region-seg" style="width:79.5%;background:#1565c0" title="Central: 79.5%"></div><div class="kpi-region-seg" style="width:7.9%;background:#2e7d32" title="Eastern: 7.9%"></div><div class="kpi-region-seg" style="width:8.3%;background:#6a1b9a" title="Western: 8.3%"></div><div class="kpi-region-seg" style="width:4.3%;background:#f57f17" title="Northern: 4.3%"></div></div><div class="kpi-region-legend"><span class="kpi-region-leg-item"><span class="sw" style="background:#1565c0"></span>Central 80%</span><span class="kpi-region-leg-item"><span class="sw" style="background:#2e7d32"></span>Eastern 8%</span><span class="kpi-region-leg-item"><span class="sw" style="background:#6a1b9a"></span>Western 8%</span><span class="kpi-region-leg-item"><span class="sw" style="background:#f57f17"></span>Northern 4%</span></div>
+      <div class="kpi-source-line">August 2025 &middot; Source: MTIC National Industries Register</div>
     </div>
 
-    <div class="card">
-      <h3>9. Establishments in Industrial Parks <span class="conf-badge conf-exact" title="Source: Uganda Investment Authority — 11 operational industrial/business parks, 166 operating industries (2025)">● exact</span></h3>
-      <div class="kpi-value-row"><span class="kpi-icon">🏗️</span><div class="value">166</div></div>
-      <div class="kpi-pct-row" style="margin-top:4px">
-        <div class="sub-value" style="font-size:13px;font-weight:700;color:var(--blue);margin-top:0">~2.4% of 7,011 registered establishments</div>
-        <svg class="kpi-bar" width="120" height="8" viewBox="0 0 120 8"><rect x="0" y="0" width="120" height="8" rx="4.0" fill="#e8eaf6"/><rect x="0" y="0" width="2.9" height="8" rx="4.0" fill="#00838f"/></svg>
-      </div>
+    <div class="card" style="text-align:center">
+      <h3 style="justify-content:center">9. Establishments in Industrial Parks <span class="conf-badge conf-exact" title="Source: Uganda Investment Authority — 11 operational industrial/business parks, 166 operating industries (2025)">● exact</span></h3>
+      <div class="kpi-pie-wrap"><svg class="donut-chart" width="88" height="88" viewBox="0 0 42 42"><circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#eee" stroke-width="20"/><circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#00838f" stroke-width="20" stroke-dasharray="2.4 97.6" stroke-dashoffset="25"/><circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#e0f2f1" stroke-width="20" stroke-dasharray="97.6 2.4000000000000057" stroke-dashoffset="22.6"/></svg></div>
+      <div class="value">166</div>
+      <div class="sub-value" style="font-size:15px;font-weight:700;color:var(--blue)">~2.4% of registered establishments</div>
+      <div class="kpi-source-line">2025 &middot; Source: Uganda Investment Authority</div>
     </div>
 
-    <div class="card">
-      <h3>10. FDI to Manufacturing <span class="conf-badge conf-estimated" title="Manufacturing FDI: UIA. Total FDI: USD 3.30B (UNCTAD, 2024) — reconciled 2026-06-22, was previously paired with an outdated ~USD 1.2B total">≈ estimated</span></h3>
-      <div class="kpi-value-row"><span class="kpi-icon">🌍</span><div class="value">USD 180M</div></div>
-      <div class="kpi-pct-row" style="margin-top:4px">
-        <div class="sub-value" style="font-size:13px;font-weight:700;color:var(--blue);margin-top:0">~5.5% of total FDI (USD 3.30B)</div>
-        <svg class="kpi-bar" width="120" height="8" viewBox="0 0 120 8"><rect x="0" y="0" width="120" height="8" rx="4.0" fill="#e8eaf6"/><rect x="0" y="0" width="6.6" height="8" rx="4.0" fill="#c62828"/></svg>
-      </div>
+    <div class="card" style="text-align:center">
+      <h3 style="justify-content:center">10. FDI to Manufacturing <span class="conf-badge conf-estimated" title="Manufacturing FDI: UIA. Total FDI: USD 3.30B (UNCTAD, 2024)">≈ estimated</span></h3>
+      <div class="kpi-pie-wrap"><svg class="donut-chart" width="88" height="88" viewBox="0 0 42 42"><circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#eee" stroke-width="20"/><circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#c62828" stroke-width="20" stroke-dasharray="5.5 94.5" stroke-dashoffset="25"/><circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#ffebee" stroke-width="20" stroke-dasharray="94.5 5.5" stroke-dashoffset="19.5"/></svg></div>
+      <div class="value">USD 180M</div>
+      <div class="sub-value" style="font-size:15px;font-weight:700;color:var(--blue)">~5.5% of total FDI</div>
+      <div class="kpi-source-line">2024 &middot; Source: UIA / UNCTAD</div>
     </div>
 
-    <div class="card">
-      <h3>11. Manufacturing Employment <span class="conf-badge conf-estimated" title="Manufacturing employment: estimated. Total employment: ~22M (UBOS National Human Resource Survey 2023/24) — reconciled 2026-06-22, was previously paired with an outdated ~9.1M total">≈ estimated</span></h3>
-      <div class="kpi-value-row"><span class="kpi-icon">👷</span><div class="value">~712,000</div></div>
-      <div class="kpi-pct-row" style="margin-top:4px">
-        <div class="sub-value" style="font-size:13px;font-weight:700;color:var(--blue);margin-top:0">~3.2% of total employment (~22M)</div>
-        <svg class="kpi-bar" width="120" height="8" viewBox="0 0 120 8"><rect x="0" y="0" width="120" height="8" rx="4.0" fill="#e8eaf6"/><rect x="0" y="0" width="3.8" height="8" rx="4.0" fill="#558b2f"/></svg>
-      </div>
+    <div class="card" style="text-align:center">
+      <h3 style="justify-content:center">11. Manufacturing Employment <span class="conf-badge conf-estimated" title="Manufacturing employment: estimated. Total employment: ~22M (UBOS National Human Resource Survey 2023/24)">≈ estimated</span></h3>
+      <div class="kpi-pie-wrap"><svg class="donut-chart" width="88" height="88" viewBox="0 0 42 42"><circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#eee" stroke-width="20"/><circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#558b2f" stroke-width="20" stroke-dasharray="3.2 96.8" stroke-dashoffset="25"/><circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#f1f8e9" stroke-width="20" stroke-dasharray="96.8 3.200000000000003" stroke-dashoffset="21.8"/></svg></div>
+      <div class="value">~712,000</div>
+      <div class="sub-value" style="font-size:15px;font-weight:700;color:var(--blue)">~3.2% of total employment</div>
+      <div class="kpi-source-line">2023/24 &middot; Source: UBOS National Human Resource Survey</div>
     </div>
 
-    <div class="card">
-      <h3>12. Variety of Manufactured Exports <span class="conf-badge conf-indicative" title="Source: ITC TradeMap HS6 product-level export data 2024">○ indicative</span></h3>
-      <div class="kpi-value-row"><span class="kpi-icon">🌐</span><div class="value">~380</div></div>
-      <div class="sub-value" style="font-size:13px;font-weight:700;color:var(--blue);margin-top:4px">distinct HS6 product categories exported</div>
-      <div class="kpi-pct-row">
-        <div class="sub-value" style="margin-top:0">~7.6% of all HS6 categories traded globally (~5,000)</div>
+    <div class="card" style="text-align:center">
+      <h3 style="justify-content:center">12. Distinct Manufactured Product Categories Exported <span class="conf-badge conf-indicative" title="Both counts are restricted to manufactured-goods HS6 categories (raw coffee, raw cotton, etc. excluded) per TradeMap's manufactured-goods grouping — pending Jerome's confirmation">○ indicative</span></h3>
+      <div class="kpi-value-row" style="margin-top:12px">
+        <span class="kpi-icon">🌐</span>
+        <div class="value">~380</div>
+      </div>
+      <div class="sub-value" style="font-size:13px;font-weight:700;color:var(--blue);margin-top:6px">manufactured HS6 categories Uganda exports</div>
+      <div class="kpi-pct-row" style="margin-top:6px">
+        <div class="sub-value" style="margin-top:0">~7.6% of ~5,000 manufactured HS6 categories traded globally</div>
         <svg class="kpi-bar" width="120" height="8" viewBox="0 0 120 8"><rect x="0" y="0" width="120" height="8" rx="4.0" fill="#e8eaf6"/><rect x="0" y="0" width="9.1" height="8" rx="4.0" fill="#4527a0"/></svg>
       </div>
+      <div class="kpi-source-line">2024 &middot; Source: ITC TradeMap</div>
     </div>
 
   </div>
@@ -630,14 +628,14 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-t
     <div class="section-title" style="margin-bottom:6px">🕓 Recently Updated</div>
     <div class="section-sub">Latest data, chapters, and reviews from the agentic pipeline — newest first.</div>
     <div class="card" style="margin-bottom:24px">
-      <div class="update-item"><span class="update-icon">🚀</span><span class="update-tag">Feature</span><span class="update-msg">refresh_status.py — brain keeps STATUS.md live counts current (ADR-012) [skip ci]</span><span class="update-date">2026-06-24</span></div>
+      <div class="update-item"><span class="update-icon">🛠️</span><span class="update-tag">Fix</span><span class="update-msg">treemap UX issues + Progress to Tenfold percentage/figure toggle</span><span class="update-date">2026-06-23</span></div>
+    <div class="update-item"><span class="update-icon">🚀</span><span class="update-tag">Feature</span><span class="update-msg">committed pre-commit hook enforcing ADR&lt;-&gt;DSL coupling at commit time [skip ci]</span><span class="update-date">2026-06-24</span></div>
+    <div class="update-item"><span class="update-icon">🚀</span><span class="update-tag">Feature</span><span class="update-msg">refresh_status.py — brain keeps STATUS.md live counts current (ADR-012) [skip ci]</span><span class="update-date">2026-06-24</span></div>
     <div class="update-item"><span class="update-icon">🚀</span><span class="update-tag">Feature</span><span class="update-msg">Ask MIDD scoped brain UI (read-only Q&amp;A over project records, feedback logged) [skip ci]</span><span class="update-date">2026-06-23</span></div>
     <div class="update-item"><span class="update-icon">🚀</span><span class="update-tag">Feature</span><span class="update-msg">ADR-011 single-source DB structure + uploader content-hash dedup [skip ci]</span><span class="update-date">2026-06-23</span></div>
     <div class="update-item"><span class="update-icon">🛠️</span><span class="update-tag">Fix</span><span class="update-msg">guard renderStatusDetail against null/empty chain status fields</span><span class="update-date">2026-06-22</span></div>
     <div class="update-item"><span class="update-icon">🛠️</span><span class="update-tag">Fix</span><span class="update-msg">defer treemap init to requestAnimationFrame — getBoundingClientRect returns 0 width on inline script execution</span><span class="update-date">2026-06-23</span></div>
     <div class="update-item"><span class="update-icon">🛠️</span><span class="update-tag">Fix</span><span class="update-msg">make Sector Distribution legend clickable in cross-filtered view</span><span class="update-date">2026-06-22</span></div>
-    <div class="update-item"><span class="update-icon">🚀</span><span class="update-tag">Feature</span><span class="update-msg">legend always visible and clickable at every treemap drill level</span><span class="update-date">2026-06-22</span></div>
-    <div class="update-item"><span class="update-icon">🚀</span><span class="update-tag">Feature</span><span class="update-msg">cross-filter Spatial Distribution by individual product (sub-sector)</span><span class="update-date">2026-06-22</span></div>
     </div>
   </div>
 

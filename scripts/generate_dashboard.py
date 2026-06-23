@@ -380,81 +380,14 @@ def kpi_progress_bar(pct, color='#1565c0', width=120, height=8):
 
 UGX_PER_USD = 3700
 
-def kpi_value_added_trend():
-    """Same 5-year Mfg Value Added trend as the Momentum panel's line chart
-    (19.6trn -> 23.3trn), converted from Shs trillions to USD billions. Sized
-    to fit a single KPI grid column (4-per-row layout is fixed)."""
-    mt = {r['id']: r for r in macro_trend}
-    r = mt.get('mfg_value_added')
-    if not r:
-        return ''
-    traj_raw = (r.get('trajectory') or '').strip()
-    labels_raw = (r.get('trajectory_labels') or '').strip()
-    if not traj_raw:
-        return ''
-    try:
-        shs_values = [float(v) for v in traj_raw.split(';') if v]
-        usd_values = [v * 1e12 / UGX_PER_USD / 1e9 for v in shs_values]
-        labels = [l for l in labels_raw.split(';') if l] if labels_raw else None
-    except ValueError:
-        return ''
-    return line_chart_svg(usd_values, labels=labels, unit='B', color='#2e7d32',
-                          width=210, chart_h=110, label_h=18, y_axis_w=28)
-
-def kpi_mfg_growth_trend():
-    """Manufacturing Growth before/after line, reusing the same 2.2% -> 5.6%
-    trend already sourced in macro_trend.csv for the Momentum panel. Sized
-    to fit a single KPI grid column (4-per-row layout is fixed)."""
-    mt = {r['id']: r for r in macro_trend}
-    r = mt.get('mfg_growth')
-    if not r:
-        return ''
-    try:
-        old, new = _parse_num(r['fy2021_value']), _parse_num(r['fy2025_value'])
-    except (KeyError, ValueError):
-        return ''
-    return line_chart_svg([old, new], labels=['FY20/21', 'FY24/25'], unit='%', color='#2e7d32',
-                          width=210, chart_h=110, label_h=18, y_axis_w=28)
-
-def kpi_credit_comparison_bar():
-    """Horizontal bar comparing Manufacturing's private-sector credit against
-    other sectors — reuses the same data as the Momentum panel's credit
-    chart. All bars grey except Manufacturing (blue), so it stands out
-    against the comparison set. Each row shows its FY24/25 stock figure and
-    its share of the five sectors shown (not a share of total economy-wide
-    credit, which we don't have a full breakdown for)."""
-    sc_file = DATA / 'sector_comparison.csv'
-    if not sc_file.exists():
-        return ''
-    rows = [r for r in load_csv('sector_comparison.csv') if r['chart'] == 'credit']
-    if not rows:
-        return ''
-    total = sum(float(r['pct']) for r in rows) or 1
-    max_val = max(float(r['pct']) for r in rows) or 1
-    parts = []
-    for r in rows:
-        val = float(r['pct'])  # Shs trillions, FY24/25 stock
-        share = val / total * 100
-        width_pct = (val / max_val) * 100
-        highlight = r.get('highlight') == '1'
-        color = '#1565c0' if highlight else '#b0bec5'
-        weight = '700' if highlight else '400'
-        usd_bn = val * 1e12 / UGX_PER_USD / 1e9
-        fy25 = f'USD {usd_bn:.2f}B'
-        parts.append(
-            f'<div class="kpi-credit-row">'
-            f'<span class="kpi-credit-label" style="font-weight:{weight}">{esc(r["sector"])}</span>'
-            f'<span class="kpi-credit-figure" style="font-weight:{weight}">{esc(fy25)} ({share:.0f}%)</span>'
-            f'<div class="kpi-credit-track"><div class="kpi-credit-fill" style="width:{width_pct:.0f}%;background:{color}"></div></div>'
-            f'</div>'
-        )
-    return ''.join(parts)
-
-def kpi_compact_donut(chart_name, size=72, stroke_width=8):
-    """Compact category-breakdown donut for a KPI card, with the highlighted
-    row (highlight=1 in sector_comparison.csv) rendered in a standout colour
-    and bold legend text. Reused for Tax Contribution (Manufacturing) and
-    Manufactured Exports (vs Gold/Coffee/Other)."""
+def kpi_compact_donut(chart_name, size=72, stroke_width=8, unit='usd'):
+    """Compact category-breakdown donut for a KPI card — circle on top,
+    legend below (per the 2026-06-23 dashboard review: 'I would prefer the
+    circle is above and the key is below the circle'). The highlighted row
+    (highlight=1 in sector_comparison.csv) renders in a standout colour and
+    bold legend text. unit='ugx' shows the Shs figure (value_label, which
+    already carries '% · Shs Xtrn') instead of the USD conversion — used for
+    Tax Contribution, since Uganda is taxed in shillings."""
     sc_file = DATA / 'sector_comparison.csv'
     if not sc_file.exists():
         return ''
@@ -463,7 +396,7 @@ def kpi_compact_donut(chart_name, size=72, stroke_width=8):
         return ''
     rows.sort(key=lambda r: -float(r['pct']))
     slices = []
-    usd_labels = {}
+    fig_labels = {}
     palette_idx = 0
     for r in rows:
         if r.get('highlight') == '1':
@@ -472,23 +405,107 @@ def kpi_compact_donut(chart_name, size=72, stroke_width=8):
             color = DONUT_PALETTE[palette_idx % len(DONUT_PALETTE)]
             palette_idx += 1
         slices.append((r['sector'], float(r['pct']), color))
-        usd_labels[r['sector']] = r.get('usd_label', '')
+        if unit == 'ugx':
+            # value_label is "<pct>% &middot; Shs Xtrn" — strip the leading
+            # "<pct>% &middot; " since the pct is already shown separately.
+            vl = r.get('value_label', '')
+            fig_labels[r['sector']] = vl.split('&middot;', 1)[-1].strip() if '&middot;' in vl else vl
+        else:
+            fig_labels[r['sector']] = r.get('usd_label', '')
     legend_rows = []
     for label, pct, color in slices:
         weight = '700' if color == '#e65100' else '400'
-        usd = usd_labels.get(label, '')
-        usd_html = f' &middot; {esc(usd)}' if usd else ''
+        fig = fig_labels.get(label, '')
+        fig_html = f' &middot; {esc(fig)}' if fig else ''
         legend_rows.append(
             f'<div class="kpi-donut-legend-item" style="font-weight:{weight}">'
             f'<span class="donut-swatch" style="background:{color}"></span>'
-            f'{esc(label)} <strong>{pct:g}%{usd_html}</strong></div>'
+            f'{esc(label)} <strong>{pct:g}%{fig_html}</strong></div>'
         )
     return (
-        f'<div class="kpi-donut-row">'
+        f'<div class="kpi-donut-col">'
         f'{donut_svg(slices, size=size, stroke_width=stroke_width)}'
         f'<div class="kpi-donut-legend">{"".join(legend_rows)}</div>'
         f'</div>'
     )
+
+def kpi_simple_pie(pct, color='#1565c0', rest_color='#e0e0e0', size=88, stroke_width=20):
+    """Single-share pie for a KPI card where one figure IS the whole story —
+    no legend needed ('a pie does not need a legend; it is self explanatory').
+    A thicker ring than the multi-category donuts so it reads as a filled
+    pie rather than a thin ring. The remaining/'rest' slice gets a visibly
+    different (light grey) colour per the FDI card's specific request."""
+    try:
+        pct = max(0, min(100, float(pct)))
+    except (TypeError, ValueError):
+        return ''
+    slices = [('', pct, color), ('', 100 - pct, rest_color)]
+    return f'<div class="kpi-pie-wrap">{donut_svg(slices, size=size, stroke_width=stroke_width)}</div>'
+
+def kpi_credit_donut(size=72, stroke_width=8):
+    """Donut version of Private Sector Credit, for visual uniformity with the
+    other indicator cards ('I would also like a donut there for uniformity').
+    Reuses the same 5-sector credit data as the comparison bars (and the
+    Momentum panel), with each sector's share computed against the sum of
+    just these 5 — the only breakdown we have, not full economy-wide credit."""
+    sc_file = DATA / 'sector_comparison.csv'
+    if not sc_file.exists():
+        return ''
+    rows = [r for r in load_csv('sector_comparison.csv') if r['chart'] == 'credit']
+    if not rows:
+        return ''
+    total = sum(float(r['pct']) for r in rows) or 1
+    rows_sorted = sorted(rows, key=lambda r: -float(r['pct']))
+    slices, fig_labels = [], {}
+    palette_idx = 0
+    for r in rows_sorted:
+        share = float(r['pct']) / total * 100
+        if r.get('highlight') == '1':
+            color = '#e65100'
+        else:
+            color = DONUT_PALETTE[palette_idx % len(DONUT_PALETTE)]
+            palette_idx += 1
+        slices.append((r['sector'], share, color))
+        usd_bn = float(r['pct']) * 1e12 / UGX_PER_USD / 1e9
+        fig_labels[r['sector']] = f'USD {usd_bn:.2f}B'
+    legend_rows = []
+    for label, share, color in slices:
+        weight = '700' if color == '#e65100' else '400'
+        legend_rows.append(
+            f'<div class="kpi-donut-legend-item" style="font-weight:{weight}">'
+            f'<span class="donut-swatch" style="background:{color}"></span>'
+            f'{esc(label)} <strong>{share:.0f}% &middot; {esc(fig_labels[label])}</strong></div>'
+        )
+    return (
+        f'<div class="kpi-donut-col">'
+        f'{donut_svg(slices, size=size, stroke_width=stroke_width)}'
+        f'<div class="kpi-donut-legend">{"".join(legend_rows)}</div>'
+        f'</div>'
+    )
+
+def kpi_region_strip():
+    """4-region proportional colour strip for the 'Distribution by Region'
+    indicator card — Jerome explicitly didn't want a donut here, just a box
+    subdivided by percentage with different colours per region, no popup."""
+    region_file = DATA / 'treemap_district.json'
+    if not region_file.exists():
+        return ''
+    district_data = json.loads(region_file.read_text('utf-8'))
+    region_colors = {'Central': '#1565c0', 'Eastern': '#2e7d32', 'Western': '#6a1b9a', 'Northern': '#f57f17'}
+    totals = {r: sum(district_data.get(r, {}).values()) for r in region_colors}
+    grand_total = sum(totals.values()) or 1
+    segs = []
+    for region, color in region_colors.items():
+        pct = totals[region] / grand_total * 100
+        segs.append(
+            f'<div class="kpi-region-seg" style="width:{pct:.1f}%;background:{color}" '
+            f'title="{esc(region)}: {pct:.1f}%"></div>'
+        )
+    legend = ''.join(
+        f'<span class="kpi-region-leg-item"><span class="sw" style="background:{color}"></span>{region} {totals[region]/grand_total*100:.0f}%</span>'
+        for region, color in region_colors.items()
+    )
+    return f'<div class="kpi-region-strip">{"".join(segs)}</div><div class="kpi-region-legend">{legend}</div>'
 
 def macro_trend_html():
     if not macro_trend:
@@ -933,16 +950,14 @@ replacements = {
     '<!--%%MILESTONES_ITEMS%%-->':    _ms_items,
     '<!--%%TAX_DONUT%%-->':           tax_donut_html(),
     '<!--%%ELECTRICITY_DONUT%%-->':   electricity_donut_html(),
-    '<!--%%KPI1_BAR%%-->':            kpi_progress_bar(14.5, color='#1565c0'),
-    '<!--%%KPI1_TREND%%-->':          kpi_value_added_trend(),
-    '<!--%%KPI2_TREND%%-->':          kpi_mfg_growth_trend(),
-    '<!--%%KPI3_DONUT%%-->':          kpi_compact_donut('tax'),
-    '<!--%%KPI4_DONUT%%-->':          kpi_compact_donut('exports'),
+    '<!--%%KPI1_DONUT%%-->':          kpi_simple_pie(14.5, color='#1565c0', rest_color='#e3f2fd'),
+    '<!--%%KPI3_DONUT%%-->':          kpi_compact_donut('tax', unit='ugx'),
     '<!--%%KPI5_DONUT%%-->':          kpi_compact_donut('hightech', size=60, stroke_width=7),
-    '<!--%%KPI6_CREDIT_BARS%%-->':    kpi_credit_comparison_bar(),
-    '<!--%%KPI9_BAR%%-->':            kpi_progress_bar(2.4, color='#00838f'),
-    '<!--%%KPI10_BAR%%-->':           kpi_progress_bar(5.5, color='#c62828'),
-    '<!--%%KPI11_BAR%%-->':           kpi_progress_bar(3.2, color='#558b2f'),
+    '<!--%%KPI6_DONUT%%-->':          kpi_credit_donut(),
+    '<!--%%KPI8_REGION_STRIP%%-->':   kpi_region_strip(),
+    '<!--%%KPI9_PIE%%-->':            kpi_simple_pie(2.4, color='#00838f', rest_color='#e0f2f1'),
+    '<!--%%KPI10_PIE%%-->':           kpi_simple_pie(5.5, color='#c62828', rest_color='#ffebee'),
+    '<!--%%KPI11_PIE%%-->':           kpi_simple_pie(3.2, color='#558b2f', rest_color='#f1f8e9'),
     '<!--%%KPI12_BAR%%-->':           kpi_progress_bar(7.6, color='#4527a0'),
     '<!--%%CREDIT_SECTOR_BARS%%-->':  sector_comparison_html('credit'),
     '/*%%CHAINS_DATA%%*/':            chains_js(),

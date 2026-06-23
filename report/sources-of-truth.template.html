@@ -118,26 +118,27 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#f0f2f5;color:#1a1a2e;fo
 .milestone-note{font-size:12px;color:var(--muted);line-height:1.5}
 .card .value{font-size:28px;font-weight:700;color:var(--blue)}
 .card .sub-value{font-size:12px;color:var(--muted);margin-top:4px}
-.kpi-value-row{display:flex;align-items:center;gap:12px}
+.kpi-value-row{display:flex;align-items:center;justify-content:center;gap:12px}
 .kpi-icon{font-size:42px;line-height:1;flex-shrink:0}
+.kpi-icon-top{font-size:40px;line-height:1;text-align:center;margin-bottom:6px}
 .kpi-pct-row{display:flex;align-items:center;justify-content:space-between;gap:8px}
 .kpi-pct-row .sub-value{margin-top:0}
-.kpi-pct-row .donut-chart{flex-shrink:0}
 .kpi-pct-row .kpi-bar{flex-shrink:0}
-.kpi-pct-row .line-chart{flex-shrink:0}
-.kpi-credit-row{display:flex;align-items:center;gap:8px;margin-bottom:7px;flex-wrap:wrap}
-.kpi-credit-row:last-child{margin-bottom:0}
-.kpi-credit-label{font-size:11px;width:130px;flex-shrink:0;color:var(--text)}
-.kpi-credit-figure{font-size:11px;color:var(--text);margin-left:auto;flex-shrink:0}
-.kpi-credit-track{flex:0 0 100%;height:10px;background:#f0f0f0;border-radius:3px;overflow:hidden;order:3}
-.kpi-credit-fill{height:100%;border-radius:3px}
-.kpi-trend-wrap{display:flex;justify-content:center}
-.kpi-trend-wrap.large svg{max-width:100%}
-.kpi-donut-row{display:flex;align-items:center;gap:10px;margin-top:6px}
-.kpi-donut-row .donut-chart{flex-shrink:0}
-.kpi-donut-legend{display:flex;flex-direction:column;gap:2px;font-size:10px}
+/* Circle/pie ABOVE, legend/value BELOW — per 2026-06-23 review ("circle is
+   above and the key is below the circle") — used for every donut/pie card. */
+.kpi-donut-col{display:flex;flex-direction:column;align-items:center;gap:8px;margin-top:4px}
+.kpi-donut-col .donut-chart{flex-shrink:0}
+.kpi-donut-legend{display:flex;flex-direction:column;gap:3px;font-size:10px;width:100%}
 .kpi-donut-legend-item{display:flex;align-items:center;gap:5px;color:var(--text)}
 .kpi-donut-legend-item .donut-swatch{width:8px;height:8px;border-radius:2px;flex-shrink:0;display:inline-block}
+.kpi-pie-wrap{display:flex;justify-content:center;margin:4px 0}
+.kpi-source-line{font-size:10px;color:var(--muted);margin-top:10px;padding-top:8px;border-top:1px solid #f0f0f0}
+.kpi-region-strip{display:flex;height:32px;border-radius:6px;overflow:hidden;margin-top:6px}
+.kpi-region-seg{transition:opacity .15s}
+.kpi-region-seg:hover{opacity:.8}
+.kpi-region-legend{display:flex;flex-wrap:wrap;gap:8px 12px;font-size:10px;margin-top:8px;color:var(--text)}
+.kpi-region-leg-item{display:flex;align-items:center;gap:4px}
+.kpi-region-leg-item .sw{width:8px;height:8px;border-radius:2px;flex-shrink:0;display:inline-block}
 
 /* GRIDS */
 .kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-bottom:24px}
@@ -369,111 +370,108 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-t
   </div>
 
   <div class="section-title">📊 Manufacturing Industry Key Indicators</div>
-  <div class="section-sub">Current status (FY2024/25) | Sources: UBOS, URA, BoU, ERA, UIA, ITC TradeMap | <span style="color:var(--green)">● exact</span> &nbsp; <span style="color:var(--amber)">≈ estimated</span> &nbsp; <span style="color:var(--blue)">○ indicative</span></div>
+  <div class="section-sub">Current status | Each indicator uses its latest available figure, with year and source shown on the card | <span style="color:var(--green)">● exact</span> &nbsp; <span style="color:var(--amber)">≈ estimated</span> &nbsp; <span style="color:var(--blue)">○ indicative</span></div>
 
   <div class="kpi-grid kpi-grid-4col" id="tour-kpi-grid">
 
-    <div class="card">
-      <h3>1. Manufacturing Value Added <span class="conf-badge conf-exact" title="Source: UBOS Annual GDP 2024/25">● exact</span></h3>
-      <div class="value">USD 8.1B</div>
-      <div class="kpi-pct-row" style="margin-top:4px">
-        <div class="sub-value" style="font-size:13px;font-weight:700;color:var(--blue);margin-top:0">14.5% of GDP (~USD 55.9B total)</div>
-        <!--%%KPI1_BAR%%-->
+    <div class="card" style="text-align:center">
+      <h3 style="justify-content:center">1. Manufacturing Value Added <span class="conf-badge conf-exact" title="Source: UBOS Annual GDP 2024/25">● exact</span></h3>
+      <div class="kpi-donut-col">
+        <!--%%KPI1_DONUT%%-->
+        <div class="value">USD 8.1B</div>
+        <div class="sub-value" style="font-size:15px;font-weight:700;color:var(--blue)">14.5% of GDP</div>
       </div>
-      <div class="kpi-trend-wrap" style="margin-top:8px">
-        <!--%%KPI1_TREND%%-->
-      </div>
+      <div class="kpi-source-line">FY2024/25 &middot; Source: UBOS</div>
     </div>
 
-    <div class="card">
-      <h3>2. Manufacturing Growth <span class="conf-badge conf-exact" title="Source: UBOS Annual GDP 2024/25">● exact</span></h3>
-      <div class="kpi-trend-wrap large">
-        <!--%%KPI2_TREND%%-->
+    <div class="card" style="text-align:center">
+      <h3 style="justify-content:center">2. Manufacturing Growth <span class="conf-badge conf-exact" title="Source: UBOS Annual GDP 2024/25">● exact</span></h3>
+      <div class="kpi-value-row" style="margin-top:12px">
+        <span class="kpi-icon" style="color:#2e7d32">📈</span>
+        <div class="value">5.6%</div>
       </div>
+      <div class="sub-value" style="margin-top:6px">year-on-year, up from 2.2% in FY20/21</div>
+      <div class="kpi-source-line">FY2024/25 &middot; Source: UBOS</div>
     </div>
 
-    <div class="card">
-      <h3>3. Manufacturing Tax Contribution <span class="conf-badge conf-estimated" title="Source: URA Revenue Performance Report FY2024/25 (UGX converted at ~UGX 3,700/USD)">≈ estimated</span></h3>
+    <div class="card" style="text-align:center">
+      <h3 style="justify-content:center">3. Manufacturing Tax Contribution <span class="conf-badge conf-estimated" title="Source: URA Revenue Performance Report FY2024/25">≈ estimated</span></h3>
       <!--%%KPI3_DONUT%%-->
+      <div class="kpi-source-line">FY2024/25 &middot; Source: URA</div>
     </div>
 
-    <div class="card">
-      <h3>4. Manufactured Exports <span class="conf-badge conf-estimated" title="Source: Bank of Uganda external trade statistics; export composition is indicative, not official OEC/UBOS breakdown">≈ estimated</span></h3>
-      <div style="margin-top:8px">
-        <!--%%KPI4_DONUT%%-->
+    <div class="card" style="text-align:center">
+      <h3 style="justify-content:center">4. Manufactured Exports <span class="conf-badge conf-estimated" title="Source: ITC TradeMap / Bank of Uganda. Manufactured-export classification (soluble vs raw coffee, yarn/fabric vs raw cotton, etc.) follows TradeMap's manufactured-goods HS code grouping — pending Jerome's confirmation of the exact figure.">≈ estimated</span></h3>
+      <div class="kpi-value-row" style="margin-top:12px">
+        <span class="kpi-icon">🚢</span>
+        <div class="value">USD 2.4B</div>
       </div>
+      <div class="sub-value" style="font-size:15px;font-weight:700;color:var(--blue);margin-top:6px">~12% of total exports</div>
+      <div class="kpi-source-line">2024 &middot; Source: ITC TradeMap</div>
     </div>
 
-    <div class="card">
-      <h3>5. High-Tech Exports <span class="conf-badge conf-indicative" title="Composition is indicative — ICT goods figure is sourced (UNCTAD, USD 9.3M, 2023); pharma/other split estimated using QCIL as the anchor since no official high-tech breakdown exists">○ indicative</span></h3>
-      <div class="kpi-value-row"><span class="kpi-icon">🔬</span><div class="value">USD 85M</div></div>
-      <div class="sub-value" style="font-size:13px;font-weight:700;color:var(--blue);margin-top:4px">~3.5% of manufactured exports (USD 2.4B)</div>
-      <div style="margin-top:8px">
-        <!--%%KPI5_DONUT%%-->
-      </div>
+    <div class="card" style="text-align:center">
+      <h3 style="justify-content:center">5. High-Tech Exports <span class="conf-badge conf-indicative" title="Composition is indicative — ICT goods figure is sourced (UNCTAD, USD 9.3M, 2023); pharma/other split estimated using QCIL as the anchor since no official high-tech breakdown exists">○ indicative</span></h3>
+      <!--%%KPI5_DONUT%%-->
+      <div class="sub-value" style="font-size:14px;font-weight:700;color:var(--blue);margin-top:6px">~3.5% of manufactured exports, USD 85M</div>
+      <div class="kpi-source-line">2023/24 &middot; Source: ITC TradeMap / UNCTAD</div>
     </div>
 
-    <div class="card">
-      <h3>6. Private Sector Credit <span class="conf-badge conf-estimated" title="Source: Bank of Uganda credit classification by sector (UGX 1.8T converted at ~UGX 3,700/USD)">≈ estimated</span></h3>
-      <div style="margin-top:8px">
-        <!--%%KPI6_CREDIT_BARS%%-->
-      </div>
+    <div class="card" style="text-align:center">
+      <h3 style="justify-content:center">6. Private Sector Credit <span class="conf-badge conf-estimated" title="Source: Bank of Uganda credit classification by sector">≈ estimated</span></h3>
+      <!--%%KPI6_DONUT%%-->
+      <div class="kpi-source-line">FY2024/25 &middot; Source: Bank of Uganda</div>
     </div>
 
-    <div class="card">
-      <h3>7. Registered Manufacturing Establishments <span class="conf-badge conf-exact" title="Source: MTIC National Industries Register, August 2025">● exact</span></h3>
-      <div class="kpi-value-row"><span class="kpi-icon">🏭</span><div class="value">7,011</div></div>
+    <div class="card" style="text-align:center">
+      <h3 style="justify-content:center">7. Registered Manufacturing Establishments <span class="conf-badge conf-exact" title="Source: MTIC National Industries Register, August 2025">● exact</span></h3>
+      <div class="kpi-icon-top">🏭</div>
+      <div class="value">7,011</div>
+      <div class="kpi-source-line">August 2025 &middot; Source: MTIC National Industries Register</div>
     </div>
 
     <div class="card" style="grid-column:span 1">
       <h3>8. Distribution by Region <span class="conf-badge conf-exact" title="Source: MTIC National Industries Register, August 2025 (7,011 establishments; 163 unspecified district omitted)">● exact</span></h3>
-      <div style="margin-top:8px">
-        <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span>Central (incl. Kampala)</span><span style="font-weight:700;color:var(--blue)">77.7%</span></div>
-        <div style="height:6px;background:#e3f2fd;border-radius:3px;margin-bottom:8px"><div style="width:77.7%;height:100%;background:#1565c0;border-radius:3px"></div></div>
-        <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span>Western</span><span style="font-weight:700;color:var(--blue)">8.1%</span></div>
-        <div style="height:6px;background:#e3f2fd;border-radius:3px;margin-bottom:8px"><div style="width:8.1%;height:100%;background:#1565c0;border-radius:3px"></div></div>
-        <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span>Eastern</span><span style="font-weight:700;color:var(--blue)">7.7%</span></div>
-        <div style="height:6px;background:#e3f2fd;border-radius:3px;margin-bottom:8px"><div style="width:7.7%;height:100%;background:#1565c0;border-radius:3px"></div></div>
-        <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span>Northern</span><span style="font-weight:700;color:var(--blue)">4.2%</span></div>
-        <div style="height:6px;background:#e3f2fd;border-radius:3px"><div style="width:4.2%;height:100%;background:#1565c0;border-radius:3px"></div></div>
-      </div>
+      <!--%%KPI8_REGION_STRIP%%-->
+      <div class="kpi-source-line">August 2025 &middot; Source: MTIC National Industries Register</div>
     </div>
 
-    <div class="card">
-      <h3>9. Establishments in Industrial Parks <span class="conf-badge conf-exact" title="Source: Uganda Investment Authority — 11 operational industrial/business parks, 166 operating industries (2025)">● exact</span></h3>
-      <div class="kpi-value-row"><span class="kpi-icon">🏗️</span><div class="value">166</div></div>
-      <div class="kpi-pct-row" style="margin-top:4px">
-        <div class="sub-value" style="font-size:13px;font-weight:700;color:var(--blue);margin-top:0">~2.4% of 7,011 registered establishments</div>
-        <!--%%KPI9_BAR%%-->
-      </div>
+    <div class="card" style="text-align:center">
+      <h3 style="justify-content:center">9. Establishments in Industrial Parks <span class="conf-badge conf-exact" title="Source: Uganda Investment Authority — 11 operational industrial/business parks, 166 operating industries (2025)">● exact</span></h3>
+      <!--%%KPI9_PIE%%-->
+      <div class="value">166</div>
+      <div class="sub-value" style="font-size:15px;font-weight:700;color:var(--blue)">~2.4% of registered establishments</div>
+      <div class="kpi-source-line">2025 &middot; Source: Uganda Investment Authority</div>
     </div>
 
-    <div class="card">
-      <h3>10. FDI to Manufacturing <span class="conf-badge conf-estimated" title="Manufacturing FDI: UIA. Total FDI: USD 3.30B (UNCTAD, 2024) — reconciled 2026-06-22, was previously paired with an outdated ~USD 1.2B total">≈ estimated</span></h3>
-      <div class="kpi-value-row"><span class="kpi-icon">🌍</span><div class="value">USD 180M</div></div>
-      <div class="kpi-pct-row" style="margin-top:4px">
-        <div class="sub-value" style="font-size:13px;font-weight:700;color:var(--blue);margin-top:0">~5.5% of total FDI (USD 3.30B)</div>
-        <!--%%KPI10_BAR%%-->
-      </div>
+    <div class="card" style="text-align:center">
+      <h3 style="justify-content:center">10. FDI to Manufacturing <span class="conf-badge conf-estimated" title="Manufacturing FDI: UIA. Total FDI: USD 3.30B (UNCTAD, 2024)">≈ estimated</span></h3>
+      <!--%%KPI10_PIE%%-->
+      <div class="value">USD 180M</div>
+      <div class="sub-value" style="font-size:15px;font-weight:700;color:var(--blue)">~5.5% of total FDI</div>
+      <div class="kpi-source-line">2024 &middot; Source: UIA / UNCTAD</div>
     </div>
 
-    <div class="card">
-      <h3>11. Manufacturing Employment <span class="conf-badge conf-estimated" title="Manufacturing employment: estimated. Total employment: ~22M (UBOS National Human Resource Survey 2023/24) — reconciled 2026-06-22, was previously paired with an outdated ~9.1M total">≈ estimated</span></h3>
-      <div class="kpi-value-row"><span class="kpi-icon">👷</span><div class="value">~712,000</div></div>
-      <div class="kpi-pct-row" style="margin-top:4px">
-        <div class="sub-value" style="font-size:13px;font-weight:700;color:var(--blue);margin-top:0">~3.2% of total employment (~22M)</div>
-        <!--%%KPI11_BAR%%-->
-      </div>
+    <div class="card" style="text-align:center">
+      <h3 style="justify-content:center">11. Manufacturing Employment <span class="conf-badge conf-estimated" title="Manufacturing employment: estimated. Total employment: ~22M (UBOS National Human Resource Survey 2023/24)">≈ estimated</span></h3>
+      <!--%%KPI11_PIE%%-->
+      <div class="value">~712,000</div>
+      <div class="sub-value" style="font-size:15px;font-weight:700;color:var(--blue)">~3.2% of total employment</div>
+      <div class="kpi-source-line">2023/24 &middot; Source: UBOS National Human Resource Survey</div>
     </div>
 
-    <div class="card">
-      <h3>12. Variety of Manufactured Exports <span class="conf-badge conf-indicative" title="Source: ITC TradeMap HS6 product-level export data 2024">○ indicative</span></h3>
-      <div class="kpi-value-row"><span class="kpi-icon">🌐</span><div class="value">~380</div></div>
-      <div class="sub-value" style="font-size:13px;font-weight:700;color:var(--blue);margin-top:4px">distinct HS6 product categories exported</div>
-      <div class="kpi-pct-row">
-        <div class="sub-value" style="margin-top:0">~7.6% of all HS6 categories traded globally (~5,000)</div>
+    <div class="card" style="text-align:center">
+      <h3 style="justify-content:center">12. Distinct Manufactured Product Categories Exported <span class="conf-badge conf-indicative" title="Both counts are restricted to manufactured-goods HS6 categories (raw coffee, raw cotton, etc. excluded) per TradeMap's manufactured-goods grouping — pending Jerome's confirmation">○ indicative</span></h3>
+      <div class="kpi-value-row" style="margin-top:12px">
+        <span class="kpi-icon">🌐</span>
+        <div class="value">~380</div>
+      </div>
+      <div class="sub-value" style="font-size:13px;font-weight:700;color:var(--blue);margin-top:6px">manufactured HS6 categories Uganda exports</div>
+      <div class="kpi-pct-row" style="margin-top:6px">
+        <div class="sub-value" style="margin-top:0">~7.6% of ~5,000 manufactured HS6 categories traded globally</div>
         <!--%%KPI12_BAR%%-->
       </div>
+      <div class="kpi-source-line">2024 &middot; Source: ITC TradeMap</div>
     </div>
 
   </div>
