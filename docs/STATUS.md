@@ -4,7 +4,7 @@ One always-current page so any agent (Solomon's, the server brain, Hillary's) re
 latest state from one place instead of diffing the whole repo. Keep this updated whenever
 something material changes. Decisions live in the ADRs; this is the live snapshot.
 
-Last updated: 2026-06-23
+Last updated: 2026-06-23 (live counts auto-refreshed)
 
 ## Environments (all on Hetzner 89.167.121.193, behind midd-ug.com via Cloudflare, SSL Full)
 
@@ -18,6 +18,8 @@ Last updated: 2026-06-23
 Rule: all development and Jerome's experimentation happen on staging first, then promote.
 
 ## Data (single source of truth — ADR-011)
+
+- Live counts (auto): industries 7100 total = 7011 register + curated; with GPS 574; value_chains 9; kpi_indicators 6.
 
 - `industries` is the one establishment table. One row per establishment, keyed by `reg_number`,
   updated in place (columns added over time, blanks where missing). Curated map factories are
