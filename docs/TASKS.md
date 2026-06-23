@@ -28,6 +28,15 @@ Last updated: 2026-06-23
 - [ ] Upload the other reports carrying establishment/sector data.
 - [ ] Review on staging, flag corrections through Ask MIDD (not direct PocketBase edits).
 
+## Done recently
+- [x] Removed the Upload Guide / Data Entry Guide buttons + the 3 inline upload-guide links and
+      stale data/uploads references from the public dashboard template (they were internal ops
+      guidance, and one taught direct PocketBase editing — against ADR-012). Deployed staging + prod.
+      NOTE for Solomon: this was a small change to sources-of-truth.template.html (the button row
+      around the header + pipeline-status text). Pull latest main before your redesign.
+- [x] Rewrote the standalone guide pages (upload-guide.html, pb-guide.html) to point to the
+      uploader + Ask MIDD (now unlinked from the dashboard; can move into the internal workbench).
+
 ## Hillary (infrastructure / harness)
 
 - [ ] Deeper harness loop: feedback improves the agents; brain auto-updates STATUS.md + ADRs.
