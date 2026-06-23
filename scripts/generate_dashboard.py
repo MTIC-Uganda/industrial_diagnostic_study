@@ -30,19 +30,27 @@ USE_POCKETBASE = bool(PB_URL)
 # ── Data loading ──────────────────────────────────────────────────────────────
 
 def pb_get(collection, sort=None, per_page=500, filter=None):
-    """Fetch all records from a PocketBase collection (public read)."""
-    url = f'{PB_URL}/api/collections/{collection}/records?perPage={per_page}'
-    if sort:
-        url += f'&sort={sort}'
-    if filter:
-        url += f'&filter={urllib.parse.quote(filter)}'
-    try:
-        with urllib.request.urlopen(url) as r:
-            return json.loads(r.read()).get('items', [])
-    except urllib.error.HTTPError as e:
-        sys.exit(f'PocketBase error {e.code} fetching {collection}: {e.read().decode()[:200]}')
-    except Exception as e:
-        sys.exit(f'Cannot reach PocketBase at {PB_URL}: {e}')
+    """Fetch ALL records from a PocketBase collection (public read), paginating.
+    PocketBase caps perPage at 500, so anything larger must page through."""
+    items, page = [], 1
+    while True:
+        url = f'{PB_URL}/api/collections/{collection}/records?perPage={per_page}&page={page}'
+        if sort:
+            url += f'&sort={urllib.parse.quote(sort)}'
+        if filter:
+            url += f'&filter={urllib.parse.quote(filter)}'
+        try:
+            with urllib.request.urlopen(url) as r:
+                payload = json.loads(r.read())
+        except urllib.error.HTTPError as e:
+            sys.exit(f'PocketBase error {e.code} fetching {collection}: {e.read().decode()[:200]}')
+        except Exception as e:
+            sys.exit(f'Cannot reach PocketBase at {PB_URL}: {e}')
+        items.extend(payload.get('items', []))
+        if page >= payload.get('totalPages', 1) or not payload.get('items'):
+            break
+        page += 1
+    return items
 
 def load_csv(name):
     with open(DATA / name, newline='', encoding='utf-8') as f:
