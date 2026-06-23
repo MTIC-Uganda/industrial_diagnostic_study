@@ -333,6 +333,7 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-t
     <button onclick="generateBrief()" class="tour-btn" title="One-page Economic Brief — KPIs, momentum, chain snapshot, sources">🧾 Generate Brief</button>
     <button onclick="openGlossary()" class="tour-btn">📖 Glossary</button>
     <button id="tour-trigger" class="tour-btn" onclick="startTour()">🧭 Take a Tour</button>
+    <!--%%TOOLS_NAV%%-->
     <div class="badge">TENFOLD GROWTH FRAMEWORK</div>
   </div>
 </div>
@@ -342,7 +343,6 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-t
   <button id="tab-btn-maps" class="tab-btn" onclick="showTab('maps')">🗺️ Value Chain Maps</button>
   <button id="tab-btn-status" class="tab-btn" onclick="showTab('status')">📊 Chain Status &amp; 2040 Projections</button>
   <button id="tab-btn-locations" class="tab-btn" onclick="showTab('locations')">📍 Industry Locations</button>
-  <button id="tab-btn-pipeline" class="tab-btn" onclick="showTab('pipeline')">🔄 Pipeline</button>
 </div>
 
 <!-- ═══════════════════════════════════════════════════════════════
@@ -795,24 +795,6 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-t
 <!-- ═══════════════════════════════════════════════════════════════
      SECTION 5: PIPELINE STATUS
 ═══════════════════════════════════════════════════════════════ -->
-<div id="tab-pipeline" class="tab-content">
-
-  <div class="section-title">🔄 Agentic Pipeline Status</div>
-  <div class="section-sub">
-    Live status of the Ingest → Synthesise → Review loop. Upload a document to
-    the uploader to trigger the pipeline.
-  </div>
-
-  <div id="pipeline-updated" style="font-size:12px;color:var(--muted);margin-bottom:20px"></div>
-  <div id="pipeline-cards">
-    <div class="pipe-empty">
-      Loading pipeline status…<br>
-      <span style="font-size:11px;margin-top:6px;display:block">If this persists, no pipeline run has been committed yet — upload a document to start.</span>
-    </div>
-  </div>
-
-</div>
-
 <footer>Manufacturing Industry Dashboard &nbsp;|&nbsp; Ministry of Trade, Industry &amp; Cooperatives (MTIC) &nbsp;×&nbsp; UNIDO PCP &nbsp;|&nbsp; June 2026 &nbsp;|&nbsp; For official use — not for public distribution</footer>
 
 <script>
@@ -2105,7 +2087,6 @@ function startTour(){
       });
   }
 
-  document.getElementById('tab-btn-pipeline').addEventListener('click', loadPipelineStatus);
 })();
 
 // ═══════════════════ CHAPTER VIEWER ═══════════════════
