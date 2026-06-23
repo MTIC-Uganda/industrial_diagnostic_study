@@ -32,6 +32,8 @@ STAGING_BRANCH = "uploads-staging"
 # The matching PocketBase admin, reachable from this uploader (gated by its own
 # admin login). Inspection surface; data corrections go through Ask MIDD.
 PB_ADMIN_URL = "https://db.midd-ug.com/_/" if IS_PROD else "https://staging-db.midd-ug.com/_/"
+# Ask MIDD (the scoped brain — questions + corrections), matching this env.
+ASK_URL      = "https://ask.midd-ug.com" if IS_PROD else "https://staging-ask.midd-ug.com"
 # Staging only: the one-way "Apply to production" promotion command.
 PROMOTE_CMD  = os.environ.get("MTIC_PROMOTE_CMD", "")
 
@@ -158,7 +160,8 @@ One-way; un-promoted changes are discarded on the next refresh.</p>
 
 TOOLS = """
 <div class=card style="margin-top:20px">
-  <h1 style="font-size:16px;margin:0 0 4px">Data store</h1>
+  <h1 style="font-size:16px;margin:0 0 10px">More tools</h1>
+  <p style="margin:0 0 8px"><a style="color:#60a5fa;font-weight:600" href="{ask}" target="_blank" rel="noopener">Ask MIDD &mdash; questions &amp; corrections &rarr;</a></p>
   <p style="margin:0"><a style="color:#60a5fa" href="{pb}" target="_blank" rel="noopener">Open the data store (PocketBase) &rarr;</a></p>
   <p class=hint>Inspect what was extracted. Corrections go through Ask MIDD, not hand-edits.</p>
   {promote}
@@ -173,7 +176,7 @@ def health():
 @app.get("/", response_class=HTMLResponse)
 def home():
     options = "".join(f"<option>{html.escape(k)}</option>" for k in FOLDERS)
-    tools = TOOLS.format(pb=PB_ADMIN_URL,
+    tools = TOOLS.format(ask=ASK_URL, pb=PB_ADMIN_URL,
                          promote=("" if IS_PROD or not PROMOTE_CMD else PROMOTE_FORM))
     return shell("MTIC Uploader", "", FORM.format(options=options) + tools)
 
