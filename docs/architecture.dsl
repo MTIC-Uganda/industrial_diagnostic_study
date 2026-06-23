@@ -1,146 +1,125 @@
-workspace "MTIC Industrial Diagnostic Study — Value Chain Intelligence System" "Automated pipeline: Jerome uploads data → agentic ingest/synthesize/review → web dashboard updated. Phase 1 (manual) is live; Phases 2–3 (automation) are in progress." {
+workspace "MIDD — Manufacturing Industry Diagnostics Dashboard" "As-built 2026-06-23: Jerome uploads a document via the web uploader (no Git) -> the Claude CLI brain on Hetzner reads his intent and extracts the data into one PocketBase datastore -> the dashboard rebuilds from it. Ask MIDD is the scoped feedback/return channel. Domain midd-ug.com over HTTPS." {
 
     model {
         # People
-        solomon   = person "Solomon Ariho" "Lead developer. Builds and iterates on the web dashboard. Pushes branches; main triggers prod deploy."
-        hillary   = person "Hillary Arinda" "Technical advisor and pipeline engineer. Sets up infra, builds agentic chain, reviews PRs."
-        jerome    = person "Jerome Nuwabaasa" "MTIC client. Uploads source data with context notes to the repo. Defines quality matrix (pass/fail criteria)."
-        commissioner = person "Commissioner (MTIC)" "Final authority. Reviews the public dashboard; approves strategic outputs."
-        colleagues = person "MTIC Colleagues" "Reviewers. Access the public prod URL to review value chain assessments and give feedback."
+        jerome    = person "Jerome Nuwabaasa" "MTIC client. Uploads source documents via the web uploader (no Git), reviews the dashboard, and asks/corrects through Ask MIDD."
+        solomon   = person "Solomon Ariho" "Lead developer. Builds the dashboard frontend in the repo; reads the shared record (ADRs, STATUS, TASKS) for instructions; pushes branches."
+        hillary   = person "Hillary Arinda" "Technical lead / pipeline+infra engineer. Owns the harness, the agents, the datastore, and the domain."
+        commissioner = person "Commissioner (MTIC)" "Reviews the public dashboard. Wants high-level numbers."
+        colleagues = person "MTIC Colleagues" "View the public dashboard."
 
         # External systems
-        github    = softwareSystem "GitHub (MTIC-Uganda org)" "Version control, CI/CD trigger, PR review gate." "External"
-        itcTrade  = softwareSystem "ITC TradeMap" "International trade statistics. Automated extraction via trademap scripts." "External"
-        whatsapp  = softwareSystem "WhatsApp (Hillary's Agent)" "Push notifications at each pipeline stage: upload detected, ingestion done, review passed/failed, deploy complete." "External"
-        hetzner   = softwareSystem "Hetzner Server (89.167.121.193)" "Always-on server. Hosts staging and prod. Runs agentic pipeline workers (Phase 2+)."
+        github    = softwareSystem "GitHub (MTIC-Uganda)" "The shared record + version control + CI/CD trigger. Holds code, ADRs, STATUS.md, TASKS.md, meeting transcripts." "External"
+        itcTrade  = softwareSystem "ITC TradeMap" "Trade statistics, used for export indicators." "External"
+        cloudflare = softwareSystem "Cloudflare (midd-ug.com)" "DNS + proxy + HTTPS (SSL Full) in front of all surfaces. Zero Trust Access can gate the internal tools." "External"
+        claudeMax = softwareSystem "Claude (Max plan)" "The model behind the Claude CLI on the host. Powers Ask MIDD, ingestion, the orchestrator. Hillary's plan for now; MIDD gets its own key when containerized (ADR-012)." "External"
 
-        # The full pipeline system
-        pipeline = softwareSystem "Value Chain Intelligence Pipeline" "End-to-end data-to-dashboard automation." {
+        # The MIDD system, all hosted on Hetzner 89.167.121.193
+        midd = softwareSystem "MIDD Platform" "Document-to-dashboard pipeline with a scoped brain and feedback loop, staging + prod." {
 
-            # ── DATA LAYER ──────────────────────────────────────────────────
-            pocketbase = container "PocketBase — Data Backend" "Live database on Hetzner port 8090. Jerome edits data via web UI (no Git, no terminal). REST API for CI reads live data. SQLite store at /var/lib/pocketbase/pb_data." "PocketBase/SQLite"
+            # ── INTAKE (the doors) ─────────────────────────────────────────
+            uploader = container "Document Uploader" "FastAPI web app. Jerome picks a value chain, writes full intent, attaches any document. Saves it to data/<value-chain>/ + a <file>.task.md intent sidecar, commits to the repo. Rejects duplicates by content hash. Staging :8210, prod :8211." "Python/FastAPI"
+            askmidd  = container "Ask MIDD (scoped brain)" "FastAPI chat. The team queries the project's own brain, scoped to the repo records. Read-only v1: answers + logs feedback. The feedback/return channel of the loop. Staging :8220, prod :8221." "Python/FastAPI + Claude CLI"
 
-            rawData = container "Raw Data Store" "Jerome uploads: PDFs, DOCX, XLSX with context notes (legacy). Also TradeMap CSV exports. Path: data/ in repo." "PDF/XLSX/DOCX/Markdown"
+            # ── BRAIN / AGENTS (the workers, on the host) ──────────────────
+            claudeCli = container "Claude CLI (brain engine)" "/usr/bin/claude on the host, headless. The single engine behind Ask MIDD, ingestion, and the orchestrator. No Anthropic API key; uses the Max plan." "Claude Code CLI"
+            orchestrator = container "Upload Orchestrator" "scripts/process_upload.py. On upload: CLI reads the intent, routes register->deterministic parse / sector->LLM ingestion, seeds PocketBase, rebuilds + publishes the dashboard, self-checks." "Python"
+            ingestionAgent = container "Ingestion Agent" "Extracts PDF/DOCX/XLSX (pdfplumber/python-docx/openpyxl) via the Claude CLI; folder-routed; reads the .task.md intent sidecar. Writes diagnostic_datapoints (sector docs)." "Python/Claude CLI"
+            synthesisAgent = container "Synthesis Agent" "Datastore rows -> report/dashboard content." "Python/Claude CLI"
+            reviewAgent = container "Review Agent" "Independent quality gate before publish." "Python/Claude CLI"
+            deterministicParser = container "Register Parser" "scripts/extract_industries_to_records.py. Deterministic pypdf parse of the National Industries Register -> 7,011 establishment rows. Brittle to layout changes (then the LLM path is needed)." "Python/pypdf"
 
-            schema = container "Value Chain Schema" "Structured field definitions per stage per chain: production capacity, utilisation %, imports, exports (TradeMap), Tenfold 2040 targets, data gap flags. Authored by Jerome. Path: data/schema/." "Markdown/JSON"
+            # ── DATASTORE (single source of truth, ADR-011) ───────────────
+            pocketbase = container "PocketBase — Datastore" "The one datastore. industries = canonical establishment table (1 row per reg_number, updated in place; curated map factories merged as FAC-*). Plus value_chains, kpi_indicators, diagnostic_datapoints. Prod :8090, staging :8091." "PocketBase/SQLite"
 
-            qualityMatrix = container "Quality Matrix" "Jerome's pass/fail criteria for each section of the diagnostic. The review agent scores against this. Path: docs/quality-matrix.md." "Markdown"
+            # ── BUILD + SURFACES ──────────────────────────────────────────
+            dashboardGen = container "Dashboard Generator" "scripts/generate_dashboard.py. Treemaps + locations map aggregate from PocketBase industries (static JSON fallback). Fills the template." "Python"
+            reactBuild = container "React Sankey Build" "app/frontend -> dist (D3-sankey), embedded as sankey.html." "Node/Vite"
+            dashboard = container "Dashboard (static)" "The public diagnostic dashboard. Prod midd-ug.com (:8201), staging staging.midd-ug.com (:8200)." "Static HTML/Nginx"
 
-            synthesizedDB = container "Synthesized Data Store" "Structured JSON records per chain per stage. Output of the ingestion and synthesis agents. Path: data/synthesized/." "JSON"
-
-            # ── AGENT LAYER (Phase 2+) ─────────────────────────────────────
-            ingestionAgent = container "Ingestion Agent" "Triggered by GitHub push to data/. Reads the uploaded file + Jerome's context note. Maps content to schema fields. Writes JSON to synthesized store. Flags unmapped fields as data gaps. (Phase 2)" "Python/Claude Code"
-
-            synthesisAgent = container "Synthesis Agent" "Reads all JSON for one value chain. Produces: current status assessment, gap vs Tenfold 2040, ranked bottleneck list, project profile sketches. Output: report/synthesized/<chain>/assessment.md. (Phase 2)" "Python/Claude Code"
-
-            reviewAgent = container "Review Agent" "Validates synthesis output against Jerome's quality matrix. PASS: opens PR to main. FAIL: sends specific feedback via WhatsApp and routes back to synthesis. Self-healing loop until PASS or human override. (Phase 2)" "Python/Claude Code"
-
-            # ── BUILD LAYER ─────────────────────────────────────────────────
-            dashboardGen = container "Dashboard Generator" "reads PocketBase REST API → generates sources-of-truth.html + sankey.html. Runs on every CI push. Path: scripts/generate_dashboard.py" "Python"
-
-            reactBuild = container "React Build (Vite)" "Builds app/frontend → dist/. React + D3-sankey. Served as sankey.html inside the dashboard." "Node.js/Vite"
-
-            # ── CI/CD LAYER ────────────────────────────────────────────────
-            ciPipeline = container "GitHub Actions Pipeline" "Triggered on every push. (1) Generate dashboard from PocketBase. (2) Build React app. (3) Deploy to staging with self-heal (3 attempts, 10s backoff). (4) Health check (timeout: 15min). (5) Staging pass → promote to prod + auto-merge to main (timeout: 10min). Merge conflict → warning only. Short URL: https://tinyurl.com/28lxntmc" "YAML"
-
-            # ── PRESENTATION LAYER ─────────────────────────────────────────
-            stagingApp = container "Staging Dashboard" "Live preview of every branch push. URL: http://89.167.121.193:8200. Dual-app: sources-of-truth.html (main) + sankey.html (iframed). Reviewers check here before main." "Static HTML/Nginx"
-
-            prodApp = container "Production Dashboard" "Public-facing value chain dashboard. URL: http://89.167.121.193:8201 (short: https://tinyurl.com/28lxntmc). Promoted from staging on main only. Jerome shares this with MTIC colleagues and Commissioner." "Static HTML/Nginx"
-
-            # ── SCRIPTS ───────────────────────────────────────────────────
-            buildScripts = container "Report Build Scripts" "Assemble markdown chapters into Word/PPTX deliverables. Separate from the dashboard pipeline. scripts/build_reports_docx.py etc." "Python"
+            # ── SHARED RECORD + ROUTING ───────────────────────────────────
+            record = container "Shared Record" "The single source of decisions + state all agents read: ADRs (docs/adr), STATUS.md (live snapshot), TASKS.md (per-owner queue), meeting transcripts, CLAUDE.md. Brain reads a read-only clone pulled every 5 min." "Markdown/Git"
+            nginx = container "nginx reverse proxy" "Host-routes midd-ug.com subdomains to the local services; self-signed origin cert behind Cloudflare Full." "Nginx"
+            ci = container "GitHub Actions CI" "On push: build dashboard (from PocketBase) -> deploy staging -> promote prod -> auto-merge to main -> self-heal. Seed PocketBase job." "YAML"
         }
 
-        # ── RELATIONSHIPS: people → systems ──────────────────────────────
-        jerome    -> pocketbase   "Edits data via web UI (no Git, no terminal)"
-        jerome    -> qualityMatrix "Authors and maintains pass/fail criteria"
-        solomon   -> pipeline  "Pushes dashboard code to branches; main triggers deploy"
-        hillary   -> pipeline  "Builds and maintains the agentic pipeline and CI/CD"
-        colleagues -> prodApp  "Reviews value chain assessments via public URL"
-        commissioner -> prodApp "Reviews strategic outputs"
+        # ── People -> doors ───────────────────────────────────────────────
+        jerome -> uploader "Uploads documents with full intent (no Git)"
+        jerome -> askmidd "Asks questions / leaves corrections"
+        jerome -> dashboard "Reviews"
+        solomon -> github "Codes the dashboard; reads ADRs/STATUS/TASKS for instructions; pushes branches"
+        hillary -> midd "Builds and operates the harness, agents, datastore, domain"
+        commissioner -> dashboard "Reviews the public dashboard"
+        colleagues -> dashboard "View"
 
-        # ── DATA FLOW: PocketBase → Dashboard Generation (Phase 1+) ──────
-        pocketbase -> dashboardGen "CI fetches live data via REST API"
-        dashboardGen -> stagingApp "Outputs sources-of-truth.html + sankey.html"
+        # ── Data loop: document -> brain -> datastore -> dashboard ────────
+        uploader -> github "Commits file + intent sidecar to data/<value-chain>/"
+        uploader -> orchestrator "Triggers processing on upload"
+        orchestrator -> claudeCli "Reads the intent (LLM understands)"
+        orchestrator -> deterministicParser "Register -> establishment rows"
+        orchestrator -> ingestionAgent "Sector document -> datapoints"
+        ingestionAgent -> claudeCli "Extraction + mapping"
+        deterministicParser -> pocketbase "Seeds industries"
+        ingestionAgent -> pocketbase "Seeds diagnostic_datapoints"
+        orchestrator -> dashboardGen "Rebuild after seeding"
+        dashboardGen -> pocketbase "Reads industries/value_chains/kpis (treemaps + locations)"
+        dashboardGen -> dashboard "Publishes the page"
 
-        # ── DATA FLOW: ingest → synthesize → review (Phase 2+) ───────────
-        rawData   -> ingestionAgent  "File + context note read on push event"
-        schema    -> ingestionAgent  "Field definitions guide extraction"
-        ingestionAgent -> synthesizedDB "Writes structured JSON, flags data gaps"
-        synthesizedDB  -> synthesisAgent "All stage JSONs for one chain"
-        qualityMatrix  -> reviewAgent    "Pass/fail criteria loaded at review time"
-        synthesisAgent -> reviewAgent    "Assessment markdown submitted for review"
-        reviewAgent    -> ciPipeline     "PASS: triggers PR to main"
-        reviewAgent    -> whatsapp       "FAIL: pushes specific gap feedback to Hillary/Solomon"
-        reviewAgent    -> synthesisAgent "FAIL: feedback routed back, loop repeats"
+        # ── Feedback / return channel ─────────────────────────────────────
+        askmidd -> claudeCli "Scoped query"
+        askmidd -> record "Answers strictly from the project records"
+        jerome -> pocketbase "DOES NOT edit directly (ADR-012: corrections go through the LLM)"
 
-        # ── CI/CD FLOW ────────────────────────────────────────────────────
-        github    -> ciPipeline  "Push event triggers pipeline"
-        ciPipeline -> dashboardGen "Generate dashboard from PocketBase"
-        ciPipeline -> reactBuild "Build React Sankey app"
-        ciPipeline -> stagingApp "Deploy with self-heal retry (3×, timeout 15min)"
-        ciPipeline -> prodApp    "main only: rsync staging → prod (timeout 10min)"
-        ciPipeline -> whatsapp   "Deploy complete notification to MTIC group"
+        # ── Code loop + sync ──────────────────────────────────────────────
+        github -> ci "Push triggers build/deploy/promote/seed"
+        ci -> dashboardGen "Build dashboard from PocketBase"
+        ci -> reactBuild "Build Sankey"
+        ci -> dashboard "Deploy staging -> promote prod -> auto-merge"
+        record -> solomon "Instructions: ADRs, STATUS, TASKS"
+        record -> askmidd "Brain reads a read-only clone (pulled every 5 min)"
 
-        # ── EXTERNAL DATA ─────────────────────────────────────────────────
-        itcTrade  -> rawData     "TradeMap CSV exports stored in data/"
-
-        # ── REPORT TRACK (separate from dashboard) ────────────────────────
-        synthesizedDB -> buildScripts "Phase 3: synthesized data feeds report assembly"
-        buildScripts -> prodApp       "Report sections rendered in dashboard"
+        # ── Edge / external ───────────────────────────────────────────────
+        cloudflare -> nginx "Proxies HTTPS to the host"
+        nginx -> dashboard "Routes the dashboard subdomains"
+        nginx -> uploader "Routes the uploader subdomains"
+        nginx -> askmidd "Routes the ask subdomains"
+        claudeCli -> claudeMax "Runs on the Max plan"
+        itcTrade -> github "TradeMap CSVs in data/trademap"
     }
 
     views {
-        systemContext pipeline "SystemContext" "People and external systems around the pipeline." {
+        systemContext midd "SystemContext" "People and external systems around MIDD." {
             include *
             autoLayout lr
         }
-
-        container pipeline "Containers" "Internal structure and data flow of the pipeline." {
+        container midd "Containers" "MIDD internal structure: intake, brain, datastore, build, surfaces, record." {
             include *
             autoLayout tb
         }
-
-        dynamic pipeline "DataFlow" "How a Jerome data upload flows through the full pipeline to the live dashboard." {
-            jerome -> rawData "1. Jerome pushes data file + context note to data/ branch"
-            rawData -> ingestionAgent "2. Push event triggers ingestion agent"
-            schema -> ingestionAgent "3. Schema loaded for field mapping"
-            ingestionAgent -> synthesizedDB "4. Structured JSON written; data gaps flagged"
-            synthesizedDB -> synthesisAgent "5. Synthesis agent reads all stage data for one chain"
-            qualityMatrix -> reviewAgent "6. Quality matrix loaded"
-            synthesisAgent -> reviewAgent "7. Assessment submitted to review agent"
-            reviewAgent -> ciPipeline "8a. PASS: PR opened to main, CI triggered"
-            ciPipeline -> stagingApp "9a. Staging updated"
-            ciPipeline -> prodApp "10a. Prod promoted (main only)"
-            ciPipeline -> whatsapp "11. WhatsApp notification: prod live"
-            reviewAgent -> whatsapp "8b. FAIL: specific gap feedback sent to team"
-            reviewAgent -> synthesisAgent "8c. FAIL: feedback looped back for re-synthesis"
+        dynamic midd "UploadFlow" "A document upload, end to end." {
+            jerome -> uploader "1. Upload document + full intent (no Git)"
+            uploader -> github "2. Commit to data/<value-chain>/ + .task.md sidecar"
+            uploader -> orchestrator "3. Trigger processing"
+            orchestrator -> claudeCli "4. CLI reads the intent (understands what to do)"
+            orchestrator -> deterministicParser "5a. Register -> establishment rows"
+            orchestrator -> ingestionAgent "5b. Sector doc -> datapoints (via CLI)"
+            deterministicParser -> pocketbase "6. Seed industries (single source)"
+            orchestrator -> dashboardGen "7. Rebuild from PocketBase"
+            dashboardGen -> dashboard "8. Publish; treemaps + locations from industries"
             autoLayout lr
         }
-
+        dynamic midd "FeedbackFlow" "Asking and correcting through the brain, not the database." {
+            jerome -> askmidd "1. Ask a question or leave a correction"
+            askmidd -> record "2. Brain reads the project records"
+            askmidd -> claudeCli "3. Scoped answer (Max plan)"
+            askmidd -> jerome "4. Answer + feedback logged (corrections then flow through ingestion, never direct PocketBase)"
+            autoLayout lr
+        }
         styles {
-            element "Person" {
-                shape Person
-                background #1168BD
-                color #ffffff
-            }
-            element "External" {
-                background #888888
-                color #ffffff
-            }
-            element "Software System" {
-                background #1168BD
-                color #ffffff
-            }
-            element "Container" {
-                background #438DD5
-                color #ffffff
-            }
-            element "Component" {
-                background #85BBF0
-                color #000000
-            }
+            element "Person" { shape Person background #1168BD color #ffffff }
+            element "External" { background #888888 color #ffffff }
+            element "Software System" { background #1168BD color #ffffff }
+            element "Container" { background #438DD5 color #ffffff }
         }
     }
 }
