@@ -43,3 +43,9 @@ cp report/sources-of-truth.html /var/www/mtic-prod/index.html
 
 IND=$(curl -s "http://127.0.0.1:8090/api/collections/industries/records?perPage=1" | python3 -c "import sys,json;print(json.load(sys.stdin).get('totalItems','?'))" 2>/dev/null)
 echo "[promote] DONE — production now reflects the approved staging state (industries=$IND)."
+
+# Acknowledge the promotion in the MTIC WhatsApp group (data promotions are not git
+# events, so the receiver can't see them — notify directly via the bridge).
+curl -s -X POST http://localhost:8080/api/send -H 'Content-Type: application/json' \
+  -d "{\"recipient\":\"256775102684-1629659312@g.us\",\"message\":\"MIDD: a reviewed document was promoted to production. The live dashboard now reflects it (industries=$IND).\"}" \
+  >/dev/null 2>&1 || true
