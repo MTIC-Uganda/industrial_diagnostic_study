@@ -70,6 +70,10 @@ workspace "MIDD — Manufacturing Industry Diagnostics Dashboard" "As-built 2026
         askmidd -> record "Answers strictly from the project records"
         jerome -> pocketbase "DOES NOT edit directly (ADR-012: corrections go through the LLM)"
 
+        # ── Environment model (ADR-013): code up, data down, data never up ──
+        ci -> dashboard "CODE promotes UP: staging dashboard -> prod dashboard on health"
+        pocketbase -> pocketbase "DATA refreshes DOWN only: prod PocketBase -> staging (refresh_staging_from_prod.sh); never staging -> prod"
+
         # ── Code loop + sync ──────────────────────────────────────────────
         github -> ci "Push triggers build/deploy/promote/seed"
         ci -> dashboardGen "Build dashboard from PocketBase"

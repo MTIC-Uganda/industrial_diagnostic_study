@@ -66,3 +66,10 @@ Enable the repo's git hooks so the ADR<->DSL gate works locally before you even 
 
 Then a commit that changes an ADR without docs/architecture.dsl is blocked at commit time
 (--no-verify to override). CI enforces the same gate post-push for everyone.
+
+## Environment model (ADR-013): code up, data down
+
+- CODE/dashboard: staging -> prod promotion via CI (the built dashboard).
+- UPLOADS: no promotion. Staging uploader = rehearsal; prod uploader = real. Re-upload the same doc to prod when happy (deterministic, so it matches staging).
+- POCKETBASE: prod is the source of truth; staging is a disposable copy. Refresh prod -> staging with scripts/refresh_staging_from_prod.sh. Never staging -> prod.
+- Rule: code flows up, data flows down, data never flows up.
