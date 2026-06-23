@@ -29,6 +29,11 @@ PUSH       = os.environ.get("MTIC_PUSH", "0") == "1"
 INGEST_CMD = os.environ.get("MTIC_INGEST_CMD", "")
 IS_PROD    = ENV == "prod"
 STAGING_BRANCH = "uploads-staging"
+# The matching PocketBase admin, reachable from this uploader (gated by its own
+# admin login). Inspection surface; data corrections go through Ask MIDD.
+PB_ADMIN_URL = "https://db.midd-ug.com/_/" if IS_PROD else "https://staging-db.midd-ug.com/_/"
+# Staging only: the one-way "Apply to production" promotion command.
+PROMOTE_CMD  = os.environ.get("MTIC_PROMOTE_CMD", "")
 
 FOLDERS = {
     "Iron & Steel": "iron-steel",
@@ -139,6 +144,27 @@ and your description is kept with it as the working instructions.</div>
 </div>"""
 
 
+PROMOTE_FORM = """
+<hr style="border-color:#25303d;margin:18px 0">
+<h1 style="font-size:16px;margin:0 0 4px">Apply to production</h1>
+<p class=hint style="margin-bottom:6px">When this staging result is good, promote it.
+This copies the approved staging data to production and rebuilds the live dashboard.
+One-way; un-promoted changes are discarded on the next refresh.</p>
+<form method=post action=promote onsubmit="return confirm('Apply the CURRENT staging state to PRODUCTION? This updates the live dashboard.');">
+  <label>Password</label>
+  <input type=password name=password required>
+  <button type=submit style="background:#166534">Apply to production</button>
+</form>"""
+
+TOOLS = """
+<div class=card style="margin-top:20px">
+  <h1 style="font-size:16px;margin:0 0 4px">Data store</h1>
+  <p style="margin:0"><a style="color:#60a5fa" href="{pb}" target="_blank" rel="noopener">Open the data store (PocketBase) &rarr;</a></p>
+  <p class=hint>Inspect what was extracted. Corrections go through Ask MIDD, not hand-edits.</p>
+  {promote}
+</div>"""
+
+
 @app.get("/health")
 def health():
     return {"ok": True, "env": ENV}
@@ -147,7 +173,32 @@ def health():
 @app.get("/", response_class=HTMLResponse)
 def home():
     options = "".join(f"<option>{html.escape(k)}</option>" for k in FOLDERS)
-    return shell("MTIC Uploader", "", FORM.format(options=options))
+    tools = TOOLS.format(pb=PB_ADMIN_URL,
+                         promote=("" if IS_PROD or not PROMOTE_CMD else PROMOTE_FORM))
+    return shell("MTIC Uploader", "", FORM.format(options=options) + tools)
+
+
+@app.post("/promote", response_class=HTMLResponse)
+def promote(password: str = Form(...)):
+    """Staging-only: one-way 'Apply to production'. Runs the promote script
+    (staging PocketBase -> prod + rebuild prod dashboard). Never on prod."""
+    if IS_PROD or not PROMOTE_CMD:
+        return shell("Not available", "", "<div class=card><p class=err>Promotion runs "
+                     "from the staging uploader only.</p><p><a style='color:#60a5fa' "
+                     "href='/'>Back</a></p></div>")
+    if password != PASSWORD:
+        return shell("Denied", "", "<div class=card><p class=err>Wrong password.</p>"
+                     "<p><a style='color:#60a5fa' href='/'>Back</a></p></div>")
+    env = dict(os.environ); env["HOME"] = "/root"
+    r = subprocess.run(PROMOTE_CMD, shell=True, capture_output=True, text=True, env=env)
+    out = (r.stdout + r.stderr)[-2500:]
+    ok = r.returncode == 0
+    body = (f"<h1 class={'ok' if ok else 'err'}>"
+            f"{'Applied to production' if ok else 'Promotion failed'}</h1>"
+            f"<div class=card><p>{'The approved staging state is now live — the prod dashboard is rebuilt.' if ok else 'Production was NOT changed. See the output below.'}</p>"
+            f"<pre>{html.escape(out)}</pre>"
+            f"<p><a style='color:#60a5fa' href='/'>Back</a></p></div>")
+    return shell("Apply to production", "", body)
 
 
 @app.post("/upload", response_class=HTMLResponse)
