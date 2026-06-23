@@ -23,8 +23,13 @@ cp -a "$STG/data.db" "$PROD/data.db"
 cp -a "$STG/logs.db" "$PROD/logs.db" 2>/dev/null || true
 
 echo "[promote] restoring prod admins (staging copy overwrote the admin table)..."
-/usr/local/bin/pocketbase admin create automation@mtic.local AutoMtic2026Prod --dir="$PROD" >/dev/null 2>&1 \
-  || /usr/local/bin/pocketbase admin update automation@mtic.local AutoMtic2026Prod --dir="$PROD" >/dev/null 2>&1 || true
+while read -r email pass; do
+  /usr/local/bin/pocketbase admin create "$email" "$pass" --dir="$PROD" >/dev/null 2>&1 \
+    || /usr/local/bin/pocketbase admin update "$email" "$pass" --dir="$PROD" >/dev/null 2>&1 || true
+done <<'ADMINS'
+admin@midd-ug.com MiddAdmin2026
+automation@mtic.local AutoMtic2026Prod
+ADMINS
 
 echo "[promote] starting prod PocketBase..."
 systemctl start pocketbase

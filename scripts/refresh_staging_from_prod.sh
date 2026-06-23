@@ -20,9 +20,14 @@ echo "[refresh] copying prod data -> staging..."
 cp -a "$PROD_DIR/data.db" "$STG_DIR/data.db"
 cp -a "$PROD_DIR/logs.db" "$STG_DIR/logs.db" 2>/dev/null || true
 
-echo "[refresh] restoring the staging admin (prod copy overwrote the admin table)..."
-/usr/local/bin/pocketbase admin create "$STG_ADMIN_EMAIL" "$STG_ADMIN_PASS" --dir="$STG_DIR" >/dev/null 2>&1 \
-  || /usr/local/bin/pocketbase admin update "$STG_ADMIN_EMAIL" "$STG_ADMIN_PASS" --dir="$STG_DIR" >/dev/null 2>&1 || true
+echo "[refresh] restoring the staging admins (prod copy overwrote the admin table)..."
+while read -r email pass; do
+  /usr/local/bin/pocketbase admin create "$email" "$pass" --dir="$STG_DIR" >/dev/null 2>&1 \
+    || /usr/local/bin/pocketbase admin update "$email" "$pass" --dir="$STG_DIR" >/dev/null 2>&1 || true
+done <<ADMINS
+admin@midd-ug.com MiddAdmin2026
+$STG_ADMIN_EMAIL $STG_ADMIN_PASS
+ADMINS
 
 echo "[refresh] starting staging PocketBase..."
 systemctl start pocketbase-staging
