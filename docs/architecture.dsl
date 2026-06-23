@@ -19,7 +19,7 @@ workspace "MIDD — Manufacturing Industry Diagnostics Dashboard" "As-built 2026
 
             # ── INTAKE (the doors) ─────────────────────────────────────────
             uploader = container "Document Uploader" "FastAPI web app. Jerome picks a value chain, writes full intent, attaches any document. Saves it to data/<value-chain>/ + a <file>.task.md intent sidecar, commits to the repo. Rejects duplicates by content hash. Staging :8210, prod :8211." "Python/FastAPI"
-            askmidd  = container "Ask MIDD (scoped brain)" "FastAPI chat. The team queries the project's own brain, scoped to the repo records. Read-only v1: answers + logs feedback. The feedback/return channel of the loop. Staging :8220, prod :8221." "Python/FastAPI + Claude CLI"
+            askmidd  = container "Ask MIDD (scoped brain)" "FastAPI chat. Team-gated /ask (Max-plan CLI, windowed memory) on staging :8220 / prod :8221. ALSO a PUBLIC /api/ask (ADR-014): Haiku, rate-limited per-IP+global, browser-supplied memory, plain prose — served same-origin at midd-ug.com/api/ask for the public dashboard chat bubble." "Python/FastAPI + Claude CLI"
 
             # ── BRAIN / AGENTS (the workers, on the host) ──────────────────
             claudeCli = container "Claude CLI (brain engine)" "/usr/bin/claude on the host, headless. The single engine behind Ask MIDD, ingestion, and the orchestrator. No Anthropic API key; uses the Max plan." "Claude Code CLI"
