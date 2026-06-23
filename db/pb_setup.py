@@ -207,6 +207,17 @@ COLLECTIONS = [
             sel('status', ['active', 'inactive', 'unverified']),
             text('source'),
             text('notes'),                        # free-text field for manual corrections/annotations
+            # Facility columns (ADR-011): the curated map factories are merged in
+            # here so the locations map and the treemaps read one table.
+            text('chain_slug'),
+            text('chain_name'),
+            text('location'),
+            text('capacity_installed'),
+            text('capacity_utilised'),
+            text('employees'),
+            text('established'),
+            text('ownership'),
+            text('exports'),
         ],
     },
     {
