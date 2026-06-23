@@ -173,11 +173,22 @@ def health():
     return {"ok": True, "env": ENV}
 
 
+PROD_NOTICE = """
+<h1>Uploading happens in staging</h1>
+<div class=sub>Direct uploads to production are turned off on purpose. The one way to change
+the live dashboard is: upload to the <b>staging</b> uploader, review it there, then click
+<b>Apply to production</b>. Every change is reviewed before it goes live.</div>
+<div class=card><p style="margin:0"><a style="color:#60a5fa;font-weight:600"
+href="https://staging-upload.midd-ug.com">Go to the staging uploader &rarr;</a></p></div>"""
+
+
 @app.get("/", response_class=HTMLResponse)
 def home():
-    options = "".join(f"<option>{html.escape(k)}</option>" for k in FOLDERS)
     tools = TOOLS.format(ask=ASK_URL, pb=PB_ADMIN_URL,
                          promote=("" if IS_PROD or not PROMOTE_CMD else PROMOTE_FORM))
+    if IS_PROD:
+        return shell("MTIC Uploader", "", PROD_NOTICE + tools)
+    options = "".join(f"<option>{html.escape(k)}</option>" for k in FOLDERS)
     return shell("MTIC Uploader", "", FORM.format(options=options) + tools)
 
 
@@ -207,6 +218,11 @@ def promote(password: str = Form(...)):
 @app.post("/upload", response_class=HTMLResponse)
 async def upload(password: str = Form(...), value_chain: str = Form(...),
                  intent: str = Form(...), file: UploadFile = File(...)):
+    if IS_PROD:
+        return shell("Disabled", "", "<div class=card><p class=err>Direct uploads to "
+                     "production are turned off. Upload to staging, review, then use "
+                     "<b>Apply to production</b>.</p><p><a style='color:#60a5fa' "
+                     "href='https://staging-upload.midd-ug.com'>Staging uploader &rarr;</a></p></div>")
     if password != PASSWORD:
         return shell("Denied", "", "<div class=card><p class=err>Wrong password.</p>"
                      "<p><a style='color:#60a5fa' href='/'>Back</a></p></div>")
