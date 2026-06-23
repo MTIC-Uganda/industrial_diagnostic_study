@@ -28,6 +28,11 @@ REPO     = Path(os.environ.get("MIDD_REPO", "/opt/mtic-uploader/repo"))
 PASSWORD = os.environ.get("MIDD_PASSWORD", "changeme")
 IS_PROD  = ENV == "prod"
 FEEDBACK_LOG = Path(f"/opt/midd-brain/feedback-{ENV}.jsonl")
+# Windowed conversation memory, mirroring the WhatsApp agent: replay the last few
+# exchanges so follow-ups work, but cap by turns AND characters so a long session
+# can never overflow the model's context (the WhatsApp agent's Groq-413 lesson).
+HISTORY_TURNS      = 8
+HISTORY_CHAR_LIMIT = 12000
 
 SCOPE = (
     "You are the assistant for the MIDD project (Manufacturing Industry Diagnostics "
@@ -42,6 +47,33 @@ SCOPE = (
 )
 
 app = FastAPI()
+
+
+def recent_history():
+    """The last few Q&A exchanges from this env's feedback log, as conversation
+    memory. Windowed exactly like the WhatsApp agent: keep the last HISTORY_TURNS
+    turns, then drop the oldest until under HISTORY_CHAR_LIMIT, so the injected
+    history is bounded and a long session cannot overflow the context."""
+    if not FEEDBACK_LOG.exists():
+        return ""
+    try:
+        lines = FEEDBACK_LOG.read_text(encoding="utf-8").strip().splitlines()
+    except Exception:
+        return ""
+    turns = []
+    for ln in lines[-HISTORY_TURNS:]:
+        try:
+            e = json.loads(ln)
+            turns.append(f"Q: {e.get('q','')}\nMIDD: {e.get('a','')}")
+        except Exception:
+            continue
+    # sliding window by characters — drop oldest turns until under the cap
+    while turns and sum(len(t) for t in turns) > HISTORY_CHAR_LIMIT:
+        turns.pop(0)
+    if not turns:
+        return ""
+    return ("EARLIER IN THIS CONVERSATION (oldest first; for context on follow-ups "
+            "like 'what about the other one?'):\n\n" + "\n\n".join(turns) + "\n\n")
 
 
 def shell(title, inner):
@@ -111,7 +143,7 @@ def ask(password: str = Form(...), q: str = Form(...)):
     env = dict(os.environ); env.setdefault("HOME", "/root")
     try:
         r = subprocess.run([os.environ.get("CLAUDE_BIN", "claude"), "-p", "--output-format", "text"],
-                           input=f"{SCOPE}\n\nQUESTION OR FEEDBACK:\n{q}",
+                           input=f"{SCOPE}\n\n{recent_history()}QUESTION OR FEEDBACK:\n{q}",
                            capture_output=True, text=True, env=env, cwd=str(REPO), timeout=420)
         answer = (r.stdout.strip() or r.stderr.strip() or "(no response)") if r.returncode == 0 \
                  else f"(brain error: {r.stderr.strip()[:300]})"
