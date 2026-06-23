@@ -17,7 +17,7 @@ Config via env:
   MTIC_PUSH       "1" to push to main   (prod sets this)
   MTIC_INGEST_CMD optional shell cmd run after commit (the brain trigger)
 """
-import os, re, subprocess, datetime, html, hashlib
+import os, re, subprocess, datetime, html, hashlib, urllib.parse
 from pathlib import Path
 from fastapi import FastAPI, UploadFile, Form, File
 from fastapi.responses import HTMLResponse
@@ -81,9 +81,19 @@ def prepare_tree():
 def shell(title, color, inner):
     badge = "PRODUCTION" if IS_PROD else "STAGING — rehearsal, not pushed to prod"
     bcol = "#166534" if IS_PROD else "#b45309"
+    # Environment-coloured favicon (green = prod, amber = staging) so the browser
+    # tab itself signals which uploader you are on. An upload-arrow glyph in an
+    # SVG data URI; no separate file to serve.
+    _fav = ("<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'>"
+            f"<rect width='24' height='24' rx='5' fill='{bcol}'/>"
+            "<path d='M12 5l4.2 4.2h-2.8V14h-2.8V9.2H7.8z' fill='#fff'/>"
+            "<rect x='7.6' y='16' width='8.8' height='1.9' rx='0.95' fill='#fff'/></svg>")
+    favicon = "data:image/svg+xml," + urllib.parse.quote(_fav)
+    tab_title = ("MIDD Uploader" if IS_PROD else "MIDD Uploader (staging)")
     return f"""<!doctype html><html><head><meta charset=utf-8>
 <meta name=viewport content="width=device-width,initial-scale=1">
-<title>{html.escape(title)}</title>
+<link rel="icon" href="{favicon}">
+<title>{html.escape(title)} &middot; {tab_title}</title>
 <style>
  body{{font-family:Inter,system-ui,Arial,sans-serif;background:#0f1722;color:#e6edf3;margin:0;padding:0}}
  .bar{{background:{bcol};color:#fff;padding:8px 20px;font-weight:700;font-size:13px;letter-spacing:.3px}}
