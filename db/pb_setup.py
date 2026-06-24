@@ -76,6 +76,8 @@ chain_colors  = json.loads((DATA / 'chain_colors.json').read_text('utf-8'))
 chain_summary = load_csv('chain_summary.csv')
 factories_csv = load_csv('factories.csv')
 kpis          = load_csv('overview_kpis.csv')
+key_indicators_csv  = load_csv('key_indicators.csv')
+key_indicator_cats_csv = load_csv('key_indicator_categories.csv')
 
 chains_by_name = {c['name']: c for c in chains_data}
 
@@ -258,6 +260,54 @@ COLLECTIONS = [
             text('approval_pr'),
         ],
     },
+    {
+        # The 12 Manufacturing Industry Key Indicator cards (2026-06-23 dashboard
+        # review redesign). One row per card. Single source of truth for
+        # generate_dashboard.py's kpi_* chart functions (ADR-011) — replaces
+        # data/dashboard/key_indicators.csv once seeded (CSV stays as the
+        # local-dev/first-deploy fallback).
+        'name': 'key_indicators',
+        'type': 'base',
+        'listRule': '',
+        'viewRule': '',
+        'createRule': None,
+        'updateRule': None,
+        'deleteRule': None,
+        'schema': [
+            text('slug', required=True),
+            text('label'),
+            sel('kind', ['pie', 'donut_multi', 'icon_figure', 'icon_figure_top', 'region_strip', 'bar']),
+            text('value'),
+            num('pct'),
+            text('sub_value'),
+            text('icon'),
+            text('color'),
+            text('rest_color'),
+            text('year'),
+            text('source'),
+            sel('confidence', ['exact', 'estimated', 'indicative']),
+            num('display_order'),
+        ],
+    },
+    {
+        # Category rows for the multi-category donuts (tax, hightech, credit)
+        # and the region-distribution strip (card 8) — one row per slice.
+        'name': 'key_indicator_categories',
+        'type': 'base',
+        'listRule': '',
+        'viewRule': '',
+        'createRule': None,
+        'updateRule': None,
+        'deleteRule': None,
+        'schema': [
+            text('indicator_slug', required=True),  # matches key_indicators.slug
+            text('category', required=True),
+            num('pct'),
+            text('value_label'),
+            sel('highlight', ['0', '1']),
+            num('display_order'),
+        ],
+    },
 ]
 
 # ── Create / update collections ───────────────────────────────────────────────
@@ -410,5 +460,54 @@ for i, r in enumerate(kpis):
     }
     upsert_record('kpi_indicators', 'slug', r['id'], payload)
     print(f'  {r["label"]}')
+
+# ── 3b. key_indicators (the 12 KPI cards, 2026-06-23 redesign) ────────────────
+
+print('\n── Seeding key_indicators ──')
+
+for i, r in enumerate(key_indicators_csv):
+    payload = {
+        'slug':          r['slug'],
+        'label':         r['label'],
+        'kind':          r['kind'],
+        'value':         r.get('value') or '',
+        'pct':           float(r['pct']) if r.get('pct') else None,
+        'sub_value':     r.get('sub_value') or '',
+        'icon':          r.get('icon') or '',
+        'color':         r.get('color') or '',
+        'rest_color':    r.get('rest_color') or '',
+        'year':          r.get('year') or '',
+        'source':        r.get('source') or '',
+        'confidence':    r.get('confidence') or 'estimated',
+        'display_order': i,
+    }
+    upsert_record('key_indicators', 'slug', r['slug'], payload)
+    print(f'  {r["label"]}')
+
+# ── 3c. key_indicator_categories (donut/region-strip slices) ──────────────────
+
+def find_category_record(indicator_slug, category):
+    f = f'(indicator_slug="{indicator_slug}"&&category="{category}")'
+    result = pb('GET', f'/api/collections/key_indicator_categories/records?filter={f}&perPage=1')
+    items = result.get('items', [])
+    return items[0]['id'] if items else None
+
+print('\n── Seeding key_indicator_categories ──')
+
+for i, r in enumerate(key_indicator_cats_csv):
+    payload = {
+        'indicator_slug': r['indicator_slug'],
+        'category':       r['category'],
+        'pct':            float(r['pct']),
+        'value_label':    r.get('value_label') or '',
+        'highlight':      r.get('highlight') or '0',
+        'display_order':  int(r.get('display_order') or i),
+    }
+    existing_id = find_category_record(r['indicator_slug'], r['category'])
+    if existing_id:
+        pb('PATCH', f'/api/collections/key_indicator_categories/records/{existing_id}', payload)
+    else:
+        pb('POST', '/api/collections/key_indicator_categories/records', payload)
+    print(f'  {r["indicator_slug"]}: {r["category"]}')
 
 print('\nSetup complete. Verify at:', f'{PB_URL}/_/')

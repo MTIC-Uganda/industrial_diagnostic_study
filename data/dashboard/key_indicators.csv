@@ -1,0 +1,13 @@
+slug,label,kind,value,pct,sub_value,icon,color,rest_color,year,source,confidence,display_order
+value_added,Manufacturing Value Added,pie,USD 8.1B,14.5,14.5% of GDP,,#1565c0,#e3f2fd,FY2024/25,UBOS,exact,1
+growth,Manufacturing Growth,icon_figure,5.6%,,"year-on-year, up from 2.2% in FY20/21",📈,#2e7d32,,FY2024/25,UBOS,exact,2
+tax,Manufacturing Tax Contribution,donut_multi,,,,,,,FY2024/25,URA,estimated,3
+exports,Manufactured Exports,icon_figure,USD 2.4B,,~12% of total exports,🚢,#1565c0,,2024,ITC TradeMap,estimated,4
+hightech,High-Tech Exports,donut_multi,,,"~3.5% of manufactured exports, USD 85M",,,,2023/24,ITC TradeMap / UNCTAD,indicative,5
+credit,Private Sector Credit,donut_multi,,,,,,,FY2024/25,Bank of Uganda,estimated,6
+establishments,Registered Manufacturing Establishments,icon_figure_top,"7,011",,,🏭,,,August 2025,MTIC National Industries Register,exact,7
+region_dist,Distribution by Region,region_strip,,,,,,,August 2025,MTIC National Industries Register,exact,8
+parks,Establishments in Industrial Parks,pie,166,2.4,~2.4% of registered establishments,,#00838f,#e0f2f1,2025,Uganda Investment Authority,exact,9
+fdi,FDI to Manufacturing,pie,USD 180M,5.5,~5.5% of total FDI,,#c62828,#ffebee,2024,UIA / UNCTAD,estimated,10
+employment,Manufacturing Employment,pie,"~712,000",3.2,~3.2% of total employment,,#558b2f,#f1f8e9,2023/24,UBOS National Human Resource Survey,estimated,11
+variety,Distinct Manufactured Product Categories Exported,bar,~380,7.6,"~7.6% of ~5,000 manufactured HS6 categories traded globally",🌐,#4527a0,,2024,ITC TradeMap,indicative,12

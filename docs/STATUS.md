@@ -26,8 +26,10 @@ Rule: all development and Jerome's experimentation happen on staging first, then
   merged in as `FAC-*` rows.
 - The distribution **treemaps** read `industries` excluding `FAC-*` (the 7,011 register).
 - The industry **locations map** reads `industries` where GPS is present (~574, includes FAC-*).
-- `value_chains` (Sankey + value-chain views), `kpi_indicators` (overview), `diagnostic_datapoints`
-  (value-chain study facts from LLM ingestion).
+- `value_chains` (Sankey + value-chain views), `kpi_indicators` (old 6-card overview, legacy —
+  superseded by the two below but left in place since `refresh_status.py`'s live count still
+  reads it), `key_indicators` + `key_indicator_categories` (the 12 Manufacturing Industry Key
+  Indicator cards, 2026-06-24), `diagnostic_datapoints` (value-chain study facts from LLM ingestion).
 - Current prod `industries`: 7,100 rows (7,011 register + 89 curated).
 
 ## Pipeline
@@ -48,10 +50,10 @@ ADR-011 schema; uploader dedup; domain + HTTPS; single-source migration (map + t
 
 - Solomon: dashboard redesign landed 2026-06-24 (12 indicators as donut/pie with year+source,
   10-fold % /figure toggle, treemap legend/tooltip/back-button) — see TASKS.md for the full
-  per-indicator checklist. **Open:** the 12 indicators + region strip still read from
-  `data/dashboard/*.csv` and `treemap_district.json`, not PocketBase — flagged honestly in
-  TASKS.md rather than repeated silently; migrating these to a `kpi_indicators`-style
-  collection is the next data-architecture item.
+  per-indicator checklist. The 12 indicators + region strip now read from two new PocketBase
+  collections, `key_indicators` and `key_indicator_categories` (db/pb_setup.py defines + seeds
+  both; CI runs it against prod on every push). CSV fallback stays for local dev / before the
+  first seed run lands.
 - Jerome: upload documents (register first, then other establishment/sector reports) on staging.
 - Hillary: deeper harness loop (feedback improves agents; brain auto-updates records),
   automated staging→prod promotion, containerization.

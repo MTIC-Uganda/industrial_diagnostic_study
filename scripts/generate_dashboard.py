@@ -60,7 +60,6 @@ if USE_POCKETBASE:
     print(f'Data source: PocketBase ({PB_URL})')
 
     raw_chains    = pb_get('value_chains', sort='display_order')
-    raw_kpis      = pb_get('kpi_indicators', sort='display_order')
     # Locations map reads from the single `industries` table (ADR-011): every
     # establishment that has GPS, not a separate facilities table. Falls back to
     # the facilities collection if industries has no located rows yet.
@@ -96,15 +95,6 @@ if USE_POCKETBASE:
         'priority_tag':    r.get('priority_tag') or '',
         'priority_color':  r.get('priority_color') or 'blue',
     } for r in raw_chains]
-
-    overview_kpis = [{
-        'id':            r['slug'],
-        'label':         r['label'],
-        'current_value': r.get('current_value') or '',
-        'sub_value':     r.get('sub_value') or '',
-        'confidence':    r.get('confidence') or 'estimated',
-        'source':        r.get('source') or '',
-    } for r in raw_kpis]
 
     chain_colors = {r['name']: r['color'] for r in raw_chains}
 
@@ -163,14 +153,62 @@ if USE_POCKETBASE:
 else:
     print('Data source: local files (data/dashboard/)')
     chain_summary  = load_csv('chain_summary.csv')
-    overview_kpis  = load_csv('overview_kpis.csv')
     chains         = json.loads((DATA / 'chains.json').read_text('utf-8'))
     chain_colors   = json.loads((DATA / 'chain_colors.json').read_text('utf-8'))
     raw_fac        = load_csv('factories.csv')
     factories_list = [{**f, 'loc': f.get('loc', '')} for f in raw_fac]
 
-macro_trend_file = DATA / 'macro_trend.csv'
-macro_trend = load_csv('macro_trend.csv') if macro_trend_file.exists() else []
+if not USE_POCKETBASE:
+    # Local-dev fallback only — when PocketBase is live, macro_trend was
+    # already set above. (This file is committed for local runs, so without
+    # this guard it would silently overwrite the PocketBase-sourced data
+    # every time, regardless of whether PocketBase succeeded.)
+    macro_trend_file = DATA / 'macro_trend.csv'
+    macro_trend = load_csv('macro_trend.csv') if macro_trend_file.exists() else []
+
+# Manufacturing Industry Key Indicators (the 12 cards) + their multi-category
+# breakdowns (tax/hightech/credit donuts, region strip). PocketBase first
+# (ADR-011, single source of truth); local CSV fallback both for local runs
+# and for the first prod deploy after this code lands, before CI's
+# seed-pocketbase job has populated the new collections.
+def _pb_fetch_or_none(collection, sort=None):
+    if not USE_POCKETBASE:
+        return None
+    try:
+        return pb_get(collection, sort=sort)
+    except SystemExit:
+        return None
+
+_raw_key_indicators  = _pb_fetch_or_none('key_indicators', sort='display_order')
+if _raw_key_indicators:
+    key_indicators = [{
+        'slug': r['slug'], 'label': r['label'], 'kind': r['kind'],
+        'value': r.get('value') or '', 'pct': r.get('pct') or '',
+        'sub_value': r.get('sub_value') or '', 'icon': r.get('icon') or '',
+        'color': r.get('color') or '', 'rest_color': r.get('rest_color') or '',
+        'year': r.get('year') or '', 'source': r.get('source') or '',
+        'confidence': r.get('confidence') or 'estimated',
+    } for r in _raw_key_indicators]
+else:
+    if USE_POCKETBASE:
+        print('  (no key_indicators collection in PocketBase yet — using local CSV fallback)')
+    key_indicators = load_csv('key_indicators.csv')
+KEY_INDICATORS = {r['slug']: r for r in key_indicators}
+
+_raw_key_categories = _pb_fetch_or_none('key_indicator_categories', sort='indicator_slug,display_order')
+if _raw_key_categories:
+    key_indicator_categories = [{
+        'indicator_slug': r['indicator_slug'], 'category': r['category'],
+        'pct': r.get('pct') or 0, 'value_label': r.get('value_label') or '',
+        'highlight': '1' if r.get('highlight') == '1' else '0',
+    } for r in _raw_key_categories]
+else:
+    if USE_POCKETBASE:
+        print('  (no key_indicator_categories collection in PocketBase yet — using local CSV fallback)')
+    key_indicator_categories = load_csv('key_indicator_categories.csv')
+
+def kpi_categories_for(slug):
+    return [r for r in key_indicator_categories if r['indicator_slug'] == slug]
 
 # ── HTML generators ───────────────────────────────────────────────────────────
 
@@ -191,21 +229,35 @@ def confidence_badge_html(confidence, source):
     title = f' title="Source: {esc(source)}"' if source else ''
     return f'<span class="conf-badge {cls}"{title}>{label}</span>'
 
-# Unused since Jerome's 2026-06-20 rebrand (12 KPI cards + 9 Tenfold bars,
-# hardcoded directly in the template like the progress bars always were).
-# Kept for now in case the CSV-driven approach is revived for a future KPI set.
-def kpi_cards_html():
-    parts = []
-    for r in overview_kpis:
-        badge = confidence_badge_html(r.get('confidence', 'estimated'), r.get('source', ''))
-        parts.append(
-            f'<div class="card">'
-            f'<h3>{esc(r["label"])} {badge}</h3>'
-            f'<div class="value">{esc(r["current_value"])}</div>'
-            f'<div class="sub-value">{r["sub_value"]}</div>'
-            f'</div>'
-        )
-    return '\n    '.join(parts)
+# Manufacturing Industry Key Indicators (the 12 cards) — text fields sourced
+# from key_indicators (PocketBase, ADR-011). Chart markup (donut/pie/region
+# strip) comes from kpi_simple_pie() etc. above; these cover the surrounding
+# value/caption/source text so a correction to PocketBase updates both.
+def kpi_value(slug):
+    r = KEY_INDICATORS.get(slug)
+    return esc(r['value']) if r and r.get('value') else ''
+
+def kpi_subvalue(slug):
+    r = KEY_INDICATORS.get(slug)
+    return r['sub_value'] if r and r.get('sub_value') else ''
+
+def kpi_icon(slug):
+    r = KEY_INDICATORS.get(slug)
+    return r.get('icon', '') if r else ''
+
+def kpi_source_line(slug):
+    r = KEY_INDICATORS.get(slug)
+    if not r:
+        return ''
+    year, source = r.get('year', ''), r.get('source', '')
+    return f'{esc(year)} &middot; Source: {esc(source)}'
+
+def kpi_badge(slug):
+    r = KEY_INDICATORS.get(slug)
+    if not r:
+        return ''
+    sub = f"{r.get('source','')}, {r.get('year','')}".strip(', ')
+    return confidence_badge_html(r.get('confidence', 'estimated'), sub)
 
 def line_chart_svg(values, labels=None, width=320, chart_h=170, label_h=24,
                     y_axis_w=36, unit='trn', color='#2e7d32'):
@@ -380,23 +432,19 @@ def kpi_progress_bar(pct, color='#1565c0', width=120, height=8):
 
 UGX_PER_USD = 3700
 
-def kpi_compact_donut(chart_name, size=72, stroke_width=8, unit='usd'):
+def kpi_compact_donut(slug, size=72, stroke_width=8):
     """Compact category-breakdown donut for a KPI card — circle on top,
     legend below (per the 2026-06-23 dashboard review: 'I would prefer the
     circle is above and the key is below the circle'). The highlighted row
-    (highlight=1 in sector_comparison.csv) renders in a standout colour and
-    bold legend text. unit='ugx' shows the Shs figure (value_label, which
-    already carries '% · Shs Xtrn') instead of the USD conversion — used for
-    Tax Contribution, since Uganda is taxed in shillings."""
-    sc_file = DATA / 'sector_comparison.csv'
-    if not sc_file.exists():
-        return ''
-    rows = [r for r in load_csv('sector_comparison.csv') if r['chart'] == chart_name]
+    renders in a standout colour and bold legend text. Sourced from
+    key_indicator_categories (PocketBase, ADR-011) — slug is 'tax' or
+    'hightech'; value_label is pre-formatted per-indicator (UGX for tax,
+    USD for hightech) at the data layer, not computed here."""
+    rows = kpi_categories_for(slug)
     if not rows:
         return ''
-    rows.sort(key=lambda r: -float(r['pct']))
-    slices = []
-    fig_labels = {}
+    rows = sorted(rows, key=lambda r: -float(r['pct']))
+    slices, fig_labels = [], {}
     palette_idx = 0
     for r in rows:
         if r.get('highlight') == '1':
@@ -404,14 +452,8 @@ def kpi_compact_donut(chart_name, size=72, stroke_width=8, unit='usd'):
         else:
             color = DONUT_PALETTE[palette_idx % len(DONUT_PALETTE)]
             palette_idx += 1
-        slices.append((r['sector'], float(r['pct']), color))
-        if unit == 'ugx':
-            # value_label is "<pct>% &middot; Shs Xtrn" — strip the leading
-            # "<pct>% &middot; " since the pct is already shown separately.
-            vl = r.get('value_label', '')
-            fig_labels[r['sector']] = vl.split('&middot;', 1)[-1].strip() if '&middot;' in vl else vl
-        else:
-            fig_labels[r['sector']] = r.get('usd_label', '')
+        slices.append((r['category'], float(r['pct']), color))
+        fig_labels[r['category']] = r.get('value_label', '')
     legend_rows = []
     for label, pct, color in slices:
         weight = '700' if color == '#e65100' else '400'
@@ -429,29 +471,33 @@ def kpi_compact_donut(chart_name, size=72, stroke_width=8, unit='usd'):
         f'</div>'
     )
 
-def kpi_simple_pie(pct, color='#1565c0', rest_color='#e0e0e0', size=88, stroke_width=20):
+def kpi_simple_pie(slug, size=88, stroke_width=20):
     """Single-share pie for a KPI card where one figure IS the whole story —
     no legend needed ('a pie does not need a legend; it is self explanatory').
     A thicker ring than the multi-category donuts so it reads as a filled
     pie rather than a thin ring. The remaining/'rest' slice gets a visibly
-    different (light grey) colour per the FDI card's specific request."""
-    try:
-        pct = max(0, min(100, float(pct)))
-    except (TypeError, ValueError):
+    different colour per the FDI card's specific request. pct/color/rest_color
+    come from the key_indicators record (PocketBase, ADR-011)."""
+    r = KEY_INDICATORS.get(slug)
+    if not r:
         return ''
+    try:
+        pct = max(0, min(100, float(r['pct'])))
+    except (TypeError, ValueError, KeyError):
+        return ''
+    color = r.get('color') or '#1565c0'
+    rest_color = r.get('rest_color') or '#e0e0e0'
     slices = [('', pct, color), ('', 100 - pct, rest_color)]
     return f'<div class="kpi-pie-wrap">{donut_svg(slices, size=size, stroke_width=stroke_width)}</div>'
 
 def kpi_credit_donut(size=72, stroke_width=8):
     """Donut version of Private Sector Credit, for visual uniformity with the
     other indicator cards ('I would also like a donut there for uniformity').
-    Reuses the same 5-sector credit data as the comparison bars (and the
-    Momentum panel), with each sector's share computed against the sum of
-    just these 5 — the only breakdown we have, not full economy-wide credit."""
-    sc_file = DATA / 'sector_comparison.csv'
-    if not sc_file.exists():
-        return ''
-    rows = [r for r in load_csv('sector_comparison.csv') if r['chart'] == 'credit']
+    Sourced from key_indicator_categories (slug='credit'), where pct holds
+    the Shs-trillions stock figure (not yet a %) — each sector's share is
+    computed against the sum of just these 5, the only breakdown we have,
+    not full economy-wide credit."""
+    rows = kpi_categories_for('credit')
     if not rows:
         return ''
     total = sum(float(r['pct']) for r in rows) or 1
@@ -465,9 +511,8 @@ def kpi_credit_donut(size=72, stroke_width=8):
         else:
             color = DONUT_PALETTE[palette_idx % len(DONUT_PALETTE)]
             palette_idx += 1
-        slices.append((r['sector'], share, color))
-        usd_bn = float(r['pct']) * 1e12 / UGX_PER_USD / 1e9
-        fig_labels[r['sector']] = f'USD {usd_bn:.2f}B'
+        slices.append((r['category'], share, color))
+        fig_labels[r['category']] = r.get('value_label', '')
     legend_rows = []
     for label, share, color in slices:
         weight = '700' if color == '#e65100' else '400'
@@ -483,29 +528,30 @@ def kpi_credit_donut(size=72, stroke_width=8):
         f'</div>'
     )
 
+REGION_STRIP_COLORS = {'Central': '#1565c0', 'Eastern': '#2e7d32', 'Western': '#6a1b9a', 'Northern': '#f57f17'}
+
 def kpi_region_strip():
     """4-region proportional colour strip for the 'Distribution by Region'
     indicator card — Jerome explicitly didn't want a donut here, just a box
-    subdivided by percentage with different colours per region, no popup."""
-    region_file = DATA / 'treemap_district.json'
-    if not region_file.exists():
+    subdivided by percentage with different colours per region, no popup.
+    Sourced from key_indicator_categories (slug='region_dist'), PocketBase."""
+    rows = kpi_categories_for('region_dist')
+    if not rows:
         return ''
-    district_data = json.loads(region_file.read_text('utf-8'))
-    region_colors = {'Central': '#1565c0', 'Eastern': '#2e7d32', 'Western': '#6a1b9a', 'Northern': '#f57f17'}
-    totals = {r: sum(district_data.get(r, {}).values()) for r in region_colors}
-    grand_total = sum(totals.values()) or 1
-    segs = []
-    for region, color in region_colors.items():
-        pct = totals[region] / grand_total * 100
+    segs, legend_items = [], []
+    for r in rows:
+        region = r['category']
+        pct = float(r['pct'])
+        color = REGION_STRIP_COLORS.get(region, '#90a4ae')
         segs.append(
             f'<div class="kpi-region-seg" style="width:{pct:.1f}%;background:{color}" '
             f'title="{esc(region)}: {pct:.1f}%"></div>'
         )
-    legend = ''.join(
-        f'<span class="kpi-region-leg-item"><span class="sw" style="background:{color}"></span>{region} {totals[region]/grand_total*100:.0f}%</span>'
-        for region, color in region_colors.items()
-    )
-    return f'<div class="kpi-region-strip">{"".join(segs)}</div><div class="kpi-region-legend">{legend}</div>'
+        legend_items.append(
+            f'<span class="kpi-region-leg-item"><span class="sw" style="background:{color}"></span>'
+            f'{esc(region)} {pct:.0f}%</span>'
+        )
+    return f'<div class="kpi-region-strip">{"".join(segs)}</div><div class="kpi-region-legend">{"".join(legend_items)}</div>'
 
 def macro_trend_html():
     if not macro_trend:
@@ -968,15 +1014,62 @@ replacements = {
     '<!--%%MILESTONES_ITEMS%%-->':    _ms_items,
     '<!--%%TAX_DONUT%%-->':           tax_donut_html(),
     '<!--%%ELECTRICITY_DONUT%%-->':   electricity_donut_html(),
-    '<!--%%KPI1_DONUT%%-->':          kpi_simple_pie(14.5, color='#1565c0', rest_color='#e3f2fd'),
-    '<!--%%KPI3_DONUT%%-->':          kpi_compact_donut('tax', unit='ugx'),
+    # Manufacturing Industry Key Indicators (12 cards) — all sourced from
+    # key_indicators / key_indicator_categories (PocketBase, ADR-011), with
+    # data/dashboard/*.csv as the local-dev/first-deploy fallback.
+    '<!--%%KPI1_DONUT%%-->':          kpi_simple_pie('value_added'),
+    '<!--%%KPI1_VALUE%%-->':          kpi_value('value_added'),
+    '<!--%%KPI1_SUBVALUE%%-->':       kpi_subvalue('value_added'),
+    '<!--%%KPI1_SOURCE%%-->':         kpi_source_line('value_added'),
+    '<!--%%KPI1_BADGE%%-->':          kpi_badge('value_added'),
+    '<!--%%KPI2_ICON%%-->':           kpi_icon('growth'),
+    '<!--%%KPI2_VALUE%%-->':          kpi_value('growth'),
+    '<!--%%KPI2_SUBVALUE%%-->':       kpi_subvalue('growth'),
+    '<!--%%KPI2_SOURCE%%-->':         kpi_source_line('growth'),
+    '<!--%%KPI2_BADGE%%-->':          kpi_badge('growth'),
+    '<!--%%KPI3_DONUT%%-->':          kpi_compact_donut('tax'),
+    '<!--%%KPI3_SOURCE%%-->':         kpi_source_line('tax'),
+    '<!--%%KPI3_BADGE%%-->':          kpi_badge('tax'),
+    '<!--%%KPI4_ICON%%-->':           kpi_icon('exports'),
+    '<!--%%KPI4_VALUE%%-->':          kpi_value('exports'),
+    '<!--%%KPI4_SUBVALUE%%-->':       kpi_subvalue('exports'),
+    '<!--%%KPI4_SOURCE%%-->':         kpi_source_line('exports'),
+    '<!--%%KPI4_BADGE%%-->':          kpi_badge('exports'),
     '<!--%%KPI5_DONUT%%-->':          kpi_compact_donut('hightech', size=60, stroke_width=7),
+    '<!--%%KPI5_SUBVALUE%%-->':       kpi_subvalue('hightech'),
+    '<!--%%KPI5_SOURCE%%-->':         kpi_source_line('hightech'),
+    '<!--%%KPI5_BADGE%%-->':          kpi_badge('hightech'),
     '<!--%%KPI6_DONUT%%-->':          kpi_credit_donut(),
+    '<!--%%KPI6_SOURCE%%-->':         kpi_source_line('credit'),
+    '<!--%%KPI6_BADGE%%-->':          kpi_badge('credit'),
+    '<!--%%KPI7_ICON%%-->':           kpi_icon('establishments'),
+    '<!--%%KPI7_VALUE%%-->':          kpi_value('establishments'),
+    '<!--%%KPI7_SOURCE%%-->':         kpi_source_line('establishments'),
+    '<!--%%KPI7_BADGE%%-->':          kpi_badge('establishments'),
     '<!--%%KPI8_REGION_STRIP%%-->':   kpi_region_strip(),
-    '<!--%%KPI9_PIE%%-->':            kpi_simple_pie(2.4, color='#00838f', rest_color='#e0f2f1'),
-    '<!--%%KPI10_PIE%%-->':           kpi_simple_pie(5.5, color='#c62828', rest_color='#ffebee'),
-    '<!--%%KPI11_PIE%%-->':           kpi_simple_pie(3.2, color='#558b2f', rest_color='#f1f8e9'),
-    '<!--%%KPI12_BAR%%-->':           kpi_progress_bar(7.6, color='#4527a0'),
+    '<!--%%KPI8_SOURCE%%-->':         kpi_source_line('region_dist'),
+    '<!--%%KPI8_BADGE%%-->':          kpi_badge('region_dist'),
+    '<!--%%KPI9_PIE%%-->':            kpi_simple_pie('parks'),
+    '<!--%%KPI9_VALUE%%-->':          kpi_value('parks'),
+    '<!--%%KPI9_SUBVALUE%%-->':       kpi_subvalue('parks'),
+    '<!--%%KPI9_SOURCE%%-->':         kpi_source_line('parks'),
+    '<!--%%KPI9_BADGE%%-->':          kpi_badge('parks'),
+    '<!--%%KPI10_PIE%%-->':           kpi_simple_pie('fdi'),
+    '<!--%%KPI10_VALUE%%-->':         kpi_value('fdi'),
+    '<!--%%KPI10_SUBVALUE%%-->':      kpi_subvalue('fdi'),
+    '<!--%%KPI10_SOURCE%%-->':        kpi_source_line('fdi'),
+    '<!--%%KPI10_BADGE%%-->':         kpi_badge('fdi'),
+    '<!--%%KPI11_PIE%%-->':           kpi_simple_pie('employment'),
+    '<!--%%KPI11_VALUE%%-->':         kpi_value('employment'),
+    '<!--%%KPI11_SUBVALUE%%-->':      kpi_subvalue('employment'),
+    '<!--%%KPI11_SOURCE%%-->':        kpi_source_line('employment'),
+    '<!--%%KPI11_BADGE%%-->':         kpi_badge('employment'),
+    '<!--%%KPI12_ICON%%-->':          kpi_icon('variety'),
+    '<!--%%KPI12_VALUE%%-->':         kpi_value('variety'),
+    '<!--%%KPI12_SUBVALUE%%-->':      kpi_subvalue('variety'),
+    '<!--%%KPI12_BAR%%-->':           kpi_progress_bar(float(KEY_INDICATORS.get('variety', {}).get('pct') or 0), color='#4527a0'),
+    '<!--%%KPI12_SOURCE%%-->':        kpi_source_line('variety'),
+    '<!--%%KPI12_BADGE%%-->':         kpi_badge('variety'),
     '<!--%%CREDIT_SECTOR_BARS%%-->':  sector_comparison_html('credit'),
     '/*%%CHAINS_DATA%%*/':            chains_js(),
     '/*%%CHAIN_COLORS_DATA%%*/':      chain_colors_js(),

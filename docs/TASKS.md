@@ -30,14 +30,18 @@ Last updated: 2026-06-24 (Solomon's dashboard-review queue landed — see notes)
       now measures itself and flips to the other side of the cursor near viewport edges; fixed the
       real bug behind "stuck on Gomba" — returning to "All Regions"/"All Sectors" wasn't clearing the
       OTHER panel's lingering cross-filter, both `showTop()`s now reset each other.
-- [ ] **NOT done — flagging honestly rather than repeating the mistake the retrospective is about:**
-      the 12 indicators and treemap-card visuals above still read from `data/dashboard/*.csv` /
-      `treemap_district.json` (the same local files built earlier this session), not from PocketBase.
-      The big drillable treemaps already migrated to the `industries` table (Hillary, ADR-011) — this
-      item is specifically about the macro/indicator figures (GDP, tax, FDI, employment, etc.), which
-      have no PocketBase collection yet (`kpi_indicators` has 6 old rows from the original 6-card
-      design, not these 12). Time-boxed today to ship the visual redesign Jerome is waiting on before
-      the 06-28 deadline; the data-source migration is the next item, not skipped indefinitely.
+- [x] **Done 2026-06-24:** the 12 indicators + region strip (card 8) now read from two new
+      PocketBase collections, `key_indicators` (one row per card: value, pct, color, year, source,
+      confidence) and `key_indicator_categories` (slices for the tax/hightech/credit donuts and the
+      region strip) — both defined and seeded by `db/pb_setup.py`, which CI already runs against prod
+      on every push to main. `data/dashboard/key_indicators.csv` / `key_indicator_categories.csv` are
+      the local-dev and first-deploy fallback (used automatically until the first CI seed run lands).
+      Deliberately left `sector_comparison.csv`/`treemap_district.json` untouched — other features
+      (Momentum panel) still read them directly; the new collections are dedicated, separate copies of
+      the same underlying figures, not a move. Also fixed a real bug found while doing this: macro_trend
+      was being silently overwritten by the local CSV even when the PocketBase fetch had already
+      succeeded, because the fallback line ran unconditionally — same class of issue as the original
+      retrospective, caught before it shipped this time.
 
 ### Retrospective: where Jerome's "PDF → database → dashboard" instruction got missed
 Traced it: the instruction was given in a PR description/commit message context, which this agent's
