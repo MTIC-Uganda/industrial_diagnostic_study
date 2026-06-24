@@ -71,12 +71,17 @@ Enable the repo's git hooks so the ADR<->DSL gate works locally before you even 
 Then a commit that changes an ADR without docs/architecture.dsl is blocked at commit time
 (--no-verify to override). CI enforces the same gate post-push for everyone.
 
-## Environment model (ADR-013): code up, data down
+## Environment model (ADR-013, revised 2026-06-24): code auto-promotes, data promotes on approval
 
-- CODE/dashboard: staging -> prod promotion via CI (the built dashboard).
-- UPLOADS: no promotion. Staging uploader = rehearsal; prod uploader = real. Re-upload the same doc to prod when happy (deterministic, so it matches staging).
-- POCKETBASE: prod is the source of truth; staging is a disposable copy. Refresh prod -> staging with scripts/refresh_staging_from_prod.sh. Never staging -> prod.
-- Rule: code flows up, data flows down, data never flows up.
+- CODE/dashboard: staging -> prod promotion via CI, health-gated, automatic. Solomon never manually promotes.
+- DATA/uploads: all document work happens in staging (upload, extract, review, correct, preview).
+  When Jerome is satisfied, "Apply to production" in the staging uploader runs
+  scripts/promote_staging_to_prod.sh — backs up prod, copies the exact approved staging
+  PocketBase state over (never re-runs the LLM), recreates the prod admin, rebuilds prod.
+  Direct prod uploads are disabled; staging+promote is the only path.
+- POCKETBASE RESET (down only): refresh_staging_from_prod.sh resets staging to mirror prod,
+  discarding staging experiments. Run before a meaningful rehearsal.
+- Rule: code promotes on health (machine decides); data promotes on Jerome's click (his judgment).
 
 ## Access & navigation
 
