@@ -11,7 +11,7 @@ workspace "MIDD — Manufacturing Industry Diagnostics Dashboard" "As-built 2026
         # External systems
         github    = softwareSystem "GitHub (MTIC-Uganda)" "The shared record + version control + CI/CD trigger. Holds code, ADRs, STATUS.md, TASKS.md, meeting transcripts." "External"
         itcTrade  = softwareSystem "ITC TradeMap" "Trade statistics, used for export indicators." "External"
-        cloudflare = softwareSystem "Cloudflare (midd-ug.com)" "DNS + proxy + HTTPS (SSL Full) in front of all surfaces. Zero Trust Access can gate the internal tools." "External"
+        cloudflare = softwareSystem "Cloudflare (midd-ug.com)" "DNS + proxy + HTTPS (SSL Full) in front of all surfaces. Zero Trust Access GATES the 4 internal tool hosts (upload/ask/staging-upload/staging-ask) to a 3-person email allow-list, preauthorized, no OTP (ADR-015). The 2 dashboards stay public; PocketBase keeps its own admin login." "External"
         claudeMax = softwareSystem "Claude (Max plan)" "The model behind the Claude CLI on the host. Powers Ask MIDD, ingestion, the orchestrator. Hillary's plan for now; MIDD gets its own key when containerized (ADR-012)." "External"
 
         # The MIDD system, all hosted on Hetzner 89.167.121.193
