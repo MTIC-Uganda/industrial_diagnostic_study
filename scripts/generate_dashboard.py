@@ -987,17 +987,17 @@ tmpl = TMPL.read_text('utf-8')
 _ms_tabs, _ms_items = milestones_html()
 
 def tools_nav_html():
-    """Team tool links in the header — STAGING ONLY (the workshop view, for Jerome).
-    The public prod dashboard carries the public Ask MIDD bubble instead, never
-    team-tool links. Local build -> nothing."""
-    pb = PB_URL
-    if '8091' in pb or 'staging' in pb:
-        up, ask = 'https://staging-upload.midd-ug.com', 'https://staging-ask.midd-ug.com'
-        return ('<a href="' + up + '" class="tour-btn" target="_blank" rel="noopener" '
-                'title="Upload a document (team login required)">&#128228; Upload</a>'
-                '<a href="' + ask + '" class="tour-btn" target="_blank" rel="noopener" '
-                'title="Ask the MIDD assistant (team login required)">&#128172; Ask MIDD</a>')
-    return ''  # prod / local: public dashboard carries the chat bubble, not team links
+    """Team tool links for the header. Emitted ALWAYS but hidden by default; the
+    bubble script reveals them only on the staging host (the workshop view), and the
+    public prod dashboard shows the chat bubble instead. The split is decided at
+    RUNTIME by hostname, not at build time — so CI's single build deployed to BOTH
+    staging and prod renders correctly on each (ADR-016)."""
+    up, ask = 'https://staging-upload.midd-ug.com', 'https://staging-ask.midd-ug.com'
+    return ('<span id="midd-team-nav" style="display:none">'
+            '<a href="' + up + '" class="tour-btn" target="_blank" rel="noopener" '
+            'title="Upload a document (team)">&#128228; Upload</a>'
+            '<a href="' + ask + '" class="tour-btn" target="_blank" rel="noopener" '
+            'title="Ask the MIDD assistant (team)">&#128172; Ask MIDD</a></span>')
 
 
 def is_prod_build():
@@ -1084,15 +1084,12 @@ for marker, content in replacements.items():
         print(f'WARNING: marker not found: {marker}', file=sys.stderr)
     out = out.replace(marker, content, 1)
 
-# Public Ask MIDD chat bubble: PROD only. Strip it on staging/local (the team
-# uses the header Ask MIDD link there, not a public bubble).
-import re as _re
-if is_prod_build():
-    out = out.replace('<!--CHAT_BUBBLE_START-->', '').replace('<!--CHAT_BUBBLE_END-->', '')
-    print('  Chat bubble: included (prod build)')
-else:
-    out = _re.sub(r'<!--CHAT_BUBBLE_START-->.*?<!--CHAT_BUBBLE_END-->', '', out, flags=_re.DOTALL)
-    print('  Chat bubble: stripped (staging/local build)')
+# Public Ask MIDD chat bubble + team-nav: emitted ALWAYS. The bubble script picks
+# what to show by hostname at runtime (bubble on prod, team links on staging), so a
+# single build is correct on both origins — CI builds once and deploys to both
+# (ADR-016). Just drop the marker comments.
+out = out.replace('<!--CHAT_BUBBLE_START-->', '').replace('<!--CHAT_BUBBLE_END-->', '')
+print('  Chat bubble + team-nav: included (hostname-aware at runtime)')
 
 OUTPUT.write_text(out, 'utf-8')
 print(f'Generated {OUTPUT}  ({len(out):,} bytes, {out.count(chr(10)):,} lines)')
