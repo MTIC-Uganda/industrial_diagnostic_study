@@ -2217,17 +2217,14 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape'){ closeChapter
 </div>
 <script>
 (function(){
-  // Runtime env split by hostname (one build serves both origins):
-  // staging.midd-ug.com -> show the team Upload/Ask links, remove the bubble.
-  // prod (midd-ug.com)  -> hide the team links, keep the public bubble.
+  // Runtime env split by hostname (one build serves both origins, ADR-016 / Issue #71):
+  // staging.midd-ug.com -> show team Upload/Ask links AND the public bubble (so the
+  //                        bubble is testable against the staging brain before prod).
+  // prod (midd-ug.com)  -> hide the team links; public bubble only.
+  // The bubble is wired on BOTH; only the team-nav visibility differs.
   var isStaging = location.hostname.indexOf('staging') === 0;
   var nav = document.getElementById('midd-team-nav');
   if (nav) nav.style.display = isStaging ? '' : 'none';
-  if (isStaging) {
-    var f = document.getElementById('midd-fab'); if (f) f.remove();
-    var pn = document.getElementById('midd-panel'); if (pn) pn.remove();
-    return;  // staging is the team workshop — no public bubble
-  }
   var msgs = [], opened = false, busy = false;
   window.middToggle = function(){
     var p = document.getElementById('midd-panel');

@@ -35,7 +35,7 @@ workspace "MIDD — Manufacturing Industry Diagnostics Dashboard" "As-built 2026
             # ── BUILD + SURFACES ──────────────────────────────────────────
             dashboardGen = container "Dashboard Generator" "scripts/generate_dashboard.py. Treemaps + locations map aggregate from PocketBase industries (static JSON fallback). Fills the template." "Python"
             reactBuild = container "React Sankey Build" "app/frontend -> dist (D3-sankey), embedded as sankey.html." "Node/Vite"
-            dashboard = container "Dashboard (static)" "The public diagnostic dashboard. Prod midd-ug.com (:8201), staging staging.midd-ug.com (:8200). One build serves both: a hostname check at runtime shows the public Ask MIDD bubble on prod and the team Upload/Ask links on staging (ADR-016)." "Static HTML/Nginx"
+            dashboard = container "Dashboard (static)" "The public diagnostic dashboard. Prod midd-ug.com (:8201), staging staging.midd-ug.com (:8200). One build serves both: a hostname check at runtime shows, on prod, the public Ask MIDD bubble only; on staging, BOTH the team Upload/Ask links and the bubble (so the bubble is testable before prod) (ADR-016, Issue #71)." "Static HTML/Nginx"
 
             # ── SHARED RECORD + ROUTING ───────────────────────────────────
             record = container "Shared Record" "The single source of decisions + state all agents read: ADRs (docs/adr), STATUS.md (live snapshot), TASKS.md (per-owner queue), meeting transcripts, CLAUDE.md. Brain reads a read-only clone pulled every 5 min." "Markdown/Git"

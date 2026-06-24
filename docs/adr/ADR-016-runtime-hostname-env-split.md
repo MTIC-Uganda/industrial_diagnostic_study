@@ -14,8 +14,8 @@ Decide the split **at runtime, by hostname**, so a single build is correct on bo
 
 - `generate_dashboard.py` now **always emits both** the public chat bubble and the team header links (the team links wrapped in `#midd-team-nav`, hidden by default).
 - A small script in the bubble block checks `location.hostname`:
-  - **`staging.midd-ug.com`** → reveal the team Upload/Ask MIDD links, remove the bubble (the workshop view).
-  - **`midd-ug.com`** (anything not starting with `staging`) → keep the public bubble, leave the team links hidden.
+  - **`staging.midd-ug.com`** → reveal the team Upload/Ask MIDD links **and keep the public bubble**, so the bubble can be tested against the staging brain before it reaches prod (Issue #71). The staging bubble hits `staging.midd-ug.com/api/ask` → the staging brain (:8220), so testing never touches prod.
+  - **`midd-ug.com`** (anything not starting with `staging`) → public bubble only, team links hidden.
 
 One artifact renders correctly on both hosts. CI's build-once-deploy-both model is now harmless.
 
