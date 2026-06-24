@@ -334,9 +334,25 @@ for col in COLLECTIONS:
         cid = existing[name]
         print(f'  Exists   {name}  (schema left intact)')
     else:
-        result = pb('POST', '/api/collections', col)
-        cid = result.get('id', '')
-        print(f'  Created  {name}  (id={cid})')
+        # Race/duplicate-safe: a concurrent run (or an earlier partial run) may have
+        # created this collection already. PocketBase 0.22's duplicate-name 400 does
+        # not always contain the literal "already exist", so a create can fail even
+        # though the collection ends up present. Re-fetch and treat present-after as
+        # success; only re-raise if it genuinely is not there. (Fixes the CI 400 from
+        # the 13:46/13:55 overlapping runs — see Issue #70.)
+        try:
+            result = pb('POST', '/api/collections', col)
+            if result.get('_exists'):
+                raise RuntimeError('already exists')
+            cid = result.get('id', '')
+            print(f'  Created  {name}  (id={cid})')
+        except Exception:
+            now = {c['name']: c['id'] for c in pb('GET', '/api/collections?perPage=200').get('items', [])}
+            if name in now:
+                cid = now[name]
+                print(f'  Exists   {name}  (already present after create attempt)')
+            else:
+                raise
     collection_ids[name] = cid
 
 # ── Helper: upsert by slug field ──────────────────────────────────────────────
