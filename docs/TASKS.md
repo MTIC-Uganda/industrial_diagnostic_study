@@ -75,6 +75,20 @@ happening to mention PocketBase by name.
 
 ## Hillary (infrastructure / harness)
 
+- [ ] **New, needs server access to diagnose:** `db/pb_setup.py` failed to create the two new
+      collections (`key_indicators`, `key_indicator_categories`) in CI run
+      https://github.com/MTIC-Uganda/industrial_diagnostic_study/actions/runs/28103151948 —
+      `HTTP 400 POST /api/collections: {"code":400,"message":"Failed to create the collection.","data":{}}`.
+      The 5 pre-existing collections all read fine ("Exists, schema left intact"); this is specifically
+      about *creating a brand-new* collection. `setup/hetzner_pocketbase.sh` pins `PB_VERSION="0.22.7"`,
+      which is the version `pb_setup.py`'s schema format (`'schema': [...]`, nested `options`) targets —
+      my hypothesis is prod PocketBase is actually running a newer version (0.23+) that expects the
+      `'fields': [...]` format instead, possibly from today's PocketBase work (the migrations-dir
+      outage fix). Can't confirm without `pocketbase --version` on the server or checking the admin UI's
+      collection editor. **No live-site impact** — the dashboard's local-CSV fallback kicked in
+      automatically and prod is serving correct values; this only blocks the new collections from being
+      genuinely seeded. Once confirmed, either pin the binary back to 0.22.7 or I'll update
+      `db/pb_setup.py`'s collection-creation payload to the 0.23+ `fields` format.
 - [ ] Deeper harness loop: feedback improves the agents; brain auto-updates STATUS.md + ADRs.
 - [ ] Feedback triage: data issues → data loop; feature/code issues → this Solomon section.
 - [ ] Automated staging→prod promotion (after Solomon's redesign lands).
