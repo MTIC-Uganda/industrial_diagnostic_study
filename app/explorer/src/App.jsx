@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { PRODUCTS, CATEGORIES, TRADE_HS4, PRODUCT_HS4, CHAIN_STATS, RAW_MATERIAL_TRADE } from "./data/ironSteel.js";
+import { PRODUCTS, CATEGORIES, TRADE_HS4, PRODUCT_HS4, CHAIN_STATS, RAW_MATERIAL_TRADE, matchInputTrade } from "./data/ironSteel.js";
 
 function formatUsd(thousands) {
   if (thousands == null) return "—";
@@ -82,6 +82,26 @@ function RawMaterialPopup({ item, top, left }) {
   );
 }
 
+function InputStatsPopup({ text, top, left }) {
+  const trade = matchInputTrade(text);
+  return (
+    <StatsPopupShell title={text} top={top} left={left}>
+      <div style={{ fontWeight: 700, color: "#93c5fd", marginTop: "8px" }}>🏭 Industries &amp; capacity</div>
+      <div style={{ color: "#cbd5e1" }}>
+        ~{CHAIN_STATS.plants} plants · {CHAIN_STATS.installedCapacityTpa.toLocaleString()} tpa installed,{" "}
+        {CHAIN_STATS.utilisationPct}% utilised
+      </div>
+      <div style={{ color: "#64748b", fontStyle: "italic" }}>Iron &amp; Steel chain-wide — this input is processed inside that same plant population, not separately profiled</div>
+
+      <TradeBlock trade={trade} noDataLabel="No HS-code-specific trade data fetched yet for this input." />
+
+      <div style={{ color: "#64748b", fontSize: "9.5px", marginTop: "8px", borderTop: "1px solid #1e293b", paddingTop: "6px" }}>
+        Sources: ITC TradeMap (Uganda bilateral trade) · {CHAIN_STATS.source}
+      </div>
+    </StatsPopupShell>
+  );
+}
+
 function Arrow({ color }) {
   return (
     <div className="flex justify-center my-1">
@@ -113,15 +133,22 @@ function TabBar({ tab, setTab, color }) {
   );
 }
 
-function ItemList({ items, color }) {
+function ItemList({ items, color, showTrade }) {
+  const [hover, setHover] = useState(null);
   return (
     <ul className="space-y-1 pt-1">
       {(items || []).map((item, i) => (
-        <li key={i} className="text-xs flex items-start gap-1.5 text-slate-700">
+        <li key={i} className="text-xs flex items-start gap-1.5 text-slate-700"
+          onMouseEnter={showTrade ? (e) => {
+            const r = e.currentTarget.getBoundingClientRect();
+            setHover({ text: item, top: Math.min(r.top, window.innerHeight - 200), left: Math.min(r.right + 8, window.innerWidth - 310) });
+          } : undefined}
+          onMouseLeave={showTrade ? () => setHover(null) : undefined}>
           <span className="mt-1 shrink-0 w-1.5 h-1.5 rounded-full" style={{ backgroundColor: color }} />
           {item}
         </li>
       ))}
+      {hover && <InputStatsPopup text={hover.text} top={hover.top} left={hover.left} />}
     </ul>
   );
 }
@@ -149,7 +176,7 @@ function SimpleCard({ node }) {
       <CardHeader stage={node.stage} label={node.label} color={node.color} textColor={node.textColor} />
       <div style={{ backgroundColor: node.color + "10" }}>
         <TabBar tab={tab} setTab={setTab} color={node.color} />
-        <div className="px-3 py-2"><ItemList items={node[tab]} color={node.color} /></div>
+        <div className="px-3 py-2"><ItemList items={node[tab]} color={node.color} showTrade={tab === "inputs"} /></div>
       </div>
     </div>
   );
@@ -166,7 +193,7 @@ function DualCard({ node }) {
           {[node.routeA, node.routeB].map((route, i) => (
             <div key={i} className="p-2">
               <RouteLabel label={route.label} color={node.color} textColor={node.textColor} />
-              <ItemList items={route[tab]} color={node.color} />
+              <ItemList items={route[tab]} color={node.color} showTrade={tab === "inputs"} />
             </div>
           ))}
         </div>
@@ -189,7 +216,7 @@ function TripleCard({ node }) {
               <div style={{ fontSize: "9px", fontWeight: "700", textAlign: "center", padding: "3px 4px", borderRadius: "4px", marginBottom: "6px", backgroundColor: node.color, color: node.textColor, lineHeight: "1.3" }}>
                 {route.label}
               </div>
-              <ItemList items={route[tab]} color={node.color} />
+              <ItemList items={route[tab]} color={node.color} showTrade={tab === "inputs"} />
             </div>
           ))}
         </div>
@@ -209,7 +236,7 @@ function GroupCard({ node }) {
           {node.groups.map((g, i) => (
             <div key={i} className={`p-2 ${i < 2 ? "border-b border-slate-200" : ""}`}>
               <RouteLabel label={g.label} color={node.color} textColor={node.textColor} />
-              <ItemList items={g[tab] || g.inputs} color={node.color} />
+              <ItemList items={g[tab] || g.inputs} color={node.color} showTrade={tab === "inputs"} />
             </div>
           ))}
         </div>
