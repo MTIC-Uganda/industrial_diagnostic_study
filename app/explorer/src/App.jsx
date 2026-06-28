@@ -1,5 +1,55 @@
 import { useState } from "react";
-import { PRODUCTS, CATEGORIES } from "./data/ironSteel.js";
+import { PRODUCTS, CATEGORIES, TRADE_HS4, PRODUCT_HS4, CHAIN_STATS } from "./data/ironSteel.js";
+
+function formatUsd(thousands) {
+  if (thousands == null) return "—";
+  const usd = thousands * 1000;
+  if (usd >= 1_000_000) return `$${(usd / 1_000_000).toFixed(1)}m`;
+  if (usd >= 1_000) return `$${(usd / 1_000).toFixed(0)}k`;
+  return `$${usd}`;
+}
+
+function ProductStatsPopup({ product, hs4, top }) {
+  const trade = hs4 ? TRADE_HS4[hs4] : null;
+  return (
+    <div
+      style={{
+        position: "fixed", zIndex: 50, left: 212, top, width: "300px",
+        backgroundColor: "#0f172a", color: "#e2e8f0", borderRadius: "8px",
+        padding: "12px 14px", boxShadow: "0 8px 24px rgba(0,0,0,0.4)",
+        fontSize: "11px", lineHeight: 1.5, pointerEvents: "none",
+      }}
+    >
+      <div style={{ fontWeight: 700, fontSize: "12px", color: "#fff" }}>{product.name}</div>
+
+      <div style={{ fontWeight: 700, color: "#93c5fd", marginTop: "8px" }}>🏭 Industries &amp; capacity</div>
+      <div style={{ color: "#cbd5e1" }}>
+        ~{CHAIN_STATS.plants} plants · {CHAIN_STATS.installedCapacityTpa.toLocaleString()} tpa installed,{" "}
+        {CHAIN_STATS.utilisationPct}% utilised
+      </div>
+      <div style={{ color: "#64748b", fontStyle: "italic" }}>Iron &amp; Steel chain-wide — not specific to this product</div>
+
+      <div style={{ fontWeight: 700, color: "#93c5fd", marginTop: "10px" }}>📦 Trade ({trade ? trade.year : "—"}, USD)</div>
+      {trade ? (
+        <>
+          <div style={{ color: "#cbd5e1" }}>
+            Imports — Uganda: <strong>{formatUsd(trade.imports.uganda)}</strong> · EAC: <strong>{formatUsd(trade.imports.eac)}</strong> · Global: <span style={{ color: "#64748b" }}>not yet sourced</span>
+          </div>
+          <div style={{ color: "#cbd5e1" }}>
+            Exports — Uganda: <strong>{formatUsd(trade.exports.uganda)}</strong> · EAC: <strong>{formatUsd(trade.exports.eac)}</strong>
+          </div>
+          <div style={{ color: "#64748b", fontSize: "9.5px", marginTop: "4px" }}>{trade.desc}</div>
+        </>
+      ) : (
+        <div style={{ color: "#94a3b8" }}>No HS-code-specific trade data fetched yet for this product.</div>
+      )}
+
+      <div style={{ color: "#64748b", fontSize: "9.5px", marginTop: "8px", borderTop: "1px solid #1e293b", paddingTop: "6px" }}>
+        Sources: ITC TradeMap (Uganda bilateral trade) · {CHAIN_STATS.source}
+      </div>
+    </div>
+  );
+}
 
 function Arrow({ color }) {
   return (
@@ -184,6 +234,7 @@ function Chain({ chain }) {
 export default function ValueChainExplorer() {
   const [selected, setSelected] = useState("galvanized");
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [hoverInfo, setHoverInfo] = useState(null);
   const product = PRODUCTS[selected];
 
   return (
@@ -210,6 +261,8 @@ export default function ValueChainExplorer() {
                 return (
                   <button key={pid} onClick={() => setSelected(pid)}
                     title={p.name}
+                    onMouseEnter={(e) => setHoverInfo({ pid, top: Math.min(e.currentTarget.getBoundingClientRect().top, window.innerHeight - 230) })}
+                    onMouseLeave={() => setHoverInfo(null)}
                     style={{ width: "100%", textAlign: "left", padding: sidebarOpen ? "5px 12px" : "8px", background: selected === pid ? "#1e293b" : "transparent", border: "none", cursor: "pointer", display: "flex", alignItems: "center", gap: "8px" }}>
                     <span style={{ width: "6px", height: "6px", borderRadius: "50%", backgroundColor: p.color, flexShrink: 0 }} />
                     {sidebarOpen && <span style={{ fontSize: "11px", color: selected === pid ? "#f1f5f9" : "#94a3b8", fontWeight: selected === pid ? "600" : "400", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{p.name}</span>}
@@ -270,6 +323,10 @@ export default function ValueChainExplorer() {
           </div>
         </div>
       </div>
+
+      {hoverInfo && (
+        <ProductStatsPopup product={PRODUCTS[hoverInfo.pid]} hs4={PRODUCT_HS4[hoverInfo.pid]} top={hoverInfo.top} />
+      )}
     </div>
   );
 }
