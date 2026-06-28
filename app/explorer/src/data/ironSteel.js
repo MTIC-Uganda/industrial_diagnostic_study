@@ -321,7 +321,32 @@ const TRADE_HS4 = {
     imports: { uganda: 2725, eac: 768 },
     exports: { uganda: 55849, eac: 55633 },
   },
+  "7204": {
+    desc: "HS 7204 — ferrous waste and scrap (EAF charge input)",
+    year: 2024,
+    imports: { uganda: 72847, eac: 50228 },
+    exports: { uganda: 36, eac: 0 },
+  },
+  "7207": {
+    desc: "HS 7207 — semi-finished products of iron/non-alloy steel (slab, billet, bloom)",
+    year: 2024,
+    imports: { uganda: 78549, eac: 0 },
+    exports: { uganda: 2516, eac: 2516 },
+  },
 };
+
+// Keyword -> HS-4 group, for matching free-text "Inputs" tab line items
+// (e.g. "Steel scrap (20-30%)" or "Billet (reheated to ~1,100-1,150 C)")
+// to the same trade data used for raw materials and products above.
+const INPUT_KEYWORD_HS4 = [
+  { pattern: /\bscrap\b/i, hs4: "7204" },
+  { pattern: /\b(slab|billet|bloom|semi-finished)\b/i, hs4: "7207" },
+];
+
+function matchInputTrade(text) {
+  const hit = INPUT_KEYWORD_HS4.find((k) => k.pattern.test(text));
+  return hit ? TRADE_HS4[hit.hs4] : null;
+}
 
 // Which HS-4 trade group each product falls under (omitted = not fetched yet).
 const PRODUCT_HS4 = {
@@ -359,4 +384,4 @@ const RAW_MATERIAL_TRADE = {
   },
 };
 
-export { PRODUCTS, CATEGORIES, TRADE_HS4, PRODUCT_HS4, CHAIN_STATS, RAW_MATERIAL_TRADE };
+export { PRODUCTS, CATEGORIES, TRADE_HS4, PRODUCT_HS4, CHAIN_STATS, RAW_MATERIAL_TRADE, matchInputTrade };
