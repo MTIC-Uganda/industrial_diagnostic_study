@@ -22,6 +22,14 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#f0f2f5;color:#1a1a2e;fo
 .tab-btn:hover{color:var(--blue)}
 .tab-btn.active{color:var(--blue);border-bottom-color:var(--blue)}
 
+/* SUB-TABS (within a parent tab, e.g. Value Chains: Maps vs Explorer) */
+.subtab-bar{display:flex;gap:8px;padding:12px 20px;background:#f8f9fa;border-bottom:1px solid var(--border)}
+.subtab-btn{padding:8px 18px;border:1px solid var(--border);border-radius:20px;background:#fff;cursor:pointer;font-size:13px;font-weight:600;color:var(--muted);transition:all .2s}
+.subtab-btn:hover{color:var(--blue);border-color:var(--blue)}
+.subtab-btn.active{background:var(--blue);color:#fff;border-color:var(--blue)}
+.subtab-pane{display:none}
+.subtab-pane.active{display:block}
+
 /* CONTENT */
 .tab-content{display:none;padding:28px 32px;max-width:1400px;margin:0 auto}
 .tab-content.active{display:block}
@@ -281,7 +289,7 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-t
 
   /* BRIEF MODE — one-page Economic Brief, triggered by "🧾 Generate Brief" */
   body.brief-mode #integration-card,
-  body.brief-mode #tab-maps,
+  body.brief-mode #tab-valuechains,
   body.brief-mode #tab-status,
   body.brief-mode #tab-locations,
   body.brief-mode #tab-pipeline,
@@ -340,8 +348,7 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-t
 
 <div class="tab-bar" id="tour-tab-bar">
   <button id="tab-btn-overview" class="tab-btn active" onclick="showTab('overview')">🏭 Manufacturing Industry</button>
-  <button id="tab-btn-maps" class="tab-btn" onclick="showTab('maps')">🗺️ Value Chain Maps</button>
-  <button id="tab-btn-explorer" class="tab-btn" onclick="showTab('explorer')">🔗 Value Chain Explorer</button>
+  <button id="tab-btn-valuechains" class="tab-btn" onclick="showTab('valuechains')">🔗 Value Chains</button>
   <button id="tab-btn-status" class="tab-btn" onclick="showTab('status')">📊 Chain Status &amp; 2040 Projections</button>
   <button id="tab-btn-locations" class="tab-btn" onclick="showTab('locations')">📍 Industry Locations</button>
 </div>
@@ -605,23 +612,25 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-t
 </div>
 
 <!-- ═══════════════════════════════════════════════════════════════
-     SECTION 2: VALUE CHAIN MAPS
+     SECTION 2: VALUE CHAINS (Maps + Explorer — same data, two views)
 ═══════════════════════════════════════════════════════════════ -->
-<div id="tab-maps" class="tab-content" style="padding:0;overflow:hidden">
-  <iframe src="./sankey.html"
-    style="width:100%;height:calc(100vh - 118px);min-height:680px;border:none;display:block"
-    title="Uganda Value Chain Maps — Interactive Sankey">
-  </iframe>
-</div>
-
-<!-- ═══════════════════════════════════════════════════════════════
-     SECTION 2B: VALUE CHAIN EXPLORER
-═══════════════════════════════════════════════════════════════ -->
-<div id="tab-explorer" class="tab-content" style="padding:0;overflow:hidden">
-  <iframe src="./explorer.html"
-    style="width:100%;height:calc(100vh - 118px);min-height:680px;border:none;display:block"
-    title="Value Chain Explorer — Iron & Steel finished products">
-  </iframe>
+<div id="tab-valuechains" class="tab-content" style="padding:0;overflow:hidden">
+  <div class="subtab-bar">
+    <button id="subtab-btn-maps" class="subtab-btn active" onclick="showSubTab('maps')">🗺️ Value Chain Maps</button>
+    <button id="subtab-btn-explorer" class="subtab-btn" onclick="showSubTab('explorer')">🧩 Value Chain Explorer</button>
+  </div>
+  <div id="subtab-maps" class="subtab-pane active">
+    <iframe src="./sankey.html"
+      style="width:100%;height:calc(100vh - 118px - 53px);min-height:630px;border:none;display:block"
+      title="Uganda Value Chain Maps — Interactive Sankey">
+    </iframe>
+  </div>
+  <div id="subtab-explorer" class="subtab-pane">
+    <iframe src="./explorer.html"
+      style="width:100%;height:calc(100vh - 118px - 53px);min-height:630px;border:none;display:block"
+      title="Value Chain Explorer — Iron & Steel finished products">
+    </iframe>
+  </div>
 </div>
 
 <!-- ═══════════════════════════════════════════════════════════════
@@ -990,6 +999,15 @@ function showTab(id){
       _leafletMap.invalidateSize();
     }
   }
+}
+
+function showSubTab(id){
+  document.querySelectorAll('#tab-valuechains .subtab-pane').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('#tab-valuechains .subtab-btn').forEach(b=>{
+    b.classList.toggle('active', b.getAttribute('onclick')===`showSubTab('${id}')`);
+  });
+  document.getElementById('subtab-'+id).classList.add('active');
+  try{ localStorage.setItem('mtic_activeSubTab',id); }catch(e){}
 }
 
 // ═══════════════════ INDUSTRY LOCATIONS MAP ═══════════════════
@@ -1450,6 +1468,8 @@ window.addEventListener('resize', () => {
     const saved=hash||(localStorage.getItem('mtic_activeTab'));
     if(saved&&document.getElementById('tab-'+saved)) showTab(saved);
     window.addEventListener('hashchange',()=>{const h=location.hash.slice(1);if(h&&document.getElementById('tab-'+h))showTab(h);});
+    const savedSub=localStorage.getItem('mtic_activeSubTab');
+    if(savedSub&&document.getElementById('subtab-'+savedSub)) showSubTab(savedSub);
   }catch(e){}
 })();
 
@@ -1932,10 +1952,10 @@ function startTour(){
         }
       },
       {
-        element: '#tab-btn-maps',
+        element: '#tab-btn-valuechains',
         popover: {
-          title: 'Value Chain Maps (Interactive Sankey)',
-          description: 'Click here to explore each chain visually — from final product upstream through technology types, components, raw materials, and labour. Hover over any node to see cost-share weights and TradeMap trade figures. Select a different chain from the dropdown inside.',
+          title: 'Value Chains: Maps & Explorer',
+          description: 'Click here to explore each chain two ways, toggled inside this tab: the interactive Sankey Map (final product upstream through technology types, components, raw materials, and labour — hover any node for cost-share weights and TradeMap figures), or the Explorer (drill into a specific finished product, stage by stage, with inputs, technology, and the professionals each stage needs).',
           side: 'bottom', align: 'start',
           onNextClick: function(){
             showTab('status');
