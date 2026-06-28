@@ -22,6 +22,14 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#f0f2f5;color:#1a1a2e;fo
 .tab-btn:hover{color:var(--blue)}
 .tab-btn.active{color:var(--blue);border-bottom-color:var(--blue)}
 
+/* SUB-TABS (within a parent tab, e.g. Value Chains: Maps vs Explorer) */
+.subtab-bar{display:flex;gap:8px;padding:12px 20px;background:#f8f9fa;border-bottom:1px solid var(--border)}
+.subtab-btn{padding:8px 18px;border:1px solid var(--border);border-radius:20px;background:#fff;cursor:pointer;font-size:13px;font-weight:600;color:var(--muted);transition:all .2s}
+.subtab-btn:hover{color:var(--blue);border-color:var(--blue)}
+.subtab-btn.active{background:var(--blue);color:#fff;border-color:var(--blue)}
+.subtab-pane{display:none}
+.subtab-pane.active{display:block}
+
 /* CONTENT */
 .tab-content{display:none;padding:28px 32px;max-width:1400px;margin:0 auto}
 .tab-content.active{display:block}
@@ -281,7 +289,7 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-t
 
   /* BRIEF MODE — one-page Economic Brief, triggered by "🧾 Generate Brief" */
   body.brief-mode #integration-card,
-  body.brief-mode #tab-maps,
+  body.brief-mode #tab-valuechains,
   body.brief-mode #tab-status,
   body.brief-mode #tab-locations,
   body.brief-mode #tab-pipeline,
@@ -333,15 +341,14 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-t
     <button onclick="generateBrief()" class="tour-btn" title="One-page Economic Brief — KPIs, momentum, chain snapshot, sources">🧾 Generate Brief</button>
     <button onclick="openGlossary()" class="tour-btn">📖 Glossary</button>
     <button id="tour-trigger" class="tour-btn" onclick="startTour()">🧭 Take a Tour</button>
-    
+    <span id="midd-team-nav" style="display:none"><a href="https://staging-upload.midd-ug.com" class="tour-btn" target="_blank" rel="noopener" title="Upload a document (team)">&#128228; Upload</a><a href="https://staging-ask.midd-ug.com" class="tour-btn" target="_blank" rel="noopener" title="Ask the MIDD assistant (team)">&#128172; Ask MIDD</a></span>
     <div class="badge">TENFOLD GROWTH FRAMEWORK</div>
   </div>
 </div>
 
 <div class="tab-bar" id="tour-tab-bar">
   <button id="tab-btn-overview" class="tab-btn active" onclick="showTab('overview')">🏭 Manufacturing Industry</button>
-  <button id="tab-btn-maps" class="tab-btn" onclick="showTab('maps')">🗺️ Value Chain Maps</button>
-  <button id="tab-btn-explorer" class="tab-btn" onclick="showTab('explorer')">🔗 Value Chain Explorer</button>
+  <button id="tab-btn-valuechains" class="tab-btn" onclick="showTab('valuechains')">🔗 Value Chains</button>
   <button id="tab-btn-status" class="tab-btn" onclick="showTab('status')">📊 Chain Status &amp; 2040 Projections</button>
   <button id="tab-btn-locations" class="tab-btn" onclick="showTab('locations')">📍 Industry Locations</button>
 </div>
@@ -605,23 +612,25 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-t
 </div>
 
 <!-- ═══════════════════════════════════════════════════════════════
-     SECTION 2: VALUE CHAIN MAPS
+     SECTION 2: VALUE CHAINS (Maps + Explorer — same data, two views)
 ═══════════════════════════════════════════════════════════════ -->
-<div id="tab-maps" class="tab-content" style="padding:0;overflow:hidden">
-  <iframe src="./sankey.html"
-    style="width:100%;height:calc(100vh - 118px);min-height:680px;border:none;display:block"
-    title="Uganda Value Chain Maps — Interactive Sankey">
-  </iframe>
-</div>
-
-<!-- ═══════════════════════════════════════════════════════════════
-     SECTION 2B: VALUE CHAIN EXPLORER
-═══════════════════════════════════════════════════════════════ -->
-<div id="tab-explorer" class="tab-content" style="padding:0;overflow:hidden">
-  <iframe src="./explorer.html"
-    style="width:100%;height:calc(100vh - 118px);min-height:680px;border:none;display:block"
-    title="Value Chain Explorer — Iron & Steel finished products">
-  </iframe>
+<div id="tab-valuechains" class="tab-content" style="padding:0;overflow:hidden">
+  <div class="subtab-bar">
+    <button id="subtab-btn-maps" class="subtab-btn active" onclick="showSubTab('maps')">🗺️ Value Chain Maps</button>
+    <button id="subtab-btn-explorer" class="subtab-btn" onclick="showSubTab('explorer')">🧩 Value Chain Explorer</button>
+  </div>
+  <div id="subtab-maps" class="subtab-pane active">
+    <iframe src="./sankey.html"
+      style="width:100%;height:calc(100vh - 118px - 53px);min-height:630px;border:none;display:block"
+      title="Uganda Value Chain Maps — Interactive Sankey">
+    </iframe>
+  </div>
+  <div id="subtab-explorer" class="subtab-pane">
+    <iframe src="./explorer.html"
+      style="width:100%;height:calc(100vh - 118px - 53px);min-height:630px;border:none;display:block"
+      title="Value Chain Explorer — Iron & Steel finished products">
+    </iframe>
+  </div>
 </div>
 
 <!-- ═══════════════════════════════════════════════════════════════
@@ -639,12 +648,12 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-t
     <div class="section-title" style="margin-bottom:6px">🕓 Recently Updated</div>
     <div class="section-sub">Latest data, chapters, and reviews from the agentic pipeline — newest first.</div>
     <div class="card" style="margin-bottom:24px">
-      <div class="update-item"><span class="update-icon">🚀</span><span class="update-tag">Feature</span><span class="update-msg">migrate 12 Key Indicator cards + region strip to PocketBase (ADR-011)</span><span class="update-date">2026-06-24</span></div>
+      <div class="update-item"><span class="update-icon">🚀</span><span class="update-tag">Feature</span><span class="update-msg">add Value Chain Explorer app (Iron &amp; Steel v1)</span><span class="update-date">2026-06-28</span></div>
+    <div class="update-item"><span class="update-icon">🚀</span><span class="update-tag">Feature</span><span class="update-msg">migrate 12 Key Indicator cards + region strip to PocketBase (ADR-011)</span><span class="update-date">2026-06-24</span></div>
     <div class="update-item"><span class="update-icon">🚀</span><span class="update-tag">Feature</span><span class="update-msg">12 Key Indicator cards overhaul per 2026-06-23 dashboard review</span><span class="update-date">2026-06-24</span></div>
     <div class="update-item"><span class="update-icon">🛠️</span><span class="update-tag">Fix</span><span class="update-msg">treemap UX issues + Progress to Tenfold percentage/figure toggle</span><span class="update-date">2026-06-23</span></div>
     <div class="update-item"><span class="update-icon">🚀</span><span class="update-tag">Feature</span><span class="update-msg">committed pre-commit hook enforcing ADR&lt;-&gt;DSL coupling at commit time [skip ci]</span><span class="update-date">2026-06-24</span></div>
     <div class="update-item"><span class="update-icon">🚀</span><span class="update-tag">Feature</span><span class="update-msg">refresh_status.py — brain keeps STATUS.md live counts current (ADR-012) [skip ci]</span><span class="update-date">2026-06-24</span></div>
-    <div class="update-item"><span class="update-icon">🚀</span><span class="update-tag">Feature</span><span class="update-msg">Ask MIDD scoped brain UI (read-only Q&amp;A over project records, feedback logged) [skip ci]</span><span class="update-date">2026-06-23</span></div>
     </div>
   </div>
 
@@ -2607,6 +2616,15 @@ function showTab(id){
   }
 }
 
+function showSubTab(id){
+  document.querySelectorAll('#tab-valuechains .subtab-pane').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('#tab-valuechains .subtab-btn').forEach(b=>{
+    b.classList.toggle('active', b.getAttribute('onclick')===`showSubTab('${id}')`);
+  });
+  document.getElementById('subtab-'+id).classList.add('active');
+  try{ localStorage.setItem('mtic_activeSubTab',id); }catch(e){}
+}
+
 // ═══════════════════ INDUSTRY LOCATIONS MAP ═══════════════════
 const CHAIN_COLORS={
   'Iron & Steel':'#3949ab',
@@ -3170,6 +3188,8 @@ window.addEventListener('resize', () => {
     const saved=hash||(localStorage.getItem('mtic_activeTab'));
     if(saved&&document.getElementById('tab-'+saved)) showTab(saved);
     window.addEventListener('hashchange',()=>{const h=location.hash.slice(1);if(h&&document.getElementById('tab-'+h))showTab(h);});
+    const savedSub=localStorage.getItem('mtic_activeSubTab');
+    if(savedSub&&document.getElementById('subtab-'+savedSub)) showSubTab(savedSub);
   }catch(e){}
 })();
 
@@ -3652,10 +3672,10 @@ function startTour(){
         }
       },
       {
-        element: '#tab-btn-maps',
+        element: '#tab-btn-valuechains',
         popover: {
-          title: 'Value Chain Maps (Interactive Sankey)',
-          description: 'Click here to explore each chain visually — from final product upstream through technology types, components, raw materials, and labour. Hover over any node to see cost-share weights and TradeMap trade figures. Select a different chain from the dropdown inside.',
+          title: 'Value Chains: Maps & Explorer',
+          description: 'Click here to explore each chain two ways, toggled inside this tab: the interactive Sankey Map (final product upstream through technology types, components, raw materials, and labour — hover any node for cost-share weights and TradeMap figures), or the Explorer (drill into a specific finished product, stage by stage, with inputs, technology, and the professionals each stage needs).',
           side: 'bottom', align: 'start',
           onNextClick: function(){
             showTab('status');
@@ -3904,6 +3924,88 @@ function generateBrief(){
 window.addEventListener('afterprint', () => document.body.classList.remove('brief-mode'));
 
 document.addEventListener('keydown', e => { if(e.key === 'Escape'){ closeChapter(); closeGlossary(); } });
+</script>
+
+<!-- Public Ask MIDD chat bubble (PROD only; stripped on staging/local by generate_dashboard). Haiku-backed, same-origin /api/ask. -->
+<style>
+#midd-fab{position:fixed;right:22px;bottom:22px;width:58px;height:58px;border-radius:50%;
+  background:#1565c0;color:#fff;border:none;cursor:pointer;box-shadow:0 6px 20px rgba(0,0,0,.25);
+  display:flex;align-items:center;justify-content:center;z-index:9998;transition:transform .15s}
+#midd-fab:hover{transform:scale(1.06)}
+#midd-fab svg{width:26px;height:26px}
+#midd-panel{position:fixed;right:22px;bottom:90px;width:360px;max-width:calc(100vw - 32px);
+  height:500px;max-height:calc(100vh - 120px);background:#fff;border-radius:14px;z-index:9999;
+  box-shadow:0 12px 40px rgba(0,0,0,.3);display:none;flex-direction:column;overflow:hidden;
+  font-family:Inter,system-ui,Arial,sans-serif}
+#midd-panel.open{display:flex}
+#midd-head{position:relative;background:#1565c0;color:#fff;padding:14px 16px}
+#midd-head h4{margin:0;font-size:15px;font-weight:700}
+#midd-head p{margin:2px 0 0;font-size:11.5px;opacity:.85}
+#midd-x{position:absolute;top:11px;right:13px;background:none;border:none;color:#fff;font-size:20px;line-height:1;cursor:pointer}
+#midd-msgs{flex:1;overflow-y:auto;padding:14px;background:#f4f6f9}
+.midd-m{margin-bottom:10px;display:flex}
+.midd-m .b{max-width:82%;padding:9px 12px;border-radius:12px;font-size:13px;line-height:1.5;white-space:pre-wrap}
+.midd-user{justify-content:flex-end}
+.midd-user .b{background:#1565c0;color:#fff;border-bottom-right-radius:3px}
+.midd-bot .b{background:#fff;color:#1a2330;border:1px solid #e2e8f0;border-bottom-left-radius:3px}
+#midd-form{display:flex;border-top:1px solid #e6eaf0;padding:10px;gap:8px;background:#fff}
+#midd-q{flex:1;border:1px solid #cfd8e3;border-radius:20px;padding:9px 14px;font-size:13px;outline:none}
+#midd-send{background:#1565c0;color:#fff;border:none;border-radius:20px;padding:0 16px;font-weight:700;cursor:pointer;font-size:13px}
+#midd-send:disabled{opacity:.5;cursor:default}
+.midd-typing .b{color:#64748b;font-style:italic}
+</style>
+<button id="midd-fab" aria-label="Ask MIDD" onclick="middToggle()">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-8.5 8.5 8.5 8.5 0 0 1-3.8-.9L3 21l1.9-5.7A8.38 8.38 0 0 1 4 11.5 8.5 8.5 0 0 1 12.5 3 8.38 8.38 0 0 1 21 11.5z"/></svg>
+</button>
+<div id="midd-panel" role="dialog" aria-label="Ask MIDD chat">
+  <div id="midd-head"><h4>Ask MIDD</h4><p>Ask about Uganda's manufacturing data</p>
+    <button id="midd-x" onclick="middToggle()" aria-label="Close">&times;</button></div>
+  <div id="midd-msgs"></div>
+  <form id="midd-form" onsubmit="return middSend(event)">
+    <input id="midd-q" autocomplete="off" placeholder="Type your question..." maxlength="1000">
+    <button id="midd-send" type="submit">Send</button>
+  </form>
+</div>
+<script>
+(function(){
+  // Runtime env split by hostname (one build serves both origins, ADR-016 / Issue #71):
+  // staging.midd-ug.com -> show team Upload/Ask links AND the public bubble (so the
+  //                        bubble is testable against the staging brain before prod).
+  // prod (midd-ug.com)  -> hide the team links; public bubble only.
+  // The bubble is wired on BOTH; only the team-nav visibility differs.
+  var isStaging = location.hostname.indexOf('staging') === 0;
+  var nav = document.getElementById('midd-team-nav');
+  if (nav) nav.style.display = isStaging ? '' : 'none';
+  var msgs = [], opened = false, busy = false;
+  window.middToggle = function(){
+    var p = document.getElementById('midd-panel');
+    opened = !opened; p.classList.toggle('open', opened);
+    if (opened && !msgs.length){
+      middAdd('bot', "Hi! Ask me anything about Uganda's manufacturing industry on this dashboard — sectors, regions, establishment counts, or the diagnostic findings.");
+    }
+    if (opened){ setTimeout(function(){ var i=document.getElementById('midd-q'); if(i) i.focus(); }, 60); }
+  };
+  function middAdd(who, text){
+    var box = document.getElementById('midd-msgs');
+    var row = document.createElement('div'); row.className = 'midd-m ' + (who==='user'?'midd-user':'midd-bot');
+    var b = document.createElement('div'); b.className = 'b'; b.textContent = text;
+    row.appendChild(b); box.appendChild(row); box.scrollTop = box.scrollHeight; return row;
+  }
+  window.middSend = function(e){
+    e.preventDefault(); if (busy) return false;
+    var inp = document.getElementById('midd-q'); var q = inp.value.trim(); if (!q) return false;
+    inp.value = ''; middAdd('user', q);
+    busy = true; document.getElementById('midd-send').disabled = true;
+    var typing = middAdd('bot', 'MIDD is typing…'); typing.classList.add('midd-typing');
+    fetch('/api/ask', { method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ q: q, history: msgs.slice(-6) }) })
+      .then(function(r){ return r.json(); })
+      .then(function(d){ var a = (d && d.answer) || 'Sorry, no answer.'; typing.remove(); middAdd('bot', a); msgs.push({ q: q, a: a }); })
+      .catch(function(){ typing.remove(); middAdd('bot', 'Sorry, I could not reach the assistant. Please try again.'); })
+      .then(function(){ busy = false; document.getElementById('midd-send').disabled = false; var i=document.getElementById('midd-q'); if(i) i.focus(); });
+    return false;
+  };
+})();
 </script>
 
 </body>
