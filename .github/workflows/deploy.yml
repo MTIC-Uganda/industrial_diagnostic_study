@@ -227,7 +227,7 @@ jobs:
           fi
 
           # SOFT WARNING: other architecture code changed without a DSL update.
-          ARCH_PATTERNS=".github/workflows app/backend app/frontend/src scripts agents uploader midd-brain db"
+          ARCH_PATTERNS=".github/workflows app/backend app/frontend/src app/explorer/src scripts agents uploader midd-brain db"
           ARCH_CHANGED=false
           for pattern in $ARCH_PATTERNS; do
             if git diff --name-only HEAD~1 HEAD -- "$pattern" 2>/dev/null | grep -q .; then
@@ -252,10 +252,14 @@ jobs:
         with:
           node-version: "20"
           cache: "npm"
-          cache-dependency-path: app/frontend/package-lock.json
+          cache-dependency-path: |
+            app/frontend/package-lock.json
+            app/explorer/package-lock.json
 
       - name: Install dependencies
-        run: cd app/frontend && npm ci
+        run: |
+          cd app/frontend && npm ci && cd "$GITHUB_WORKSPACE"
+          cd app/explorer && npm ci && cd "$GITHUB_WORKSPACE"
 
       - uses: actions/setup-python@v5
         with:
@@ -270,13 +274,17 @@ jobs:
         run: |
           REPO="$GITHUB_WORKSPACE"
           cd app/frontend && VITE_BASE=/ npm run build && cd "$REPO"
-          # Vite outputs to report/sankey-dist/ and copies to report/sankey.html.
-          # Bundle the two files the server needs into site/:
-          #   index.html  = the main dashboard (sources-of-truth.html)
-          #   sankey.html = the React Sankey app (self-contained, iframed by index.html)
+          cd app/explorer && npm run build && cd "$REPO"
+          # Vite outputs to report/sankey-dist/ and copies to report/sankey.html
+          # (same single-file pattern for app/explorer -> report/explorer.html).
+          # Bundle the files the server needs into site/:
+          #   index.html    = the main dashboard (sources-of-truth.html)
+          #   sankey.html   = the React Sankey app (self-contained, iframed by index.html)
+          #   explorer.html = the React Value Chain Explorer (self-contained, iframed by index.html)
           mkdir -p site
           cp report/sources-of-truth.html site/index.html
           cp report/sankey.html site/sankey.html
+          cp report/explorer.html site/explorer.html
           cp report/pb-guide.html site/pb-guide.html
           cp report/upload-guide.html site/upload-guide.html
           cp report/uganda_coat_of_arms.png site/uganda_coat_of_arms.png

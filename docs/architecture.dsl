@@ -35,6 +35,7 @@ workspace "MIDD — Manufacturing Industry Diagnostics Dashboard" "As-built 2026
             # ── BUILD + SURFACES ──────────────────────────────────────────
             dashboardGen = container "Dashboard Generator" "scripts/generate_dashboard.py. Treemaps + locations map aggregate from PocketBase industries (static JSON fallback). Fills the template." "Python"
             reactBuild = container "React Sankey Build" "app/frontend -> dist (D3-sankey), embedded as sankey.html." "Node/Vite"
+            explorerBuild = container "React Value Chain Explorer Build" "app/explorer -> dist (sidebar product picker + chain-of-cards drill-down: inputs/technology/professionals per stage), embedded as explorer.html. Iron & Steel only for v1." "Node/Vite/Tailwind"
             dashboard = container "Dashboard (static)" "The public diagnostic dashboard. Prod midd-ug.com (:8201), staging staging.midd-ug.com (:8200)." "Static HTML/Nginx"
 
             # ── SHARED RECORD + ROUTING ───────────────────────────────────
@@ -79,6 +80,7 @@ workspace "MIDD — Manufacturing Industry Diagnostics Dashboard" "As-built 2026
         github -> ci "Push triggers build/deploy/promote/seed"
         ci -> dashboardGen "Build dashboard from PocketBase"
         ci -> reactBuild "Build Sankey"
+        ci -> explorerBuild "Build Value Chain Explorer"
         ci -> dashboard "Deploy staging -> promote prod -> auto-merge"
         record -> solomon "Instructions: ADRs, STATUS, TASKS"
         record -> askmidd "Brain reads a read-only clone (pulled every 5 min)"
