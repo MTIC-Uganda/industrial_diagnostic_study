@@ -287,4 +287,61 @@ const CATEGORIES = [
   { name: "Tubular Products", color: "#1e3a8a", products: ["weldedpipe", "seamlesspipe"] },
 ];
 
-export { PRODUCTS, CATEGORIES };
+// ── Trade & capacity reference data ─────────────────────────────────────────
+// Sourced from data/trademap/UGA_*.csv (ITC TradeMap, Uganda's bilateral
+// trade, 2024, USD '000) and report/chapters/report1-04-iron-steel.md
+// (NPA/UDC 2025 plant register). TradeMap was only fetched at HS-4-digit
+// level, which groups several finished products together — figures are
+// labelled by that real granularity rather than attributed to one product.
+// EAC = sum of Uganda's 2024 trade with Kenya, Tanzania, Rwanda, Burundi,
+// South Sudan and DR Congo from the same bilateral CSVs. "Global" (world
+// total trade flow, not just Uganda's) has not been sourced yet.
+const TRADE_HS4 = {
+  "7208": {
+    desc: "HS 7208 — flat-rolled, hot-rolled, ≥600mm (shared by Hot-Rolled Coil and Plate)",
+    year: 2024,
+    imports: { uganda: 219496, eac: 117 },
+    exports: { uganda: 2876, eac: 2802 },
+  },
+  "7209": {
+    desc: "HS 7209 — flat-rolled, cold-rolled, ≥600mm",
+    year: 2024,
+    imports: { uganda: 4213, eac: 1923 },
+    exports: { uganda: 256, eac: 255 },
+  },
+  "7213": {
+    desc: "HS 7213 — bars and rods in coils (wire rod)",
+    year: 2024,
+    imports: { uganda: 34054, eac: 0 },
+    exports: { uganda: 503, eac: 503 },
+  },
+  "7214": {
+    desc: "HS 7214 — other bars and rods, iron/non-alloy steel (shared by Rebar and Merchant Bar)",
+    year: 2024,
+    imports: { uganda: 2725, eac: 768 },
+    exports: { uganda: 55849, eac: 55633 },
+  },
+};
+
+// Which HS-4 trade group each product falls under (omitted = not fetched yet).
+const PRODUCT_HS4 = {
+  hotrolled: "7208",
+  plate: "7208",
+  coldrolled: "7209",
+  wirerod: "7213",
+  rebar: "7214",
+  merchantbar: "7214",
+};
+
+// Whole-chain capacity/establishment count — no per-product breakdown exists
+// in the source documents, so this is shown labelled as chain-wide, not
+// specific to whichever product is being hovered.
+const CHAIN_STATS = {
+  plants: 37,
+  installedCapacityTpa: 1682779,
+  utilisedCapacityTpa: 513364,
+  utilisationPct: 30.5,
+  source: "NPA/UDC, Mapping and Value Chain Analysis for Uganda's Iron and Steel Industry (2025)",
+};
+
+export { PRODUCTS, CATEGORIES, TRADE_HS4, PRODUCT_HS4, CHAIN_STATS };
