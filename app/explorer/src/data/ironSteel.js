@@ -344,4 +344,19 @@ const CHAIN_STATS = {
   source: "NPA/UDC, Mapping and Value Chain Analysis for Uganda's Iron and Steel Industry (2025)",
 };
 
-export { PRODUCTS, CATEGORIES, TRADE_HS4, PRODUCT_HS4, CHAIN_STATS };
+// Trade data for named raw-material commodities shown in the "Raw Materials"
+// cards (RawCard items). Keyed by the exact item name string used in those
+// cards. Only items with a fetched data/trademap/UGA_<HS>_*.csv are included
+// — the rest (Metallurgical Coal, Limestone/Dolomite, Water, Electricity,
+// Zinc/Bauxite/Cassiterite ore, etc.) have not been fetched at any HS code
+// and are intentionally left out rather than guessed.
+const RAW_MATERIAL_TRADE = {
+  "Iron Ore": {
+    desc: "HS 2601 — iron ores and concentrates",
+    year: 2024,
+    imports: { uganda: 0, eac: 0 },
+    exports: { uganda: 35841, eac: 35841 },
+  },
+};
+
+export { PRODUCTS, CATEGORIES, TRADE_HS4, PRODUCT_HS4, CHAIN_STATS, RAW_MATERIAL_TRADE };

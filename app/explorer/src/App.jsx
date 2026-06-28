@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { PRODUCTS, CATEGORIES, TRADE_HS4, PRODUCT_HS4, CHAIN_STATS } from "./data/ironSteel.js";
+import { PRODUCTS, CATEGORIES, TRADE_HS4, PRODUCT_HS4, CHAIN_STATS, RAW_MATERIAL_TRADE } from "./data/ironSteel.js";
 
 function formatUsd(thousands) {
   if (thousands == null) return "—";
@@ -9,26 +9,9 @@ function formatUsd(thousands) {
   return `$${usd}`;
 }
 
-function ProductStatsPopup({ product, hs4, top }) {
-  const trade = hs4 ? TRADE_HS4[hs4] : null;
+function TradeBlock({ trade, noDataLabel }) {
   return (
-    <div
-      style={{
-        position: "fixed", zIndex: 50, left: 212, top, width: "300px",
-        backgroundColor: "#0f172a", color: "#e2e8f0", borderRadius: "8px",
-        padding: "12px 14px", boxShadow: "0 8px 24px rgba(0,0,0,0.4)",
-        fontSize: "11px", lineHeight: 1.5, pointerEvents: "none",
-      }}
-    >
-      <div style={{ fontWeight: 700, fontSize: "12px", color: "#fff" }}>{product.name}</div>
-
-      <div style={{ fontWeight: 700, color: "#93c5fd", marginTop: "8px" }}>🏭 Industries &amp; capacity</div>
-      <div style={{ color: "#cbd5e1" }}>
-        ~{CHAIN_STATS.plants} plants · {CHAIN_STATS.installedCapacityTpa.toLocaleString()} tpa installed,{" "}
-        {CHAIN_STATS.utilisationPct}% utilised
-      </div>
-      <div style={{ color: "#64748b", fontStyle: "italic" }}>Iron &amp; Steel chain-wide — not specific to this product</div>
-
+    <>
       <div style={{ fontWeight: 700, color: "#93c5fd", marginTop: "10px" }}>📦 Trade ({trade ? trade.year : "—"}, USD)</div>
       {trade ? (
         <>
@@ -41,13 +24,61 @@ function ProductStatsPopup({ product, hs4, top }) {
           <div style={{ color: "#64748b", fontSize: "9.5px", marginTop: "4px" }}>{trade.desc}</div>
         </>
       ) : (
-        <div style={{ color: "#94a3b8" }}>No HS-code-specific trade data fetched yet for this product.</div>
+        <div style={{ color: "#94a3b8" }}>{noDataLabel}</div>
       )}
+    </>
+  );
+}
+
+function StatsPopupShell({ title, top, left, children }) {
+  return (
+    <div
+      style={{
+        position: "fixed", zIndex: 50, left, top, width: "300px",
+        backgroundColor: "#0f172a", color: "#e2e8f0", borderRadius: "8px",
+        padding: "12px 14px", boxShadow: "0 8px 24px rgba(0,0,0,0.4)",
+        fontSize: "11px", lineHeight: 1.5, pointerEvents: "none",
+      }}
+    >
+      <div style={{ fontWeight: 700, fontSize: "12px", color: "#fff" }}>{title}</div>
+      {children}
+    </div>
+  );
+}
+
+function ProductStatsPopup({ product, hs4, top }) {
+  const trade = hs4 ? TRADE_HS4[hs4] : null;
+  return (
+    <StatsPopupShell title={product.name} top={top} left={212}>
+      <div style={{ fontWeight: 700, color: "#93c5fd", marginTop: "8px" }}>🏭 Industries &amp; capacity</div>
+      <div style={{ color: "#cbd5e1" }}>
+        ~{CHAIN_STATS.plants} plants · {CHAIN_STATS.installedCapacityTpa.toLocaleString()} tpa installed,{" "}
+        {CHAIN_STATS.utilisationPct}% utilised
+      </div>
+      <div style={{ color: "#64748b", fontStyle: "italic" }}>Iron &amp; Steel chain-wide — not specific to this product</div>
+
+      <TradeBlock trade={trade} noDataLabel="No HS-code-specific trade data fetched yet for this product." />
 
       <div style={{ color: "#64748b", fontSize: "9.5px", marginTop: "8px", borderTop: "1px solid #1e293b", paddingTop: "6px" }}>
         Sources: ITC TradeMap (Uganda bilateral trade) · {CHAIN_STATS.source}
       </div>
-    </div>
+    </StatsPopupShell>
+  );
+}
+
+function RawMaterialPopup({ item, top, left }) {
+  const trade = RAW_MATERIAL_TRADE[item.name] || null;
+  return (
+    <StatsPopupShell title={item.name} top={top} left={left}>
+      <div style={{ fontWeight: 700, color: "#93c5fd", marginTop: "8px" }}>🏭 Industries &amp; capacity</div>
+      <div style={{ color: "#94a3b8" }}>Not yet sourced for this raw material (mining/production data is not in the source documents at this granularity).</div>
+
+      <TradeBlock trade={trade} noDataLabel="No HS-code-specific trade data fetched yet for this raw material." />
+
+      <div style={{ color: "#64748b", fontSize: "9.5px", marginTop: "8px", borderTop: "1px solid #1e293b", paddingTop: "6px" }}>
+        Source: ITC TradeMap (Uganda bilateral trade)
+      </div>
+    </StatsPopupShell>
   );
 }
 
@@ -188,12 +219,18 @@ function GroupCard({ node }) {
 }
 
 function RawCard({ node }) {
+  const [hover, setHover] = useState(null);
   return (
     <div className="rounded-lg overflow-hidden border border-slate-200 shadow-sm">
       <CardHeader stage={node.stage} label={node.label} color={node.color} textColor={node.textColor} />
       <div className="divide-y divide-slate-200" style={{ backgroundColor: node.color + "10" }}>
         {node.items.map((item, i) => (
-          <div key={i} className="px-3 py-2 flex items-start gap-2">
+          <div key={i} className="px-3 py-2 flex items-start gap-2"
+            onMouseEnter={(e) => {
+              const r = e.currentTarget.getBoundingClientRect();
+              setHover({ item, top: Math.min(r.top, window.innerHeight - 200), left: Math.min(r.right + 8, window.innerWidth - 310) });
+            }}
+            onMouseLeave={() => setHover(null)}>
             <span className="mt-1 shrink-0 w-1.5 h-1.5 rounded-full" style={{ backgroundColor: node.color }} />
             <div>
               <div className="text-xs font-bold text-slate-800">{item.name}</div>
@@ -202,6 +239,7 @@ function RawCard({ node }) {
           </div>
         ))}
       </div>
+      {hover && <RawMaterialPopup item={hover.item} top={hover.top} left={hover.left} />}
     </div>
   );
 }
