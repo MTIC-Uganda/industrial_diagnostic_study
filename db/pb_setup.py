@@ -15,7 +15,7 @@ Re-running is safe — existing collections and records are updated, not duplica
 """
 
 import csv, json, os, sys, time
-import urllib.request, urllib.error
+import urllib.request, urllib.error, urllib.parse
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -334,15 +334,32 @@ for col in COLLECTIONS:
         cid = existing[name]
         print(f'  Exists   {name}  (schema left intact)')
     else:
-        result = pb('POST', '/api/collections', col)
-        cid = result.get('id', '')
-        print(f'  Created  {name}  (id={cid})')
+        # Race/duplicate-safe: a concurrent run (or an earlier partial run) may have
+        # created this collection already. PocketBase 0.22's duplicate-name 400 does
+        # not always contain the literal "already exist", so a create can fail even
+        # though the collection ends up present. Re-fetch and treat present-after as
+        # success; only re-raise if it genuinely is not there. (Fixes the CI 400 from
+        # the 13:46/13:55 overlapping runs — see Issue #70.)
+        try:
+            result = pb('POST', '/api/collections', col)
+            if result.get('_exists'):
+                raise RuntimeError('already exists')
+            cid = result.get('id', '')
+            print(f'  Created  {name}  (id={cid})')
+        except Exception:
+            now = {c['name']: c['id'] for c in pb('GET', '/api/collections?perPage=200').get('items', [])}
+            if name in now:
+                cid = now[name]
+                print(f'  Exists   {name}  (already present after create attempt)')
+            else:
+                raise
     collection_ids[name] = cid
 
 # ── Helper: upsert by slug field ──────────────────────────────────────────────
 
 def find_by_slug(collection, slug):
-    result = pb('GET', f'/api/collections/{collection}/records?filter=(slug="{slug}")&perPage=1')
+    flt = urllib.parse.quote(f'(slug="{slug}")')
+    result = pb('GET', f'/api/collections/{collection}/records?filter={flt}&perPage=1')
     items = result.get('items', [])
     return items[0]['id'] if items else None
 
@@ -487,7 +504,7 @@ for i, r in enumerate(key_indicators_csv):
 # ── 3c. key_indicator_categories (donut/region-strip slices) ──────────────────
 
 def find_category_record(indicator_slug, category):
-    f = f'(indicator_slug="{indicator_slug}"&&category="{category}")'
+    f = urllib.parse.quote(f'(indicator_slug="{indicator_slug}"&&category="{category}")')
     result = pb('GET', f'/api/collections/key_indicator_categories/records?filter={f}&perPage=1')
     items = result.get('items', [])
     return items[0]['id'] if items else None
