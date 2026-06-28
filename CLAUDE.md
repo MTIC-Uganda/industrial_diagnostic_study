@@ -90,7 +90,15 @@ app/                    ← THE INTERACTIVE SANKEY APP (moved from valuechains-a
       graph-bundle.json Static data snapshot — regenerate with export_bundle.py
     package.json        React + d3-sankey + driver.js dependencies
     vite.config.js      Vite build config
-  netlify.toml          Netlify build config (base = app/frontend)
+  explorer/             VALUE CHAIN EXPLORER — sibling React app (Tailwind, separate from frontend/)
+    src/
+      App.jsx           Sidebar product picker -> chain-of-cards (inputs/technology/professionals tabs)
+      data/ironSteel.js Iron & Steel finished-product data (PRODUCTS + CATEGORIES). To add the next
+                        value chain, add a sibling data file in this same shape and wire it into App.jsx.
+    package.json        React + Tailwind dependencies
+    vite.config.js      Single-file build -> report/explorer.html (same pattern as frontend/)
+  netlify.toml          Netlify build config (base = app/frontend) — stale, deployment is via
+                        .github/workflows/deploy.yml -> Hetzner, not Netlify
   sample_chapter_iron_steel.md  Example of generate_chapter.py output
 scripts/                Report build scripts (Phase 1 — already used)
 docs/

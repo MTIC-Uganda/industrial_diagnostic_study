@@ -341,6 +341,7 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-t
 <div class="tab-bar" id="tour-tab-bar">
   <button id="tab-btn-overview" class="tab-btn active" onclick="showTab('overview')">🏭 Manufacturing Industry</button>
   <button id="tab-btn-maps" class="tab-btn" onclick="showTab('maps')">🗺️ Value Chain Maps</button>
+  <button id="tab-btn-explorer" class="tab-btn" onclick="showTab('explorer')">🔗 Value Chain Explorer</button>
   <button id="tab-btn-status" class="tab-btn" onclick="showTab('status')">📊 Chain Status &amp; 2040 Projections</button>
   <button id="tab-btn-locations" class="tab-btn" onclick="showTab('locations')">📍 Industry Locations</button>
 </div>
@@ -609,7 +610,17 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-t
 <div id="tab-maps" class="tab-content" style="padding:0;overflow:hidden">
   <iframe src="./sankey.html"
     style="width:100%;height:calc(100vh - 118px);min-height:680px;border:none;display:block"
-    title="Uganda Value Chain Explorer — Interactive Sankey">
+    title="Uganda Value Chain Maps — Interactive Sankey">
+  </iframe>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SECTION 2B: VALUE CHAIN EXPLORER
+═══════════════════════════════════════════════════════════════ -->
+<div id="tab-explorer" class="tab-content" style="padding:0;overflow:hidden">
+  <iframe src="./explorer.html"
+    style="width:100%;height:calc(100vh - 118px);min-height:680px;border:none;display:block"
+    title="Value Chain Explorer — Iron & Steel finished products">
   </iframe>
 </div>
 
