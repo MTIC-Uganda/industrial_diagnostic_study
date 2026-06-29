@@ -63,6 +63,10 @@ function StatsPopupShell({ title, anchorRect, children }) {
         position: "fixed", zIndex: 50,
         top: pos ? pos.top : anchorRect.top, left: pos ? pos.left : anchorRect.right + 8,
         visibility: pos ? "visible" : "hidden", width: "300px",
+        // Repositioning alone can't keep the popup on-screen if its content
+        // is taller than the viewport (long firm lists, smaller windows) —
+        // cap its own size to fit, and let it scroll internally if needed.
+        maxWidth: "calc(100vw - 16px)", maxHeight: "calc(100vh - 16px)", overflowY: "auto",
         backgroundColor: "#0f172a", color: "#e2e8f0", borderRadius: "8px",
         padding: "12px 14px", boxShadow: "0 8px 24px rgba(0,0,0,0.4)",
         fontSize: "11px", lineHeight: 1.5, pointerEvents: "none",
