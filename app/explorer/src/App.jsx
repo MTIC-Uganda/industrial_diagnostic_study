@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useLayoutEffect } from "react";
 import { PRODUCTS, CATEGORIES, TRADE_HS4, PRODUCT_HS4, RAW_MATERIAL_TRADE, matchInputTrade, PRODUCT_FIRMS } from "./data/ironSteel.js";
 
 function formatUsd(thousands) {
@@ -30,11 +30,39 @@ function TradeBlock({ trade, noDataLabel }) {
   );
 }
 
-function StatsPopupShell({ title, top, left, children }) {
+// Renders the popup, measures its own size once mounted, and clamps/flips
+// it so it always stays fully on-screen relative to the hovered element's
+// rect — regardless of where on the page that element is.
+function StatsPopupShell({ title, anchorRect, children }) {
+  const ref = useRef(null);
+  const [pos, setPos] = useState(null);
+
+  useLayoutEffect(() => {
+    const el = ref.current;
+    if (!el || !anchorRect) return;
+    const margin = 8;
+    const w = el.offsetWidth;
+    const h = el.offsetHeight;
+
+    let left = anchorRect.right + margin;
+    if (left + w > window.innerWidth - margin) {
+      left = anchorRect.left - w - margin; // flip to the left of the anchor
+    }
+    left = Math.max(margin, Math.min(left, window.innerWidth - w - margin));
+
+    let top = anchorRect.top;
+    top = Math.max(margin, Math.min(top, window.innerHeight - h - margin));
+
+    setPos({ top, left });
+  }, [anchorRect]);
+
   return (
     <div
+      ref={ref}
       style={{
-        position: "fixed", zIndex: 50, left, top, width: "300px",
+        position: "fixed", zIndex: 50,
+        top: pos ? pos.top : anchorRect.top, left: pos ? pos.left : anchorRect.right + 8,
+        visibility: pos ? "visible" : "hidden", width: "300px",
         backgroundColor: "#0f172a", color: "#e2e8f0", borderRadius: "8px",
         padding: "12px 14px", boxShadow: "0 8px 24px rgba(0,0,0,0.4)",
         fontSize: "11px", lineHeight: 1.5, pointerEvents: "none",
@@ -74,11 +102,11 @@ function ProducerBlock({ entry }) {
   );
 }
 
-function ProductStatsPopup({ product, hs4, top }) {
+function ProductStatsPopup({ product, hs4, anchorRect }) {
   const trade = hs4 ? TRADE_HS4[hs4] : null;
   const producers = PRODUCT_FIRMS[product.id];
   return (
-    <StatsPopupShell title={product.name} top={top} left={212}>
+    <StatsPopupShell title={product.name} anchorRect={anchorRect}>
       <div style={{ fontWeight: 700, color: "#93c5fd", marginTop: "8px" }}>🏭 Known producers</div>
       <ProducerBlock entry={producers} />
 
@@ -91,10 +119,10 @@ function ProductStatsPopup({ product, hs4, top }) {
   );
 }
 
-function RawMaterialPopup({ item, top, left }) {
+function RawMaterialPopup({ item, anchorRect }) {
   const trade = RAW_MATERIAL_TRADE[item.name] || null;
   return (
-    <StatsPopupShell title={item.name} top={top} left={left}>
+    <StatsPopupShell title={item.name} anchorRect={anchorRect}>
       <div style={{ fontWeight: 700, color: "#93c5fd", marginTop: "8px" }}>🏭 Industries &amp; capacity</div>
       <div style={{ color: "#94a3b8" }}>Not yet sourced for this raw material (mining/production data is not in the source documents at this granularity).</div>
 
@@ -107,10 +135,10 @@ function RawMaterialPopup({ item, top, left }) {
   );
 }
 
-function InputStatsPopup({ text, top, left }) {
+function InputStatsPopup({ text, anchorRect }) {
   const trade = matchInputTrade(text);
   return (
-    <StatsPopupShell title={text} top={top} left={left}>
+    <StatsPopupShell title={text} anchorRect={anchorRect}>
       <div style={{ fontWeight: 700, color: "#93c5fd", marginTop: "8px" }}>🏭 Industries &amp; capacity</div>
       <div style={{ color: "#94a3b8" }}>
         No count exists for this intermediate stream specifically — it's produced inside whichever finished-product
@@ -165,14 +193,14 @@ function ItemList({ items, color, showTrade }) {
         <li key={i} className="text-xs flex items-start gap-1.5 text-slate-700"
           onMouseEnter={showTrade ? (e) => {
             const r = e.currentTarget.getBoundingClientRect();
-            setHover({ text: item, top: Math.min(r.top, window.innerHeight - 200), left: Math.min(r.right + 8, window.innerWidth - 310) });
+            setHover({ text: item, rect: r });
           } : undefined}
           onMouseLeave={showTrade ? () => setHover(null) : undefined}>
           <span className="mt-1 shrink-0 w-1.5 h-1.5 rounded-full" style={{ backgroundColor: color }} />
           {item}
         </li>
       ))}
-      {hover && <InputStatsPopup text={hover.text} top={hover.top} left={hover.left} />}
+      {hover && <InputStatsPopup text={hover.text} anchorRect={hover.rect} />}
     </ul>
   );
 }
@@ -279,7 +307,7 @@ function RawCard({ node }) {
           <div key={i} className="px-3 py-2 flex items-start gap-2"
             onMouseEnter={(e) => {
               const r = e.currentTarget.getBoundingClientRect();
-              setHover({ item, top: Math.min(r.top, window.innerHeight - 200), left: Math.min(r.right + 8, window.innerWidth - 310) });
+              setHover({ item, rect: r });
             }}
             onMouseLeave={() => setHover(null)}>
             <span className="mt-1 shrink-0 w-1.5 h-1.5 rounded-full" style={{ backgroundColor: node.color }} />
@@ -290,7 +318,7 @@ function RawCard({ node }) {
           </div>
         ))}
       </div>
-      {hover && <RawMaterialPopup item={hover.item} top={hover.top} left={hover.left} />}
+      {hover && <RawMaterialPopup item={hover.item} anchorRect={hover.rect} />}
     </div>
   );
 }
@@ -350,7 +378,7 @@ export default function ValueChainExplorer() {
                 return (
                   <button key={pid} onClick={() => setSelected(pid)}
                     title={p.name}
-                    onMouseEnter={(e) => setHoverInfo({ pid, top: Math.min(e.currentTarget.getBoundingClientRect().top, window.innerHeight - 230) })}
+                    onMouseEnter={(e) => setHoverInfo({ pid, rect: e.currentTarget.getBoundingClientRect() })}
                     onMouseLeave={() => setHoverInfo(null)}
                     style={{ width: "100%", textAlign: "left", padding: sidebarOpen ? "5px 12px" : "8px", background: selected === pid ? "#1e293b" : "transparent", border: "none", cursor: "pointer", display: "flex", alignItems: "center", gap: "8px" }}>
                     <span style={{ width: "6px", height: "6px", borderRadius: "50%", backgroundColor: p.color, flexShrink: 0 }} />
@@ -414,7 +442,7 @@ export default function ValueChainExplorer() {
       </div>
 
       {hoverInfo && (
-        <ProductStatsPopup product={PRODUCTS[hoverInfo.pid]} hs4={PRODUCT_HS4[hoverInfo.pid]} top={hoverInfo.top} />
+        <ProductStatsPopup product={PRODUCTS[hoverInfo.pid]} hs4={PRODUCT_HS4[hoverInfo.pid]} anchorRect={hoverInfo.rect} />
       )}
     </div>
   );
