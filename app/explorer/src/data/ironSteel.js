@@ -348,6 +348,21 @@ function matchInputTrade(text) {
   return hit ? TRADE_HS4[hit.hs4] : null;
 }
 
+// Keyword -> verified Phase, for the same free-text "Inputs" line items —
+// only for phases the NPA/UDC register actually distinguishes (II/III/IV).
+// Deliberately excludes hot/cold-rolled coil mentions: those are imported
+// inputs, not domestically produced, so no Uganda phase count applies.
+const INPUT_KEYWORD_PHASE = [
+  { pattern: /\bsponge iron\b|\bpig iron\b|\bDRI\b|\bHBI\b/i, phase: "II" },
+  { pattern: /\bscrap\b|\bliquid steel\b/i, phase: "III" },
+  { pattern: /\b(slab|billet|bloom)\b/i, phase: "IV" },
+];
+
+function matchInputPhase(text) {
+  const hit = INPUT_KEYWORD_PHASE.find((k) => k.pattern.test(text));
+  return hit ? PHASE_PRODUCERS[hit.phase] : null;
+}
+
 // Which HS-4 trade group each product falls under (omitted = not fetched yet).
 const PRODUCT_HS4 = {
   hotrolled: "7208",
@@ -358,41 +373,60 @@ const PRODUCT_HS4 = {
   merchantbar: "7214",
 };
 
-// Per-product producer attribution, from the named-firm table and product
-// narrative in report/chapters/report1-04-iron-steel.md (NPA/UDC 2025 plant
-// register cites ~37 plants total, but the register itself is a legacy .doc
-// file not yet machine-readable — so this is NOT a verified complete count,
-// only the firms the chapter names for that specific product). status:
-// "named" = at least one firm explicitly named for this product; "absent" =
-// the chapter explicitly states no/negligible domestic production; "unknown"
-// = neither confirmed — don't imply a number either way.
+// Verified plant-by-phase participation, extracted from the NPA/UDC source
+// register itself (Table 7: "Value Chain mapping for Iron and Steel players
+// in Uganda") once it was converted from legacy .doc to .docx. Each plant is
+// colour-coded there by % operation in each value-chain phase; counts below
+// are plants marked active (100%, <50%, or small-scale) in that phase —
+// "out of business" marks are excluded (e.g. BM Steel Ltd, International
+// Mining Company of Uganda and WCH are all marked fully out of business,
+// despite BM Steel being named as an active producer in the report chapter's
+// prose summary — the matrix is the more granular, more current source).
+//
+// Phase V is split into V(a) primary steel rolling (billets -> long
+// products: rebar, wire rod, bars, sections) and V(b) finishing/coating
+// (e.g. PPGI/galvanizing) — this split is explicit in the source document's
+// own text (Section 3.3.6: "the small players in Phase V(b) source their
+// raw materials locally from those in Phase V(a)"). This is the most
+// granular real breakdown available — the register does not go further to
+// separate, say, rebar-only plants from wire-rod-only plants within V(a).
+const PHASE_PRODUCERS = {
+  I: { count: 3, label: "Phase I — exploration & mining", examples: ["SINO Minerals Ltd (300,000 tpa installed, Kabale)", "GLISCO Ltd (small-scale, Kisoro)", "Kamuntu Investments (small-scale)"] },
+  II: { count: 2, label: "Phase II — ironmaking (sponge iron/DRI)", examples: ["Tembo Steel — Iganga", "Abyssinia Iron & Steel (U) Ltd — Jinja"] },
+  III: { count: 5, label: "Phase III — steelmaking", examples: ["Tembo Steel", "Abyssinia Iron & Steel", "Pramukh Steel", "Yogi Steel", "Tembo Steel — Lugazi"] },
+  IV: { count: 9, label: "Phase IV — continuous casting (slabs/blooms/billets)", examples: ["Tembo Steel", "Abyssinia Iron & Steel", "Steel & Tube Ltd (Nakawa & Namanve)", "Roofings Ltd — Lubowa", "Tian Tang Steel"] },
+  Va: { count: 16, label: "Phase V(a) — primary steel rolling (billets → long products)", examples: ["Roofings Ltd (Lubowa & Namanve)", "Steel & Tube Ltd (Nakawa & Namanve)", "Tembo Steel (Iganga & Lugazi)", "Pramukh Steel", "Yogi Steel", "Tian Tang Steel", "Madhvani Steel", "and 9 others"] },
+  Vb: { count: 32, label: "Phase V(b) — finishing/coating (e.g. PPGI, galvanizing)", examples: ["Uganda Baati", "Tororo Cement — Steel Division", "Nile Roofings Ltd", "East African Roofing Systems Ltd", "Mayuge Sugar — Steel Division", "plus the 16 Phase V(a) plants, and 11 others"] },
+};
+const PHASE_SOURCE = "NPA/UDC, Mapping and Value Chain Analysis for Uganda's Iron and Steel Industry (Oct 2025), Table 7";
+
+// Per-product producer attribution. status: "phase" = backed by the verified
+// PHASE_PRODUCERS count above (shared across every finished product rolled
+// out of that phase — the register doesn't split further); "absent" = the
+// report explicitly states no/negligible domestic production; "unknown" =
+// neither confirmed — don't imply a number either way.
 const PRODUCT_FIRMS = {
-  galvanized: { status: "named", firms: ["Roofings Ltd", "Roofings Rolling Mills", "Uganda Baati"], note: "Coat imported coil locally — Uganda has no domestic flat-rolling, so the steel substrate itself is imported." },
-  galvalume: { status: "unknown", firms: [], note: "Not discussed separately from Galvanized Sheet in the source report." },
-  prepainted: { status: "unknown", firms: [], note: "Not discussed separately from Galvanized Sheet in the source report." },
-  tinplate: { status: "absent", firms: [], note: "Explicitly deprioritized — \"low\" on every prioritisation criterion (Section 4.F); no producer named." },
-  coldrolled: { status: "absent", firms: [], note: "Flat-rolling is explicitly described as absent in Uganda (Section 4.A/4.B) — no domestic cold-rolling mill identified." },
-  hotrolled: { status: "absent", firms: [], note: "Flat-rolling is explicitly described as absent in Uganda (Section 4.A/4.B) — no domestic hot-rolling mill identified." },
-  plate: { status: "absent", firms: [], note: "Flat-rolling is explicitly described as absent in Uganda (Section 4.A/4.B) — no domestic plate mill identified." },
-  rebar: { status: "named", firms: ["Roofings Rolling Mills", "Tororo Cement — Steel Division", "BM Steel (GLISCO)", "Pramukh, Yogi, Madhvani, Tian Tang, Diamond and others"], note: "Uganda's strongest finished product — net exporter (USD 55.8m, 2024)." },
-  wirerod: { status: "named", firms: ["Roofings Rolling Mills", "Pramukh, Yogi, Madhvani, Tian Tang, Diamond and others"], note: "Re-rolling group named for \"wire, nails\"." },
-  merchantbar: { status: "named", firms: ["Steel & Tube Industries (STIL)", "BM Steel (GLISCO)", "Pramukh, Yogi, Madhvani, Tian Tang, Diamond and others"], note: "Named for \"bars, tubes, sections\" / \"sections, bars\"." },
-  structural: { status: "named", firms: ["Steel & Tube Industries (STIL)", "BM Steel (GLISCO)"], note: "Named for \"bars, tubes, sections\" / \"sections, bars\"." },
-  rail: { status: "unknown", firms: [], note: "Not discussed in the source report — neither confirmed present nor absent." },
-  sheetpiling: { status: "unknown", firms: [], note: "Not discussed in the source report — neither confirmed present nor absent." },
-  weldedpipe: { status: "named", firms: ["Roofings Ltd", "Steel & Tube Industries (STIL)"], note: "Named for \"wire, pipes\" / \"tubes\"." },
-  seamlesspipe: { status: "absent", firms: [], note: "Explicitly named as a product Uganda should NOT pursue at this stage (Section 4.F)." },
+  galvanized: { status: "phase", phase: "Vb" },
+  galvalume: { status: "phase", phase: "Vb", note: "Not discussed as a separate line item from PPGI/galvanized sheet in the source report — same Phase V(b) finishing plants." },
+  prepainted: { status: "phase", phase: "Vb" },
+  tinplate: { status: "absent", note: "Explicitly deprioritized — \"low\" on every prioritisation criterion (report Section 4.F); no producer named or marked active." },
+  coldrolled: { status: "absent", note: "Flat-rolling is explicitly described as absent in Uganda — Phase V(a)/(b) plants finish imported coil, none cast and roll flat coil domestically." },
+  hotrolled: { status: "absent", note: "Flat-rolling is explicitly described as absent in Uganda — Phase V(a)/(b) plants finish imported coil, none cast and roll flat coil domestically." },
+  plate: { status: "absent", note: "Flat-rolling is explicitly described as absent in Uganda — Phase V(a)/(b) plants finish imported coil, none cast and roll flat coil domestically." },
+  rebar: { status: "phase", phase: "Va", note: "Uganda's strongest finished product — net exporter (USD 55.8m, 2024)." },
+  wirerod: { status: "phase", phase: "Va" },
+  merchantbar: { status: "phase", phase: "Va" },
+  structural: { status: "phase", phase: "Va" },
+  rail: { status: "unknown", note: "Not discussed in the source report — neither confirmed present nor absent." },
+  sheetpiling: { status: "unknown", note: "Not discussed in the source report — neither confirmed present nor absent." },
+  weldedpipe: { status: "phase", phase: "Va", note: "Steel & Tube Ltd is specifically named for \"tubes\" in the report narrative, within this Phase V(a) group." },
+  seamlesspipe: { status: "absent", note: "Explicitly named as a product Uganda should NOT pursue at this stage (report Section 4.F)." },
 };
 
-// Whole-chain capacity/establishment count — no per-product breakdown exists
-// in the source documents, so this is shown labelled as chain-wide, not
-// specific to whichever product is being hovered.
-const CHAIN_STATS = {
-  plants: 37,
-  installedCapacityTpa: 1682779,
-  utilisedCapacityTpa: 513364,
-  utilisationPct: 30.5,
-  source: "NPA/UDC, Mapping and Value Chain Analysis for Uganda's Iron and Steel Industry (2025)",
+// Verified Phase I (mining) producer count for raw materials shown in the
+// "Raw Materials" cards, where the NPA/UDC register covers that material.
+const RAW_MATERIAL_PHASE = {
+  "Iron Ore": "I",
 };
 
 // Trade data for named raw-material commodities shown in the "Raw Materials"
@@ -410,4 +444,4 @@ const RAW_MATERIAL_TRADE = {
   },
 };
 
-export { PRODUCTS, CATEGORIES, TRADE_HS4, PRODUCT_HS4, CHAIN_STATS, RAW_MATERIAL_TRADE, matchInputTrade, PRODUCT_FIRMS };
+export { PRODUCTS, CATEGORIES, TRADE_HS4, PRODUCT_HS4, RAW_MATERIAL_TRADE, matchInputTrade, matchInputPhase, PRODUCT_FIRMS, PHASE_PRODUCERS, PHASE_SOURCE, RAW_MATERIAL_PHASE };
