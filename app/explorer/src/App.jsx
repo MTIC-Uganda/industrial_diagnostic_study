@@ -1,5 +1,5 @@
 import { useState, useRef, useLayoutEffect } from "react";
-import { PRODUCTS, CATEGORIES, TRADE_HS4, PRODUCT_HS4, RAW_MATERIAL_TRADE, matchInputTrade, PRODUCT_FIRMS } from "./data/ironSteel.js";
+import { PRODUCTS, CATEGORIES, TRADE_HS4, PRODUCT_HS4, RAW_MATERIAL_TRADE, matchInputTrade, matchInputPhase, PRODUCT_FIRMS, PHASE_PRODUCERS, PHASE_SOURCE, RAW_MATERIAL_PHASE } from "./data/ironSteel.js";
 
 function formatUsd(thousands) {
   if (thousands == null) return "—";
@@ -74,6 +74,19 @@ function StatsPopupShell({ title, anchorRect, children }) {
   );
 }
 
+function PhaseCountBlock({ phase }) {
+  const p = PHASE_PRODUCERS[phase];
+  if (!p) return null;
+  return (
+    <>
+      <div style={{ color: "#cbd5e1" }}><strong>{p.count} plants</strong> — {p.label}</div>
+      <div style={{ color: "#64748b", fontSize: "9.5px", marginTop: "2px" }}>
+        e.g. {p.examples.join(", ")}.
+      </div>
+    </>
+  );
+}
+
 function ProducerBlock({ entry }) {
   if (!entry || entry.status === "unknown") {
     return (
@@ -91,11 +104,14 @@ function ProducerBlock({ entry }) {
       </>
     );
   }
+  // status === "phase": a verified count of plants marked active in that
+  // value-chain phase, shared with every other finished product rolled out
+  // of the same phase — the source register doesn't split further.
   return (
     <>
-      <div style={{ color: "#cbd5e1" }}>{entry.firms.join(" · ")}</div>
+      <PhaseCountBlock phase={entry.phase} />
       <div style={{ color: "#64748b", fontSize: "9.5px", marginTop: "2px" }}>
-        Named firms only, from the report's plant-register excerpt — not a verified complete count.
+        Verified from the plant register, not split further by specific finished product within this phase.
         {entry.note ? ` ${entry.note}` : ""}
       </div>
     </>
@@ -113,7 +129,7 @@ function ProductStatsPopup({ product, hs4, anchorRect }) {
       <TradeBlock trade={trade} noDataLabel="No HS-code-specific trade data fetched yet for this product." />
 
       <div style={{ color: "#64748b", fontSize: "9.5px", marginTop: "8px", borderTop: "1px solid #1e293b", paddingTop: "6px" }}>
-        Sources: ITC TradeMap (Uganda bilateral trade) · report1-04-iron-steel.md (NPA/UDC 2025 plant register excerpt)
+        Sources: ITC TradeMap (Uganda bilateral trade) · {PHASE_SOURCE}
       </div>
     </StatsPopupShell>
   );
@@ -121,15 +137,20 @@ function ProductStatsPopup({ product, hs4, anchorRect }) {
 
 function RawMaterialPopup({ item, anchorRect }) {
   const trade = RAW_MATERIAL_TRADE[item.name] || null;
+  const phase = RAW_MATERIAL_PHASE[item.name];
   return (
     <StatsPopupShell title={item.name} anchorRect={anchorRect}>
       <div style={{ fontWeight: 700, color: "#93c5fd", marginTop: "8px" }}>🏭 Industries &amp; capacity</div>
-      <div style={{ color: "#94a3b8" }}>Not yet sourced for this raw material (mining/production data is not in the source documents at this granularity).</div>
+      {phase ? (
+        <PhaseCountBlock phase={phase} />
+      ) : (
+        <div style={{ color: "#94a3b8" }}>Not yet sourced for this raw material (mining/production data is not in the source documents at this granularity).</div>
+      )}
 
       <TradeBlock trade={trade} noDataLabel="No HS-code-specific trade data fetched yet for this raw material." />
 
       <div style={{ color: "#64748b", fontSize: "9.5px", marginTop: "8px", borderTop: "1px solid #1e293b", paddingTop: "6px" }}>
-        Source: ITC TradeMap (Uganda bilateral trade)
+        {phase ? `Sources: ITC TradeMap (Uganda bilateral trade) · ${PHASE_SOURCE}` : "Source: ITC TradeMap (Uganda bilateral trade)"}
       </div>
     </StatsPopupShell>
   );
@@ -137,18 +158,23 @@ function RawMaterialPopup({ item, anchorRect }) {
 
 function InputStatsPopup({ text, anchorRect }) {
   const trade = matchInputTrade(text);
+  const phase = matchInputPhase(text);
   return (
     <StatsPopupShell title={text} anchorRect={anchorRect}>
       <div style={{ fontWeight: 700, color: "#93c5fd", marginTop: "8px" }}>🏭 Industries &amp; capacity</div>
-      <div style={{ color: "#94a3b8" }}>
-        No count exists for this intermediate stream specifically — it's produced inside whichever finished-product
-        plants use this process step. See that product's card for named producers, where known.
-      </div>
+      {phase ? (
+        <div style={{ color: "#cbd5e1" }}><strong>{phase.count} plants</strong> — {phase.label}</div>
+      ) : (
+        <div style={{ color: "#94a3b8" }}>
+          No count exists for this intermediate stream specifically — it's produced inside whichever finished-product
+          plants use this process step. See that product's card for named producers, where known.
+        </div>
+      )}
 
       <TradeBlock trade={trade} noDataLabel="No HS-code-specific trade data fetched yet for this input." />
 
       <div style={{ color: "#64748b", fontSize: "9.5px", marginTop: "8px", borderTop: "1px solid #1e293b", paddingTop: "6px" }}>
-        Source: ITC TradeMap (Uganda bilateral trade)
+        {phase ? `Sources: ITC TradeMap (Uganda bilateral trade) · ${PHASE_SOURCE}` : "Source: ITC TradeMap (Uganda bilateral trade)"}
       </div>
     </StatsPopupShell>
   );
