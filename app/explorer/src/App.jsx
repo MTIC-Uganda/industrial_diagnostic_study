@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { PRODUCTS, CATEGORIES, TRADE_HS4, PRODUCT_HS4, CHAIN_STATS, RAW_MATERIAL_TRADE, matchInputTrade } from "./data/ironSteel.js";
+import { PRODUCTS, CATEGORIES, TRADE_HS4, PRODUCT_HS4, RAW_MATERIAL_TRADE, matchInputTrade, PRODUCT_FIRMS } from "./data/ironSteel.js";
 
 function formatUsd(thousands) {
   if (thousands == null) return "—";
@@ -46,21 +46,46 @@ function StatsPopupShell({ title, top, left, children }) {
   );
 }
 
+function ProducerBlock({ entry }) {
+  if (!entry || entry.status === "unknown") {
+    return (
+      <>
+        <div style={{ color: "#94a3b8" }}>Not identified in source documents — neither confirmed present nor absent.</div>
+        {entry?.note && <div style={{ color: "#64748b", fontSize: "9.5px", marginTop: "2px" }}>{entry.note}</div>}
+      </>
+    );
+  }
+  if (entry.status === "absent") {
+    return (
+      <>
+        <div style={{ color: "#fca5a5" }}>No domestic producer identified — explicitly described as absent/deprioritized in the source report.</div>
+        {entry.note && <div style={{ color: "#64748b", fontSize: "9.5px", marginTop: "2px" }}>{entry.note}</div>}
+      </>
+    );
+  }
+  return (
+    <>
+      <div style={{ color: "#cbd5e1" }}>{entry.firms.join(" · ")}</div>
+      <div style={{ color: "#64748b", fontSize: "9.5px", marginTop: "2px" }}>
+        Named firms only, from the report's plant-register excerpt — not a verified complete count.
+        {entry.note ? ` ${entry.note}` : ""}
+      </div>
+    </>
+  );
+}
+
 function ProductStatsPopup({ product, hs4, top }) {
   const trade = hs4 ? TRADE_HS4[hs4] : null;
+  const producers = PRODUCT_FIRMS[product.id];
   return (
     <StatsPopupShell title={product.name} top={top} left={212}>
-      <div style={{ fontWeight: 700, color: "#93c5fd", marginTop: "8px" }}>🏭 Industries &amp; capacity</div>
-      <div style={{ color: "#cbd5e1" }}>
-        ~{CHAIN_STATS.plants} plants · {CHAIN_STATS.installedCapacityTpa.toLocaleString()} tpa installed,{" "}
-        {CHAIN_STATS.utilisationPct}% utilised
-      </div>
-      <div style={{ color: "#64748b", fontStyle: "italic" }}>Iron &amp; Steel chain-wide — not specific to this product</div>
+      <div style={{ fontWeight: 700, color: "#93c5fd", marginTop: "8px" }}>🏭 Known producers</div>
+      <ProducerBlock entry={producers} />
 
       <TradeBlock trade={trade} noDataLabel="No HS-code-specific trade data fetched yet for this product." />
 
       <div style={{ color: "#64748b", fontSize: "9.5px", marginTop: "8px", borderTop: "1px solid #1e293b", paddingTop: "6px" }}>
-        Sources: ITC TradeMap (Uganda bilateral trade) · {CHAIN_STATS.source}
+        Sources: ITC TradeMap (Uganda bilateral trade) · report1-04-iron-steel.md (NPA/UDC 2025 plant register excerpt)
       </div>
     </StatsPopupShell>
   );
@@ -87,16 +112,15 @@ function InputStatsPopup({ text, top, left }) {
   return (
     <StatsPopupShell title={text} top={top} left={left}>
       <div style={{ fontWeight: 700, color: "#93c5fd", marginTop: "8px" }}>🏭 Industries &amp; capacity</div>
-      <div style={{ color: "#cbd5e1" }}>
-        ~{CHAIN_STATS.plants} plants · {CHAIN_STATS.installedCapacityTpa.toLocaleString()} tpa installed,{" "}
-        {CHAIN_STATS.utilisationPct}% utilised
+      <div style={{ color: "#94a3b8" }}>
+        No count exists for this intermediate stream specifically — it's produced inside whichever finished-product
+        plants use this process step. See that product's card for named producers, where known.
       </div>
-      <div style={{ color: "#64748b", fontStyle: "italic" }}>Iron &amp; Steel chain-wide — this input is processed inside that same plant population, not separately profiled</div>
 
       <TradeBlock trade={trade} noDataLabel="No HS-code-specific trade data fetched yet for this input." />
 
       <div style={{ color: "#64748b", fontSize: "9.5px", marginTop: "8px", borderTop: "1px solid #1e293b", paddingTop: "6px" }}>
-        Sources: ITC TradeMap (Uganda bilateral trade) · {CHAIN_STATS.source}
+        Source: ITC TradeMap (Uganda bilateral trade)
       </div>
     </StatsPopupShell>
   );

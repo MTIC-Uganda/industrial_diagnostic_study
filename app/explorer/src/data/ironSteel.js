@@ -358,6 +358,32 @@ const PRODUCT_HS4 = {
   merchantbar: "7214",
 };
 
+// Per-product producer attribution, from the named-firm table and product
+// narrative in report/chapters/report1-04-iron-steel.md (NPA/UDC 2025 plant
+// register cites ~37 plants total, but the register itself is a legacy .doc
+// file not yet machine-readable — so this is NOT a verified complete count,
+// only the firms the chapter names for that specific product). status:
+// "named" = at least one firm explicitly named for this product; "absent" =
+// the chapter explicitly states no/negligible domestic production; "unknown"
+// = neither confirmed — don't imply a number either way.
+const PRODUCT_FIRMS = {
+  galvanized: { status: "named", firms: ["Roofings Ltd", "Roofings Rolling Mills", "Uganda Baati"], note: "Coat imported coil locally — Uganda has no domestic flat-rolling, so the steel substrate itself is imported." },
+  galvalume: { status: "unknown", firms: [], note: "Not discussed separately from Galvanized Sheet in the source report." },
+  prepainted: { status: "unknown", firms: [], note: "Not discussed separately from Galvanized Sheet in the source report." },
+  tinplate: { status: "absent", firms: [], note: "Explicitly deprioritized — \"low\" on every prioritisation criterion (Section 4.F); no producer named." },
+  coldrolled: { status: "absent", firms: [], note: "Flat-rolling is explicitly described as absent in Uganda (Section 4.A/4.B) — no domestic cold-rolling mill identified." },
+  hotrolled: { status: "absent", firms: [], note: "Flat-rolling is explicitly described as absent in Uganda (Section 4.A/4.B) — no domestic hot-rolling mill identified." },
+  plate: { status: "absent", firms: [], note: "Flat-rolling is explicitly described as absent in Uganda (Section 4.A/4.B) — no domestic plate mill identified." },
+  rebar: { status: "named", firms: ["Roofings Rolling Mills", "Tororo Cement — Steel Division", "BM Steel (GLISCO)", "Pramukh, Yogi, Madhvani, Tian Tang, Diamond and others"], note: "Uganda's strongest finished product — net exporter (USD 55.8m, 2024)." },
+  wirerod: { status: "named", firms: ["Roofings Rolling Mills", "Pramukh, Yogi, Madhvani, Tian Tang, Diamond and others"], note: "Re-rolling group named for \"wire, nails\"." },
+  merchantbar: { status: "named", firms: ["Steel & Tube Industries (STIL)", "BM Steel (GLISCO)", "Pramukh, Yogi, Madhvani, Tian Tang, Diamond and others"], note: "Named for \"bars, tubes, sections\" / \"sections, bars\"." },
+  structural: { status: "named", firms: ["Steel & Tube Industries (STIL)", "BM Steel (GLISCO)"], note: "Named for \"bars, tubes, sections\" / \"sections, bars\"." },
+  rail: { status: "unknown", firms: [], note: "Not discussed in the source report — neither confirmed present nor absent." },
+  sheetpiling: { status: "unknown", firms: [], note: "Not discussed in the source report — neither confirmed present nor absent." },
+  weldedpipe: { status: "named", firms: ["Roofings Ltd", "Steel & Tube Industries (STIL)"], note: "Named for \"wire, pipes\" / \"tubes\"." },
+  seamlesspipe: { status: "absent", firms: [], note: "Explicitly named as a product Uganda should NOT pursue at this stage (Section 4.F)." },
+};
+
 // Whole-chain capacity/establishment count — no per-product breakdown exists
 // in the source documents, so this is shown labelled as chain-wide, not
 // specific to whichever product is being hovered.
@@ -384,4 +410,4 @@ const RAW_MATERIAL_TRADE = {
   },
 };
 
-export { PRODUCTS, CATEGORIES, TRADE_HS4, PRODUCT_HS4, CHAIN_STATS, RAW_MATERIAL_TRADE, matchInputTrade };
+export { PRODUCTS, CATEGORIES, TRADE_HS4, PRODUCT_HS4, CHAIN_STATS, RAW_MATERIAL_TRADE, matchInputTrade, PRODUCT_FIRMS };
