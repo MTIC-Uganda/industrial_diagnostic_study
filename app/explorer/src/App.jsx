@@ -30,9 +30,36 @@ function TradeBlock({ trade, noDataLabel }) {
   );
 }
 
+// This app is normally embedded in an <iframe> on the live dashboard. A
+// popup that stays within the iframe's OWN window.innerHeight can still run
+// off the bottom of what the user actually sees, if the iframe itself is
+// taller than the remaining space below the fold of the outer page (i.e.
+// the iframe is only partially scrolled into view). Same-origin iframes can
+// read window.frameElement to find their own position within the parent
+// page, so use that — when available — as the real clamp boundary instead
+// of just this document's own viewport.
+function getVisibleViewport() {
+  let top = 0, left = 0, height = window.innerHeight, width = window.innerWidth;
+  try {
+    if (window.frameElement && window.parent && window.parent !== window) {
+      const r = window.frameElement.getBoundingClientRect();
+      const pH = window.parent.innerHeight;
+      const pW = window.parent.innerWidth;
+      top = Math.max(0, -r.top);
+      left = Math.max(0, -r.left);
+      height = Math.max(0, Math.min(r.bottom, pH) - Math.max(r.top, 0));
+      width = Math.max(0, Math.min(r.right, pW) - Math.max(r.left, 0));
+    }
+  } catch (e) {
+    // Cross-origin or no parent access — fall back to this document's own viewport.
+  }
+  return { top, left, height, width };
+}
+
 // Renders the popup, measures its own size once mounted, and clamps/flips
-// it so it always stays fully on-screen relative to the hovered element's
-// rect — regardless of where on the page that element is.
+// it so it always stays fully within the visible viewport relative to the
+// hovered element's rect — regardless of where on the page that element is,
+// and regardless of how much of the embedding iframe is actually visible.
 function StatsPopupShell({ title, anchorRect, children }) {
   const ref = useRef(null);
   const [pos, setPos] = useState(null);
@@ -41,19 +68,22 @@ function StatsPopupShell({ title, anchorRect, children }) {
     const el = ref.current;
     if (!el || !anchorRect) return;
     const margin = 8;
+    const vp = getVisibleViewport();
     const w = el.offsetWidth;
     const h = el.offsetHeight;
+    const maxW = Math.max(50, vp.width - 2 * margin);
+    const maxH = Math.max(50, vp.height - 2 * margin);
 
     let left = anchorRect.right + margin;
-    if (left + w > window.innerWidth - margin) {
-      left = anchorRect.left - w - margin; // flip to the left of the anchor
+    if (left + Math.min(w, maxW) > vp.left + vp.width - margin) {
+      left = anchorRect.left - Math.min(w, maxW) - margin; // flip to the left of the anchor
     }
-    left = Math.max(margin, Math.min(left, window.innerWidth - w - margin));
+    left = Math.max(vp.left + margin, Math.min(left, vp.left + vp.width - Math.min(w, maxW) - margin));
 
     let top = anchorRect.top;
-    top = Math.max(margin, Math.min(top, window.innerHeight - h - margin));
+    top = Math.max(vp.top + margin, Math.min(top, vp.top + vp.height - Math.min(h, maxH) - margin));
 
-    setPos({ top, left });
+    setPos({ top, left, maxW, maxH });
   }, [anchorRect]);
 
   return (
@@ -64,9 +94,11 @@ function StatsPopupShell({ title, anchorRect, children }) {
         top: pos ? pos.top : anchorRect.top, left: pos ? pos.left : anchorRect.right + 8,
         visibility: pos ? "visible" : "hidden", width: "300px",
         // Repositioning alone can't keep the popup on-screen if its content
-        // is taller than the viewport (long firm lists, smaller windows) —
-        // cap its own size to fit, and let it scroll internally if needed.
-        maxWidth: "calc(100vw - 16px)", maxHeight: "calc(100vh - 16px)", overflowY: "auto",
+        // is taller than the visible viewport — cap its own size to fit,
+        // and let it scroll internally if needed.
+        maxWidth: pos ? `${pos.maxW}px` : "calc(100vw - 16px)",
+        maxHeight: pos ? `${pos.maxH}px` : "calc(100vh - 16px)",
+        overflowY: "auto",
         backgroundColor: "#0f172a", color: "#e2e8f0", borderRadius: "8px",
         padding: "12px 14px", boxShadow: "0 8px 24px rgba(0,0,0,0.4)",
         fontSize: "11px", lineHeight: 1.5, pointerEvents: "none",
