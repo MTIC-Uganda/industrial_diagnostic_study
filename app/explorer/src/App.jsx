@@ -87,12 +87,30 @@ function PhaseCountBlock({ phase }) {
   );
 }
 
+// Phase-level context is shown only as secondary background, never as the
+// answer to "how many plants make this product" — it's the same number for
+// every product sharing that phase, so presenting it as the headline would
+// repeat the exact mistake this was built to fix.
+function PhaseContextNote({ phaseContext }) {
+  if (!phaseContext) return null;
+  const p = PHASE_PRODUCERS[phaseContext.phase];
+  if (!p) return null;
+  return (
+    <div style={{ color: "#64748b", fontSize: "9.5px", marginTop: "6px", borderTop: "1px solid #1e293b", paddingTop: "4px" }}>
+      Broader context, NOT specific to this product: {p.count} plants are marked active in {p.label} overall — a
+      total shared with {phaseContext.sharedWith}. The register doesn't break this down by which specific product
+      each plant makes.
+    </div>
+  );
+}
+
 function ProducerBlock({ entry }) {
   if (!entry || entry.status === "unknown") {
     return (
       <>
-        <div style={{ color: "#94a3b8" }}>Not identified in source documents — neither confirmed present nor absent.</div>
+        <div style={{ color: "#94a3b8" }}>Not identified per-product in source documents — neither confirmed present nor absent.</div>
         {entry?.note && <div style={{ color: "#64748b", fontSize: "9.5px", marginTop: "2px" }}>{entry.note}</div>}
+        <PhaseContextNote phaseContext={entry?.phaseContext} />
       </>
     );
   }
@@ -101,19 +119,20 @@ function ProducerBlock({ entry }) {
       <>
         <div style={{ color: "#fca5a5" }}>No domestic producer identified — explicitly described as absent/deprioritized in the source report.</div>
         {entry.note && <div style={{ color: "#64748b", fontSize: "9.5px", marginTop: "2px" }}>{entry.note}</div>}
+        <PhaseContextNote phaseContext={entry.phaseContext} />
       </>
     );
   }
-  // status === "phase": a verified count of plants marked active in that
-  // value-chain phase, shared with every other finished product rolled out
-  // of the same phase — the source register doesn't split further.
+  // status === "named": firms the report chapter specifically attributes to
+  // THIS product — the most specific answer available, not a shared count.
   return (
     <>
-      <PhaseCountBlock phase={entry.phase} />
+      <div style={{ color: "#cbd5e1" }}>{entry.firms.join(" · ")}</div>
       <div style={{ color: "#64748b", fontSize: "9.5px", marginTop: "2px" }}>
-        Verified from the plant register, not split further by specific finished product within this phase.
+        Named firms only, from the report's plant-register excerpt — not a verified complete count.
         {entry.note ? ` ${entry.note}` : ""}
       </div>
+      <PhaseContextNote phaseContext={entry.phaseContext} />
     </>
   );
 }

@@ -400,26 +400,36 @@ const PHASE_PRODUCERS = {
 };
 const PHASE_SOURCE = "NPA/UDC, Mapping and Value Chain Analysis for Uganda's Iron and Steel Industry (Oct 2025), Table 7";
 
-// Per-product producer attribution. status: "phase" = backed by the verified
-// PHASE_PRODUCERS count above (shared across every finished product rolled
-// out of that phase — the register doesn't split further); "absent" = the
-// report explicitly states no/negligible domestic production; "unknown" =
-// neither confirmed — don't imply a number either way.
+// Per-product producer attribution. The PHASE_PRODUCERS counts above answer
+// "how many plants operate at this rolling/finishing stage" — they do NOT
+// answer "how many plants make THIS specific product," because the source
+// register doesn't split rolling output by product. Conflating the two
+// (attaching the same phase count to five different products) was wrong —
+// it looks precise but answers a different question than the one asked.
+//
+// So: the headline here is always the most product-specific answer we
+// actually have (named firms from the report chapter's prose, where it
+// attributes a firm to a specific product) or an explicit "not available
+// per-product" when we don't. `phaseContext` is shown only as secondary,
+// clearly-labelled background — never as if it were the per-product count.
+// status: "named" = specific firms attributed to this product; "absent" =
+// the report explicitly states no/negligible domestic production;
+// "unknown" = neither confirmed — don't imply a number either way.
 const PRODUCT_FIRMS = {
-  galvanized: { status: "phase", phase: "Vb" },
-  galvalume: { status: "phase", phase: "Vb", note: "Not discussed as a separate line item from PPGI/galvanized sheet in the source report — same Phase V(b) finishing plants." },
-  prepainted: { status: "phase", phase: "Vb" },
+  galvanized: { status: "named", firms: ["Uganda Baati (named for \"roofing, coated sheet\")", "Roofings Rolling Mills (named for \"coated coil\", among other products)"], phaseContext: { phase: "Vb", sharedWith: "Galvalume, Pre-painted Coil and all other Phase V(b) finishing output" } },
+  galvalume: { status: "unknown", note: "Not named separately from Galvanized Sheet/PPGI anywhere in the source documents — no specific producer or absence confirmed for this alloy specifically." },
+  prepainted: { status: "named", firms: ["Roofings Rolling Mills (named for \"coated coil\")"], note: "The source register's Phase V(b) economic analysis is specifically about PPGI (pre-painted galvanised iron) production economics, but still doesn't name which plants make PPGI vs plain galvanized.", phaseContext: { phase: "Vb", sharedWith: "Galvanized Sheet, Galvalume and all other Phase V(b) finishing output" } },
   tinplate: { status: "absent", note: "Explicitly deprioritized — \"low\" on every prioritisation criterion (report Section 4.F); no producer named or marked active." },
   coldrolled: { status: "absent", note: "Flat-rolling is explicitly described as absent in Uganda — Phase V(a)/(b) plants finish imported coil, none cast and roll flat coil domestically." },
   hotrolled: { status: "absent", note: "Flat-rolling is explicitly described as absent in Uganda — Phase V(a)/(b) plants finish imported coil, none cast and roll flat coil domestically." },
   plate: { status: "absent", note: "Flat-rolling is explicitly described as absent in Uganda — Phase V(a)/(b) plants finish imported coil, none cast and roll flat coil domestically." },
-  rebar: { status: "phase", phase: "Va", note: "Uganda's strongest finished product — net exporter (USD 55.8m, 2024)." },
-  wirerod: { status: "phase", phase: "Va" },
-  merchantbar: { status: "phase", phase: "Va" },
-  structural: { status: "phase", phase: "Va" },
+  rebar: { status: "named", firms: ["Roofings Rolling Mills (named for \"rebar, wire, coated coil\")", "Tororo Cement — Steel Division (named for \"long products\")", "Pramukh, Yogi, Madhvani, Tian Tang, Diamond and others (named for \"re-rolling, sections, wire, nails\")"], note: "Uganda's strongest finished product — net exporter (USD 55.8m, 2024).", phaseContext: { phase: "Va", sharedWith: "Wire Rod, Merchant Bar, Structural Sections and Welded Pipe" } },
+  wirerod: { status: "named", firms: ["Roofings Rolling Mills (named for \"wire\")", "Pramukh, Yogi, Madhvani, Tian Tang, Diamond and others (named for \"wire, nails\")"], phaseContext: { phase: "Va", sharedWith: "Rebar, Merchant Bar, Structural Sections and Welded Pipe" } },
+  merchantbar: { status: "named", firms: ["Steel & Tube Ltd (named for \"bars, tubes, sections\")", "Pramukh, Yogi, Madhvani, Tian Tang, Diamond and others (named for \"sections\")"], phaseContext: { phase: "Va", sharedWith: "Rebar, Wire Rod, Structural Sections and Welded Pipe" } },
+  structural: { status: "named", firms: ["Steel & Tube Ltd (named for \"bars, tubes, sections\")"], phaseContext: { phase: "Va", sharedWith: "Rebar, Wire Rod, Merchant Bar and Welded Pipe" } },
   rail: { status: "unknown", note: "Not discussed in the source report — neither confirmed present nor absent." },
   sheetpiling: { status: "unknown", note: "Not discussed in the source report — neither confirmed present nor absent." },
-  weldedpipe: { status: "phase", phase: "Va", note: "Steel & Tube Ltd is specifically named for \"tubes\" in the report narrative, within this Phase V(a) group." },
+  weldedpipe: { status: "named", firms: ["Roofings Ltd (named for \"pipes\")", "Steel & Tube Ltd (named for \"tubes\")"], phaseContext: { phase: "Va", sharedWith: "Rebar, Wire Rod, Merchant Bar and Structural Sections" } },
   seamlesspipe: { status: "absent", note: "Explicitly named as a product Uganda should NOT pursue at this stage (report Section 4.F)." },
 };
 
