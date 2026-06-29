@@ -333,6 +333,28 @@ const TRADE_HS4 = {
     imports: { uganda: 78549, eac: 0 },
     exports: { uganda: 2516, eac: 2516 },
   },
+  // Refined metals fed directly into the coating baths (zinc ingots, the
+  // Al-Zn alloy bath, tin anodes) — fetched from ITC TradeMap 2026-06-29.
+  // Uganda has no zinc/aluminium/tin smelting industry, so it imports the
+  // finished metal for these coating lines, not the raw ore.
+  "7901": {
+    desc: "HS 7901 — unwrought zinc (zinc ingots for galvanizing baths)",
+    year: 2024,
+    imports: { uganda: 12483, eac: 0 },
+    exports: { uganda: 0, eac: 0 },
+  },
+  "7601": {
+    desc: "HS 7601 — unwrought aluminium (Al-Zn alloy bath input)",
+    year: 2024,
+    imports: { uganda: 12995, eac: 0 },
+    exports: { uganda: 0, eac: 0 },
+  },
+  "8001": {
+    desc: "HS 8001 — unwrought tin (tin anodes for electrolytic tinning)",
+    year: 2024,
+    imports: { uganda: 222, eac: 0 },
+    exports: { uganda: 2625, eac: 0 },
+  },
 };
 
 // Keyword -> HS-4 group, for matching free-text "Inputs" tab line items
@@ -341,6 +363,9 @@ const TRADE_HS4 = {
 const INPUT_KEYWORD_HS4 = [
   { pattern: /\bscrap\b/i, hs4: "7204" },
   { pattern: /\b(slab|billet|bloom|semi-finished)\b/i, hs4: "7207" },
+  { pattern: /\bzinc ingots?\b/i, hs4: "7901" },
+  { pattern: /\baluminum \(55% of bath/i, hs4: "7601" },
+  { pattern: /\btin anodes?\b/i, hs4: "8001" },
 ];
 
 function matchInputTrade(text) {
@@ -441,16 +466,102 @@ const RAW_MATERIAL_PHASE = {
 
 // Trade data for named raw-material commodities shown in the "Raw Materials"
 // cards (RawCard items). Keyed by the exact item name string used in those
-// cards. Only items with a fetched data/trademap/UGA_<HS>_*.csv are included
-// — the rest (Metallurgical Coal, Limestone/Dolomite, Water, Electricity,
-// Zinc/Bauxite/Cassiterite ore, etc.) have not been fetched at any HS code
-// and are intentionally left out rather than guessed.
+// cards. Fetched from ITC TradeMap 2026-06-29 — only Water, Electricity and
+// Process Water are intentionally left out (not goods tracked by HS code in
+// the conventional bilateral-trade sense).
+//
+// Deliberately NOT included despite being fetched: "Crude Oil / Naphtha"
+// (HS 2710, refined petroleum) and "Natural Gas / Ethylene" (HS 2711,
+// petroleum gases) — Uganda's HS 2710 imports (~$2.09bn, 2024) are almost
+// entirely motor fuel, and HS 2711 is almost entirely LPG cylinders; Uganda
+// has no petrochemical cracking industry, so neither figure is actually
+// representative of "feedstock for resin production." Attaching either
+// would repeat the same mistake this data effort started by fixing —
+// a number that looks specific but answers a different question.
 const RAW_MATERIAL_TRADE = {
   "Iron Ore": {
     desc: "HS 2601 — iron ores and concentrates",
     year: 2024,
     imports: { uganda: 0, eac: 0 },
     exports: { uganda: 35841, eac: 35841 },
+  },
+  "Metallurgical Coal": {
+    desc: "HS 2701 — coal and briquettes (not metallurgical-grade specific)",
+    year: 2024,
+    imports: { uganda: 9639, eac: 8295 },
+    exports: { uganda: 0, eac: 0 },
+  },
+  "Limestone / Dolomite": {
+    desc: "HS 2521 — limestone flux",
+    year: 2024,
+    imports: { uganda: 165, eac: 165 },
+    exports: { uganda: 12, eac: 12 },
+  },
+  "Zinc Ore (Sphalerite, ZnS)": {
+    desc: "HS 2608 — zinc ores and concentrates",
+    year: 2024,
+    imports: { uganda: 440, eac: 0 },
+    exports: { uganda: 0, eac: 0 },
+  },
+  "Sulfuric Acid": {
+    desc: "HS 2807 — sulphuric acid",
+    year: 2024,
+    imports: { uganda: 1306, eac: 1219 },
+    exports: { uganda: 5, eac: 5 },
+  },
+  "Coke / Coal": {
+    desc: "HS 2704 — coke and semi-coke",
+    year: 2024,
+    imports: { uganda: 0, eac: 0 },
+    exports: { uganda: 2184, eac: 2184 },
+  },
+  "Bauxite Ore": {
+    desc: "HS 2606 — aluminium ores and concentrates",
+    year: 2024,
+    imports: { uganda: 203, eac: 203 },
+    exports: { uganda: 0, eac: 0 },
+  },
+  "Caustic Soda (NaOH)": {
+    desc: "HS 2815 — sodium hydroxide",
+    year: 2024,
+    imports: { uganda: 15137, eac: 201 },
+    exports: { uganda: 3148, eac: 3116 },
+  },
+  "Petroleum Coke": {
+    desc: "HS 2713 — petroleum coke, bitumen and other petroleum-oil residues",
+    year: 2024,
+    imports: { uganda: 9578, eac: 86 },
+    exports: { uganda: 464, eac: 464 },
+  },
+  "Coal Tar Pitch": {
+    desc: "HS 2706 — tar from coal/lignite",
+    year: 2024,
+    imports: { uganda: 0, eac: 0 },
+    exports: { uganda: 0, eac: 0 },
+  },
+  "Cassiterite Ore (SnO2)": {
+    desc: "HS 2609 — tin ores and concentrates",
+    year: 2024,
+    imports: { uganda: 0, eac: 0 },
+    exports: { uganda: 0, eac: 0 },
+  },
+  "Coal / Coke": {
+    desc: "HS 2704 — coke and semi-coke",
+    year: 2024,
+    imports: { uganda: 0, eac: 0 },
+    exports: { uganda: 2184, eac: 2184 },
+  },
+  "Fluorite (CaF2)": {
+    desc: "HS 2529 — feldspar, leucite, nepheline, fluorspar (not fluorite-specific)",
+    year: 2024,
+    imports: { uganda: 37, eac: 0 },
+    exports: { uganda: 0, eac: 0 },
+  },
+  "Ilmenite / Rutile": {
+    desc: "HS 2614 — titanium and zirconium ores and concentrates",
+    year: 2024,
+    imports: { uganda: 0, eac: 0 },
+    exports: { uganda: 0, eac: 0 },
   },
 };
 
