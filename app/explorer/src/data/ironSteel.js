@@ -380,13 +380,13 @@ const TRADE_HS4 = {
   // Uganda has no zinc/aluminium/tin smelting industry, so it imports the
   // finished metal for these coating lines, not the raw ore.
   "7901": {
-    desc: "HS 7901 — unwrought zinc (zinc ingots for galvanizing baths)",
+    desc: "HS 7901 — unwrought zinc (zinc ingots for galvanizing baths). The NPA/UDC value-chain report (para 599) names zinc, aluminium and hydrochloric acid as Phase V coating-line inputs sourced from the UK.",
     year: 2024,
     imports: { uganda: 12483, eac: 0 },
     exports: { uganda: 0, eac: 0 },
   },
   "7601": {
-    desc: "HS 7601 — unwrought aluminium (Al-Zn alloy bath input)",
+    desc: "HS 7601 — unwrought aluminium (Al-Zn alloy bath input). Same NPA/UDC report citation as zinc above — sourced from the UK.",
     year: 2024,
     imports: { uganda: 12995, eac: 0 },
     exports: { uganda: 0, eac: 0 },
@@ -396,6 +396,54 @@ const TRADE_HS4 = {
     year: 2024,
     imports: { uganda: 222, eac: 0 },
     exports: { uganda: 2625, eac: 0 },
+  },
+  "7202": {
+    desc: "HS 7202 — ferro-alloys (deoxidation/chemistry additions). Not discussed with Uganda-specific cost or supplier detail in any of the three source documents — only a generic textbook description of alloying elements.",
+    year: 2024,
+    imports: { uganda: 5911, eac: 0 },
+    exports: { uganda: 17, eac: 17 },
+  },
+  "8545": {
+    desc: "HS 8545 — carbon electrodes (EAF graphite electrodes). Not mentioned in any of the three source documents despite being a known major EAF cost item elsewhere.",
+    year: 2024,
+    imports: { uganda: 177, eac: 0 },
+    exports: { uganda: 3, eac: 3 },
+  },
+  "2521": {
+    desc: "HS 2521 — limestone flux. The value-chain report names Karamoja as a domestic source, consistent with this trade being almost entirely regional rather than a major standalone import.",
+    year: 2024,
+    imports: { uganda: 165, eac: 165 },
+    exports: { uganda: 12, eac: 12 },
+  },
+  "2522": {
+    desc: "HS 2522 — quicklime, slaked lime and hydraulic lime (distinct from limestone, HS 2521)",
+    year: 2024,
+    imports: { uganda: 1994, eac: 1968 },
+    exports: { uganda: 32, eac: 33 },
+  },
+  "2819": {
+    desc: "HS 2819 — chromium oxides and hydroxides (closest fetchable code to chromic acid/chromium salts; not an exact match — sodium dichromate is a separate HS chapter not fetched)",
+    year: 2024,
+    imports: { uganda: 52, eac: 3 },
+    exports: { uganda: 0, eac: 0 },
+  },
+  "3206": {
+    desc: "HS 3206 — other colouring matter and pigments, incl. titanium dioxide-based",
+    year: 2024,
+    imports: { uganda: 17142, eac: 234 },
+    exports: { uganda: 38, eac: 37 },
+  },
+  "3208": {
+    desc: "HS 3208 — paints and varnishes based on synthetic polymers (topcoat/primer/lacquer)",
+    year: 2024,
+    imports: { uganda: 10998, eac: 635 },
+    exports: { uganda: 1835, eac: 1835 },
+  },
+  "2804": {
+    desc: "HS 2804 — hydrogen, argon and other industrial gases (oxygen, argon — not separately split at 4-digit level)",
+    year: 2024,
+    imports: { uganda: 501, eac: 196 },
+    exports: { uganda: 72, eac: 59 },
   },
 };
 
@@ -408,6 +456,14 @@ const INPUT_KEYWORD_HS4 = [
   { pattern: /\bzinc ingots?\b/i, hs4: "7901" },
   { pattern: /\baluminum \(55% of bath/i, hs4: "7601" },
   { pattern: /\btin anodes?\b/i, hs4: "8001" },
+  { pattern: /\bferroalloy/i, hs4: "7202" },
+  { pattern: /\bgraphite electrodes?\b/i, hs4: "8545" },
+  { pattern: /\blimestone\b/i, hs4: "2521" },
+  { pattern: /\blime\b/i, hs4: "2522" },
+  { pattern: /\bchromic acid\b|\bchromium salts?\b/i, hs4: "2819" },
+  { pattern: /\btitanium dioxide\b|\bpigments?\b|\bTiO2\b/i, hs4: "3206" },
+  { pattern: /\btopcoat\b|\bprimer coat\b|\blacquer\b/i, hs4: "3208" },
+  { pattern: /\bargon gas\b|\boxygen\b/i, hs4: "2804" },
 ];
 
 function matchInputTrade(text) {
@@ -537,13 +593,13 @@ const RAW_MATERIAL_TRADE = {
     exports: { uganda: 35841, eac: 35841 },
   },
   "Metallurgical Coal": {
-    desc: "HS 2701 — coal and briquettes (not metallurgical-grade specific)",
+    desc: "HS 2701 — coal and briquettes (not metallurgical-grade specific). The taxation policy review names Tanzania as the coal supplier — consistent with EAC being almost all of this trade.",
     year: 2024,
     imports: { uganda: 9639, eac: 8295 },
     exports: { uganda: 0, eac: 0 },
   },
   "Limestone / Dolomite": {
-    desc: "HS 2521 — limestone flux",
+    desc: "HS 2521 (limestone) — the value-chain report names Karamoja as a domestic limestone source, consistent with this trade being almost entirely regional/EAC rather than a major standalone import. Dolomite specifically (HS 2518, not shown here) is tiny — USD 14k imports in 2024 — but the taxation review names India as a dolomite supplier.",
     year: 2024,
     imports: { uganda: 165, eac: 165 },
     exports: { uganda: 12, eac: 12 },
