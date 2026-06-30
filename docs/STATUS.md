@@ -19,7 +19,7 @@ Rule: all development and Jerome's experimentation happen on staging first, then
 
 ## Data (single source of truth — ADR-011)
 
-- Live counts (auto): industries 7100 total = 7011 register + curated; with GPS 574; value_chains 9; kpi_indicators 6.
+- Live counts (auto): industries 7100 total = 7011 register + curated; with GPS 574; value_chains 9; kpi_indicators 13.
 
 - `industries` is the one establishment table. One row per establishment, keyed by `reg_number`,
   updated in place (columns added over time, blanks where missing). Curated map factories are
