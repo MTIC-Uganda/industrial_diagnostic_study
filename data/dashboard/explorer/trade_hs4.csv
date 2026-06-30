@@ -1,0 +1,25 @@
+hs4_code,desc,year,imports_uganda,imports_eac,exports_uganda,exports_eac
+2521,"HS 2521 — limestone flux. The value-chain report names Karamoja as a domestic source, consistent with this trade being almost entirely regional rather than a major standalone import.",2024,165,165,12,12
+2522,"HS 2522 — quicklime, slaked lime and hydraulic lime (distinct from limestone, HS 2521)",2024,1994,1968,32,33
+2804,"HS 2804 — hydrogen, argon and other industrial gases (oxygen, argon — not separately split at 4-digit level)",2024,501,196,72,59
+2819,HS 2819 — chromium oxides and hydroxides (closest fetchable code to chromic acid/chromium salts; not an exact match — sodium dichromate is a separate HS chapter not fetched),2024,52,3,0,0
+3206,"HS 3206 — other colouring matter and pigments, incl. titanium dioxide-based",2024,17142,234,38,37
+3208,HS 3208 — paints and varnishes based on synthetic polymers (topcoat/primer/lacquer),2024,10998,635,1835,1835
+7202,HS 7202 — ferro-alloys (deoxidation/chemistry additions). Not discussed with Uganda-specific cost or supplier detail in any of the three source documents — only a generic textbook description of alloying elements.,2024,5911,0,17,17
+7204,HS 7204 — ferrous waste and scrap (EAF charge input),2024,72847,50228,36,0
+7207,"HS 7207 — semi-finished products of iron/non-alloy steel (slab, billet, bloom)",2024,78549,0,2516,2516
+7208,"HS 7208 — flat-rolled, hot-rolled, ≥600mm (the wide segment the taxation policy review confirms has no local manufacturer)",2024,219496,117,2876,2802
+7209,"HS 7209 — flat-rolled, cold-rolled, ≥600mm",2024,4213,1923,256,255
+7210,"HS 7210 — flat-rolled, clad/plated/coated, ≥600mm (shared by Galvanized Sheet, Galvalume, Pre-painted Coil and Tinplate)",2024,101421,84403,53511,52625
+7211,"HS 7211 — flat-rolled, hot- or cold-rolled, <600mm (narrow strip — matches Tembo Steels' actual production width)",2024,657,239,1346,1346
+7213,HS 7213 — bars and rods in coils (wire rod),2024,34054,0,503,503
+7214,"HS 7214 — other bars and rods, iron/non-alloy steel (shared by Rebar and Merchant Bar)",2024,2725,768,55849,55633
+7216,"HS 7216 — angles, shapes and sections of iron/non-alloy steel",2024,15301,1778,6647,6640
+7301,HS 7301 — sheet piling and welded angles/shapes/sections of iron/steel (not sheet-piling-specific),2024,1595,1,214,214
+7302,HS 7302 — railway/tramway track construction material,2024,12342,1,0,0
+7304,"HS 7304 — seamless tubes, pipes and hollow profiles of iron/steel",2024,41572,150,295,172
+7601,HS 7601 — unwrought aluminium (Al-Zn alloy bath input). Same NPA/UDC report citation as zinc above — sourced from the UK.,2024,12995,0,0,0
+7901,"HS 7901 — unwrought zinc (zinc ingots for galvanizing baths). The NPA/UDC value-chain report (para 599) names zinc, aluminium and hydrochloric acid as Phase V coating-line inputs sourced from the UK.",2024,12483,0,0,0
+8001,HS 8001 — unwrought tin (tin anodes for electrolytic tinning),2024,222,0,2625,0
+8545,HS 8545 — carbon electrodes (EAF graphite electrodes). Not mentioned in any of the three source documents despite being a known major EAF cost item elsewhere.,2024,177,0,3,3
+7305_7306,"HS 7305+7306 — welded tubes/pipes, large- and small-diameter combined",2024,23935,7752,31381,31106

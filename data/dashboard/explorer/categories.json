@@ -1,0 +1,52 @@
+[
+  {
+    "name": "Coated Flat",
+    "color": "#7c3aed",
+    "products": [
+      "galvanized",
+      "galvalume",
+      "prepainted",
+      "tinplate"
+    ],
+    "display_order": 0
+  },
+  {
+    "name": "Cold-Rolled Flat",
+    "color": "#1e4976",
+    "products": [
+      "coldrolled"
+    ],
+    "display_order": 1
+  },
+  {
+    "name": "Hot-Rolled Flat",
+    "color": "#235991",
+    "products": [
+      "hotrolled",
+      "plate"
+    ],
+    "display_order": 2
+  },
+  {
+    "name": "Long Products",
+    "color": "#b45309",
+    "products": [
+      "rebar",
+      "wirerod",
+      "merchantbar",
+      "structural",
+      "rail",
+      "sheetpiling"
+    ],
+    "display_order": 3
+  },
+  {
+    "name": "Tubular Products",
+    "color": "#1e3a8a",
+    "products": [
+      "weldedpipe",
+      "seamlesspipe"
+    ],
+    "display_order": 4
+  }
+]

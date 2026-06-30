@@ -1,0 +1,79 @@
+[
+  {
+    "phase": "I",
+    "count": 3,
+    "label": "Phase I — exploration & mining",
+    "examples": [
+      "SINO Minerals Ltd (300,000 tpa installed, Kabale)",
+      "GLISCO Ltd (small-scale, Kisoro)",
+      "Kamuntu Investments (small-scale)"
+    ],
+    "source": "NPA/UDC, Mapping and Value Chain Analysis for Uganda's Iron and Steel Industry (Oct 2025), Table 7"
+  },
+  {
+    "phase": "II",
+    "count": 2,
+    "label": "Phase II — ironmaking (sponge iron/DRI)",
+    "examples": [
+      "Tembo Steel — Iganga",
+      "Abyssinia Iron & Steel (U) Ltd — Jinja"
+    ],
+    "source": "NPA/UDC, Mapping and Value Chain Analysis for Uganda's Iron and Steel Industry (Oct 2025), Table 7"
+  },
+  {
+    "phase": "III",
+    "count": 5,
+    "label": "Phase III — steelmaking",
+    "examples": [
+      "Tembo Steel",
+      "Abyssinia Iron & Steel",
+      "Pramukh Steel",
+      "Yogi Steel",
+      "Tembo Steel — Lugazi"
+    ],
+    "source": "NPA/UDC, Mapping and Value Chain Analysis for Uganda's Iron and Steel Industry (Oct 2025), Table 7"
+  },
+  {
+    "phase": "IV",
+    "count": 9,
+    "label": "Phase IV — continuous casting (slabs/blooms/billets)",
+    "examples": [
+      "Tembo Steel",
+      "Abyssinia Iron & Steel",
+      "Steel & Tube Ltd (Nakawa & Namanve)",
+      "Roofings Ltd — Lubowa",
+      "Tian Tang Steel"
+    ],
+    "source": "NPA/UDC, Mapping and Value Chain Analysis for Uganda's Iron and Steel Industry (Oct 2025), Table 7"
+  },
+  {
+    "phase": "Va",
+    "count": 16,
+    "label": "Phase V(a) — primary steel rolling (billets → long products)",
+    "examples": [
+      "Roofings Ltd (Lubowa & Namanve)",
+      "Steel & Tube Ltd (Nakawa & Namanve)",
+      "Tembo Steel (Iganga & Lugazi)",
+      "Pramukh Steel",
+      "Yogi Steel",
+      "Tian Tang Steel",
+      "Madhvani Steel",
+      "and 9 others"
+    ],
+    "source": "NPA/UDC, Mapping and Value Chain Analysis for Uganda's Iron and Steel Industry (Oct 2025), Table 7"
+  },
+  {
+    "phase": "Vb",
+    "count": 32,
+    "label": "Phase V(b) — finishing/coating (e.g. PPGI, galvanizing)",
+    "examples": [
+      "Uganda Baati",
+      "Tororo Cement — Steel Division",
+      "Nile Roofings Ltd",
+      "East African Roofing Systems Ltd",
+      "Mayuge Sugar — Steel Division",
+      "plus the 16 Phase V(a) plants, and 11 others"
+    ],
+    "source": "NPA/UDC, Mapping and Value Chain Analysis for Uganda's Iron and Steel Industry (Oct 2025), Table 7"
+  }
+]

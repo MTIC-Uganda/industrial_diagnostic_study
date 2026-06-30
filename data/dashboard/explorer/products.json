@@ -1,17 +1,11 @@
-// GENERATED FILE — do not hand-edit. Regenerate with:
-//   python scripts/generate_explorer_data.py
-// Source of truth: PocketBase (explorer_products, explorer_categories,
-// explorer_trade_hs4, explorer_raw_material_trade, explorer_phase_producers,
-// explorer_product_firms, explorer_input_keywords — see db/pb_setup_explorer.py).
-// Local fallback: data/dashboard/explorer/*.
-
-const PRODUCTS = {
-  "galvanized": {
-    "id": "galvanized",
+[
+  {
+    "slug": "galvanized",
     "name": "Galvanized Sheet",
     "category": "Coated Flat",
     "color": "#1a3a5c",
     "description": "Cold-rolled steel with zinc coating applied by hot-dip or electrolytic process. Primary use: construction, automotive, appliances.",
+    "hs4_code": "7210",
     "chains": [
       {
         "title": "Steel Base Chain",
@@ -542,14 +536,16 @@ const PRODUCTS = {
           }
         ]
       }
-    ]
+    ],
+    "display_order": 0
   },
-  "galvalume": {
-    "id": "galvalume",
+  {
+    "slug": "galvalume",
     "name": "Galvalume / Aluzinc",
     "category": "Coated Flat",
     "color": "#2d5a29",
     "description": "Cold-rolled steel coated with aluminum-zinc-silicon alloy (55% Al / 43.4% Zn / 1.6% Si). Superior corrosion resistance. Primary use: roofing, cladding, appliance panels.",
+    "hs4_code": "7210",
     "chains": [
       {
         "title": "Steel Base Chain",
@@ -1034,14 +1030,16 @@ const PRODUCTS = {
           }
         ]
       }
-    ]
+    ],
+    "display_order": 1
   },
-  "prepainted": {
-    "id": "prepainted",
+  {
+    "slug": "prepainted",
     "name": "Pre-painted / Color-Coated Coil",
     "category": "Coated Flat",
     "color": "#7c3aed",
     "description": "Galvanized or Galvalume base coil with organic paint system applied on a coil coating line. Primary use: roofing, cladding, domestic appliances, automotive interiors.",
+    "hs4_code": "7210",
     "chains": [
       {
         "title": "Steel Base Chain",
@@ -1549,14 +1547,16 @@ const PRODUCTS = {
           }
         ]
       }
-    ]
+    ],
+    "display_order": 2
   },
-  "tinplate": {
-    "id": "tinplate",
+  {
+    "slug": "tinplate",
     "name": "Tinplate / Tin-Free Steel (ECCS)",
     "category": "Coated Flat",
     "color": "#374151",
     "description": "Cold-rolled steel with electrolytic tin (tinplate) or electrolytic chromium/oxide coating (ECCS/TFS). Primary use: food & beverage cans, aerosols, closures.",
+    "hs4_code": "7210",
     "chains": [
       {
         "title": "Steel Base Chain",
@@ -2064,14 +2064,16 @@ const PRODUCTS = {
           }
         ]
       }
-    ]
+    ],
+    "display_order": 3
   },
-  "coldrolled": {
-    "id": "coldrolled",
+  {
+    "slug": "coldrolled",
     "name": "Cold-Rolled Coil / Sheet",
     "category": "Cold-Rolled Flat",
     "color": "#1e4976",
     "description": "Hot-rolled coil cold-reduced at room temperature for thinner gauge, tighter tolerances and smoother surface. Primary use: automotive body panels, appliances, electrical steel.",
+    "hs4_code": "7209",
     "chains": [
       {
         "title": "Steel Chain",
@@ -2410,14 +2412,16 @@ const PRODUCTS = {
           }
         ]
       }
-    ]
+    ],
+    "display_order": 4
   },
-  "hotrolled": {
-    "id": "hotrolled",
+  {
+    "slug": "hotrolled",
     "name": "Hot-Rolled Coil / Sheet / Strip",
     "category": "Hot-Rolled Flat",
     "color": "#235991",
     "description": "Steel slab rolled at high temperature into coil, sheet or strip. Primary use: automotive structural, general fabrication, pipe-making strip, welded tube.",
+    "hs4_code": "7211",
     "chains": [
       {
         "title": "Steel Chain",
@@ -2729,14 +2733,16 @@ const PRODUCTS = {
           }
         ]
       }
-    ]
+    ],
+    "display_order": 5
   },
-  "plate": {
-    "id": "plate",
+  {
+    "slug": "plate",
     "name": "Plate",
     "category": "Hot-Rolled Flat",
     "color": "#1d4e8f",
     "description": "Heavy gauge flat steel (>6mm) rolled from slab on a plate mill. Primary use: shipbuilding, pressure vessels, bridges, offshore structures, heavy machinery.",
+    "hs4_code": "7208",
     "chains": [
       {
         "title": "Steel Chain",
@@ -3047,14 +3053,16 @@ const PRODUCTS = {
           }
         ]
       }
-    ]
+    ],
+    "display_order": 6
   },
-  "rebar": {
-    "id": "rebar",
+  {
+    "slug": "rebar",
     "name": "Rebar (Reinforcing Bar)",
     "category": "Long Products",
     "color": "#92400e",
     "description": "Deformed steel bar rolled from billet. Primary use: concrete reinforcement in buildings, bridges, tunnels and infrastructure.",
+    "hs4_code": "7214",
     "chains": [
       {
         "title": "Steel Chain",
@@ -3365,14 +3373,16 @@ const PRODUCTS = {
           }
         ]
       }
-    ]
+    ],
+    "display_order": 7
   },
-  "wirerod": {
-    "id": "wirerod",
+  {
+    "slug": "wirerod",
     "name": "Wire Rod",
     "category": "Long Products",
     "color": "#b45309",
     "description": "Small-diameter rod (5-20mm) coiled at high speed from billet. Primary use: downstream drawing into wire, welding wire, fasteners, spring wire, PC strand.",
+    "hs4_code": "7213",
     "chains": [
       {
         "title": "Steel Chain",
@@ -3683,14 +3693,16 @@ const PRODUCTS = {
           }
         ]
       }
-    ]
+    ],
+    "display_order": 8
   },
-  "merchantbar": {
-    "id": "merchantbar",
+  {
+    "slug": "merchantbar",
     "name": "Merchant Bar",
     "category": "Long Products",
     "color": "#78350f",
     "description": "Standard bar sections (rounds, flats, squares, angles, hexagons) rolled from billet. Primary use: general engineering, fabrication, machining, construction.",
+    "hs4_code": "7214",
     "chains": [
       {
         "title": "Steel Chain",
@@ -4002,14 +4014,16 @@ const PRODUCTS = {
           }
         ]
       }
-    ]
+    ],
+    "display_order": 9
   },
-  "structural": {
-    "id": "structural",
+  {
+    "slug": "structural",
     "name": "Structural Sections (I/H-beam, Channel, Angle)",
     "category": "Long Products",
     "color": "#1e3a5f",
     "description": "Heavy structural profiles rolled from bloom. Primary use: building frames, bridges, industrial structures, crane rails.",
+    "hs4_code": "7216",
     "chains": [
       {
         "title": "Steel Chain",
@@ -4322,14 +4336,16 @@ const PRODUCTS = {
           }
         ]
       }
-    ]
+    ],
+    "display_order": 10
   },
-  "rail": {
-    "id": "rail",
+  {
+    "slug": "rail",
     "name": "Rail",
     "category": "Long Products",
     "color": "#374151",
     "description": "Heavy section rolled from bloom to precise rail profile (head, web, foot). Primary use: railway track (main line, metro, tram, crane rail).",
+    "hs4_code": "7302",
     "chains": [
       {
         "title": "Steel Chain",
@@ -4641,14 +4657,16 @@ const PRODUCTS = {
           }
         ]
       }
-    ]
+    ],
+    "display_order": 11
   },
-  "sheetpiling": {
-    "id": "sheetpiling",
+  {
+    "slug": "sheetpiling",
     "name": "Sheet Piling",
     "category": "Long Products",
     "color": "#065f46",
     "description": "Hot-rolled interlocking steel sections (Z, U or flat profile) driven into ground to form retaining walls, cofferdams and flood defences.",
+    "hs4_code": "7301",
     "chains": [
       {
         "title": "Steel Chain",
@@ -4960,14 +4978,16 @@ const PRODUCTS = {
           }
         ]
       }
-    ]
+    ],
+    "display_order": 12
   },
-  "weldedpipe": {
-    "id": "weldedpipe",
+  {
+    "slug": "weldedpipe",
     "name": "Welded Pipe / Tube",
     "category": "Tubular Products",
     "color": "#1e3a8a",
     "description": "Pipe formed by rolling flat strip / coil into a cylinder and welding the seam (ERW, LSAW or HSAW). Primary use: line pipe (oil & gas), structural hollow sections, water & gas distribution.",
+    "hs4_code": "7305_7306",
     "chains": [
       {
         "title": "Steel Chain",
@@ -5307,14 +5327,16 @@ const PRODUCTS = {
           }
         ]
       }
-    ]
+    ],
+    "display_order": 13
   },
-  "seamlesspipe": {
-    "id": "seamlesspipe",
+  {
+    "slug": "seamlesspipe",
     "name": "Seamless Pipe",
     "category": "Tubular Products",
     "color": "#1e40af",
     "description": "Pipe formed without a weld seam by piercing and rolling a solid round billet. Primary use: OCTG (oil country tubular goods), high-pressure boiler tubes, process plant piping.",
+    "hs4_code": "7304",
     "chains": [
       {
         "title": "Steel Chain",
@@ -5624,776 +5646,7 @@ const PRODUCTS = {
           }
         ]
       }
-    ]
+    ],
+    "display_order": 14
   }
-};
-
-const CATEGORIES = [
-  {
-    "name": "Coated Flat",
-    "color": "#7c3aed",
-    "products": [
-      "galvanized",
-      "galvalume",
-      "prepainted",
-      "tinplate"
-    ]
-  },
-  {
-    "name": "Cold-Rolled Flat",
-    "color": "#1e4976",
-    "products": [
-      "coldrolled"
-    ]
-  },
-  {
-    "name": "Hot-Rolled Flat",
-    "color": "#235991",
-    "products": [
-      "hotrolled",
-      "plate"
-    ]
-  },
-  {
-    "name": "Long Products",
-    "color": "#b45309",
-    "products": [
-      "rebar",
-      "wirerod",
-      "merchantbar",
-      "structural",
-      "rail",
-      "sheetpiling"
-    ]
-  },
-  {
-    "name": "Tubular Products",
-    "color": "#1e3a8a",
-    "products": [
-      "weldedpipe",
-      "seamlesspipe"
-    ]
-  }
-];
-
-const TRADE_HS4 = {
-  "2521": {
-    "desc": "HS 2521 — limestone flux. The value-chain report names Karamoja as a domestic source, consistent with this trade being almost entirely regional rather than a major standalone import.",
-    "year": 2024,
-    "imports": {
-      "uganda": 165.0,
-      "eac": 165.0
-    },
-    "exports": {
-      "uganda": 12.0,
-      "eac": 12.0
-    }
-  },
-  "2522": {
-    "desc": "HS 2522 — quicklime, slaked lime and hydraulic lime (distinct from limestone, HS 2521)",
-    "year": 2024,
-    "imports": {
-      "uganda": 1994.0,
-      "eac": 1968.0
-    },
-    "exports": {
-      "uganda": 32.0,
-      "eac": 33.0
-    }
-  },
-  "2804": {
-    "desc": "HS 2804 — hydrogen, argon and other industrial gases (oxygen, argon — not separately split at 4-digit level)",
-    "year": 2024,
-    "imports": {
-      "uganda": 501.0,
-      "eac": 196.0
-    },
-    "exports": {
-      "uganda": 72.0,
-      "eac": 59.0
-    }
-  },
-  "2819": {
-    "desc": "HS 2819 — chromium oxides and hydroxides (closest fetchable code to chromic acid/chromium salts; not an exact match — sodium dichromate is a separate HS chapter not fetched)",
-    "year": 2024,
-    "imports": {
-      "uganda": 52.0,
-      "eac": 3.0
-    },
-    "exports": {
-      "uganda": 0.0,
-      "eac": 0.0
-    }
-  },
-  "3206": {
-    "desc": "HS 3206 — other colouring matter and pigments, incl. titanium dioxide-based",
-    "year": 2024,
-    "imports": {
-      "uganda": 17142.0,
-      "eac": 234.0
-    },
-    "exports": {
-      "uganda": 38.0,
-      "eac": 37.0
-    }
-  },
-  "3208": {
-    "desc": "HS 3208 — paints and varnishes based on synthetic polymers (topcoat/primer/lacquer)",
-    "year": 2024,
-    "imports": {
-      "uganda": 10998.0,
-      "eac": 635.0
-    },
-    "exports": {
-      "uganda": 1835.0,
-      "eac": 1835.0
-    }
-  },
-  "7202": {
-    "desc": "HS 7202 — ferro-alloys (deoxidation/chemistry additions). Not discussed with Uganda-specific cost or supplier detail in any of the three source documents — only a generic textbook description of alloying elements.",
-    "year": 2024,
-    "imports": {
-      "uganda": 5911.0,
-      "eac": 0.0
-    },
-    "exports": {
-      "uganda": 17.0,
-      "eac": 17.0
-    }
-  },
-  "7204": {
-    "desc": "HS 7204 — ferrous waste and scrap (EAF charge input)",
-    "year": 2024,
-    "imports": {
-      "uganda": 72847.0,
-      "eac": 50228.0
-    },
-    "exports": {
-      "uganda": 36.0,
-      "eac": 0.0
-    }
-  },
-  "7207": {
-    "desc": "HS 7207 — semi-finished products of iron/non-alloy steel (slab, billet, bloom)",
-    "year": 2024,
-    "imports": {
-      "uganda": 78549.0,
-      "eac": 0.0
-    },
-    "exports": {
-      "uganda": 2516.0,
-      "eac": 2516.0
-    }
-  },
-  "7208": {
-    "desc": "HS 7208 — flat-rolled, hot-rolled, ≥600mm (the wide segment the taxation policy review confirms has no local manufacturer)",
-    "year": 2024,
-    "imports": {
-      "uganda": 219496.0,
-      "eac": 117.0
-    },
-    "exports": {
-      "uganda": 2876.0,
-      "eac": 2802.0
-    }
-  },
-  "7209": {
-    "desc": "HS 7209 — flat-rolled, cold-rolled, ≥600mm",
-    "year": 2024,
-    "imports": {
-      "uganda": 4213.0,
-      "eac": 1923.0
-    },
-    "exports": {
-      "uganda": 256.0,
-      "eac": 255.0
-    }
-  },
-  "7210": {
-    "desc": "HS 7210 — flat-rolled, clad/plated/coated, ≥600mm (shared by Galvanized Sheet, Galvalume, Pre-painted Coil and Tinplate)",
-    "year": 2024,
-    "imports": {
-      "uganda": 101421.0,
-      "eac": 84403.0
-    },
-    "exports": {
-      "uganda": 53511.0,
-      "eac": 52625.0
-    }
-  },
-  "7211": {
-    "desc": "HS 7211 — flat-rolled, hot- or cold-rolled, <600mm (narrow strip — matches Tembo Steels' actual production width)",
-    "year": 2024,
-    "imports": {
-      "uganda": 657.0,
-      "eac": 239.0
-    },
-    "exports": {
-      "uganda": 1346.0,
-      "eac": 1346.0
-    }
-  },
-  "7213": {
-    "desc": "HS 7213 — bars and rods in coils (wire rod)",
-    "year": 2024,
-    "imports": {
-      "uganda": 34054.0,
-      "eac": 0.0
-    },
-    "exports": {
-      "uganda": 503.0,
-      "eac": 503.0
-    }
-  },
-  "7214": {
-    "desc": "HS 7214 — other bars and rods, iron/non-alloy steel (shared by Rebar and Merchant Bar)",
-    "year": 2024,
-    "imports": {
-      "uganda": 2725.0,
-      "eac": 768.0
-    },
-    "exports": {
-      "uganda": 55849.0,
-      "eac": 55633.0
-    }
-  },
-  "7216": {
-    "desc": "HS 7216 — angles, shapes and sections of iron/non-alloy steel",
-    "year": 2024,
-    "imports": {
-      "uganda": 15301.0,
-      "eac": 1778.0
-    },
-    "exports": {
-      "uganda": 6647.0,
-      "eac": 6640.0
-    }
-  },
-  "7301": {
-    "desc": "HS 7301 — sheet piling and welded angles/shapes/sections of iron/steel (not sheet-piling-specific)",
-    "year": 2024,
-    "imports": {
-      "uganda": 1595.0,
-      "eac": 1.0
-    },
-    "exports": {
-      "uganda": 214.0,
-      "eac": 214.0
-    }
-  },
-  "7302": {
-    "desc": "HS 7302 — railway/tramway track construction material",
-    "year": 2024,
-    "imports": {
-      "uganda": 12342.0,
-      "eac": 1.0
-    },
-    "exports": {
-      "uganda": 0.0,
-      "eac": 0.0
-    }
-  },
-  "7304": {
-    "desc": "HS 7304 — seamless tubes, pipes and hollow profiles of iron/steel",
-    "year": 2024,
-    "imports": {
-      "uganda": 41572.0,
-      "eac": 150.0
-    },
-    "exports": {
-      "uganda": 295.0,
-      "eac": 172.0
-    }
-  },
-  "7601": {
-    "desc": "HS 7601 — unwrought aluminium (Al-Zn alloy bath input). Same NPA/UDC report citation as zinc above — sourced from the UK.",
-    "year": 2024,
-    "imports": {
-      "uganda": 12995.0,
-      "eac": 0.0
-    },
-    "exports": {
-      "uganda": 0.0,
-      "eac": 0.0
-    }
-  },
-  "7901": {
-    "desc": "HS 7901 — unwrought zinc (zinc ingots for galvanizing baths). The NPA/UDC value-chain report (para 599) names zinc, aluminium and hydrochloric acid as Phase V coating-line inputs sourced from the UK.",
-    "year": 2024,
-    "imports": {
-      "uganda": 12483.0,
-      "eac": 0.0
-    },
-    "exports": {
-      "uganda": 0.0,
-      "eac": 0.0
-    }
-  },
-  "8001": {
-    "desc": "HS 8001 — unwrought tin (tin anodes for electrolytic tinning)",
-    "year": 2024,
-    "imports": {
-      "uganda": 222.0,
-      "eac": 0.0
-    },
-    "exports": {
-      "uganda": 2625.0,
-      "eac": 0.0
-    }
-  },
-  "8545": {
-    "desc": "HS 8545 — carbon electrodes (EAF graphite electrodes). Not mentioned in any of the three source documents despite being a known major EAF cost item elsewhere.",
-    "year": 2024,
-    "imports": {
-      "uganda": 177.0,
-      "eac": 0.0
-    },
-    "exports": {
-      "uganda": 3.0,
-      "eac": 3.0
-    }
-  },
-  "7305_7306": {
-    "desc": "HS 7305+7306 — welded tubes/pipes, large- and small-diameter combined",
-    "year": 2024,
-    "imports": {
-      "uganda": 23935.0,
-      "eac": 7752.0
-    },
-    "exports": {
-      "uganda": 31381.0,
-      "eac": 31106.0
-    }
-  }
-};
-
-const PRODUCT_HS4 = {
-  "galvanized": "7210",
-  "galvalume": "7210",
-  "prepainted": "7210",
-  "tinplate": "7210",
-  "coldrolled": "7209",
-  "hotrolled": "7211",
-  "plate": "7208",
-  "rebar": "7214",
-  "wirerod": "7213",
-  "merchantbar": "7214",
-  "structural": "7216",
-  "rail": "7302",
-  "sheetpiling": "7301",
-  "weldedpipe": "7305_7306",
-  "seamlesspipe": "7304"
-};
-
-const RAW_MATERIAL_TRADE = {
-  "Iron Ore": {
-    "desc": "HS 2601 — iron ores and concentrates",
-    "year": 2024,
-    "imports": {
-      "uganda": 0.0,
-      "eac": 0.0
-    },
-    "exports": {
-      "uganda": 35841.0,
-      "eac": 35841.0
-    }
-  },
-  "Metallurgical Coal": {
-    "desc": "HS 2701 — coal and briquettes (not metallurgical-grade specific). The taxation policy review names Tanzania as the coal supplier — consistent with EAC being almost all of this trade.",
-    "year": 2024,
-    "imports": {
-      "uganda": 9639.0,
-      "eac": 8295.0
-    },
-    "exports": {
-      "uganda": 0.0,
-      "eac": 0.0
-    }
-  },
-  "Limestone / Dolomite": {
-    "desc": "HS 2521 (limestone) — the value-chain report names Karamoja as a domestic limestone source, consistent with this trade being almost entirely regional/EAC rather than a major standalone import. Dolomite specifically (HS 2518, not shown here) is tiny — USD 14k imports in 2024 — but the taxation review names India as a dolomite supplier.",
-    "year": 2024,
-    "imports": {
-      "uganda": 165.0,
-      "eac": 165.0
-    },
-    "exports": {
-      "uganda": 12.0,
-      "eac": 12.0
-    }
-  },
-  "Zinc Ore (Sphalerite, ZnS)": {
-    "desc": "HS 2608 — zinc ores and concentrates",
-    "year": 2024,
-    "imports": {
-      "uganda": 440.0,
-      "eac": 0.0
-    },
-    "exports": {
-      "uganda": 0.0,
-      "eac": 0.0
-    }
-  },
-  "Sulfuric Acid": {
-    "desc": "HS 2807 — sulphuric acid",
-    "year": 2024,
-    "imports": {
-      "uganda": 1306.0,
-      "eac": 1219.0
-    },
-    "exports": {
-      "uganda": 5.0,
-      "eac": 5.0
-    }
-  },
-  "Coke / Coal": {
-    "desc": "HS 2704 — coke and semi-coke",
-    "year": 2024,
-    "imports": {
-      "uganda": 0.0,
-      "eac": 0.0
-    },
-    "exports": {
-      "uganda": 2184.0,
-      "eac": 2184.0
-    }
-  },
-  "Bauxite Ore": {
-    "desc": "HS 2606 — aluminium ores and concentrates",
-    "year": 2024,
-    "imports": {
-      "uganda": 203.0,
-      "eac": 203.0
-    },
-    "exports": {
-      "uganda": 0.0,
-      "eac": 0.0
-    }
-  },
-  "Caustic Soda (NaOH)": {
-    "desc": "HS 2815 — sodium hydroxide",
-    "year": 2024,
-    "imports": {
-      "uganda": 15137.0,
-      "eac": 201.0
-    },
-    "exports": {
-      "uganda": 3148.0,
-      "eac": 3116.0
-    }
-  },
-  "Petroleum Coke": {
-    "desc": "HS 2713 — petroleum coke, bitumen and other petroleum-oil residues",
-    "year": 2024,
-    "imports": {
-      "uganda": 9578.0,
-      "eac": 86.0
-    },
-    "exports": {
-      "uganda": 464.0,
-      "eac": 464.0
-    }
-  },
-  "Coal Tar Pitch": {
-    "desc": "HS 2706 — tar from coal/lignite",
-    "year": 2024,
-    "imports": {
-      "uganda": 0.0,
-      "eac": 0.0
-    },
-    "exports": {
-      "uganda": 0.0,
-      "eac": 0.0
-    }
-  },
-  "Cassiterite Ore (SnO2)": {
-    "desc": "HS 2609 — tin ores and concentrates",
-    "year": 2024,
-    "imports": {
-      "uganda": 0.0,
-      "eac": 0.0
-    },
-    "exports": {
-      "uganda": 0.0,
-      "eac": 0.0
-    }
-  },
-  "Coal / Coke": {
-    "desc": "HS 2704 — coke and semi-coke",
-    "year": 2024,
-    "imports": {
-      "uganda": 0.0,
-      "eac": 0.0
-    },
-    "exports": {
-      "uganda": 2184.0,
-      "eac": 2184.0
-    }
-  },
-  "Fluorite (CaF2)": {
-    "desc": "HS 2529 — feldspar, leucite, nepheline, fluorspar (not fluorite-specific)",
-    "year": 2024,
-    "imports": {
-      "uganda": 37.0,
-      "eac": 0.0
-    },
-    "exports": {
-      "uganda": 0.0,
-      "eac": 0.0
-    }
-  },
-  "Ilmenite / Rutile": {
-    "desc": "HS 2614 — titanium and zirconium ores and concentrates",
-    "year": 2024,
-    "imports": {
-      "uganda": 0.0,
-      "eac": 0.0
-    },
-    "exports": {
-      "uganda": 0.0,
-      "eac": 0.0
-    }
-  }
-};
-
-const RAW_MATERIAL_PHASE = {
-  "Iron Ore": "I"
-};
-
-const PHASE_PRODUCERS = {
-  "I": {
-    "count": 3,
-    "label": "Phase I — exploration & mining",
-    "examples": [
-      "SINO Minerals Ltd (300,000 tpa installed, Kabale)",
-      "GLISCO Ltd (small-scale, Kisoro)",
-      "Kamuntu Investments (small-scale)"
-    ]
-  },
-  "II": {
-    "count": 2,
-    "label": "Phase II — ironmaking (sponge iron/DRI)",
-    "examples": [
-      "Tembo Steel — Iganga",
-      "Abyssinia Iron & Steel (U) Ltd — Jinja"
-    ]
-  },
-  "III": {
-    "count": 5,
-    "label": "Phase III — steelmaking",
-    "examples": [
-      "Tembo Steel",
-      "Abyssinia Iron & Steel",
-      "Pramukh Steel",
-      "Yogi Steel",
-      "Tembo Steel — Lugazi"
-    ]
-  },
-  "IV": {
-    "count": 9,
-    "label": "Phase IV — continuous casting (slabs/blooms/billets)",
-    "examples": [
-      "Tembo Steel",
-      "Abyssinia Iron & Steel",
-      "Steel & Tube Ltd (Nakawa & Namanve)",
-      "Roofings Ltd — Lubowa",
-      "Tian Tang Steel"
-    ]
-  },
-  "Va": {
-    "count": 16,
-    "label": "Phase V(a) — primary steel rolling (billets → long products)",
-    "examples": [
-      "Roofings Ltd (Lubowa & Namanve)",
-      "Steel & Tube Ltd (Nakawa & Namanve)",
-      "Tembo Steel (Iganga & Lugazi)",
-      "Pramukh Steel",
-      "Yogi Steel",
-      "Tian Tang Steel",
-      "Madhvani Steel",
-      "and 9 others"
-    ]
-  },
-  "Vb": {
-    "count": 32,
-    "label": "Phase V(b) — finishing/coating (e.g. PPGI, galvanizing)",
-    "examples": [
-      "Uganda Baati",
-      "Tororo Cement — Steel Division",
-      "Nile Roofings Ltd",
-      "East African Roofing Systems Ltd",
-      "Mayuge Sugar — Steel Division",
-      "plus the 16 Phase V(a) plants, and 11 others"
-    ]
-  }
-};
-
-const PHASE_SOURCE = "NPA/UDC, Mapping and Value Chain Analysis for Uganda's Iron and Steel Industry (Oct 2025), Table 7";
-
-const PRODUCT_FIRMS = {
-  "galvanized": {
-    "status": "named",
-    "firms": [
-      "Uganda Baati (named for \"roofing, coated sheet\")",
-      "Roofings Rolling Mills (named for \"coated coil\", among other products)"
-    ],
-    "note": "Backed by real trade scale: Uganda exported USD 53.5m of HS 7210 coated flat steel in 2024, almost entirely regional (ITC TradeMap).",
-    "phaseContext": {
-      "phase": "Vb",
-      "sharedWith": "Galvalume, Pre-painted Coil and all other Phase V(b) finishing output"
-    }
-  },
-  "galvalume": {
-    "status": "unknown",
-    "firms": [],
-    "note": "Not named separately from Galvanized Sheet/PPGI anywhere in any of the three source documents (NPA/UDC value-chain report, taxation policy review, feasibility study) — no specific producer or absence confirmed for this alloy specifically."
-  },
-  "prepainted": {
-    "status": "named",
-    "firms": [
-      "Roofings Rolling Mills (named for \"coated coil\")"
-    ],
-    "note": "The source register's Phase V(b) economic analysis is specifically about PPGI (pre-painted galvanised iron) production economics, but still doesn't name which plants make PPGI vs plain galvanized.",
-    "phaseContext": {
-      "phase": "Vb",
-      "sharedWith": "Galvanized Sheet, Galvalume and all other Phase V(b) finishing output"
-    }
-  },
-  "tinplate": {
-    "status": "unknown",
-    "firms": [],
-    "note": "No mention of tinplate, tin-coating or ECCS/tin-free steel found in any of the three source documents (searched directly, not inferred) — neither confirmed present nor absent."
-  },
-  "coldrolled": {
-    "status": "named",
-    "firms": [
-      "Roofings Rolling Mills (cold-rolling mill complex; a USD 125m expansion for +150,000 tpa export capacity was underway as of the taxation policy review)"
-    ],
-    "note": "The feasibility study also notes \"some cold rolled coils for roofing material or galvanized sheets\" are produced domestically, alongside continued coil imports (cold-rolled coil is only 0.7% of import value per the value-chain report)."
-  },
-  "hotrolled": {
-    "status": "named",
-    "firms": [
-      "Tembo Steels Ltd (narrow-strip HRC <600mm, 100,000 tpa installed — first Uganda producer of 0.7mm HRC sheet via direct rolling from liquid steel, since 2008)",
-      "Roofings Rolling Mills (hot rolling mill)"
-    ],
-    "note": "Narrow-strip only — the taxation policy review explicitly states there are \"no local manufacturers\" for wide HRC (>600mm), which is the grade normally meant by \"Hot-Rolled Coil\" in flat-steel trade statistics."
-  },
-  "plate": {
-    "status": "absent",
-    "firms": [],
-    "note": "The feasibility study explicitly states no heavy-plate hot-strip mill exists in Uganda (\"due to unavailability of Plate Hot strip mill\"). Steel & Tube Industries sources \"steel plates from Roofings Ltd, China\" for plate-cutting/chequered-plate work — but that pairing with an import source suggests distribution, not Roofings milling plate itself."
-  },
-  "rebar": {
-    "status": "named",
-    "firms": [
-      "Roofings Rolling Mills (named for \"rebar, wire, coated coil\")",
-      "Tororo Cement — Steel Division (named for \"long products\")",
-      "Pramukh, Yogi, Madhvani, Tian Tang, Diamond and others (named for \"re-rolling, sections, wire, nails\")"
-    ],
-    "note": "Uganda's strongest finished product — net exporter (USD 55.8m, 2024).",
-    "phaseContext": {
-      "phase": "Va",
-      "sharedWith": "Wire Rod, Merchant Bar, Structural Sections and Welded Pipe"
-    }
-  },
-  "wirerod": {
-    "status": "named",
-    "firms": [
-      "Roofings Rolling Mills (named for \"wire\")",
-      "Pramukh, Yogi, Madhvani, Tian Tang, Diamond and others (named for \"wire, nails\")"
-    ],
-    "note": "",
-    "phaseContext": {
-      "phase": "Va",
-      "sharedWith": "Rebar, Merchant Bar, Structural Sections and Welded Pipe"
-    }
-  },
-  "merchantbar": {
-    "status": "named",
-    "firms": [
-      "Steel & Tube Ltd (named for \"bars, tubes, sections\")",
-      "Pramukh, Yogi, Madhvani, Tian Tang, Diamond and others (named for \"sections\")"
-    ],
-    "note": "",
-    "phaseContext": {
-      "phase": "Va",
-      "sharedWith": "Rebar, Wire Rod, Structural Sections and Welded Pipe"
-    }
-  },
-  "structural": {
-    "status": "named",
-    "firms": [
-      "Steel & Tube Ltd (named for \"bars, tubes, sections\")"
-    ],
-    "note": "Uganda exported USD 6.6m of HS 7216 structural sections/angles/shapes in 2024, almost entirely regional (ITC TradeMap).",
-    "phaseContext": {
-      "phase": "Va",
-      "sharedWith": "Rebar, Wire Rod, Merchant Bar and Welded Pipe"
-    }
-  },
-  "rail": {
-    "status": "absent",
-    "firms": [],
-    "note": "The feasibility study explicitly proposes a \"Rail Mill Rolling plant\" as a future investment, calling it \"urgent and necessary to produce rails locally\" and listing it among technologies \"presently not available\" — confirming no current domestic rail production. Uganda's HS 7302 trade is import-only (USD 12.3m, 2024) with zero exports."
-  },
-  "sheetpiling": {
-    "status": "unknown",
-    "firms": [],
-    "note": "No mention of sheet piling found in any of the three source documents — neither confirmed present nor absent. Uganda does show a small USD 214k of HS 7301 exports (2024, almost entirely regional) — but that code also covers welded angles/shapes/sections generally, so it isn't confirmation of sheet-pile production specifically."
-  },
-  "weldedpipe": {
-    "status": "named",
-    "firms": [
-      "Roofings Ltd (named for \"pipes\")",
-      "Steel & Tube Ltd (named for \"tubes\")"
-    ],
-    "note": "Strongly backed by trade scale: Uganda exported USD 31.4m of HS 7306 welded pipe/tube in 2024, almost entirely regional (ITC TradeMap) — a similar regional-export profile to Rebar.",
-    "phaseContext": {
-      "phase": "Va",
-      "sharedWith": "Rebar, Wire Rod, Merchant Bar and Structural Sections"
-    }
-  },
-  "seamlesspipe": {
-    "status": "absent",
-    "firms": [],
-    "note": "The feasibility study explicitly proposes a seamless-pipe mill as a future investment (\"presently not available\"), and the report chapter names it as a product Uganda should NOT pursue at this stage. Uganda's HS 7304 trade is import-dominated (USD 41.6m, 2024) with only a small USD 295k of exports, consistent with re-exported imported pipe rather than domestic seamless production."
-  }
-};
-
-// Keyword -> HS-4 group, for matching free-text "Inputs" tab line items
-// to the same trade data used for raw materials and products above.
-const INPUT_KEYWORD_HS4 = [
-  { pattern: /\bscrap\b/i, hs4: "7204" },
-  { pattern: /\b(slab|billet|bloom|semi-finished)\b/i, hs4: "7207" },
-  { pattern: /\bzinc ingots?\b/i, hs4: "7901" },
-  { pattern: /\baluminum \(55% of bath/i, hs4: "7601" },
-  { pattern: /\btin anodes?\b/i, hs4: "8001" },
-  { pattern: /\bferroalloy/i, hs4: "7202" },
-  { pattern: /\bgraphite electrodes?\b/i, hs4: "8545" },
-  { pattern: /\blimestone\b/i, hs4: "2521" },
-  { pattern: /\blime\b/i, hs4: "2522" },
-  { pattern: /\bchromic acid\b|\bchromium salts?\b/i, hs4: "2819" },
-  { pattern: /\btitanium dioxide\b|\bpigments?\b|\bTiO2\b/i, hs4: "3206" },
-  { pattern: /\btopcoat\b|\bprimer coat\b|\blacquer\b/i, hs4: "3208" },
-  { pattern: /\bargon gas\b|\boxygen\b/i, hs4: "2804" },
-];
-
-function matchInputTrade(text) {
-  const hit = INPUT_KEYWORD_HS4.find((k) => k.pattern.test(text));
-  return hit ? TRADE_HS4[hit.hs4] : null;
-}
-
-// Keyword -> verified Phase, for the same free-text "Inputs" line items.
-const INPUT_KEYWORD_PHASE = [
-  { pattern: /\bsponge iron\b|\bpig iron\b|\bDRI\b|\bHBI\b/i, phase: "II" },
-  { pattern: /\bscrap\b|\bliquid steel\b/i, phase: "III" },
-  { pattern: /\b(slab|billet|bloom)\b/i, phase: "IV" },
-];
-
-function matchInputPhase(text) {
-  const hit = INPUT_KEYWORD_PHASE.find((k) => k.pattern.test(text));
-  return hit ? PHASE_PRODUCERS[hit.phase] : null;
-}
-
-export { PRODUCTS, CATEGORIES, TRADE_HS4, PRODUCT_HS4, RAW_MATERIAL_TRADE, matchInputTrade, matchInputPhase, PRODUCT_FIRMS, PHASE_PRODUCERS, PHASE_SOURCE, RAW_MATERIAL_PHASE };
+]
