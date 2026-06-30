@@ -510,20 +510,30 @@ for col in COLLECTIONS:
     name = col['name']
     if name not in existing:
         continue  # just created above with the full schema already
-    current = pb('GET', f'/api/collections/{collection_ids[name]}')
-    live_field_names = {f['name'] for f in current.get('schema', [])}
-    missing = [f for f in col['schema'] if f['name'] not in live_field_names]
-    if not missing:
-        continue
-    # PocketBase 0.22's collection PATCH rejects a {'schema': [...]}-only
-    # body (400, no detail) — it expects the mutable collection fields, not
-    # just the one being changed. Send everything current already has,
-    # minus read-only metadata (id is in the URL, created/updated/system
-    # are server-managed), with schema swapped for the appended version.
-    payload = {k: v for k, v in current.items() if k not in ('id', 'created', 'updated', 'system')}
-    payload['schema'] = current['schema'] + missing
-    pb('PATCH', f'/api/collections/{collection_ids[name]}', payload)
-    print(f'  Added field(s) to {name}: {", ".join(f["name"] for f in missing)}')
+    try:
+        current = pb('GET', f'/api/collections/{collection_ids[name]}')
+        live_field_names = {f['name'] for f in current.get('schema', [])}
+        missing = [f for f in col['schema'] if f['name'] not in live_field_names]
+        if not missing:
+            continue
+        # PocketBase 0.22's collection PATCH rejects a {'schema': [...]}-only
+        # body (400, no detail) — it expects the mutable collection fields, not
+        # just the one being changed. Send everything current already has,
+        # minus read-only metadata (id is in the URL, created/updated/system
+        # are server-managed), with schema swapped for the appended version.
+        # New field entries also need the same system/presentable/unique keys
+        # PocketBase's own GET response includes on every existing field, or
+        # the mixed-shape schema array fails validation.
+        missing_full = [{**f, 'id': '', 'system': False, 'presentable': False, 'unique': False} for f in missing]
+        payload = {k: v for k, v in current.items() if k not in ('id', 'created', 'updated', 'system')}
+        payload['schema'] = current['schema'] + missing_full
+        pb('PATCH', f'/api/collections/{collection_ids[name]}', payload)
+        print(f'  Added field(s) to {name}: {", ".join(f["name"] for f in missing)}')
+    except Exception as e:
+        # Never let a field-migration issue block seeding the records below —
+        # worst case a new field stays absent until this is fixed by hand,
+        # same as before this migration step existed at all.
+        print(f'  WARNING: could not add missing field(s) to {name}: {e}')
 
 # ── Helper: upsert by slug field ──────────────────────────────────────────────
 
