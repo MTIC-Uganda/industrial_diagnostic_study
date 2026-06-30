@@ -79,6 +79,10 @@ kpis          = load_csv('overview_kpis.csv')
 key_indicators_csv  = load_csv('key_indicators.csv')
 key_indicator_cats_csv = load_csv('key_indicator_categories.csv')
 macro_trend_csv = load_csv('macro_trend.csv')
+sector_comparison_csv = load_csv('sector_comparison.csv')
+risk_register_csv = load_csv('risk_register.csv')
+milestones_csv = load_csv('milestones.csv')
+glossary_csv  = load_csv('glossary.csv')
 
 chains_by_name = {c['name']: c for c in chains_data}
 
@@ -339,6 +343,89 @@ COLLECTIONS = [
             num('display_order'),
         ],
     },
+    {
+        # "Chain Status & 2040 Projections" tab — Tax-by-Sector donut and
+        # Private Credit-by-Sector bars (and the unused-by-the-dashboard-today
+        # 'exports'/'hightech' chart rows, kept for parity with the CSV).
+        # 2026-06-30 data-source audit: was CSV-only, no PocketBase path at all.
+        'name': 'sector_comparison',
+        'type': 'base',
+        'listRule': '',
+        'viewRule': '',
+        'createRule': None,
+        'updateRule': None,
+        'deleteRule': None,
+        'schema': [
+            text('slug', required=True),
+            sel('chart', ['tax', 'credit', 'exports', 'hightech']),
+            text('sector', required=True),
+            text('value_label'),
+            text('usd_label'),
+            num('pct'),
+            sel('highlight', ['0', '1']),
+            num('display_order'),
+        ],
+    },
+    {
+        # "Chain Status & 2040 Projections" tab — Risk Register table.
+        # 2026-06-30 data-source audit: was CSV-only, no PocketBase path at all.
+        'name': 'risk_register',
+        'type': 'base',
+        'listRule': '',
+        'viewRule': '',
+        'createRule': None,
+        'updateRule': None,
+        'deleteRule': None,
+        'schema': [
+            text('slug', required=True),
+            text('risk', required=True),
+            text('category'),
+            sel('severity', ['high', 'medium', 'low']),
+            sel('likelihood', ['high', 'medium', 'low']),
+            text('mitigation'),
+            text('owner'),
+            num('display_order'),
+        ],
+    },
+    {
+        # "Chain Status & 2040 Projections" tab — Milestone Roadmap.
+        # 2026-06-30 data-source audit: was CSV-only, no PocketBase path at all.
+        'name': 'milestones',
+        'type': 'base',
+        'listRule': '',
+        'viewRule': '',
+        'createRule': None,
+        'updateRule': None,
+        'deleteRule': None,
+        'schema': [
+            text('slug', required=True),
+            num('year', required=True),
+            text('year_label'),
+            text('project', required=True),
+            text('value_chain'),
+            sel('status', ['complete', 'in_progress', 'planned', 'proposed', 'stalled', 'milestone']),
+            text('category'),
+            text('note'),
+            num('display_order'),
+        ],
+    },
+    {
+        # Glossary modal, available from any tab.
+        # 2026-06-30 data-source audit: was CSV-only, no PocketBase path at all.
+        'name': 'glossary',
+        'type': 'base',
+        'listRule': '',
+        'viewRule': '',
+        'createRule': None,
+        'updateRule': None,
+        'deleteRule': None,
+        'schema': [
+            text('slug', required=True),
+            text('term', required=True),
+            text('definition'),
+            num('display_order'),
+        ],
+    },
 ]
 
 # ── Create / update collections ───────────────────────────────────────────────
@@ -580,5 +667,74 @@ for i, r in enumerate(macro_trend_csv):
     }
     upsert_record('macro_trend', 'slug', r['id'], payload)
     print(f'  {r["label"]}')
+
+# ── 3e. sector_comparison (tax/credit donuts) ───────────────────────────────
+
+print('\n── Seeding sector_comparison ──')
+
+for i, r in enumerate(sector_comparison_csv):
+    payload = {
+        'slug':          r['slug'],
+        'chart':         r['chart'],
+        'sector':        r['sector'],
+        'value_label':   r.get('value_label') or '',
+        'usd_label':     r.get('usd_label') or '',
+        'pct':           float(r['pct']) if r.get('pct') else None,
+        'highlight':     r.get('highlight') or '0',
+        'display_order': i,
+    }
+    upsert_record('sector_comparison', 'slug', r['slug'], payload)
+    print(f'  {r["chart"]}: {r["sector"]}')
+
+# ── 3f. risk_register ───────────────────────────────────────────────────────
+
+print('\n── Seeding risk_register ──')
+
+for i, r in enumerate(risk_register_csv):
+    payload = {
+        'slug':          r['slug'],
+        'risk':          r['risk'],
+        'category':      r.get('category') or '',
+        'severity':      r.get('severity') or 'medium',
+        'likelihood':    r.get('likelihood') or 'medium',
+        'mitigation':    r.get('mitigation') or '',
+        'owner':         r.get('owner') or '',
+        'display_order': i,
+    }
+    upsert_record('risk_register', 'slug', r['slug'], payload)
+    print(f'  {r["slug"]}')
+
+# ── 3g. milestones ───────────────────────────────────────────────────────────
+
+print('\n── Seeding milestones ──')
+
+for i, r in enumerate(milestones_csv):
+    payload = {
+        'slug':          r['slug'],
+        'year':          int(r['year']),
+        'year_label':    r.get('year_label') or '',
+        'project':       r['project'],
+        'value_chain':   r.get('value_chain') or '',
+        'status':        r.get('status') or 'planned',
+        'category':      r.get('category') or '',
+        'note':          r.get('note') or '',
+        'display_order': i,
+    }
+    upsert_record('milestones', 'slug', r['slug'], payload)
+    print(f'  {r["project"]}')
+
+# ── 3h. glossary ─────────────────────────────────────────────────────────────
+
+print('\n── Seeding glossary ──')
+
+for i, r in enumerate(glossary_csv):
+    payload = {
+        'slug':          r['slug'],
+        'term':          r['term'],
+        'definition':    r.get('definition') or '',
+        'display_order': i,
+    }
+    upsert_record('glossary', 'slug', r['slug'], payload)
+    print(f'  {r["term"]}')
 
 print('\nSetup complete. Verify at:', f'{PB_URL}/_/')
