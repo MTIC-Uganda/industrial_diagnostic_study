@@ -1,7 +1,7 @@
 id,label,current_value,current_pct,ndp_value,ndp_pct,tenfold_value,tenfold_pct,sub_value,confidence,source
-manufacturing_gdp,Manufacturing Value Added (% of GDP),USD 8.1B,14.5,USD 31.6B,20,USD 150.0B,30,NDP IV target: 20% (NPA, NDP IV Ch.11 §11.4, 2024) &nbsp;|&nbsp; Tenfold target: 30%,exact,UBOS Annual GDP FY2024/25
+manufacturing_gdp,Manufacturing Value Added (% of GDP),USD 8.1B,14.5,USD 31.6B,20,USD 150.0B,30,"NDP IV target: 20% (NPA, NDP IV Ch.11 §11.4, 2024) &nbsp;|&nbsp; Tenfold target: 30%",exact,UBOS Annual GDP FY2024/25
 manufacturing_tax,Manufacturing Tax Contribution (% of total tax),USD 1.9B,34,,35,,40,of total tax revenue (URA FY2024/25) &nbsp;|&nbsp; NDP IV target not published for this sub-indicator — project estimate,estimated,URA
-mfg_exports,Manufactured Exports (% of total exports),USD 2.4B,12,,13.5,,50,of total exports (ITC TradeMap 2024) &nbsp;|&nbsp; NDP IV target: 13.5% (NPA, NDP IV Ch.11 §11.4, 2024),estimated,ITC TradeMap
+mfg_exports,Manufactured Exports (% of total exports),USD 2.4B,12,,13.5,,50,"of total exports (ITC TradeMap 2024) &nbsp;|&nbsp; NDP IV target: 13.5% (NPA, NDP IV Ch.11 §11.4, 2024)",estimated,ITC TradeMap
 hightech_exports,High-Tech Exports (% of manufactured exports),USD 85M,2.3,,8,,15,"of manufactured exports (NPA, NDP IV Ch.11 Situation Analysis, 2024) &nbsp;|&nbsp; NDP IV/Tenfold targets not published — project estimates",indicative,NPA NDP IV / ITC TradeMap
 private_credit,Private Sector Credit to Manufacturing (% of total credit),USD 900M,3.4,,12,,20,UGX 3.4tn (Bank of Uganda FY2024/25 sectoral credit) &nbsp;|&nbsp; NDP IV target not published — project estimate,estimated,Bank of Uganda
 industrial_parks,Establishments in Industrial Parks (% of total),166,2.4,,5,,15,of registered establishments (Uganda Investment Authority 2025) &nbsp;|&nbsp; NDP IV target not published — project estimate,exact,Uganda Investment Authority

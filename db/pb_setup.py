@@ -179,6 +179,8 @@ COLLECTIONS = [
             text('tenfold_value'),
             num('tenfold_pct'),
             text('sub_value'),
+            sel('confidence', ['exact', 'estimated', 'indicative']),
+            text('source'),
             num('display_order'),
         ],
     },
@@ -611,6 +613,8 @@ for i, r in enumerate(kpis):
         'tenfold_value': r['tenfold_value'],
         'tenfold_pct':   float(r['tenfold_pct']),
         'sub_value':     r['sub_value'],
+        'confidence':    r.get('confidence') or 'estimated',
+        'source':        r.get('source') or '',
         'display_order': i,
     }
     upsert_record('kpi_indicators', 'slug', r['id'], payload)
