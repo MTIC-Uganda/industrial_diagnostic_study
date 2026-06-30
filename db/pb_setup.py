@@ -515,7 +515,14 @@ for col in COLLECTIONS:
     missing = [f for f in col['schema'] if f['name'] not in live_field_names]
     if not missing:
         continue
-    pb('PATCH', f'/api/collections/{collection_ids[name]}', {'schema': current['schema'] + missing})
+    # PocketBase 0.22's collection PATCH rejects a {'schema': [...]}-only
+    # body (400, no detail) — it expects the mutable collection fields, not
+    # just the one being changed. Send everything current already has,
+    # minus read-only metadata (id is in the URL, created/updated/system
+    # are server-managed), with schema swapped for the appended version.
+    payload = {k: v for k, v in current.items() if k not in ('id', 'created', 'updated', 'system')}
+    payload['schema'] = current['schema'] + missing
+    pb('PATCH', f'/api/collections/{collection_ids[name]}', payload)
     print(f'  Added field(s) to {name}: {", ".join(f["name"] for f in missing)}')
 
 # ── Helper: upsert by slug field ──────────────────────────────────────────────
