@@ -495,6 +495,29 @@ for col in COLLECTIONS:
                 raise
     collection_ids[name] = cid
 
+# ── Additive field migration ────────────────────────────────────────────────
+# The big comment above explains why a full schema PATCH on an existing
+# collection is destructive (resets every field's id, wiping data). This is
+# the "dedicated, id-preserving migration" it points to: fetch the live
+# schema (with real ids), append ONLY fields genuinely missing from it, PATCH
+# with existing-fields-untouched + new-fields-appended. Never reorders or
+# touches an existing field, so it's safe to run on every CI seed, not just
+# once. (First needed 2026-06-30: kpi_indicators gained confidence/source
+# columns after the collection already existed — those fields were being
+# sent in the seed payload below but silently dropped by PocketBase since
+# they didn't exist on the live collection yet.)
+for col in COLLECTIONS:
+    name = col['name']
+    if name not in existing:
+        continue  # just created above with the full schema already
+    current = pb('GET', f'/api/collections/{collection_ids[name]}')
+    live_field_names = {f['name'] for f in current.get('schema', [])}
+    missing = [f for f in col['schema'] if f['name'] not in live_field_names]
+    if not missing:
+        continue
+    pb('PATCH', f'/api/collections/{collection_ids[name]}', {'schema': current['schema'] + missing})
+    print(f'  Added field(s) to {name}: {", ".join(f["name"] for f in missing)}')
+
 # ── Helper: upsert by slug field ──────────────────────────────────────────────
 
 def find_by_slug(collection, slug):
