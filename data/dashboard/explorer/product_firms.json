@@ -1,0 +1,153 @@
+[
+  {
+    "product_slug": "galvanized",
+    "status": "named",
+    "firms": [
+      "Uganda Baati (named for \"roofing, coated sheet\")",
+      "Roofings Rolling Mills (named for \"coated coil\", among other products)"
+    ],
+    "note": "Backed by real trade scale: Uganda exported USD 53.5m of HS 7210 coated flat steel in 2024, almost entirely regional (ITC TradeMap).",
+    "phase_context": {
+      "phase": "Vb",
+      "sharedWith": "Galvalume, Pre-painted Coil and all other Phase V(b) finishing output"
+    }
+  },
+  {
+    "product_slug": "galvalume",
+    "status": "unknown",
+    "firms": [],
+    "note": "Not named separately from Galvanized Sheet/PPGI anywhere in any of the three source documents (NPA/UDC value-chain report, taxation policy review, feasibility study) — no specific producer or absence confirmed for this alloy specifically.",
+    "phase_context": null
+  },
+  {
+    "product_slug": "prepainted",
+    "status": "named",
+    "firms": [
+      "Roofings Rolling Mills (named for \"coated coil\")"
+    ],
+    "note": "The source register's Phase V(b) economic analysis is specifically about PPGI (pre-painted galvanised iron) production economics, but still doesn't name which plants make PPGI vs plain galvanized.",
+    "phase_context": {
+      "phase": "Vb",
+      "sharedWith": "Galvanized Sheet, Galvalume and all other Phase V(b) finishing output"
+    }
+  },
+  {
+    "product_slug": "tinplate",
+    "status": "unknown",
+    "firms": [],
+    "note": "No mention of tinplate, tin-coating or ECCS/tin-free steel found in any of the three source documents (searched directly, not inferred) — neither confirmed present nor absent.",
+    "phase_context": null
+  },
+  {
+    "product_slug": "coldrolled",
+    "status": "named",
+    "firms": [
+      "Roofings Rolling Mills (cold-rolling mill complex; a USD 125m expansion for +150,000 tpa export capacity was underway as of the taxation policy review)"
+    ],
+    "note": "The feasibility study also notes \"some cold rolled coils for roofing material or galvanized sheets\" are produced domestically, alongside continued coil imports (cold-rolled coil is only 0.7% of import value per the value-chain report).",
+    "phase_context": null
+  },
+  {
+    "product_slug": "hotrolled",
+    "status": "named",
+    "firms": [
+      "Tembo Steels Ltd (narrow-strip HRC <600mm, 100,000 tpa installed — first Uganda producer of 0.7mm HRC sheet via direct rolling from liquid steel, since 2008)",
+      "Roofings Rolling Mills (hot rolling mill)"
+    ],
+    "note": "Narrow-strip only — the taxation policy review explicitly states there are \"no local manufacturers\" for wide HRC (>600mm), which is the grade normally meant by \"Hot-Rolled Coil\" in flat-steel trade statistics.",
+    "phase_context": null
+  },
+  {
+    "product_slug": "plate",
+    "status": "absent",
+    "firms": [],
+    "note": "The feasibility study explicitly states no heavy-plate hot-strip mill exists in Uganda (\"due to unavailability of Plate Hot strip mill\"). Steel & Tube Industries sources \"steel plates from Roofings Ltd, China\" for plate-cutting/chequered-plate work — but that pairing with an import source suggests distribution, not Roofings milling plate itself.",
+    "phase_context": null
+  },
+  {
+    "product_slug": "rebar",
+    "status": "named",
+    "firms": [
+      "Roofings Rolling Mills (named for \"rebar, wire, coated coil\")",
+      "Tororo Cement — Steel Division (named for \"long products\")",
+      "Pramukh, Yogi, Madhvani, Tian Tang, Diamond and others (named for \"re-rolling, sections, wire, nails\")"
+    ],
+    "note": "Uganda's strongest finished product — net exporter (USD 55.8m, 2024).",
+    "phase_context": {
+      "phase": "Va",
+      "sharedWith": "Wire Rod, Merchant Bar, Structural Sections and Welded Pipe"
+    }
+  },
+  {
+    "product_slug": "wirerod",
+    "status": "named",
+    "firms": [
+      "Roofings Rolling Mills (named for \"wire\")",
+      "Pramukh, Yogi, Madhvani, Tian Tang, Diamond and others (named for \"wire, nails\")"
+    ],
+    "note": "",
+    "phase_context": {
+      "phase": "Va",
+      "sharedWith": "Rebar, Merchant Bar, Structural Sections and Welded Pipe"
+    }
+  },
+  {
+    "product_slug": "merchantbar",
+    "status": "named",
+    "firms": [
+      "Steel & Tube Ltd (named for \"bars, tubes, sections\")",
+      "Pramukh, Yogi, Madhvani, Tian Tang, Diamond and others (named for \"sections\")"
+    ],
+    "note": "",
+    "phase_context": {
+      "phase": "Va",
+      "sharedWith": "Rebar, Wire Rod, Structural Sections and Welded Pipe"
+    }
+  },
+  {
+    "product_slug": "structural",
+    "status": "named",
+    "firms": [
+      "Steel & Tube Ltd (named for \"bars, tubes, sections\")"
+    ],
+    "note": "Uganda exported USD 6.6m of HS 7216 structural sections/angles/shapes in 2024, almost entirely regional (ITC TradeMap).",
+    "phase_context": {
+      "phase": "Va",
+      "sharedWith": "Rebar, Wire Rod, Merchant Bar and Welded Pipe"
+    }
+  },
+  {
+    "product_slug": "rail",
+    "status": "absent",
+    "firms": [],
+    "note": "The feasibility study explicitly proposes a \"Rail Mill Rolling plant\" as a future investment, calling it \"urgent and necessary to produce rails locally\" and listing it among technologies \"presently not available\" — confirming no current domestic rail production. Uganda's HS 7302 trade is import-only (USD 12.3m, 2024) with zero exports.",
+    "phase_context": null
+  },
+  {
+    "product_slug": "sheetpiling",
+    "status": "unknown",
+    "firms": [],
+    "note": "No mention of sheet piling found in any of the three source documents — neither confirmed present nor absent. Uganda does show a small USD 214k of HS 7301 exports (2024, almost entirely regional) — but that code also covers welded angles/shapes/sections generally, so it isn't confirmation of sheet-pile production specifically.",
+    "phase_context": null
+  },
+  {
+    "product_slug": "weldedpipe",
+    "status": "named",
+    "firms": [
+      "Roofings Ltd (named for \"pipes\")",
+      "Steel & Tube Ltd (named for \"tubes\")"
+    ],
+    "note": "Strongly backed by trade scale: Uganda exported USD 31.4m of HS 7306 welded pipe/tube in 2024, almost entirely regional (ITC TradeMap) — a similar regional-export profile to Rebar.",
+    "phase_context": {
+      "phase": "Va",
+      "sharedWith": "Rebar, Wire Rod, Merchant Bar and Structural Sections"
+    }
+  },
+  {
+    "product_slug": "seamlesspipe",
+    "status": "absent",
+    "firms": [],
+    "note": "The feasibility study explicitly proposes a seamless-pipe mill as a future investment (\"presently not available\"), and the report chapter names it as a product Uganda should NOT pursue at this stage. Uganda's HS 7304 trade is import-dominated (USD 41.6m, 2024) with only a small USD 295k of exports, consistent with re-exported imported pipe rather than domestic seamless production.",
+    "phase_context": null
+  }
+]

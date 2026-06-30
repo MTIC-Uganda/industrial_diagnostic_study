@@ -1,0 +1,114 @@
+[
+  {
+    "target_type": "hs4",
+    "pattern_source": "\\bscrap\\b",
+    "pattern_flags": "i",
+    "target_value": "7204",
+    "display_order": 0
+  },
+  {
+    "target_type": "hs4",
+    "pattern_source": "\\b(slab|billet|bloom|semi-finished)\\b",
+    "pattern_flags": "i",
+    "target_value": "7207",
+    "display_order": 1
+  },
+  {
+    "target_type": "hs4",
+    "pattern_source": "\\bzinc ingots?\\b",
+    "pattern_flags": "i",
+    "target_value": "7901",
+    "display_order": 2
+  },
+  {
+    "target_type": "hs4",
+    "pattern_source": "\\baluminum \\(55% of bath",
+    "pattern_flags": "i",
+    "target_value": "7601",
+    "display_order": 3
+  },
+  {
+    "target_type": "hs4",
+    "pattern_source": "\\btin anodes?\\b",
+    "pattern_flags": "i",
+    "target_value": "8001",
+    "display_order": 4
+  },
+  {
+    "target_type": "hs4",
+    "pattern_source": "\\bferroalloy",
+    "pattern_flags": "i",
+    "target_value": "7202",
+    "display_order": 5
+  },
+  {
+    "target_type": "hs4",
+    "pattern_source": "\\bgraphite electrodes?\\b",
+    "pattern_flags": "i",
+    "target_value": "8545",
+    "display_order": 6
+  },
+  {
+    "target_type": "hs4",
+    "pattern_source": "\\blimestone\\b",
+    "pattern_flags": "i",
+    "target_value": "2521",
+    "display_order": 7
+  },
+  {
+    "target_type": "hs4",
+    "pattern_source": "\\blime\\b",
+    "pattern_flags": "i",
+    "target_value": "2522",
+    "display_order": 8
+  },
+  {
+    "target_type": "hs4",
+    "pattern_source": "\\bchromic acid\\b|\\bchromium salts?\\b",
+    "pattern_flags": "i",
+    "target_value": "2819",
+    "display_order": 9
+  },
+  {
+    "target_type": "hs4",
+    "pattern_source": "\\btitanium dioxide\\b|\\bpigments?\\b|\\bTiO2\\b",
+    "pattern_flags": "i",
+    "target_value": "3206",
+    "display_order": 10
+  },
+  {
+    "target_type": "hs4",
+    "pattern_source": "\\btopcoat\\b|\\bprimer coat\\b|\\blacquer\\b",
+    "pattern_flags": "i",
+    "target_value": "3208",
+    "display_order": 11
+  },
+  {
+    "target_type": "hs4",
+    "pattern_source": "\\bargon gas\\b|\\boxygen\\b",
+    "pattern_flags": "i",
+    "target_value": "2804",
+    "display_order": 12
+  },
+  {
+    "target_type": "phase",
+    "pattern_source": "\\bsponge iron\\b|\\bpig iron\\b|\\bDRI\\b|\\bHBI\\b",
+    "pattern_flags": "i",
+    "target_value": "II",
+    "display_order": 13
+  },
+  {
+    "target_type": "phase",
+    "pattern_source": "\\bscrap\\b|\\bliquid steel\\b",
+    "pattern_flags": "i",
+    "target_value": "III",
+    "display_order": 14
+  },
+  {
+    "target_type": "phase",
+    "pattern_source": "\\b(slab|billet|bloom)\\b",
+    "pattern_flags": "i",
+    "target_value": "IV",
+    "display_order": 15
+  }
+]

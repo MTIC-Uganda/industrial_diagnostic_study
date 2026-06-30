@@ -284,6 +284,11 @@ jobs:
           PB_URL: ${{ secrets.PB_URL }}
         run: python scripts/generate_dashboard.py
 
+      - name: Generate Value Chain Explorer data from PocketBase
+        env:
+          PB_URL: ${{ secrets.PB_URL }}
+        run: python scripts/generate_explorer_data.py
+
       - name: Build
         run: |
           REPO="$GITHUB_WORKSPACE"
@@ -488,6 +493,13 @@ jobs:
           PB_ADMIN_EMAIL: ${{ secrets.PB_ADMIN_EMAIL }}
           PB_ADMIN_PASSWORD: ${{ secrets.PB_ADMIN_PASSWORD }}
         run: python db/pb_setup.py
+
+      - name: Seed Value Chain Explorer PocketBase collections
+        env:
+          PB_URL: ${{ secrets.PB_URL }}
+          PB_ADMIN_EMAIL: ${{ secrets.PB_ADMIN_EMAIL }}
+          PB_ADMIN_PASSWORD: ${{ secrets.PB_ADMIN_PASSWORD }}
+        run: python db/pb_setup_explorer.py
 
       - name: Verify seeding
         env:
