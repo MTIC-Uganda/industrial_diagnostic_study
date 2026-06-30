@@ -215,6 +215,20 @@ def kpi_categories_for(slug):
 # to be hand-typed HTML in the template, which is exactly how it went stale
 # and drifted from the 12-card KPI section above it (same underlying numbers,
 # two disconnected sources). Now both read from the same table.
+#
+# PocketBase's seed-pocketbase CI job only runs on direct pushes to main
+# (auto-merge pushes with the bot token don't trigger a new workflow run —
+# a GitHub Actions anti-recursion rule), so there's always a window where a
+# CSV gets a new row before PocketBase has it. Backfill any indicator slug
+# this panel needs but PocketBase doesn't have yet from the CSV, instead of
+# silently dropping that bar — PocketBase still wins for every slug it does
+# have, so a real PocketBase correction always takes priority once seeded.
+TENFOLD_PANEL_SLUGS = [
+    'manufacturing_gdp', 'manufacturing_tax', 'mfg_exports', 'hightech_exports',
+    'private_credit', 'industrial_parks', 'fdi_manufacturing',
+    'manufacturing_employment', 'export_variety',
+]
+
 _raw_kpi_indicators = _pb_fetch_or_none('kpi_indicators', sort='display_order')
 if _raw_kpi_indicators:
     kpi_indicators = [{
@@ -227,8 +241,16 @@ if _raw_kpi_indicators:
 else:
     if USE_POCKETBASE:
         print('  (no kpi_indicators collection in PocketBase yet — using local CSV fallback)')
-    kpi_indicators = load_csv('overview_kpis.csv')
+    kpi_indicators = []
 KPI_INDICATORS = {r['id']: r for r in kpi_indicators}
+
+_missing_slugs = [s for s in TENFOLD_PANEL_SLUGS if s not in KPI_INDICATORS]
+if _missing_slugs:
+    if USE_POCKETBASE:
+        print(f'  kpi_indicators missing from PocketBase (using CSV fallback for these): {", ".join(_missing_slugs)}')
+    for r in load_csv('overview_kpis.csv'):
+        if r['id'] in _missing_slugs:
+            KPI_INDICATORS[r['id']] = r
 
 # ── HTML generators ───────────────────────────────────────────────────────────
 
@@ -279,16 +301,6 @@ def kpi_badge(slug):
     sub = f"{r.get('source','')}, {r.get('year','')}".strip(', ')
     return confidence_badge_html(r.get('confidence', 'estimated'), sub)
 
-# Progress to Tenfold Growth — 9-bar panel, numbered in this fixed order.
-# Each bar's segment widths are computed here (current/NDP/Tenfold as % of
-# the bar, scaled so the indicator's own Tenfold value = 100% of the bar),
-# never hand-typed in the template — that hand-typing is exactly how this
-# panel went stale and drifted from the 12-card KPI section above it.
-TENFOLD_PANEL_SLUGS = [
-    'manufacturing_gdp', 'manufacturing_tax', 'mfg_exports', 'hightech_exports',
-    'private_credit', 'industrial_parks', 'fdi_manufacturing',
-    'manufacturing_employment', 'export_variety',
-]
 
 def _usd_billions(s):
     m = re.search(r'USD\s*([\d.]+)\s*B', s or '')
