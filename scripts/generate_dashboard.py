@@ -56,6 +56,19 @@ def load_csv(name):
     with open(DATA / name, newline='', encoding='utf-8') as f:
         return list(csv.DictReader(f))
 
+def pb_count(collection, filter=None):
+    """Total record count via PocketBase's totalItems pagination field — one
+    lightweight request (perPage=1), not a full fetch. Returns None if
+    PocketBase is unreachable so the caller can fall back to a static figure."""
+    url = f'{PB_URL}/api/collections/{collection}/records?perPage=1'
+    if filter:
+        url += f'&filter={urllib.parse.quote(filter)}'
+    try:
+        with urllib.request.urlopen(url) as r:
+            return json.loads(r.read()).get('totalItems')
+    except Exception:
+        return None
+
 if USE_POCKETBASE:
     print(f'Data source: PocketBase ({PB_URL})')
 
@@ -162,6 +175,17 @@ else:
     raw_fac        = load_csv('factories.csv')
     factories_list = [{**f, 'loc': f.get('loc', '')} for f in raw_fac]
 
+# Total registered establishments — was a hand-typed "~7,011" both in the
+# template and in key_indicators.csv's KPI-7 card; 2026-06-30 data-source
+# audit flagged it as a number that will silently go stale as the register
+# grows. industries is the canonical establishment table (ADR-011), so count
+# it directly (excluding the curated FAC-* map-only rows, same exclusion
+# treemap_data_js() already applies) — one lightweight request, not a full
+# fetch. Falls back to the last-known figure if PocketBase is unreachable.
+_pb_establishment_count = pb_count('industries', filter='reg_number !~ "FAC-"') if USE_POCKETBASE else None
+ESTABLISHMENT_COUNT = _pb_establishment_count or 7011
+ESTABLISHMENT_COUNT_LABEL = f'{ESTABLISHMENT_COUNT:,}'
+
 if not USE_POCKETBASE:
     # Local-dev fallback only — when PocketBase is live, macro_trend was
     # already set above. (This file is committed for local runs, so without
@@ -198,6 +222,8 @@ else:
         print('  (no key_indicators collection in PocketBase yet — using local CSV fallback)')
     key_indicators = load_csv('key_indicators.csv')
 KEY_INDICATORS = {r['slug']: r for r in key_indicators}
+if 'establishments' in KEY_INDICATORS:
+    KEY_INDICATORS['establishments']['value'] = ESTABLISHMENT_COUNT_LABEL
 
 _raw_key_categories = _pb_fetch_or_none('key_indicator_categories', sort='indicator_slug,display_order')
 if _raw_key_categories:
@@ -273,6 +299,7 @@ sector_comparison = _pb_or_csv('sector_comparison', 'sector_comparison.csv')
 risk_register     = _pb_or_csv('risk_register', 'risk_register.csv')
 milestones        = _pb_or_csv('milestones', 'milestones.csv')
 glossary          = _pb_or_csv('glossary', 'glossary.csv')
+chain_synergies   = _pb_or_csv('chain_synergies', 'chain_synergies.csv')
 
 # ── HTML generators ───────────────────────────────────────────────────────────
 
@@ -864,6 +891,18 @@ def recent_updates_html(limit=8):
         )
     return '\n    '.join(rows)
 
+def chain_synergies_html():
+    if not chain_synergies:
+        return '<div style="color:rgba(255,255,255,.8);font-size:13px">No synergy data available.</div>'
+    parts = []
+    for r in chain_synergies:
+        parts.append(
+            f'<div style="background:rgba(255,255,255,.1);border-radius:8px;padding:12px">'
+            f'<strong>{r["title"]}:</strong> {r["description"]}'
+            f'</div>'
+        )
+    return '\n      '.join(parts)
+
 def glossary_html():
     if not glossary:
         return '<div style="color:var(--muted);font-size:12px">No glossary available.</div>'
@@ -1188,6 +1227,8 @@ replacements = {
     '/*%%FACTORIES_DATA%%*/':         factories_js(),
     '/*%%TREEMAP_DATA%%*/':           treemap_data_js(),
     '<!--%%TOOLS_NAV%%-->':           tools_nav_html(),
+    '<!--%%ESTABLISHMENT_COUNT%%-->': ESTABLISHMENT_COUNT_LABEL,
+    '<!--%%CHAIN_SYNERGIES%%-->':     chain_synergies_html(),
 }
 
 out = tmpl
