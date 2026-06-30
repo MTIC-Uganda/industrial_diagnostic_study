@@ -560,11 +560,13 @@ jobs:
         run: python scripts/detect_drift.py
 
       - name: Open a PR if drift was found
+        id: open-pr
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           if git diff --quiet data/dashboard/; then
             echo "No drift detected."
+            echo "pr_url=" >> "$GITHUB_OUTPUT"
             exit 0
           fi
           git config user.name  "MTIC CI Bot"
@@ -574,9 +576,21 @@ jobs:
           git add data/dashboard/
           git commit -m "drift: PocketBase data differs from committed files"
           git push origin "$BRANCH"
-          gh pr create --title "PocketBase drift detected — review and merge or close" --base main --head "$BRANCH" --body "PocketBase's live data no longer matches what's committed in \`data/dashboard/\`. This usually means a record was edited directly in the PocketBase admin UI, bypassing the normal CSV -> \`db/pb_setup.py\` -> PocketBase pipeline (ADR-011 says writes shouldn't happen that way, but nothing technically blocks it).
+          PR_URL=$(gh pr create --title "PocketBase drift detected — review and merge or close" --base main --head "$BRANCH" --body "PocketBase's live data no longer matches what's committed in \`data/dashboard/\`. This usually means a record was edited directly in the PocketBase admin UI, bypassing the normal CSV -> \`db/pb_setup.py\` -> PocketBase pipeline (ADR-011 says writes shouldn't happen that way, but nothing technically blocks it).
 
           **Review the diff in this PR carefully**, then:
           - **If the change was intentional** — merge this PR. That brings git in sync with what's now live in PocketBase; no further action needed.
-          - **If the change was NOT intentional** — close this PR without merging, then run \`python scripts/restore_from_git.py\` (needs \`PB_ADMIN_EMAIL\`/\`PB_ADMIN_PASSWORD\`) to push git's last-known values back into PocketBase. That also deletes any record PocketBase has that git doesn't — covers someone adding a new row directly, not just editing an existing one."
+          - **If the change was NOT intentional** — close this PR without merging, then run \`python scripts/restore_from_git.py\` (needs \`PB_ADMIN_EMAIL\`/\`PB_ADMIN_PASSWORD\`) to push git's last-known values back into PocketBase. That also deletes any record PocketBase has that git doesn't — covers someone adding a new row directly, not just editing an existing one.")
+          echo "pr_url=$PR_URL" >> "$GITHUB_OUTPUT"
           echo "::notice::Opened drift-review PR on $BRANCH"
+
+      - name: Notify team by email and WhatsApp
+        if: steps.open-pr.outputs.pr_url != ''
+        continue-on-error: true
+        env:
+          SMTP_USER:    ${{ secrets.SMTP_USER }}
+          SMTP_PASS:    ${{ secrets.SMTP_PASS }}
+          TWILIO_SID:   ${{ secrets.TWILIO_SID }}
+          TWILIO_TOKEN: ${{ secrets.TWILIO_TOKEN }}
+          TWILIO_FROM:  ${{ secrets.TWILIO_FROM }}
+        run: python scripts/notify.py "${{ steps.open-pr.outputs.pr_url }}"
