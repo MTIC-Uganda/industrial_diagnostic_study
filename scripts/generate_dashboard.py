@@ -134,6 +134,7 @@ if USE_POCKETBASE:
     try:
         raw_macro = pb_get('macro_trend', sort='display_order')
         macro_trend = [{
+            'id':           r['slug'],
             'label':        r['label'],
             'fy2021_value': r.get('fy2021_value') or '',
             'fy2025_value': r.get('fy2025_value') or '',
@@ -146,9 +147,12 @@ if USE_POCKETBASE:
             'confidence':   r.get('confidence') or 'estimated',
             'source':       r.get('source') or '',
         } for r in raw_macro]
+        if not macro_trend:
+            raise SystemExit
     except SystemExit:
-        print('  (no macro_trend collection in PocketBase yet — skipping Momentum panel)')
-        macro_trend = []
+        print('  (no macro_trend collection in PocketBase yet — using local CSV fallback)')
+        _mt_file = DATA / 'macro_trend.csv'
+        macro_trend = load_csv('macro_trend.csv') if _mt_file.exists() else []
 
 else:
     print('Data source: local files (data/dashboard/)')
