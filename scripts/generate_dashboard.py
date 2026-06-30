@@ -267,6 +267,7 @@ if _raw_kpi_indicators:
         'ndp_value': r.get('ndp_value') or '', 'ndp_pct': r.get('ndp_pct') or 0,
         'tenfold_value': r.get('tenfold_value') or '', 'tenfold_pct': r.get('tenfold_pct') or 0,
         'sub_value': r.get('sub_value') or '',
+        'confidence': r.get('confidence') or 'estimated', 'source': r.get('source') or '',
     } for r in _raw_kpi_indicators]
 else:
     if USE_POCKETBASE:

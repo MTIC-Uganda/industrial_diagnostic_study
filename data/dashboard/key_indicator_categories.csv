@@ -1,18 +1,18 @@
 indicator_slug,category,pct,value_label,highlight,display_order
+credit,Building & Real Estate,5,Shs 5.0trn,0,1
+credit,Trade,4.3,Shs 4.3trn,0,2
+credit,Personal & Household,4.6,Shs 4.6trn,0,3
+credit,Manufacturing,3.4,Shs 3.4trn,1,4
+credit,Agriculture,2.7,Shs 2.7trn,0,5
+hightech,Pharmaceuticals (QCIL + others),75,USD 64M,1,1
+hightech,ICT Goods,11,USD 9.3M,0,2
+hightech,Other high-tech,14,USD 12M,0,3
+region_dist,Central,79.5,"5,446 establishments",1,1
+region_dist,Western,8.3,570 establishments,0,2
+region_dist,Eastern,7.9,538 establishments,0,3
+region_dist,Northern,4.3,294 establishments,0,4
 tax,Wholesale & Retail,39,Shs 6.1trn,0,1
 tax,Manufacturing,34,Shs 7.19trn,1,2
 tax,Financial & Insurance,15,Shs 2.3trn,0,3
 tax,Info & Communications,9,Shs 1.4trn,0,4
 tax,Public Administration,5,Shs 0.8trn,0,5
-hightech,Pharmaceuticals (QCIL + others),75,USD 64M,1,1
-hightech,ICT Goods,11,USD 9.3M,0,2
-hightech,Other high-tech,14,USD 12M,0,3
-credit,Building & Real Estate,5.0,Shs 5.0trn,0,1
-credit,Trade,4.3,Shs 4.3trn,0,2
-credit,Personal & Household,4.6,Shs 4.6trn,0,3
-credit,Manufacturing,3.4,Shs 3.4trn,1,4
-credit,Agriculture,2.7,Shs 2.7trn,0,5
-region_dist,Central,79.5,"5,446 establishments",1,1
-region_dist,Western,8.3,570 establishments,0,2
-region_dist,Eastern,7.9,538 establishments,0,3
-region_dist,Northern,4.3,294 establishments,0,4
