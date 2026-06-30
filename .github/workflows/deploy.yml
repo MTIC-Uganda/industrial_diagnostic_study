@@ -16,13 +16,19 @@ name: Deploy MTIC Value Chains App
 on:
   push:
     branches: ["**"]
-  # Self-dispatched by the "Trigger PocketBase reseed on main" step below.
-  # A plain `git push` to main using the bot's GITHUB_TOKEN does NOT trigger
-  # a new on:push run (GitHub's anti-recursion rule for GITHUB_TOKEN-authored
-  # pushes), so auto-merge alone never reaches the seed-pocketbase job below
-  # (it's gated to github.ref == refs/heads/main). Dispatching this event
-  # explicitly via `gh workflow run` is the documented way around that rule.
+  # Self-dispatched by the "Trigger PocketBase reseed on main" and "Trigger
+  # one rebuild..." steps below. A plain `git push` to main using the bot's
+  # GITHUB_TOKEN does NOT trigger a new on:push run (GitHub's anti-recursion
+  # rule for GITHUB_TOKEN-authored pushes), so auto-merge alone never reaches
+  # the seed-pocketbase job below (it's gated to github.ref ==
+  # refs/heads/main). Dispatching this event explicitly via `gh workflow run`
+  # is the documented way around that rule.
   workflow_dispatch:
+    inputs:
+      reseed_followup:
+        description: "Internal — set by CI when this run exists only to pick up freshly-seeded PocketBase data. Bounds the auto-chain to exactly one follow-up run; do not set manually more than once in a row."
+        type: boolean
+        default: false
 
 env:
   HETZNER_HOST:       89.167.121.193
@@ -490,3 +496,19 @@ jobs:
           sleep 2
           curl -s ${{ secrets.PB_URL }}/api/health | jq .
           echo "✓ PocketBase seeded and verified"
+
+      # generate_dashboard.py (the build job, earlier in this same run) reads
+      # PocketBase BEFORE this seeding step runs, so the content just
+      # deployed above can still be one step stale on a run where seeding
+      # changed something the build needed. Dispatch one more run, marked
+      # reseed_followup so IT skips this step in turn — bounds the chain to
+      # exactly one follow-up rebuild, never loops regardless of how this
+      # run itself was triggered.
+      - name: Trigger one rebuild to pick up freshly-seeded PocketBase data
+        if: github.event.inputs.reseed_followup != 'true'
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh workflow run deploy.yml --ref main -f reseed_followup=true
+          echo "::notice::Dispatched a rebuild on main to pick up freshly-seeded PocketBase data"
