@@ -256,6 +256,24 @@ if _missing_slugs:
         if r['id'] in _missing_slugs:
             KPI_INDICATORS[r['id']] = r
 
+# Tax/Credit-by-sector charts, Risk Register, Milestone Roadmap, Glossary —
+# PocketBase first (ADR-011), local CSV fallback. 2026-06-30 data-source audit:
+# these 4 had no PocketBase path at all (CSV-only), unlike everything else on
+# the dashboard.
+def _pb_or_csv(collection, csv_name, sort='display_order'):
+    rows = _pb_fetch_or_none(collection, sort=sort)
+    if rows:
+        return rows
+    if USE_POCKETBASE:
+        print(f'  (no {collection} collection in PocketBase yet — using local CSV fallback)')
+    csv_file = DATA / csv_name
+    return load_csv(csv_name) if csv_file.exists() else []
+
+sector_comparison = _pb_or_csv('sector_comparison', 'sector_comparison.csv')
+risk_register     = _pb_or_csv('risk_register', 'risk_register.csv')
+milestones        = _pb_or_csv('milestones', 'milestones.csv')
+glossary          = _pb_or_csv('glossary', 'glossary.csv')
+
 # ── HTML generators ───────────────────────────────────────────────────────────
 
 TAG_COLOR = {'green':'tag-green','amber':'tag-yellow','red':'tag-red','blue':'tag-blue'}
@@ -742,10 +760,7 @@ def macro_trend_html():
 DONUT_PALETTE = ['#b0bec5', '#2e7d32', '#f57f17', '#6a1b9a', '#789262', '#8d6e63']
 
 def tax_donut_html():
-    sc_file = DATA / 'sector_comparison.csv'
-    if not sc_file.exists():
-        return ''
-    rows = [r for r in load_csv('sector_comparison.csv') if r['chart'] == 'tax']
+    rows = [r for r in sector_comparison if r['chart'] == 'tax']
     if not rows:
         return ''
     rows.sort(key=lambda r: -float(r['pct']))
@@ -782,10 +797,7 @@ def electricity_donut_html():
     )
 
 def sector_comparison_html(chart_name):
-    sc_file = DATA / 'sector_comparison.csv'
-    if not sc_file.exists():
-        return '<div style="color:var(--muted);font-size:12px">No sector comparison data available.</div>'
-    rows = [r for r in load_csv('sector_comparison.csv') if r['chart'] == chart_name]
+    rows = [r for r in sector_comparison if r['chart'] == chart_name]
     if not rows:
         return '<div style="color:var(--muted);font-size:12px">No data for this chart.</div>'
     max_pct = max(float(r['pct']) for r in rows) or 1
@@ -853,12 +865,10 @@ def recent_updates_html(limit=8):
     return '\n    '.join(rows)
 
 def glossary_html():
-    glossary_file = DATA / 'glossary.csv'
-    if not glossary_file.exists():
+    if not glossary:
         return '<div style="color:var(--muted);font-size:12px">No glossary available.</div>'
-    rows = load_csv('glossary.csv')
     parts = []
-    for r in sorted(rows, key=lambda r: r['term'].lower()):
+    for r in sorted(glossary, key=lambda r: r['term'].lower()):
         parts.append(
             f'<div class="glossary-item">'
             f'<div class="glossary-term">{esc(r["term"])}</div>'
@@ -870,12 +880,10 @@ def glossary_html():
 SEVERITY_TAG = {'high': 'tag-red', 'medium': 'tag-yellow', 'low': 'tag-green'}
 
 def risk_register_html():
-    risk_file = DATA / 'risk_register.csv'
-    if not risk_file.exists():
+    if not risk_register:
         return '<tr><td colspan="5" style="color:var(--muted)">No risk register available.</td></tr>'
-    rows = load_csv('risk_register.csv')
     parts = []
-    for r in rows:
+    for r in risk_register:
         sev_cls = SEVERITY_TAG.get(r['severity'].lower(), 'tag-yellow')
         lik_cls = SEVERITY_TAG.get(r['likelihood'].lower(), 'tag-yellow')
         parts.append(
@@ -908,11 +916,9 @@ VC_ORDER = ['Iron & Steel', 'Copper & Allied Metals', 'Automotive',
             'Sugar & Confectionery', 'Plastics & Packaging', 'Cement & Building Materials']
 
 def milestones_html():
-    ms_file = DATA / 'milestones.csv'
-    if not ms_file.exists():
+    if not milestones:
         return ('', '<div style="color:var(--muted);font-size:12px">No milestone data available.</div>')
-    rows = load_csv('milestones.csv')
-    rows.sort(key=lambda r: int(r['year']))
+    rows = sorted(milestones, key=lambda r: int(r['year']))
 
     present_chains = [vc for vc in VC_ORDER if any(r['value_chain'] == vc for r in rows)]
     tab_parts = ['<button class="chain-btn active" data-chain="__all__" onclick="filterMilestones(this,\'__all__\')">All Chains</button>']

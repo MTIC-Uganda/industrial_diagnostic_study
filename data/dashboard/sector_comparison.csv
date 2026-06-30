@@ -1,18 +1,18 @@
-chart,sector,value_label,usd_label,pct,highlight
-tax,Wholesale & Retail,39% &middot; Shs 6.1trn,USD 1.65B,39,
-tax,Manufacturing,34% &middot; Shs 7.19trn,USD 1.94B,34,1
-tax,Financial & Insurance,15% &middot; Shs 2.3trn,USD 0.62B,15,
-tax,Info & Communications,9% &middot; Shs 1.4trn,USD 0.38B,9,
-tax,Public Administration,5% &middot; Shs 0.8trn,USD 0.22B,5,
-credit,Building & Real Estate,Shs 3.8trn &rarr; 5.0trn,,5.0,
-credit,Trade,Shs 2.9trn &rarr; 4.3trn,,4.3,
-credit,Personal & Household,Shs 3.5trn &rarr; 4.6trn,,4.6,
-credit,Manufacturing,Shs 2.3trn &rarr; 3.4trn,,3.4,1
-credit,Agriculture,Shs 2.1trn &rarr; 2.7trn,,2.7,
-exports,Gold,35% &middot; USD 7.0B,USD 7.0B,35,
-exports,Coffee,22% &middot; USD 4.4B,USD 4.4B,22,
-exports,Manufactured Goods,12% &middot; USD 2.4B,USD 2.4B,12,1
-exports,Other (tea/cotton/copper/oil/fish/etc),31% &middot; USD 6.2B,USD 6.2B,31,
-hightech,Pharmaceuticals (QCIL + others),75% &middot; USD 64M,USD 64M,75,1
-hightech,ICT Goods,11% &middot; USD 9.3M,USD 9.3M,11,
-hightech,Other high-tech,14% &middot; USD 12M,USD 12M,14,
+slug,chart,sector,value_label,usd_label,pct,highlight
+tax-wholesale-retail,tax,Wholesale & Retail,39% &middot; Shs 6.1trn,USD 1.65B,39,
+tax-manufacturing,tax,Manufacturing,34% &middot; Shs 7.19trn,USD 1.94B,34,1
+tax-financial-insurance,tax,Financial & Insurance,15% &middot; Shs 2.3trn,USD 0.62B,15,
+tax-info-communications,tax,Info & Communications,9% &middot; Shs 1.4trn,USD 0.38B,9,
+tax-public-administration,tax,Public Administration,5% &middot; Shs 0.8trn,USD 0.22B,5,
+credit-building-real-estate,credit,Building & Real Estate,Shs 3.8trn &rarr; 5.0trn,,5.0,
+credit-trade,credit,Trade,Shs 2.9trn &rarr; 4.3trn,,4.3,
+credit-personal-household,credit,Personal & Household,Shs 3.5trn &rarr; 4.6trn,,4.6,
+credit-manufacturing,credit,Manufacturing,Shs 2.3trn &rarr; 3.4trn,,3.4,1
+credit-agriculture,credit,Agriculture,Shs 2.1trn &rarr; 2.7trn,,2.7,
+exports-gold,exports,Gold,35% &middot; USD 7.0B,USD 7.0B,35,
+exports-coffee,exports,Coffee,22% &middot; USD 4.4B,USD 4.4B,22,
+exports-manufactured-goods,exports,Manufactured Goods,12% &middot; USD 2.4B,USD 2.4B,12,1
+exports-other-tea-cotton-copper-oil-fish,exports,Other (tea/cotton/copper/oil/fish/etc),31% &middot; USD 6.2B,USD 6.2B,31,
+hightech-pharmaceuticals-qcil-others,hightech,Pharmaceuticals (QCIL + others),75% &middot; USD 64M,USD 64M,75,1
+hightech-ict-goods,hightech,ICT Goods,11% &middot; USD 9.3M,USD 9.3M,11,
+hightech-other-high-tech,hightech,Other high-tech,14% &middot; USD 12M,USD 12M,14,
