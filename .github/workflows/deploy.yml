@@ -16,6 +16,13 @@ name: Deploy MTIC Value Chains App
 on:
   push:
     branches: ["**"]
+  # Self-dispatched by the "Trigger PocketBase reseed on main" step below.
+  # A plain `git push` to main using the bot's GITHUB_TOKEN does NOT trigger
+  # a new on:push run (GitHub's anti-recursion rule for GITHUB_TOKEN-authored
+  # pushes), so auto-merge alone never reaches the seed-pocketbase job below
+  # (it's gated to github.ref == refs/heads/main). Dispatching this event
+  # explicitly via `gh workflow run` is the documented way around that rule.
+  workflow_dispatch:
 
 env:
   HETZNER_HOST:       89.167.121.193
@@ -29,6 +36,7 @@ env:
 
 permissions:
   contents: write
+  actions:  write
 
 jobs:
   # ── A. Ingestion Agent (only when uploads change) ─────────────────────────
@@ -407,6 +415,7 @@ jobs:
           done
 
       - name: Auto-merge branch to main
+        id: automerge
         if: github.ref != 'refs/heads/main'
         continue-on-error: true
         run: |
@@ -417,11 +426,27 @@ jobs:
           git checkout main
           if git merge --no-ff origin/$BRANCH -m "ci: auto-merge $BRANCH (staging passed)"; then
             git push origin main
+            echo "merged=true" >> "$GITHUB_OUTPUT"
             echo "::notice::Auto-merged $BRANCH → main"
           else
             git merge --abort || true
             echo "::warning::Merge conflict: $BRANCH not merged to main. Prod is updated. Resolve manually."
           fi
+
+      # A plain `git push origin main` above (using GITHUB_TOKEN) does not
+      # trigger a new on:push run, so seed-pocketbase (gated to
+      # refs/heads/main) would otherwise never run after auto-merge. Dispatch
+      # a workflow_dispatch run on main explicitly — that's allowed to
+      # trigger a fresh run. Re-runs build/deploy/promote too (redundant,
+      # same content) but that's the trade for one simple, reliable trigger.
+      - name: Trigger PocketBase reseed on main
+        if: steps.automerge.outputs.merged == 'true'
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh workflow run deploy.yml --ref main
+          echo "::notice::Dispatched a run on main to reseed PocketBase"
 
       - name: Report live URLs
         run: |
