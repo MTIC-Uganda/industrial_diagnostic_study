@@ -486,6 +486,9 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-t
 
   <div class="section-title" style="margin-top:8px">📈 Progress to Tenfold Growth</div>
   <div class="section-sub">Each indicator tracked against its current value, NDP IV target (FY2029/30), and Tenfold Growth target (2040). Bar represents journey from zero to Tenfold target.</div>
+  <div class="section-sub" style="margin-top:-8px">
+    <strong>On NDP IV targets:</strong> #1 (20% of GDP by FY2029/30) is the published NDP IV Manufacturing Programme target (National Planning Authority, <em>NDP IV</em>, Chapter 11 "Manufacturing", §11.4 Programme Results, 2024 — baseline stated there as 16% of GDP in FY2023/24; this dashboard uses UBOS's more recent FY2024/25 actual of 14.5% as the current value instead of NDP IV's own baseline). #3's NDP IV figure (13.5%) is also from that same chapter ("value of exports of manufactured products," FY2023/24 baseline 10.6%) — flagged because a separate section of the same NDP IV document independently cites manufactured goods at 21.4% of total 2023 exports, so the exact basis of the 13.5% target isn't fully unambiguous. #4's current value (2.3%) is also NDP IV's own stated figure. Targets for #2, #5, #6, #7, #8 and #9 (manufacturing's share of tax, credit, industrial parks, FDI, employment and export variety) do not appear anywhere in the NDP IV document; they remain this project's indicative estimates, not official figures, pending MTIC/NPA confirmation.
+  </div>
 
   <div class="tenfold-view-toggle" id="tenfold-view-toggle">
     <button class="tv-btn active" onclick="setTenfoldView('pct', this)">📊 View by Percentage</button>
@@ -499,14 +502,14 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-t
     <div class="progress-section">
 
       <div class="progress-item" id="tenfold-bar-1"
-           data-pct-widths="48.3,21.7,30" data-fig-widths="5.1,17.0,77.9"
-           data-pct-labels="USD 7.7B / 14.5%|→ USD 33.2B / 21%|→ USD 150.0B / 30%"
-           data-fig-labels="USD 7.7B|→ USD 33.2B|→ USD 150.0B">
-        <div class="progress-label"><span><strong>1. Manufacturing Value Added (% of GDP)</strong></span><span style="font-size:11px">USD 7.7B (14.5%) → USD 33.2B (21%) → USD 150.0B (30%)</span></div>
+           data-pct-widths="48.3,18.3,33.3" data-fig-widths="5.4,15.7,78.9"
+           data-pct-labels="USD 8.1B / 14.5%|→ USD 31.6B / 20%|→ USD 150.0B / 30%"
+           data-fig-labels="USD 8.1B|→ USD 31.6B|→ USD 150.0B">
+        <div class="progress-label"><span><strong>1. Manufacturing Value Added (% of GDP)</strong></span><span style="font-size:11px">USD 8.1B (14.5%) → USD 31.6B (20%) → USD 150.0B (30%)</span></div>
         <div style="position:relative;height:28px;background:#f5f5f5;border-radius:6px;overflow:hidden">
-          <div class="tb-seg" style="position:absolute;left:0;top:0;height:100%;width:48.3%;background:#1565c0;border-radius:6px 0 0 6px;display:flex;align-items:center;padding-left:8px;color:#fff;font-size:11px;font-weight:700">USD 7.7B / 14.5%</div>
-          <div class="tb-seg" style="position:absolute;left:48.3%;top:0;height:100%;width:21.7%;background:#43a047;display:flex;align-items:center;padding-left:6px;color:#fff;font-size:11px;font-weight:700">→ USD 33.2B / 21%</div>
-          <div class="tb-seg" style="position:absolute;left:70%;top:0;height:100%;width:30%;background:#f57f17;border-radius:0 6px 6px 0;display:flex;align-items:center;padding-left:6px;color:#fff;font-size:11px;font-weight:700">→ USD 150.0B / 30%</div>
+          <div class="tb-seg" style="position:absolute;left:0;top:0;height:100%;width:48.3%;background:#1565c0;border-radius:6px 0 0 6px;display:flex;align-items:center;padding-left:8px;color:#fff;font-size:11px;font-weight:700">USD 8.1B / 14.5%</div>
+          <div class="tb-seg" style="position:absolute;left:48.3%;top:0;height:100%;width:18.3%;background:#43a047;display:flex;align-items:center;padding-left:6px;color:#fff;font-size:11px;font-weight:700">→ USD 31.6B / 20%</div>
+          <div class="tb-seg" style="position:absolute;left:66.7%;top:0;height:100%;width:33.3%;background:#f57f17;border-radius:0 6px 6px 0;display:flex;align-items:center;padding-left:6px;color:#fff;font-size:11px;font-weight:700">→ USD 150.0B / 30%</div>
         </div>
       </div>
 
@@ -520,28 +523,28 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-t
       </div>
 
       <div class="progress-item" style="margin-top:14px">
-        <div class="progress-label"><span><strong>3. Manufactured Exports (% of total exports)</strong></span><span style="font-size:11px">USD 2.4B (12%) → NDP IV 35% → Tenfold 50%</span></div>
+        <div class="progress-label"><span><strong>3. Manufactured Exports (% of total exports)</strong></span><span style="font-size:11px">USD 2.4B (12%) → NDP IV 13.5% → Tenfold 50%</span></div>
         <div style="position:relative;height:28px;background:#f5f5f5;border-radius:6px;overflow:hidden">
           <div style="position:absolute;left:0;top:0;height:100%;width:24%;background:#1565c0;border-radius:6px 0 0 6px;display:flex;align-items:center;padding-left:8px;color:#fff;font-size:11px;font-weight:700">USD 2.4B / 12%</div>
-          <div style="position:absolute;left:24%;top:0;height:100%;width:46%;background:#43a047;display:flex;align-items:center;padding-left:6px;color:#fff;font-size:11px;font-weight:700">→ 35% NDP IV</div>
-          <div style="position:absolute;left:70%;top:0;height:100%;width:30%;background:#f57f17;border-radius:0 6px 6px 0;display:flex;align-items:center;padding-left:6px;color:#fff;font-size:11px;font-weight:700">→ 50% Tenfold</div>
+          <div style="position:absolute;left:24%;top:0;height:100%;width:3%;background:#43a047;display:flex;align-items:center;padding-left:2px;color:#fff;font-size:9px;font-weight:700">13.5%</div>
+          <div style="position:absolute;left:27%;top:0;height:100%;width:73%;background:#f57f17;border-radius:0 6px 6px 0;display:flex;align-items:center;padding-left:6px;color:#fff;font-size:11px;font-weight:700">→ 50% Tenfold</div>
         </div>
       </div>
 
       <div class="progress-item" style="margin-top:14px">
-        <div class="progress-label"><span><strong>4. High-Tech Exports (% of manufactured exports)</strong></span><span style="font-size:11px">USD 85M (~3.5%) → NDP IV 8% → Tenfold 15%</span></div>
+        <div class="progress-label"><span><strong>4. High-Tech Exports (% of manufactured exports)</strong></span><span style="font-size:11px">USD 85M (2.3%) → NDP IV 8% → Tenfold 15%</span></div>
         <div style="position:relative;height:28px;background:#f5f5f5;border-radius:6px;overflow:hidden">
-          <div style="position:absolute;left:0;top:0;height:100%;width:23.3%;background:#1565c0;border-radius:6px 0 0 6px;display:flex;align-items:center;padding-left:8px;color:#fff;font-size:11px;font-weight:700">USD 85M / ~3.5%</div>
-          <div style="position:absolute;left:23.3%;top:0;height:100%;width:30%;background:#43a047;display:flex;align-items:center;padding-left:6px;color:#fff;font-size:11px;font-weight:700">→ 8% NDP IV</div>
+          <div style="position:absolute;left:0;top:0;height:100%;width:15.3%;background:#1565c0;border-radius:6px 0 0 6px;display:flex;align-items:center;padding-left:8px;color:#fff;font-size:11px;font-weight:700">USD 85M / 2.3%</div>
+          <div style="position:absolute;left:15.3%;top:0;height:100%;width:38%;background:#43a047;display:flex;align-items:center;padding-left:6px;color:#fff;font-size:11px;font-weight:700">→ 8% NDP IV</div>
           <div style="position:absolute;left:53.3%;top:0;height:100%;width:46.7%;background:#f57f17;border-radius:0 6px 6px 0;display:flex;align-items:center;padding-left:6px;color:#fff;font-size:11px;font-weight:700">→ 15% Tenfold</div>
         </div>
       </div>
 
       <div class="progress-item" style="margin-top:14px">
-        <div class="progress-label"><span><strong>5. Private Sector Credit to Manufacturing (% of total credit)</strong></span><span style="font-size:11px">USD 487M (~8%) → NDP IV 12% → Tenfold 20%</span></div>
+        <div class="progress-label"><span><strong>5. Private Sector Credit to Manufacturing (% of total credit)</strong></span><span style="font-size:11px">UGX 3.4tn / USD 900M (3.4%) → NDP IV 12% → Tenfold 20%</span></div>
         <div style="position:relative;height:28px;background:#f5f5f5;border-radius:6px;overflow:hidden">
-          <div style="position:absolute;left:0;top:0;height:100%;width:40%;background:#1565c0;border-radius:6px 0 0 6px;display:flex;align-items:center;padding-left:8px;color:#fff;font-size:11px;font-weight:700">USD 487M / ~8%</div>
-          <div style="position:absolute;left:40%;top:0;height:100%;width:20%;background:#43a047;display:flex;align-items:center;padding-left:6px;color:#fff;font-size:11px;font-weight:700">→ 12%</div>
+          <div style="position:absolute;left:0;top:0;height:100%;width:17%;background:#1565c0;border-radius:6px 0 0 6px;display:flex;align-items:center;padding-left:8px;color:#fff;font-size:11px;font-weight:700">3.4%</div>
+          <div style="position:absolute;left:17%;top:0;height:100%;width:43%;background:#43a047;display:flex;align-items:center;padding-left:6px;color:#fff;font-size:11px;font-weight:700">→ 12%</div>
           <div style="position:absolute;left:60%;top:0;height:100%;width:40%;background:#f57f17;border-radius:0 6px 6px 0;display:flex;align-items:center;padding-left:6px;color:#fff;font-size:11px;font-weight:700">→ 20% Tenfold</div>
         </div>
       </div>
