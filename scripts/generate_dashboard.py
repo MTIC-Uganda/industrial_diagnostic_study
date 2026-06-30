@@ -16,7 +16,7 @@ Output:
     report/sources-of-truth.html
 """
 
-import csv, json, math, os, subprocess, sys, urllib.request, urllib.error, urllib.parse
+import csv, json, math, os, re, subprocess, sys, urllib.request, urllib.error, urllib.parse
 from pathlib import Path
 
 ROOT   = Path(__file__).resolve().parent.parent
@@ -210,6 +210,26 @@ else:
 def kpi_categories_for(slug):
     return [r for r in key_indicator_categories if r['indicator_slug'] == slug]
 
+# Progress to Tenfold Growth panel — sourced from kpi_indicators (PocketBase,
+# ADR-011), local CSV fallback at data/dashboard/overview_kpis.csv. This used
+# to be hand-typed HTML in the template, which is exactly how it went stale
+# and drifted from the 12-card KPI section above it (same underlying numbers,
+# two disconnected sources). Now both read from the same table.
+_raw_kpi_indicators = _pb_fetch_or_none('kpi_indicators', sort='display_order')
+if _raw_kpi_indicators:
+    kpi_indicators = [{
+        'id': r['slug'], 'label': r['label'],
+        'current_value': r.get('current_value') or '', 'current_pct': r.get('current_pct') or 0,
+        'ndp_value': r.get('ndp_value') or '', 'ndp_pct': r.get('ndp_pct') or 0,
+        'tenfold_value': r.get('tenfold_value') or '', 'tenfold_pct': r.get('tenfold_pct') or 0,
+        'sub_value': r.get('sub_value') or '',
+    } for r in _raw_kpi_indicators]
+else:
+    if USE_POCKETBASE:
+        print('  (no kpi_indicators collection in PocketBase yet — using local CSV fallback)')
+    kpi_indicators = load_csv('overview_kpis.csv')
+KPI_INDICATORS = {r['id']: r for r in kpi_indicators}
+
 # ── HTML generators ───────────────────────────────────────────────────────────
 
 TAG_COLOR = {'green':'tag-green','amber':'tag-yellow','red':'tag-red','blue':'tag-blue'}
@@ -258,6 +278,75 @@ def kpi_badge(slug):
         return ''
     sub = f"{r.get('source','')}, {r.get('year','')}".strip(', ')
     return confidence_badge_html(r.get('confidence', 'estimated'), sub)
+
+# Progress to Tenfold Growth — 9-bar panel, numbered in this fixed order.
+# Each bar's segment widths are computed here (current/NDP/Tenfold as % of
+# the bar, scaled so the indicator's own Tenfold value = 100% of the bar),
+# never hand-typed in the template — that hand-typing is exactly how this
+# panel went stale and drifted from the 12-card KPI section above it.
+TENFOLD_PANEL_SLUGS = [
+    'manufacturing_gdp', 'manufacturing_tax', 'mfg_exports', 'hightech_exports',
+    'private_credit', 'industrial_parks', 'fdi_manufacturing',
+    'manufacturing_employment', 'export_variety',
+]
+
+def _usd_billions(s):
+    m = re.search(r'USD\s*([\d.]+)\s*B', s or '')
+    return float(m.group(1)) if m else None
+
+def _fmt_pct(p):
+    return f'{p:g}'
+
+def tenfold_progress_panel_html():
+    blocks = []
+    for i, slug in enumerate(TENFOLD_PANEL_SLUGS, start=1):
+        r = KPI_INDICATORS.get(slug)
+        if not r:
+            print(f'WARNING: kpi_indicators missing slug "{slug}" — Progress to Tenfold bar #{i} skipped', file=sys.stderr)
+            continue
+        cur_v, cur_p = r['current_value'], float(r['current_pct'] or 0)
+        ndp_v, ndp_p = r['ndp_value'], float(r['ndp_pct'] or 0)
+        ten_v, ten_p = r['tenfold_value'], float(r['tenfold_pct'] or 0)
+
+        cur_w   = (cur_p / ten_p * 100) if ten_p else 0
+        ndp_cum = (ndp_p / ten_p * 100) if ten_p else 0
+        ndp_w   = max(ndp_cum - cur_w, 0)
+        ten_w   = max(100 - ndp_cum, 0)
+
+        cur_label = f'{esc(cur_v)} / {_fmt_pct(cur_p)}%' if cur_v else f'{_fmt_pct(cur_p)}%'
+        ndp_label = f'{esc(ndp_v)} / {_fmt_pct(ndp_p)}%' if ndp_v else f'{_fmt_pct(ndp_p)}%'
+        ten_label = f'{esc(ten_v)} / {_fmt_pct(ten_p)}%' if ten_v else f'{_fmt_pct(ten_p)}%'
+        summary = f'{cur_label} → NDP IV {ndp_label} → Tenfold {ten_label}'
+
+        margin = '' if i == 1 else ' style="margin-top:14px"'
+        seg_cls_attr = ' class="tb-seg"' if slug == 'manufacturing_gdp' else ''
+
+        extra_attrs = ''
+        if slug == 'manufacturing_gdp':
+            cur_usd, ndp_usd, ten_usd = _usd_billions(cur_v), _usd_billions(ndp_v), _usd_billions(ten_v)
+            if cur_usd and ndp_usd and ten_usd:
+                fig_cur_w   = cur_usd / ten_usd * 100
+                fig_ndp_cum = ndp_usd / ten_usd * 100
+                fig_ndp_w   = max(fig_ndp_cum - fig_cur_w, 0)
+                fig_ten_w   = max(100 - fig_ndp_cum, 0)
+                extra_attrs = (
+                    f' id="tenfold-bar-1"'
+                    f' data-pct-widths="{cur_w:.1f},{ndp_w:.1f},{ten_w:.1f}"'
+                    f' data-fig-widths="{fig_cur_w:.1f},{fig_ndp_w:.1f},{fig_ten_w:.1f}"'
+                    f' data-pct-labels="{esc(cur_v)} / {_fmt_pct(cur_p)}%|→ {esc(ndp_v)} / {_fmt_pct(ndp_p)}%|→ {esc(ten_v)} / {_fmt_pct(ten_p)}%"'
+                    f' data-fig-labels="{esc(cur_v)}|→ {esc(ndp_v)}|→ {esc(ten_v)}"'
+                )
+
+        blocks.append(f'''
+      <div class="progress-item"{margin}{extra_attrs}>
+        <div class="progress-label"><span><strong>{i}. {esc(r["label"])}</strong></span><span style="font-size:11px">{summary}</span></div>
+        <div style="position:relative;height:28px;background:#f5f5f5;border-radius:6px;overflow:hidden">
+          <div{seg_cls_attr} style="position:absolute;left:0;top:0;height:100%;width:{cur_w:.1f}%;background:#1565c0;border-radius:6px 0 0 6px;display:flex;align-items:center;padding-left:8px;color:#fff;font-size:11px;font-weight:700">{cur_label}</div>
+          <div{seg_cls_attr} style="position:absolute;left:{cur_w:.1f}%;top:0;height:100%;width:{ndp_w:.1f}%;background:#43a047;display:flex;align-items:center;padding-left:6px;color:#fff;font-size:11px;font-weight:700">→ {ndp_label}</div>
+          <div{seg_cls_attr} style="position:absolute;left:{ndp_cum:.1f}%;top:0;height:100%;width:{ten_w:.1f}%;background:#f57f17;border-radius:0 6px 6px 0;display:flex;align-items:center;padding-left:6px;color:#fff;font-size:11px;font-weight:700">→ {ten_label} Tenfold</div>
+        </div>
+      </div>''')
+    return ''.join(blocks)
 
 def line_chart_svg(values, labels=None, width=320, chart_h=170, label_h=24,
                     y_axis_w=36, unit='trn', color='#2e7d32'):
@@ -1071,6 +1160,7 @@ replacements = {
     '<!--%%KPI12_SOURCE%%-->':        kpi_source_line('variety'),
     '<!--%%KPI12_BADGE%%-->':         kpi_badge('variety'),
     '<!--%%CREDIT_SECTOR_BARS%%-->':  sector_comparison_html('credit'),
+    '<!--%%TENFOLD_PROGRESS_PANEL%%-->': tenfold_progress_panel_html(),
     '/*%%CHAINS_DATA%%*/':            chains_js(),
     '/*%%CHAIN_COLORS_DATA%%*/':      chain_colors_js(),
     '/*%%FACTORIES_DATA%%*/':         factories_js(),
