@@ -83,6 +83,7 @@ sector_comparison_csv = load_csv('sector_comparison.csv')
 risk_register_csv = load_csv('risk_register.csv')
 milestones_csv = load_csv('milestones.csv')
 glossary_csv  = load_csv('glossary.csv')
+chain_synergies_csv = load_csv('chain_synergies.csv')
 
 chains_by_name = {c['name']: c for c in chains_data}
 
@@ -426,6 +427,25 @@ COLLECTIONS = [
             num('display_order'),
         ],
     },
+    {
+        # "How the 9 chains form one integrated industrial system" card.
+        # 2026-06-30 data-source audit: was hardcoded narrative text directly
+        # in the template, with specific figures (37,300 t, USD 37m, ~2029)
+        # baked into the HTML rather than sourced from any data file.
+        'name': 'chain_synergies',
+        'type': 'base',
+        'listRule': '',
+        'viewRule': '',
+        'createRule': None,
+        'updateRule': None,
+        'deleteRule': None,
+        'schema': [
+            text('slug', required=True),
+            text('title', required=True),
+            text('description'),
+            num('display_order'),
+        ],
+    },
 ]
 
 # ── Create / update collections ───────────────────────────────────────────────
@@ -736,5 +756,19 @@ for i, r in enumerate(glossary_csv):
     }
     upsert_record('glossary', 'slug', r['slug'], payload)
     print(f'  {r["term"]}')
+
+# ── 3i. chain_synergies (Integration card) ──────────────────────────────────
+
+print('\n── Seeding chain_synergies ──')
+
+for i, r in enumerate(chain_synergies_csv):
+    payload = {
+        'slug':          r['slug'],
+        'title':         r['title'],
+        'description':   r.get('description') or '',
+        'display_order': i,
+    }
+    upsert_record('chain_synergies', 'slug', r['slug'], payload)
+    print(f'  {r["title"]}')
 
 print('\nSetup complete. Verify at:', f'{PB_URL}/_/')
