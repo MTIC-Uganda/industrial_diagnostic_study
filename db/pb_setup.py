@@ -78,6 +78,7 @@ factories_csv = load_csv('factories.csv')
 kpis          = load_csv('overview_kpis.csv')
 key_indicators_csv  = load_csv('key_indicators.csv')
 key_indicator_cats_csv = load_csv('key_indicator_categories.csv')
+macro_trend_csv = load_csv('macro_trend.csv')
 
 chains_by_name = {c['name']: c for c in chains_data}
 
@@ -308,6 +309,36 @@ COLLECTIONS = [
             num('display_order'),
         ],
     },
+    {
+        # "Momentum — FY20/21 -> FY24/25" panel. generate_dashboard.py has
+        # been reading this collection since it was added (pb_get('macro_trend',
+        # ...)), but the collection itself was never created here -- a real,
+        # currently-live gap found in the 2026-06-30 dashboard data-source
+        # audit: the panel renders "No trend data available" in prod right
+        # now because PocketBase has no macro_trend collection to read.
+        'name': 'macro_trend',
+        'type': 'base',
+        'listRule': '',
+        'viewRule': '',
+        'createRule': None,
+        'updateRule': None,
+        'deleteRule': None,
+        'schema': [
+            text('slug', required=True),
+            text('label'),
+            text('fy2021_value'),
+            text('fy2025_value'),
+            num('fy2021_pct'),
+            num('fy2025_pct'),
+            text('delta'),
+            sel('direction', ['up', 'down']),
+            text('trajectory'),
+            text('trajectory_labels'),
+            sel('confidence', ['exact', 'estimated', 'indicative']),
+            text('source'),
+            num('display_order'),
+        ],
+    },
 ]
 
 # ── Create / update collections ───────────────────────────────────────────────
@@ -526,5 +557,28 @@ for i, r in enumerate(key_indicator_cats_csv):
     else:
         pb('POST', '/api/collections/key_indicator_categories/records', payload)
     print(f'  {r["indicator_slug"]}: {r["category"]}')
+
+# ── 3d. macro_trend (Momentum panel) ────────────────────────────────────────
+
+print('\n── Seeding macro_trend ──')
+
+for i, r in enumerate(macro_trend_csv):
+    payload = {
+        'slug':              r['id'],
+        'label':             r['label'],
+        'fy2021_value':      r.get('fy2021_value') or '',
+        'fy2025_value':      r.get('fy2025_value') or '',
+        'fy2021_pct':        float(r['fy2021_pct']) if r.get('fy2021_pct') else None,
+        'fy2025_pct':        float(r['fy2025_pct']) if r.get('fy2025_pct') else None,
+        'delta':             r.get('delta') or '',
+        'direction':         r.get('direction') or 'up',
+        'trajectory':        r.get('trajectory') or '',
+        'trajectory_labels': r.get('trajectory_labels') or '',
+        'confidence':        r.get('confidence') or 'estimated',
+        'source':            r.get('source') or '',
+        'display_order':     i,
+    }
+    upsert_record('macro_trend', 'slug', r['id'], payload)
+    print(f'  {r["label"]}')
 
 print('\nSetup complete. Verify at:', f'{PB_URL}/_/')
