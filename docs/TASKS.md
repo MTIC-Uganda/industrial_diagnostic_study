@@ -6,6 +6,29 @@ reads this to know what to work on next. Tick items as they land.
 
 Last updated: 2026-06-24 (Solomon's dashboard-review queue landed — see notes)
 
+## Solomon (from the 2026-07-01 meeting — minister is data-driven; interactive demo due Monday)
+
+- [ ] Sources: footer on every card, consistent placement; detailed source (which UBOS report/link) shown on hover.
+- [ ] UBOS-first data policy: use UBOS where available; TradeMap only where UBOS has nothing or cannot break it down.
+- [ ] HS code(s) on every product/stage; support multiple codes per product (used vs new clothing); import value = sum across a product's codes.
+- [ ] Per-product data slots (blank OK for now): imports, exports, number of industries, total installed capacity. (Minister's per-product questions; example steel wire HS 7217.20.)
+- [ ] Fix "trade data not yet available" when the HS code is linked — TradeMap data exists (yellow/estimated is still usable) and should pull.
+- [ ] Value-chain map visuals: icons only (no labels), icons resembling the item; more vivid colours (blue too dull); wider group spacing; drill-down by district, both sides drillable. Reference: OEC.
+- [ ] Clarify estimated vs indicative labels for laymen.
+- [ ] Own the single document-upload workflow (staging upload → Ask MIDD corrections → Apply to Production). No direct PocketBase edits, no hand-created collections.
+
+## Hillary (from the 2026-07-01 meeting)
+
+- [ ] Verify all dashboard data comes from PocketBase, nothing hardcoded (Jerome's hard rule). Fix immediately if any is.
+- [ ] Wire Ask MIDD to read live data (answer per-product questions) + add self-improvement loop (rate answers, learn from failures).
+- [ ] Cross-platform mobile stack decision (app must not be Android-only) — drives the tech choice.
+
+## Jerome (from the 2026-07-01 meeting)
+
+- [ ] Call UBOS (after 9am) for more broken-down data (HS 6-digit); if unavailable, stay on TradeMap.
+- [ ] Provide the value-added + tax table (percentages AND figures) + the Tenfold Growth table.
+- [ ] Give the specific defendable source for each figure.
+
 ## Solomon (dashboard, from the 2026-06-23 dashboard review)
 
 - [x] 12 key indicators: convert each to a donut/pie circle; remove gauges/sliders/small graphs;
