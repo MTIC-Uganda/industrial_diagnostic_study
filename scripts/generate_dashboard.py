@@ -215,6 +215,7 @@ if _raw_key_indicators:
         'sub_value': r.get('sub_value') or '', 'icon': r.get('icon') or '',
         'color': r.get('color') or '', 'rest_color': r.get('rest_color') or '',
         'year': r.get('year') or '', 'source': r.get('source') or '',
+        'source_detail': r.get('source_detail') or '',
         'confidence': r.get('confidence') or 'estimated',
     } for r in _raw_key_indicators]
 else:
@@ -307,10 +308,10 @@ chain_synergies   = _pb_or_csv('chain_synergies', 'chain_synergies.csv')
 TAG_COLOR = {'green':'tag-green','amber':'tag-yellow','red':'tag-red','blue':'tag-blue'}
 
 CONFIDENCE_BADGE = {
-    'exact':       ('● exact',       'conf-exact'),
-    'estimated':   ('≈ estimated',   'conf-estimated'),
-    'indicative':  ('○ indicative',  'conf-indicative'),
-    'not_available': ('— not available', 'conf-na'),
+    'exact':         ('● Official figure',   'conf-exact'),
+    'estimated':     ('≈ Estimated',         'conf-estimated'),
+    'indicative':    ('○ Approximate',       'conf-indicative'),
+    'not_available': ('— Not yet available', 'conf-na'),
 }
 
 def esc(s):
@@ -341,8 +342,14 @@ def kpi_source_line(slug):
     r = KEY_INDICATORS.get(slug)
     if not r:
         return ''
-    year, source = r.get('year', ''), r.get('source', '')
-    return f'{esc(year)} &middot; Source: {esc(source)}'
+    year = r.get('year', '')
+    source = r.get('source', '')
+    # source_detail holds the specific document name/link (e.g. "UBOS Annual
+    # Gross Domestic Product Statistics FY2024/25"). Falls back to source when
+    # not yet populated — Jerome's action point from 2026-07-01 meeting.
+    detail = r.get('source_detail', '') or source
+    title = f' title="{esc(detail)}"' if detail else ''
+    return f'{esc(year)} &middot; <span style="cursor:help;border-bottom:1px dotted var(--muted)"{title}>Source: {esc(source)}</span>'
 
 def kpi_badge(slug):
     r = KEY_INDICATORS.get(slug)

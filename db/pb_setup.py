@@ -293,6 +293,7 @@ COLLECTIONS = [
             text('rest_color'),
             text('year'),
             text('source'),
+            text('source_detail'),   # full doc name/link; Jerome populates via Ask MIDD (2026-07-01 action)
             sel('confidence', ['exact', 'estimated', 'indicative']),
             num('display_order'),
         ],
