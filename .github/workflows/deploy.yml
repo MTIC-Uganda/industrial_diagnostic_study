@@ -293,6 +293,14 @@ jobs:
         with:
           python-version: "3.11"
 
+      # Tests gate the build (ADR-018): unit + integration tests must pass before
+      # anything is generated or deployed. Coverage on new/changed code is ratcheting
+      # toward >90% as the scripts are refactored into importable, testable units.
+      - name: Run tests (pytest)
+        run: |
+          pip install -r requirements-dev.txt
+          python -m pytest -q
+
       - name: Generate dashboard from data files
         env:
           PB_URL: ${{ secrets.PB_URL }}
