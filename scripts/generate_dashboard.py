@@ -2,9 +2,10 @@
 """
 Generate report/sources-of-truth.html from template + data.
 
-Data source (auto-detected):
-  • If PB_URL is set  →  fetch from PocketBase (CI / prod)
-  • Otherwise         →  fall back to local CSV/JSON files in data/dashboard/
+Data source: PocketBase ONLY (ADR-017). PB_URL must be set; there is no file
+fallback. Structured for testability (ADR-018): all logic is in importable units
+(load_data / the *_html + *_js generators / render); the only side effects
+(PocketBase fetch, file write) run under main(), so importing this module is inert.
 
 Usage:
     python scripts/generate_dashboard.py
@@ -24,17 +25,11 @@ DATA   = ROOT / 'data' / 'dashboard'
 TMPL   = ROOT / 'report' / 'sources-of-truth.template.html'
 OUTPUT = ROOT / 'report' / 'sources-of-truth.html'
 
-PB_URL      = os.environ.get('PB_URL', '').rstrip('/')
-USE_POCKETBASE = bool(PB_URL)
-
-# ── SINGLE SOURCE OF TRUTH (ADR-017) ──────────────────────────────────────────
-# The dashboard is built ONLY from PocketBase. There is NO CSV/JSON fallback.
-# If PB_URL is unset, or any required collection is empty, we FAIL LOUDLY rather
-# than silently rendering stale committed-file data. This is enforced in code so
-# no agent (Solomon's or Hillary's) can quietly reintroduce a file fallback.
-if not USE_POCKETBASE:
-    sys.exit('SINGLE SOURCE (ADR-017): PB_URL is required. The dashboard reads only '
-             'from PocketBase; there is no file fallback. Set PB_URL and retry.')
+# PB_URL / USE_POCKETBASE are module-level state set by main() at run time, so
+# importing this module has NO side effects (ADR-018). The SINGLE SOURCE guard
+# (ADR-017: PocketBase only, no file fallback) is enforced in main().
+PB_URL = ''
+USE_POCKETBASE = False
 
 # ── Data loading ──────────────────────────────────────────────────────────────
 
@@ -81,124 +76,7 @@ def pb_count(collection, filter=None):
     except Exception:
         return None
 
-if USE_POCKETBASE:
-    print(f'Data source: PocketBase ({PB_URL})')
-
-    raw_chains    = pb_get('value_chains', sort='display_order')
-    # Locations map reads from the single `industries` table (ADR-011): every
-    # establishment that has GPS, not a separate facilities table. Falls back to
-    # the facilities collection if industries has no located rows yet.
-    located = pb_get('industries', sort='chain_name,name',
-                     filter='latitude != 0 || longitude != 0')
-    if located:
-        raw_facilities = [{
-            'name': r.get('name') or r.get('name_products') or '',
-            'chain_name': r.get('chain_name') or '',
-            'lat': r.get('latitude') or 0, 'lng': r.get('longitude') or 0,
-            'location': r.get('location') or r.get('district') or '',
-            'products': r.get('products') or r.get('name_products') or '',
-            'capacity_installed': r.get('capacity_installed') or '',
-            'capacity_utilised': r.get('capacity_utilised') or '',
-            'employees': r.get('employees') or '',
-            'established': r.get('established') or '',
-            'ownership': r.get('ownership') or '',
-            'exports': r.get('exports') or '',
-        } for r in located]
-        print(f'  Locations map: {len(raw_facilities)} establishments from industries (GPS present)')
-    else:
-        raw_facilities = pb_get('facilities', sort='chain_name,name')
-        print('  Locations map: industries has no GPS rows — facilities fallback')
-
-    # Reshape for the generators below
-    chain_summary = [{
-        'chain':           r['name'],
-        'key_import_2024': r.get('key_import_2024') or '',
-        'key_export_2024': r.get('key_export_2024') or '',
-        'position_tag':    r.get('position_tag') or '',
-        'position_color':  r.get('position_color') or 'amber',
-        'target_2040':     r.get('target_2040') or '',
-        'priority_tag':    r.get('priority_tag') or '',
-        'priority_color':  r.get('priority_color') or 'blue',
-    } for r in raw_chains]
-
-    chain_colors = {r['name']: r['color'] for r in raw_chains}
-
-    chains = [{
-        'id':   r['slug'],
-        'name': r['name'],
-        'map': {
-            'title':  r.get('map_title') or '',
-            'desc':   r.get('map_description') or '',
-            'phases': r.get('map_phases') or [],
-            'gap':    r.get('map_gap') or '',
-        },
-        'status': {
-            'current':     r.get('status_current') or [],
-            'companies':   r.get('status_companies') or [],
-            'constraints': r.get('status_constraints') or [],
-            'priorities':  r.get('status_priorities') or [],
-            'proj':        r.get('status_proj') or {},
-        },
-    } for r in raw_chains]
-
-    factories_list = [{
-        'name':               f['name'],
-        'chain':              f.get('chain_name') or '',
-        'lat':                f.get('lat') or 0,
-        'lng':                f.get('lng') or 0,
-        'loc':                f.get('location') or '',
-        'products':           f.get('products') or '',
-        'capacity_installed': f.get('capacity_installed') or '',
-        'capacity_utilised':  f.get('capacity_utilised') or '',
-        'employees':          f.get('employees') or '',
-        'est':                f.get('established') or '',
-        'ownership':          f.get('ownership') or '',
-        'exports':            f.get('exports') or '',
-    } for f in raw_facilities]
-
-    try:
-        raw_macro = pb_get('macro_trend', sort='display_order')
-        macro_trend = [{
-            'id':           r['slug'],
-            'label':        r['label'],
-            'fy2021_value': r.get('fy2021_value') or '',
-            'fy2025_value': r.get('fy2025_value') or '',
-            'fy2021_pct':   r.get('fy2021_pct') or 0,
-            'fy2025_pct':   r.get('fy2025_pct') or 0,
-            'delta':        r.get('delta') or '',
-            'direction':    r.get('direction') or 'up',
-            'trajectory':   r.get('trajectory') or '',
-            'trajectory_labels': r.get('trajectory_labels') or '',
-            'confidence':   r.get('confidence') or 'estimated',
-            'source':       r.get('source') or '',
-        } for r in raw_macro]
-        if not macro_trend:
-            raise SystemExit
-    except SystemExit:
-        print('  (no macro_trend collection in PocketBase yet — using local CSV fallback)')
-        _mt_file = DATA / 'macro_trend.csv'
-        macro_trend = load_csv('macro_trend.csv') if _mt_file.exists() else []
-
-# (No `else` branch: PB_URL is required and enforced at the top — single source,
-# no local-file fallback, ADR-017.)
-
-# Total registered establishments — was a hand-typed "~7,011" both in the
-# template and in key_indicators.csv's KPI-7 card; 2026-06-30 data-source
-# audit flagged it as a number that will silently go stale as the register
-# grows. industries is the canonical establishment table (ADR-011), so count
-# it directly (excluding the curated FAC-* map-only rows, same exclusion
-# treemap_data_js() already applies) — one lightweight request, not a full
-# fetch. Falls back to the last-known figure if PocketBase is unreachable.
-_pb_establishment_count = pb_count('industries', filter='reg_number !~ "FAC-"') if USE_POCKETBASE else None
-ESTABLISHMENT_COUNT = _pb_establishment_count or 7011
-ESTABLISHMENT_COUNT_LABEL = f'{ESTABLISHMENT_COUNT:,}'
-
-
-# Manufacturing Industry Key Indicators (the 12 cards) + their multi-category
-# breakdowns (tax/hightech/credit donuts, region strip). PocketBase first
-# (ADR-011, single source of truth); local CSV fallback both for local runs
-# and for the first prod deploy after this code lands, before CI's
-# seed-pocketbase job has populated the new collections.
+# ── data-source helpers (module-level; used by load_data + the generators) ────
 def _pb_fetch_or_none(collection, sort=None):
     if not USE_POCKETBASE:
         return None
@@ -206,37 +84,6 @@ def _pb_fetch_or_none(collection, sort=None):
         return pb_get(collection, sort=sort)
     except SystemExit:
         return None
-
-_raw_key_indicators  = _pb_fetch_or_none('key_indicators', sort='display_order')
-if _raw_key_indicators:
-    key_indicators = [{
-        'slug': r['slug'], 'label': r['label'], 'kind': r['kind'],
-        'value': r.get('value') or '', 'pct': r.get('pct') or '',
-        'sub_value': r.get('sub_value') or '', 'icon': r.get('icon') or '',
-        'color': r.get('color') or '', 'rest_color': r.get('rest_color') or '',
-        'year': r.get('year') or '', 'source': r.get('source') or '',
-        'source_detail': r.get('source_detail') or '',
-        'confidence': r.get('confidence') or 'estimated',
-    } for r in _raw_key_indicators]
-else:
-    if USE_POCKETBASE:
-        print('  (no key_indicators collection in PocketBase yet — using local CSV fallback)')
-    key_indicators = load_csv('key_indicators.csv')
-KEY_INDICATORS = {r['slug']: r for r in key_indicators}
-if 'establishments' in KEY_INDICATORS:
-    KEY_INDICATORS['establishments']['value'] = ESTABLISHMENT_COUNT_LABEL
-
-_raw_key_categories = _pb_fetch_or_none('key_indicator_categories', sort='indicator_slug,display_order')
-if _raw_key_categories:
-    key_indicator_categories = [{
-        'indicator_slug': r['indicator_slug'], 'category': r['category'],
-        'pct': r.get('pct') or 0, 'value_label': r.get('value_label') or '',
-        'highlight': '1' if r.get('highlight') == '1' else '0',
-    } for r in _raw_key_categories]
-else:
-    if USE_POCKETBASE:
-        print('  (no key_indicator_categories collection in PocketBase yet — using local CSV fallback)')
-    key_indicator_categories = load_csv('key_indicator_categories.csv')
 
 def kpi_categories_for(slug):
     return [r for r in key_indicator_categories if r['indicator_slug'] == slug]
@@ -260,34 +107,6 @@ TENFOLD_PANEL_SLUGS = [
     'manufacturing_employment', 'export_variety',
 ]
 
-_raw_kpi_indicators = _pb_fetch_or_none('kpi_indicators', sort='display_order')
-if _raw_kpi_indicators:
-    kpi_indicators = [{
-        'id': r['slug'], 'label': r['label'],
-        'current_value': r.get('current_value') or '', 'current_pct': r.get('current_pct') or 0,
-        'ndp_value': r.get('ndp_value') or '', 'ndp_pct': r.get('ndp_pct') or 0,
-        'tenfold_value': r.get('tenfold_value') or '', 'tenfold_pct': r.get('tenfold_pct') or 0,
-        'sub_value': r.get('sub_value') or '',
-        'confidence': r.get('confidence') or 'estimated', 'source': r.get('source') or '',
-    } for r in _raw_kpi_indicators]
-else:
-    if USE_POCKETBASE:
-        print('  (no kpi_indicators collection in PocketBase yet — using local CSV fallback)')
-    kpi_indicators = []
-KPI_INDICATORS = {r['id']: r for r in kpi_indicators}
-
-_missing_slugs = [s for s in TENFOLD_PANEL_SLUGS if s not in KPI_INDICATORS]
-if _missing_slugs:
-    if USE_POCKETBASE:
-        print(f'  kpi_indicators missing from PocketBase (using CSV fallback for these): {", ".join(_missing_slugs)}')
-    for r in load_csv('overview_kpis.csv'):
-        if r['id'] in _missing_slugs:
-            KPI_INDICATORS[r['id']] = r
-
-# Tax/Credit-by-sector charts, Risk Register, Milestone Roadmap, Glossary —
-# PocketBase first (ADR-011), local CSV fallback. 2026-06-30 data-source audit:
-# these 4 had no PocketBase path at all (CSV-only), unlike everything else on
-# the dashboard.
 def _pb_or_csv(collection, csv_name, sort='display_order'):
     rows = _pb_fetch_or_none(collection, sort=sort)
     if rows:
@@ -297,11 +116,194 @@ def _pb_or_csv(collection, csv_name, sort='display_order'):
     csv_file = DATA / csv_name
     return load_csv(csv_name) if csv_file.exists() else []
 
-sector_comparison = _pb_or_csv('sector_comparison', 'sector_comparison.csv')
-risk_register     = _pb_or_csv('risk_register', 'risk_register.csv')
-milestones        = _pb_or_csv('milestones', 'milestones.csv')
-glossary          = _pb_or_csv('glossary', 'glossary.csv')
-chain_synergies   = _pb_or_csv('chain_synergies', 'chain_synergies.csv')
+
+# ── load_data: fetch from PocketBase + reshape into module globals ────────────
+# All side effects (the network fetch) live here; run by main(), never at import
+# (ADR-018), so importing this module stays inert and the pieces are unit-testable.
+def load_data():
+    global chain_summary, chain_colors, chains, factories_list, macro_trend, \
+        ESTABLISHMENT_COUNT, ESTABLISHMENT_COUNT_LABEL, key_indicators, \
+        KEY_INDICATORS, key_indicator_categories, kpi_indicators, KPI_INDICATORS, \
+        sector_comparison, risk_register, milestones, glossary, chain_synergies
+
+    if USE_POCKETBASE:
+        print(f'Data source: PocketBase ({PB_URL})')
+
+        raw_chains    = pb_get('value_chains', sort='display_order')
+        # Locations map reads from the single `industries` table (ADR-011): every
+        # establishment that has GPS, not a separate facilities table. Falls back to
+        # the facilities collection if industries has no located rows yet.
+        located = pb_get('industries', sort='chain_name,name',
+                         filter='latitude != 0 || longitude != 0')
+        if located:
+            raw_facilities = [{
+                'name': r.get('name') or r.get('name_products') or '',
+                'chain_name': r.get('chain_name') or '',
+                'lat': r.get('latitude') or 0, 'lng': r.get('longitude') or 0,
+                'location': r.get('location') or r.get('district') or '',
+                'products': r.get('products') or r.get('name_products') or '',
+                'capacity_installed': r.get('capacity_installed') or '',
+                'capacity_utilised': r.get('capacity_utilised') or '',
+                'employees': r.get('employees') or '',
+                'established': r.get('established') or '',
+                'ownership': r.get('ownership') or '',
+                'exports': r.get('exports') or '',
+            } for r in located]
+            print(f'  Locations map: {len(raw_facilities)} establishments from industries (GPS present)')
+        else:
+            raw_facilities = pb_get('facilities', sort='chain_name,name')
+            print('  Locations map: industries has no GPS rows — facilities fallback')
+
+        # Reshape for the generators below
+        chain_summary = [{
+            'chain':           r['name'],
+            'key_import_2024': r.get('key_import_2024') or '',
+            'key_export_2024': r.get('key_export_2024') or '',
+            'position_tag':    r.get('position_tag') or '',
+            'position_color':  r.get('position_color') or 'amber',
+            'target_2040':     r.get('target_2040') or '',
+            'priority_tag':    r.get('priority_tag') or '',
+            'priority_color':  r.get('priority_color') or 'blue',
+        } for r in raw_chains]
+
+        chain_colors = {r['name']: r['color'] for r in raw_chains}
+
+        chains = [{
+            'id':   r['slug'],
+            'name': r['name'],
+            'map': {
+                'title':  r.get('map_title') or '',
+                'desc':   r.get('map_description') or '',
+                'phases': r.get('map_phases') or [],
+                'gap':    r.get('map_gap') or '',
+            },
+            'status': {
+                'current':     r.get('status_current') or [],
+                'companies':   r.get('status_companies') or [],
+                'constraints': r.get('status_constraints') or [],
+                'priorities':  r.get('status_priorities') or [],
+                'proj':        r.get('status_proj') or {},
+            },
+        } for r in raw_chains]
+
+        factories_list = [{
+            'name':               f['name'],
+            'chain':              f.get('chain_name') or '',
+            'lat':                f.get('lat') or 0,
+            'lng':                f.get('lng') or 0,
+            'loc':                f.get('location') or '',
+            'products':           f.get('products') or '',
+            'capacity_installed': f.get('capacity_installed') or '',
+            'capacity_utilised':  f.get('capacity_utilised') or '',
+            'employees':          f.get('employees') or '',
+            'est':                f.get('established') or '',
+            'ownership':          f.get('ownership') or '',
+            'exports':            f.get('exports') or '',
+        } for f in raw_facilities]
+
+        try:
+            raw_macro = pb_get('macro_trend', sort='display_order')
+            macro_trend = [{
+                'id':           r['slug'],
+                'label':        r['label'],
+                'fy2021_value': r.get('fy2021_value') or '',
+                'fy2025_value': r.get('fy2025_value') or '',
+                'fy2021_pct':   r.get('fy2021_pct') or 0,
+                'fy2025_pct':   r.get('fy2025_pct') or 0,
+                'delta':        r.get('delta') or '',
+                'direction':    r.get('direction') or 'up',
+                'trajectory':   r.get('trajectory') or '',
+                'trajectory_labels': r.get('trajectory_labels') or '',
+                'confidence':   r.get('confidence') or 'estimated',
+                'source':       r.get('source') or '',
+            } for r in raw_macro]
+            if not macro_trend:
+                raise SystemExit
+        except SystemExit:
+            print('  (no macro_trend collection in PocketBase yet — using local CSV fallback)')
+            _mt_file = DATA / 'macro_trend.csv'
+            macro_trend = load_csv('macro_trend.csv') if _mt_file.exists() else []
+
+    # Total registered establishments — was a hand-typed "~7,011" both in the
+    # template and in key_indicators.csv's KPI-7 card; 2026-06-30 data-source
+    # audit flagged it as a number that will silently go stale as the register
+    # grows. industries is the canonical establishment table (ADR-011), so count
+    # it directly (excluding the curated FAC-* map-only rows, same exclusion
+    # treemap_data_js() already applies) — one lightweight request, not a full
+    # fetch. Falls back to the last-known figure if PocketBase is unreachable.
+    _pb_establishment_count = pb_count('industries', filter='reg_number !~ "FAC-"') if USE_POCKETBASE else None
+    ESTABLISHMENT_COUNT = _pb_establishment_count or 7011
+    ESTABLISHMENT_COUNT_LABEL = f'{ESTABLISHMENT_COUNT:,}'
+
+    # Manufacturing Industry Key Indicators (the 12 cards) + their multi-category
+    # breakdowns (tax/hightech/credit donuts, region strip). PocketBase first
+    # (ADR-011, single source of truth); local CSV fallback both for local runs
+    # and for the first prod deploy after this code lands, before CI's
+    # seed-pocketbase job has populated the new collections.
+    _raw_key_indicators  = _pb_fetch_or_none('key_indicators', sort='display_order')
+    if _raw_key_indicators:
+        key_indicators = [{
+            'slug': r['slug'], 'label': r['label'], 'kind': r['kind'],
+            'value': r.get('value') or '', 'pct': r.get('pct') or '',
+            'sub_value': r.get('sub_value') or '', 'icon': r.get('icon') or '',
+            'color': r.get('color') or '', 'rest_color': r.get('rest_color') or '',
+            'year': r.get('year') or '', 'source': r.get('source') or '',
+            'source_detail': r.get('source_detail') or '',
+            'confidence': r.get('confidence') or 'estimated',
+        } for r in _raw_key_indicators]
+    else:
+        if USE_POCKETBASE:
+            print('  (no key_indicators collection in PocketBase yet — using local CSV fallback)')
+        key_indicators = load_csv('key_indicators.csv')
+    KEY_INDICATORS = {r['slug']: r for r in key_indicators}
+    if 'establishments' in KEY_INDICATORS:
+        KEY_INDICATORS['establishments']['value'] = ESTABLISHMENT_COUNT_LABEL
+
+    _raw_key_categories = _pb_fetch_or_none('key_indicator_categories', sort='indicator_slug,display_order')
+    if _raw_key_categories:
+        key_indicator_categories = [{
+            'indicator_slug': r['indicator_slug'], 'category': r['category'],
+            'pct': r.get('pct') or 0, 'value_label': r.get('value_label') or '',
+            'highlight': '1' if r.get('highlight') == '1' else '0',
+        } for r in _raw_key_categories]
+    else:
+        if USE_POCKETBASE:
+            print('  (no key_indicator_categories collection in PocketBase yet — using local CSV fallback)')
+        key_indicator_categories = load_csv('key_indicator_categories.csv')
+
+    _raw_kpi_indicators = _pb_fetch_or_none('kpi_indicators', sort='display_order')
+    if _raw_kpi_indicators:
+        kpi_indicators = [{
+            'id': r['slug'], 'label': r['label'],
+            'current_value': r.get('current_value') or '', 'current_pct': r.get('current_pct') or 0,
+            'ndp_value': r.get('ndp_value') or '', 'ndp_pct': r.get('ndp_pct') or 0,
+            'tenfold_value': r.get('tenfold_value') or '', 'tenfold_pct': r.get('tenfold_pct') or 0,
+            'sub_value': r.get('sub_value') or '',
+            'confidence': r.get('confidence') or 'estimated', 'source': r.get('source') or '',
+        } for r in _raw_kpi_indicators]
+    else:
+        if USE_POCKETBASE:
+            print('  (no kpi_indicators collection in PocketBase yet — using local CSV fallback)')
+        kpi_indicators = []
+    KPI_INDICATORS = {r['id']: r for r in kpi_indicators}
+
+    _missing_slugs = [s for s in TENFOLD_PANEL_SLUGS if s not in KPI_INDICATORS]
+    if _missing_slugs:
+        if USE_POCKETBASE:
+            print(f'  kpi_indicators missing from PocketBase (using CSV fallback for these): {", ".join(_missing_slugs)}')
+        for r in load_csv('overview_kpis.csv'):
+            if r['id'] in _missing_slugs:
+                KPI_INDICATORS[r['id']] = r
+
+    # Tax/Credit-by-sector charts, Risk Register, Milestone Roadmap, Glossary —
+    # PocketBase first (ADR-011), local CSV fallback. 2026-06-30 data-source audit:
+    # these 4 had no PocketBase path at all (CSV-only), unlike everything else on
+    # the dashboard.
+    sector_comparison = _pb_or_csv('sector_comparison', 'sector_comparison.csv')
+    risk_register     = _pb_or_csv('risk_register', 'risk_register.csv')
+    milestones        = _pb_or_csv('milestones', 'milestones.csv')
+    glossary          = _pb_or_csv('glossary', 'glossary.csv')
+    chain_synergies   = _pb_or_csv('chain_synergies', 'chain_synergies.csv')
 
 # ── HTML generators ───────────────────────────────────────────────────────────
 
@@ -1139,13 +1141,6 @@ def chains_js():
 
 # ── Assemble ──────────────────────────────────────────────────────────────────
 
-if not TMPL.exists():
-    sys.exit(f'ERROR: template not found: {TMPL}\nRun scripts/create_template.py first.')
-
-tmpl = TMPL.read_text('utf-8')
-
-_ms_tabs, _ms_items = milestones_html()
-
 def tools_nav_html():
     """Team tool links for the header. Emitted ALWAYS but hidden by default; the
     bubble script reveals them only on the staging host (the workshop view), and the
@@ -1164,8 +1159,13 @@ def is_prod_build():
     """Prod build = PocketBase points at the prod instance (:8090), not staging/local."""
     return bool(PB_URL) and '8091' not in PB_URL and 'staging' not in PB_URL
 
-replacements = {
-    '<!--%%CHAIN_SUMMARY_ROWS%%-->':  chain_table_rows_html(),
+
+def render(tmpl):
+    """Fill the template with the generated sections and return the output HTML.
+    load_data() must have run first — the generators read the module globals it sets."""
+    _ms_tabs, _ms_items = milestones_html()
+    replacements = {
+        '<!--%%CHAIN_SUMMARY_ROWS%%-->':  chain_table_rows_html(),
     '<!--%%MACRO_TREND_ITEMS%%-->':   macro_trend_html(),
     '<!--%%RECENT_UPDATES%%-->':      recent_updates_html(),
     '<!--%%GLOSSARY_ITEMS%%-->':      glossary_html(),
@@ -1239,20 +1239,41 @@ replacements = {
     '<!--%%TOOLS_NAV%%-->':           tools_nav_html(),
     '<!--%%ESTABLISHMENT_COUNT%%-->': ESTABLISHMENT_COUNT_LABEL,
     '<!--%%CHAIN_SYNERGIES%%-->':     chain_synergies_html(),
-}
+    }
 
-out = tmpl
-for marker, content in replacements.items():
-    if marker not in out:
-        print(f'WARNING: marker not found: {marker}', file=sys.stderr)
-    out = out.replace(marker, content, 1)
+    out = tmpl
+    for marker, content in replacements.items():
+        if marker not in out:
+            print(f'WARNING: marker not found: {marker}', file=sys.stderr)
+        out = out.replace(marker, content, 1)
 
-# Public Ask MIDD chat bubble + team-nav: emitted ALWAYS. The bubble script picks
-# what to show by hostname at runtime (bubble on prod, team links on staging), so a
-# single build is correct on both origins — CI builds once and deploys to both
-# (ADR-016). Just drop the marker comments.
-out = out.replace('<!--CHAT_BUBBLE_START-->', '').replace('<!--CHAT_BUBBLE_END-->', '')
-print('  Chat bubble + team-nav: included (hostname-aware at runtime)')
+    # Public Ask MIDD chat bubble + team-nav: emitted ALWAYS. The bubble script picks
+    # what to show by hostname at runtime (bubble on prod, team links on staging), so a
+    # single build is correct on both origins — CI builds once and deploys to both
+    # (ADR-016). Just drop the marker comments.
+    out = out.replace('<!--CHAT_BUBBLE_START-->', '').replace('<!--CHAT_BUBBLE_END-->', '')
+    print('  Chat bubble + team-nav: included (hostname-aware at runtime)')
+    return out
 
-OUTPUT.write_text(out, 'utf-8')
-print(f'Generated {OUTPUT}  ({len(out):,} bytes, {out.count(chr(10)):,} lines)')
+
+def main(pb_url=None, out_path=OUTPUT):
+    """Resolve PB_URL, enforce the single-source guard, load data, render, write."""
+    global PB_URL, USE_POCKETBASE
+    PB_URL = (pb_url if pb_url is not None else os.environ.get('PB_URL', '')).rstrip('/')
+    USE_POCKETBASE = bool(PB_URL)
+    # SINGLE SOURCE OF TRUTH (ADR-017): the dashboard is built ONLY from PocketBase;
+    # there is NO CSV/JSON fallback. Fail loudly rather than render stale file data.
+    if not USE_POCKETBASE:
+        sys.exit('SINGLE SOURCE (ADR-017): PB_URL is required. The dashboard reads only '
+                 'from PocketBase; there is no file fallback. Set PB_URL and retry.')
+    load_data()
+    if not TMPL.exists():
+        sys.exit(f'ERROR: template not found: {TMPL}\nRun scripts/create_template.py first.')
+    out = render(TMPL.read_text('utf-8'))
+    Path(out_path).write_text(out, 'utf-8')
+    print(f'Generated {out_path}  ({len(out):,} bytes, {out.count(chr(10)):,} lines)')
+    return out
+
+
+if __name__ == '__main__':
+    main()
