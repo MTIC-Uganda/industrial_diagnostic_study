@@ -26,6 +26,7 @@ from fastapi.responses import HTMLResponse, JSONResponse
 import sys as _sys
 _sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from brief_lib import format_public_brief  # pure, unit-tested (ADR-018)
+from query_tool import validate_spec, build_filter, return_fields  # DB-tool security boundary
 
 ENV      = os.environ.get("MIDD_ENV", "staging")
 REPO     = Path(os.environ.get("MIDD_REPO", "/opt/mtic-uploader/repo"))
@@ -127,6 +128,68 @@ def build_public_brief():
     if text:
         _brief_cache.update(text=text, at=now)
     return text
+
+
+# ── DB tool-use: plan -> validate -> execute (read-only) ──────────────────────
+QUERY_PLANNER_PROMPT = (
+    "Convert the question into ONE PocketBase query for Uganda's manufacturing dashboard, "
+    "or reply NONE.\n"
+    "Collections and the fields you may filter on:\n"
+    "- industries (one row per registered manufacturing establishment): region "
+    "(Central/Eastern/Northern/Western), district, sector_name, subsector_name, chain_name, "
+    "status, isic_2digit_desc\n"
+    "- value_chains: slug, name\n"
+    "- key_indicators: slug\n"
+    'Operators: "=" exact, "~" contains.\n'
+    "Output ONLY a JSON object, no prose, e.g.:\n"
+    '{"collection":"industries","filters":[{"field":"district","op":"=","value":"Gulu"}],"mode":"count"}\n'
+    'Use mode "count" for how-many questions, "list" (add "limit") for which/list/show.\n'
+    "If the question needs no database lookup, is off-topic, or is about a person, output exactly: NONE"
+)
+
+
+def _run_claude(prompt, timeout):
+    """One Haiku call in the no-repo sandbox. Returns stdout text or ''."""
+    PUBLIC_SANDBOX.mkdir(parents=True, exist_ok=True)
+    env = dict(os.environ); env.setdefault("HOME", "/root")
+    try:
+        r = subprocess.run(
+            [os.environ.get("CLAUDE_BIN", "claude"), "-p", "--model", PUBLIC_MODEL,
+             "--output-format", "text"],
+            input=prompt, capture_output=True, text=True, env=env,
+            cwd=str(PUBLIC_SANDBOX), timeout=timeout)
+        return r.stdout.strip() if r.returncode == 0 else ""
+    except Exception:
+        return ""
+
+
+def plan_query(q):
+    """Step 1: ask the model for a query spec. Returns a validated spec or None."""
+    out = _run_claude(f"{QUERY_PLANNER_PROMPT}\n\nQuestion: {q}", 60)
+    start, end = out.find("{"), out.rfind("}")
+    if start < 0 or end <= start:
+        return None
+    try:
+        return validate_spec(json.loads(out[start:end + 1]))
+    except Exception:
+        return None
+
+
+def run_query(spec):
+    """Execute a VALIDATED spec against PocketBase, read-only. Returns a result dict."""
+    coll = spec["collection"]
+    flt = build_filter(spec["filters"])
+    params = ("&filter=" + urllib.parse.quote(flt)) if flt else ""
+    if spec["mode"] == "count":
+        url = f"{MIDD_PB_URL}/api/collections/{coll}/records?perPage=1{params}"
+        with urllib.request.urlopen(url, timeout=15) as r:
+            return {"mode": "count", "collection": coll, "filters": spec["filters"],
+                    "count": json.loads(r.read()).get("totalItems", 0)}
+    fields = urllib.parse.quote(",".join(return_fields(coll)))
+    url = f"{MIDD_PB_URL}/api/collections/{coll}/records?perPage={spec['limit']}{params}&fields={fields}"
+    with urllib.request.urlopen(url, timeout=15) as r:
+        return {"mode": "list", "collection": coll, "filters": spec["filters"],
+                "rows": json.loads(r.read()).get("items", [])}
 
 
 def _rate_ok(ip):
@@ -295,23 +358,22 @@ async def api_ask(request: Request):
     if not q:
         return JSONResponse({"answer": "Ask me a question about Uganda's manufacturing data."},
                             status_code=400)
-    env = dict(os.environ); env.setdefault("HOME", "/root")
-    # Empty sandbox cwd: the CLI has NO repo/files to read, so it cannot leak names or
-    # internal notes. Its only facts are the sanitized DATA BRIEF (from PocketBase).
-    PUBLIC_SANDBOX.mkdir(parents=True, exist_ok=True)
+    # The whole flow runs in an empty sandbox (no repo files -> cannot leak names).
+    # Its only facts are the sanitized DATA BRIEF + the LIVE, validated query result.
     brief = build_public_brief()
-    prompt = (f"{PUBLIC_SCOPE}\n\nDATA BRIEF (the only facts you may use):\n{brief}\n\n"
+    # Step 1: plan + run a live, whitelisted, read-only DB query (best-effort).
+    query_block = ""
+    spec = plan_query(q)
+    if spec:
+        try:
+            query_block = ("LIVE QUERY RESULT (from the database — use these exact figures):\n"
+                           + json.dumps(run_query(spec), ensure_ascii=False)[:3500] + "\n\n")
+        except Exception:
+            query_block = ""
+    # Step 2: answer from the brief + any query result, under the guardrails.
+    prompt = (f"{PUBLIC_SCOPE}\n\nDATA BRIEF:\n{brief}\n\n{query_block}"
               f"{_client_history(body.get('history'))}QUESTION:\n{q}")
-    try:
-        r = subprocess.run(
-            [os.environ.get("CLAUDE_BIN", "claude"), "-p", "--model", PUBLIC_MODEL,
-             "--output-format", "text"],
-            input=prompt,
-            capture_output=True, text=True, env=env, cwd=str(PUBLIC_SANDBOX), timeout=150)
-        answer = (r.stdout.strip() or "(no response)") if r.returncode == 0 \
-                 else "Sorry, I couldn't answer that just now — please try again."
-    except Exception:
-        answer = "Sorry, I couldn't answer that just now — please try again."
+    answer = _run_claude(prompt, 150) or "Sorry, I couldn't answer that just now — please try again."
     try:
         PUBLIC_FEEDBACK_LOG.parent.mkdir(parents=True, exist_ok=True)
         ts = datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ")
