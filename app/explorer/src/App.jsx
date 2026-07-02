@@ -178,13 +178,37 @@ function ProductStatsPopup({ product, hs4, anchorRect }) {
   const producers = PRODUCT_FIRMS[product.id];
   return (
     <StatsPopupShell title={product.name} anchorRect={anchorRect}>
-      <div style={{ fontWeight: 700, color: "#93c5fd", marginTop: "8px" }}>🏭 Known producers</div>
+
+      {/* ── Uganda trade (minister question: how much imported / exported) ── */}
+      <TradeBlock trade={trade} noDataLabel="Trade data not yet fetched for this product's HS code." />
+
+      {/* ── Known producers + industry count ───────────────────────────── */}
+      <div style={{ fontWeight: 700, color: "#93c5fd", marginTop: "10px" }}>🏭 Known producers</div>
       <ProducerBlock entry={producers} />
 
-      <TradeBlock trade={trade} noDataLabel="No HS-code-specific trade data fetched yet for this product." />
+      {/* ── Installed capacity (minister question) — populated from MTIC   */}
+      {/* ── National Industries Register; left blank until register data   */}
+      {/* ── is linked per product (interim: see phase count above).       */}
+      <div style={{ fontWeight: 700, color: "#93c5fd", marginTop: "10px" }}>⚡ Total installed capacity</div>
+      {producers?.capacity ? (
+        <div style={{ color: "#cbd5e1" }}>{producers.capacity}</div>
+      ) : (
+        <div style={{ color: "#64748b", fontSize: "11px" }}>
+          Capacity data per product is being compiled from the MTIC National Industries Register.
+          {producers?.phaseContext &&
+            " Phase-level capacity is referenced in the producers section above."}
+        </div>
+      )}
+
+      {/* ── HS code(s) for traceability ───────────────────────────────── */}
+      {hs4 && (
+        <div style={{ color: "#64748b", fontSize: "9.5px", marginTop: "6px" }}>
+          HS code: <strong>{hs4.replace(/_/g, " + ")}</strong>
+        </div>
+      )}
 
       <div style={{ color: "#64748b", fontSize: "9.5px", marginTop: "8px", borderTop: "1px solid #1e293b", paddingTop: "6px" }}>
-        Sources: ITC TradeMap (Uganda bilateral trade) · {PHASE_SOURCE}
+        Sources: ITC TradeMap (Uganda bilateral trade 2024) · {PHASE_SOURCE}
       </div>
     </StatsPopupShell>
   );
