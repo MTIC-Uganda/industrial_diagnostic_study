@@ -1,23 +1,28 @@
 import React, { useMemo, useState } from "react";
 import { sankey, sankeyLinkHorizontal, sankeyLeft } from "d3-sankey";
 
-const LABEL_MARGIN = 170; // room on the right for the last column's labels
+// Labels now shown only on hover/selection, so we reserve less margin.
+// A small buffer still leaves room for the hovered label to render without clipping.
+const LABEL_MARGIN = 80;
 
 // Structural levels are coloured by label; components/inputs by their category
 // (component_type). Keys are split so a component's label ("Material",
 // "Component", ...) falls through to its lowercase category colour.
+// Vivid, saturated palette (2026-07-01 minister feedback: "current blue too dull").
+// Reference: OEC (Observatory of Economic Complexity) colour conventions — bold,
+// high-contrast, each node type immediately recognisable by colour alone.
 const COLORS = {
-  System: "#002b5b",
-  Stage: "#00695c",
-  Route: "#5c6bc0",
-  TechnologyType: "#26a69a",
-  material: "#2e7d32",
-  component: "#1565c0",
-  energy: "#f9a825",
-  labor: "#8e24aa",
-  machinery: "#6d4c41",
-  additive: "#9e9e9e",
-  other: "#8e8e8e",
+  System:         "#0050c8",  // deep cobalt — top-level system nodes
+  Stage:          "#00897b",  // vivid teal — production stages
+  Route:          "#6200ea",  // vivid purple — route/pathway nodes
+  TechnologyType: "#00acc1",  // vivid cyan — technology groupings
+  material:       "#2e7d32",  // vivid forest green — raw materials
+  component:      "#c62828",  // vivid red — finished/intermediate components
+  energy:         "#f57f17",  // vivid amber — energy inputs
+  labor:          "#ad1457",  // vivid magenta — labour / skills
+  machinery:      "#4e342e",  // warm dark brown — machinery / capital equipment
+  additive:       "#546e7a",  // slate — additives / processing aids
+  other:          "#616161",  // mid-grey — uncategorised
 };
 
 function nodeColor(n) {
@@ -98,8 +103,8 @@ export default function SankeyView({ graph, onNodeClick, selectedId, containerW 
 
     // Reserve room on the right for the deepest column's labels.
     const sk = sankey()
-      .nodeWidth(14)
-      .nodePadding(9)
+      .nodeWidth(18)       // slightly wider bars for visual weight
+      .nodePadding(18)     // wider group spacing (was 9) — minister feedback
       .nodeAlign(sankeyLeft)
       .extent([[8, 8], [width - LABEL_MARGIN, height - 8]]);
 
@@ -195,17 +200,23 @@ export default function SankeyView({ graph, onNodeClick, selectedId, containerW 
               >
                 <title>{n.name} ({n.label})</title>
               </rect>
-              <text
-                x={right ? n.x1 + 6 : n.x0 - 6}
-                y={(n.y0 + n.y1) / 2}
-                dy="0.35em"
-                textAnchor={right ? "start" : "end"}
-                fontSize={10.5}
-                fontWeight={isSelected || isHovered ? 700 : 400}
-                fill={isSelected ? "#b34700" : "#222"}
-              >
-                {n.name}
-              </text>
+              {/* Labels shown only on hover or selection — keeps the diagram
+                  clean at a glance (OEC-style icon/block-first), full
+                  text always accessible by hovering or clicking. */}
+              {(isHovered || isSelected) && (
+                <text
+                  x={right ? n.x1 + 6 : n.x0 - 6}
+                  y={(n.y0 + n.y1) / 2}
+                  dy="0.35em"
+                  textAnchor={right ? "start" : "end"}
+                  fontSize={10.5}
+                  fontWeight={700}
+                  fill={isSelected ? "#b34700" : "#111"}
+                  style={{ pointerEvents: "none" }}
+                >
+                  {n.name}
+                </text>
+              )}
             </g>
           );
         })}
