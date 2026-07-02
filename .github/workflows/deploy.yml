@@ -270,6 +270,12 @@ jobs:
         with:
           fetch-depth: 50   # generate_dashboard.py reads git log for the Recently Updated panel
 
+      # SINGLE SOURCE guard (ADR-017): fails the build (and thus deploy + auto-merge)
+      # if a file-based data source or fallback is reintroduced. Server-side, on every
+      # push — the enforcement no agent (Solomon's or Hillary's) can bypass.
+      - name: Single-source guard (ADR-017)
+        run: bash scripts/check_single_source.sh
+
       - uses: actions/setup-node@v4
         with:
           node-version: "20"

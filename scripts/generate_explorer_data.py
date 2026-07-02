@@ -32,6 +32,12 @@ OUTPUT = ROOT / 'app' / 'explorer' / 'src' / 'data' / 'ironSteel.js'
 PB_URL = os.environ.get('PB_URL', '').rstrip('/')
 USE_POCKETBASE = bool(PB_URL)
 
+# SINGLE SOURCE OF TRUTH (ADR-017): explorer data is built ONLY from PocketBase.
+# No CSV/JSON fallback. Fail loudly if PB_URL is unset.
+if not USE_POCKETBASE:
+    sys.exit('SINGLE SOURCE (ADR-017): PB_URL is required — explorer data comes only '
+             'from PocketBase; there is no file fallback.')
+
 # ── Data loading ──────────────────────────────────────────────────────────────
 
 def pb_get(collection, sort=None):
@@ -53,11 +59,14 @@ def pb_get(collection, sort=None):
     return items
 
 def load_csv(name):
-    with open(DATA / name, newline='', encoding='utf-8') as f:
-        return list(csv.DictReader(f))
+    # SINGLE SOURCE guard (ADR-017): no file fallback. See generate_dashboard.py.
+    sys.exit(f'SINGLE SOURCE VIOLATION (ADR-017): tried to read {name} from disk. '
+             f'Explorer data must live in PocketBase; there is no file fallback.')
 
 def load_json(name):
-    return json.loads((DATA / name).read_text('utf-8'))
+    # SINGLE SOURCE guard (ADR-017): no file fallback.
+    sys.exit(f'SINGLE SOURCE VIOLATION (ADR-017): tried to read {name} from disk. '
+             f'Explorer data must live in PocketBase; there is no file fallback.')
 
 def _pb_or_local(collection, sort, local_loader):
     rows = pb_get(collection, sort=sort) if USE_POCKETBASE else None

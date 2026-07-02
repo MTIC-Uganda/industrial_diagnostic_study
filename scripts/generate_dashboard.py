@@ -179,13 +179,8 @@ if USE_POCKETBASE:
         _mt_file = DATA / 'macro_trend.csv'
         macro_trend = load_csv('macro_trend.csv') if _mt_file.exists() else []
 
-else:
-    print('Data source: local files (data/dashboard/)')
-    chain_summary  = load_csv('chain_summary.csv')
-    chains         = json.loads((DATA / 'chains.json').read_text('utf-8'))
-    chain_colors   = json.loads((DATA / 'chain_colors.json').read_text('utf-8'))
-    raw_fac        = load_csv('factories.csv')
-    factories_list = [{**f, 'loc': f.get('loc', '')} for f in raw_fac]
+# (No `else` branch: PB_URL is required and enforced at the top — single source,
+# no local-file fallback, ADR-017.)
 
 # Total registered establishments — was a hand-typed "~7,011" both in the
 # template and in key_indicators.csv's KPI-7 card; 2026-06-30 data-source
@@ -198,13 +193,6 @@ _pb_establishment_count = pb_count('industries', filter='reg_number !~ "FAC-"') 
 ESTABLISHMENT_COUNT = _pb_establishment_count or 7011
 ESTABLISHMENT_COUNT_LABEL = f'{ESTABLISHMENT_COUNT:,}'
 
-if not USE_POCKETBASE:
-    # Local-dev fallback only — when PocketBase is live, macro_trend was
-    # already set above. (This file is committed for local runs, so without
-    # this guard it would silently overwrite the PocketBase-sourced data
-    # every time, regardless of whether PocketBase succeeded.)
-    macro_trend_file = DATA / 'macro_trend.csv'
-    macro_trend = load_csv('macro_trend.csv') if macro_trend_file.exists() else []
 
 # Manufacturing Industry Key Indicators (the 12 cards) + their multi-category
 # breakdowns (tax/hightech/credit donuts, region strip). PocketBase first

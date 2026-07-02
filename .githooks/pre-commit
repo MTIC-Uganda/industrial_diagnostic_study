@@ -15,4 +15,13 @@ if [ "$adr" -gt 0 ] && [ "$dsl" -eq 0 ]; then
   echo "------------------------------------------------------------------"
   exit 1
 fi
+
+# SINGLE SOURCE guard (ADR-017): block reintroducing a file-based data source /
+# fallback into the dashboard or explorer generators. (CI enforces this too.)
+if [ -f scripts/check_single_source.sh ]; then
+  if ! bash scripts/check_single_source.sh; then
+    echo "BLOCKED by the single-source guard (ADR-017). Escape: git commit --no-verify"
+    exit 1
+  fi
+fi
 exit 0

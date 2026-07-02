@@ -30,7 +30,7 @@ workspace "MIDD — Manufacturing Industry Diagnostics Dashboard" "As-built 2026
             deterministicParser = container "Register Parser" "scripts/extract_industries_to_records.py. Deterministic pypdf parse of the National Industries Register -> 7,011 establishment rows. Brittle to layout changes (then the LLM path is needed)." "Python/pypdf"
 
             # ── DATASTORE (single source of truth, ADR-011) ───────────────
-            pocketbase = container "PocketBase — Datastore" "The one datastore. industries = canonical establishment table (1 row per reg_number, updated in place; curated map factories merged as FAC-*). Plus value_chains, kpi_indicators, diagnostic_datapoints. Prod :8090, staging :8091." "PocketBase/SQLite"
+            pocketbase = container "PocketBase — Datastore" "The ONLY data source (ADR-017, enforced): generators read solely from here, no CSV/JSON fallback, and check_single_source.sh blocks any reintroduction in CI + pre-commit. industries = canonical establishment table (1 row per reg_number, updated in place; curated map factories merged as FAC-*). Plus value_chains, kpi_indicators, key_indicators, diagnostic_datapoints. Prod :8090, staging :8091." "PocketBase/SQLite"
 
             # ── BUILD + SURFACES ──────────────────────────────────────────
             dashboardGen = container "Dashboard Generator" "scripts/generate_dashboard.py. Treemaps + locations map aggregate from PocketBase industries (static JSON fallback). Fills the template." "Python"
