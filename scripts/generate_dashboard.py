@@ -27,6 +27,15 @@ OUTPUT = ROOT / 'report' / 'sources-of-truth.html'
 PB_URL      = os.environ.get('PB_URL', '').rstrip('/')
 USE_POCKETBASE = bool(PB_URL)
 
+# ── SINGLE SOURCE OF TRUTH (ADR-017) ──────────────────────────────────────────
+# The dashboard is built ONLY from PocketBase. There is NO CSV/JSON fallback.
+# If PB_URL is unset, or any required collection is empty, we FAIL LOUDLY rather
+# than silently rendering stale committed-file data. This is enforced in code so
+# no agent (Solomon's or Hillary's) can quietly reintroduce a file fallback.
+if not USE_POCKETBASE:
+    sys.exit('SINGLE SOURCE (ADR-017): PB_URL is required. The dashboard reads only '
+             'from PocketBase; there is no file fallback. Set PB_URL and retry.')
+
 # ── Data loading ──────────────────────────────────────────────────────────────
 
 def pb_get(collection, sort=None, per_page=500, filter=None):
@@ -53,8 +62,11 @@ def pb_get(collection, sort=None, per_page=500, filter=None):
     return items
 
 def load_csv(name):
-    with open(DATA / name, newline='', encoding='utf-8') as f:
-        return list(csv.DictReader(f))
+    # SINGLE SOURCE guard (ADR-017): reaching here means PocketBase was missing data
+    # and something tried to fall back to a committed file — exactly the bypass we
+    # forbid. Fail loudly; seed the collection in PocketBase instead.
+    sys.exit(f'SINGLE SOURCE VIOLATION (ADR-017): tried to read {name} from disk. '
+             f'All dashboard data must live in PocketBase; there is no file fallback.')
 
 def pb_count(collection, filter=None):
     """Total record count via PocketBase's totalItems pagination field — one
@@ -1098,8 +1110,10 @@ def treemap_data_js():
         level deeper: selecting an individual product like "Bakery Products"
         updates Spatial Distribution to that specific product's mix)."""
     def _load(name):
-        f = DATA / name
-        return json.loads(f.read_text('utf-8')) if f.exists() else {}
+        # SINGLE SOURCE guard (ADR-017): treemaps come from the PocketBase industries
+        # collection, never a committed JSON. Reaching here = industries was empty.
+        sys.exit(f'SINGLE SOURCE VIOLATION (ADR-017): tried to read {name} from disk. '
+                 f'Treemaps must be computed from the PocketBase industries collection.')
 
     agg = _treemaps_from_pocketbase() if USE_POCKETBASE else None
     if agg:

@@ -22,6 +22,12 @@ echo "[promote] copying staging data -> prod..."
 cp -a "$STG/data.db" "$PROD/data.db"
 cp -a "$STG/logs.db" "$PROD/logs.db" 2>/dev/null || true
 
+# The copied data.db already carries the full schema + _migrations history. Any
+# auto-generated migration .js files in the target would try to RE-create those
+# collections on start and crash ("UNIQUE constraint failed: _collections.name").
+# Clear them so prod boots from the copied db, not from replayed migrations.
+rm -f "$PROD/pb_migrations/"*.js 2>/dev/null || true
+
 echo "[promote] restoring prod admins (staging copy overwrote the admin table)..."
 while read -r email pass; do
   /usr/local/bin/pocketbase admin create "$email" "$pass" --dir="$PROD" >/dev/null 2>&1 \
