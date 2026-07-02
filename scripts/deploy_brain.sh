@@ -6,11 +6,19 @@
 # prod keeps serving the old code until staging has passed.
 set -e
 BRAIN=/opt/midd-brain
-FILES="app.py brief_lib.py query_tool.py"
+FILES="app.py brief_lib.py query_tool.py analytics_sandbox.py analytics_lib.py"
 
 echo "[deploy-brain] pulling latest main..."
 cd "$BRAIN/repo" && git checkout -f main -q && git pull --ff-only -q
 for f in $FILES; do cp "$BRAIN/repo/midd-brain/$f" "$BRAIN/$f"; done
+
+# Analytics sandbox (ADR-020) needs the scientific stack. Best-effort + non-fatal:
+# app.py imports these modules but only touches pandas/sklearn lazily, so if the
+# install fails the brain still boots and the analytics path degrades to a normal answer.
+PIP="$BRAIN/venv/bin/pip"; [ -x "$PIP" ] || PIP="pip3"
+echo "[deploy-brain] installing analytics deps with $PIP (best-effort)..."
+"$PIP" install -q -r "$BRAIN/repo/midd-brain/requirements.txt" \
+  || echo "[deploy-brain] warning: analytics deps not installed — analytics will no-op until installed"
 
 echo "[deploy-brain] restarting STAGING brain (:8220)..."
 systemctl restart midd-brain-staging

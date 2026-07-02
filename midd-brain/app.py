@@ -27,6 +27,9 @@ import sys as _sys
 _sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from brief_lib import format_public_brief  # pure, unit-tested (ADR-018)
 from query_tool import validate_spec, build_filter, return_fields  # DB-tool security boundary
+import analytics_sandbox  # read-only analytics executor (ADR-020)
+from analytics_lib import (build_dataframes, schema_hint, planner_prompt,
+                           extract_code, format_analysis_result)
 
 ENV      = os.environ.get("MIDD_ENV", "staging")
 REPO     = Path(os.environ.get("MIDD_REPO", "/opt/mtic-uploader/repo"))
@@ -192,6 +195,46 @@ def run_query(spec):
                 "rows": json.loads(r.read()).get("items", [])}
 
 
+# ── Analytics (gated team tool): snapshot -> plan code -> run sandbox (ADR-020) ─
+# A read-only DataFrame snapshot of the data, TTL-cached. The team CLI writes pandas/
+# sklearn/matplotlib code against it; analytics_sandbox runs it with no PB handle, so it
+# queries but never alters (ADR-017). The whole path is best-effort: any failure (incl.
+# pandas not installed on the host yet) degrades silently to the normal repo-scoped answer.
+_df_cache = {"dfs": None, "at": 0.0}
+DF_TTL = 900
+
+
+def get_dataframes():
+    now = time.time()
+    if _df_cache["dfs"] is not None and now - _df_cache["at"] < DF_TTL:
+        return _df_cache["dfs"]
+    dfs = build_dataframes(lambda coll: _pb_items(coll))
+    _df_cache.update(dfs=dfs, at=now)
+    return dfs
+
+
+def plan_analysis(q, schema):
+    """Ask the model for read-only analysis code (or None if no computation is needed)."""
+    return extract_code(_run_claude(f"{planner_prompt(schema)}\n\nQuestion: {q}", 60))
+
+
+def analytics_augment(q):
+    """Best-effort: (answer-context block, chart HTML). Never raises."""
+    try:
+        dfs = get_dataframes()
+        code = plan_analysis(q, schema_hint(dfs))
+        if not code:
+            return "", ""
+        res = analytics_sandbox.run_analysis(code, dfs, timeout=12)
+        block = format_analysis_result(res)
+        img = res.get("image") if res else None
+        chart = (f'<div class=ans><img alt="analysis chart" '
+                 f'style="max-width:100%;border-radius:8px" src="{img}"></div>') if img else ""
+        return block, chart
+    except Exception:
+        return "", ""
+
+
 def _rate_ok(ip):
     now = time.time(); cut = now - 3600
     global _all_hits
@@ -315,10 +358,13 @@ def ask(password: str = Form(...), q: str = Form(...)):
     if password != PASSWORD:
         return shell("Denied", "<div class=card><p style='color:#f87171'>Wrong password.</p>"
                      "<p><a href='/'>Back</a></p></div>")
+    # Deep analytics (ADR-020): if the question needs computing over the data, run it
+    # read-only in the sandbox first and feed the result (and any chart) to the answer.
+    analysis_block, chart_html = analytics_augment(q)
     env = dict(os.environ); env.setdefault("HOME", "/root")
     try:
         r = subprocess.run([os.environ.get("CLAUDE_BIN", "claude"), "-p", "--output-format", "text"],
-                           input=f"{SCOPE}\n\n{recent_history()}QUESTION OR FEEDBACK:\n{q}",
+                           input=f"{SCOPE}\n\n{analysis_block}{recent_history()}QUESTION OR FEEDBACK:\n{q}",
                            capture_output=True, text=True, env=env, cwd=str(REPO), timeout=420)
         answer = (r.stdout.strip() or r.stderr.strip() or "(no response)") if r.returncode == 0 \
                  else f"(brain error: {r.stderr.strip()[:300]})"
@@ -334,7 +380,8 @@ def ask(password: str = Form(...), q: str = Form(...)):
     except Exception:
         pass
 
-    prior = (f"<div class=ans><b>Q:</b> {html.escape(q)}\n\n<b>MIDD:</b> {html.escape(answer)}</div>")
+    prior = (f"<div class=ans><b>Q:</b> {html.escape(q)}\n\n<b>MIDD:</b> {html.escape(answer)}</div>"
+             f"{chart_html}")
     return shell("Ask MIDD", FORM.format(prior=prior))
 
 
