@@ -487,7 +487,16 @@ export default function ValueChainExplorer() {
                     onMouseLeave={() => setHoverInfo(null)}
                     style={{ width: "100%", textAlign: "left", padding: sidebarOpen ? "5px 12px" : "8px", background: selected === pid ? "#1e293b" : "transparent", border: "none", cursor: "pointer", display: "flex", alignItems: "center", gap: "8px" }}>
                     <span style={{ width: "6px", height: "6px", borderRadius: "50%", backgroundColor: p.color, flexShrink: 0 }} />
-                    {sidebarOpen && <span style={{ fontSize: "11px", color: selected === pid ? "#f1f5f9" : "#94a3b8", fontWeight: selected === pid ? "600" : "400", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{p.name}</span>}
+                    {sidebarOpen && (
+                      <span style={{ overflow: "hidden" }}>
+                        <span style={{ display: "block", fontSize: "11px", color: selected === pid ? "#f1f5f9" : "#94a3b8", fontWeight: selected === pid ? "600" : "400", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{p.name}</span>
+                        {PRODUCT_HS4[pid] && (
+                          <span style={{ display: "block", fontSize: "9px", color: "#475569", marginTop: "1px" }}>
+                            HS {PRODUCT_HS4[pid].replace(/_/g, " + ")}
+                          </span>
+                        )}
+                      </span>
+                    )}
                   </button>
                 );
               })}
@@ -506,7 +515,14 @@ export default function ValueChainExplorer() {
               <div style={{ fontSize: "9px", fontWeight: "700", letterSpacing: "0.1em", textTransform: "uppercase", color: "#94a3b8" }}>
                 Tier 2 — Finished Mill Products · {product.category}
               </div>
-              <div style={{ fontSize: "18px", fontWeight: "900", color: "#0f172a", marginTop: "2px" }}>{product.name}</div>
+              <div style={{ display: "flex", alignItems: "baseline", gap: "10px", marginTop: "2px" }}>
+                <div style={{ fontSize: "18px", fontWeight: "900", color: "#0f172a" }}>{product.name}</div>
+                {PRODUCT_HS4[selected] && (
+                  <div style={{ fontSize: "11px", fontWeight: "600", color: "#1565c0", background: "#e3f2fd", borderRadius: "4px", padding: "1px 7px", flexShrink: 0 }}>
+                    HS {PRODUCT_HS4[selected].replace(/_/g, " + ")}
+                  </div>
+                )}
+              </div>
               <div style={{ fontSize: "11px", color: "#64748b", marginTop: "2px", maxWidth: "600px" }}>{product.description}</div>
             </div>
             <div style={{ display: "flex", gap: "16px", fontSize: "11px", color: "#94a3b8", flexShrink: 0, marginLeft: "16px" }}>
