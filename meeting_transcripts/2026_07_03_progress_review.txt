@@ -1,0 +1,750 @@
+Hillary Arinda
+mmm
+Solomon Ariho
+gambhaji
+Who
+Hillary Arinda
+So this is system.
+Solomon Ariho
+a Is always being the account? generator
+Hillary Arinda
+What's the plan now?
+Solomon Ariho
+Are you going to say to come back tomorrow?
+
+🎯
+Decision
+Hillary Arinda
+So which are the music is that?
+Solomon Ariho
+Since it is.
+Hillary Arinda
+Hi, I'm transcribing this call with my Tactiq AI Extension. https://tactiq.io/r/transcribing
+uh-huh yeah
+Hmm. I also sentiment invite.
+Yes, yes.
+Solomon Ariho
+blood blood You know hey.
+Hillary Arinda
+Yemen yes you know
+I didn't get there.
+Jerome Nuwabaasa
+Hello. How are you?
+Hillary Arinda
+Yeah good.
+Jerome Nuwabaasa
+Yeah, by completely those troubled time.
+Hillary Arinda
+sorry
+Jerome Nuwabaasa
+So we're here now. okay so Where was the discussion?
+Hillary Arinda
+The way we are looking for you.
+Jerome Nuwabaasa
+Okay, so solo, have you got any update? have you
+Solomon Ariho
+I didn't do much as a bit occupied with this solar guys.
+Jerome Nuwabaasa
+okay
+Solomon Ariho
+So when they also still didn't even finish so I don't know but I'll walk tonight.
+
+🎯
+Decision
+Jerome Nuwabaasa
+okay
+Hillary Arinda
+That's a good thing because I have been changing a few rules such that we do not fetch data from the wrong source by mistake so I checked last night. Where mostly predicted but some rules could be jailbroken if the AI insisted so I put more I put more rules and then click the new data that could have been leaked through in a hardcoded way and then added tests so now going forward deep since the system is a bit big now. We do wouldn't want the AI to make a very big change that could affect the stabilities so we've added tests.
+that means Any new development must first of all path existing tests and then write new test cases. Yeah, the boat was also.
+Jerome Nuwabaasa
+Okay, that's good.
+Hillary Arinda
+What's the world got railed the previously had access to a lot of information that is not good for the public like how a whole system is set up and all so right now. We are trying to limit it success to the database and things like that. I will do it. We'll do some this will take some time to to improve. We'll do some checks you ask questions you see how it responds the one thinking of it. Is you ask a question it respond then you rate how it's doing and then the cycle repeats. Yeah, that's that's the latest update really nothing much. About from that.
+Jerome Nuwabaasa
+okay mmm Okay, I I so myself I visited you both. I called someone in yubos. We had a chat. Then based from the chat. I realized that I needed to visit them. So I visited and then discovered that there are some decisions that. We need to make or maybe I need to make so let me let me share this screen so that you can appreciate where I'm coming from.
+Hillary Arinda
+okay
+Jerome Nuwabaasa
+Am I sharing okay good? so When I went to have a discussion with the guys of you boss. I was basically okay, maybe this is the best. I will showing them this. When you're going to the value chain. if you go into this value chain
+Hillary Arinda
+hmm
+Jerome Nuwabaasa
+What you're interested in is each product? And that's certain things will clarify when it's a technology. I don't expect okay. I see within Blooms let me go see if we can but if you pick like cottonian you see it's HS code okay. This is this HS code is what is used to fetch data on import and export and if they even data on local production. It is fetched using this HS code okay, so what we have is import export data. We don't have.
+Local production data but we have input export data and that infotechs for data is fetched using this HS code okay now when I went I found that they use a different code. I think I talked about this site. Essay s i t c.
+Solomon Ariho
+Something like that.
+Jerome Nuwabaasa
+standard international trade code something like that So and then iPhone so inside Uganda Bureau of statistics so now Solomon Solomon
+Hillary Arinda
+okay
+Jerome Nuwabaasa
+used to work for you boss, but there are different departments. There's a department of trade that captures trade data and it uses sitc which is then gives to it the international Trade Center and trades the international Trade Center transforms this into HS now I actually think they both source in HS from. From URA because you are a capture this data in HS but you both convert seat into si TC because that it's standard of data capture and this is really a problem of colonization.
+Where you find you one organization within the same country one organization is using like an American standard another one is using like an international standard another one is using you know stuff like that, but HS code data is the customs standard. Satc is almost like the standard form now. I then had a discussion with the manufacturing guys who use another standard that is not HS not satc is called Isaac maybe you've heard about it.
+have you had So if you pick the product like cottonian. It has in the it has this HS code in sitc. It will have a completely different code in Isaac it also has a different code. So and then I really found a challenge because first of all I was they were saying you know right to you boss for us to give you the data that you want. I said you see before I even ask for the data. I need it organize the way that I can analyze it if you just give me data just It may not be possible for me to analyze.
+So the only other thing they did is that they referred me to another link this is a un link. I see it has up to 2025. from to let's say we are looking at exports and we picked Uganda hey You have scroll down. So I had intimate temperature is to you from Uganda to the world. And you exports let's see we even show monthly okay, but let's see any of the interested in any.
+total HS code community classification, so you see here it shows HS and this ITC
+But I don't see the data.
+Solomon Ariho
+They can see that is not available or something.
+Jerome Nuwabaasa
+It looks like you need to sign up. Is a possibility that I've ever signed up in this thing because this. always signing up in these things because of my
+discord
+Solomon Ariho
+verification code
+That's what I was talking about these things that he's saying trade data is not available for selected parameters.
+Jerome Nuwabaasa
+Is it the year?
+Solomon Ariho
+About the other thing of HS code as reported you see they are total. the first No down. selecting in the cultures
+Jerome Nuwabaasa
+Please like at least one commodity codes.
+Solomon Ariho
+You click on it then select click on the drop down we see. That why there is now it's not clickable.
+Jerome Nuwabaasa
+Okay anyway, I don't see how this I'll see. but the bottom line is Until we find better data. It looks like we are stuck with ITC because that is the international trade data because that's what looks like. We can currently do now. If we are to change then we shall change but that's what we can work with for now. We use these HS codes. We've already marked the product again.
+Hillary Arinda
+What's wrong with the HS codes again? Just took me back.
+Jerome Nuwabaasa
+So you boss. I went to talk to you was about data. They have more recent data. show you So, they are so I think we'll just probably go with that so you see you both it has. 001 0204 all this now. Yes several aspects that soap like for sugar. Let me see if I can show you. Okay, this is the s they standard international trade classification. That's the satc. So, let's look for sugar. And I show you. I don't need to go to Sugar we can even look at.
+you see 0 0 is live anymore 00 is Labor when you come here in the Excel You see 0 0 is Labor nimos. This is the number okay. It's 0 1 is mid preparation but you see here. Just says mid preparations okay, but In here 0 1 mid preparations and as zero one okay 0 1 1.1. his meat bovine meat of bovine animals fresh or chilled But even under that there is 1.1.1.
+Hillary Arinda
+yeah
+Jerome Nuwabaasa
+pressure chilled with bonin 1.1.2 pressure shield boneless
+Hillary Arinda
+hmm
+Jerome Nuwabaasa
+You see then meet of bovine animals frozen so the first one is so this data is normally broken down this far. So like at least you see it bovine animals you over anonymous are basically like. beef right It would probably be before horse is that above my animals so it breaks down the meat to the different animals, but the data that we currently have is not broken down so I was basically asking them can they?
+Hillary Arinda
+So that that doesn't make sense. They are key. They are standard says one thing and their data stays another says another is that correct?
+Jerome Nuwabaasa
+No, so they give you they give you aggregated data and as a reason they give
+Hillary Arinda
+aggregate
+Jerome Nuwabaasa
+aggregated data. They are argument is so they give you methan mid preparations. So they are
+Hillary Arinda
+Okay first go back. Sorry sorry before sorry, so what they give is 0 1 1, so
+Jerome Nuwabaasa
+argument is. It's just 0 1 meter and mid preparation.
+Hillary Arinda
+what is 0 1 1 so they just give you zero one.
+Jerome Nuwabaasa
+Yes, that is what not what they give you what not what they give you this is
+Hillary Arinda
+so, how do they aggregate to
+Jerome Nuwabaasa
+what is on there on their website when you download it's there.
+Hillary Arinda
+yeah, so first go back to the PDF So the end of the day the values, are they the same values kilos shillings? What
+Jerome Nuwabaasa
+hmm
+Hillary Arinda
+are the units again?
+Jerome Nuwabaasa
+I normally you you're looking at import value, so you you look at
+Hillary Arinda
+let's go to the ExCel
+Jerome Nuwabaasa
+You yeah, you know. This is in US dollars.
+Hillary Arinda
+Okay okay so US dollars, so we sold meat was this that's it. That's what they're trying to say.
+Jerome Nuwabaasa
+Exactly, that's what they say.
+Hillary Arinda
+And for the bit more granular.
+Jerome Nuwabaasa
+Yeah, I wanted it.
+Hillary Arinda
+It's just not there. No, but it has to because I didn't need to get aggregated.
+Jerome Nuwabaasa
+They have it they have it. Exactly, how do they get to this? So they have it okay?
+Hillary Arinda
+Yeah. But we don't have access to it.
+Jerome Nuwabaasa
+We can ask for access to it. We can write an official we can write an officially
+Hillary Arinda
+So, what's the challenge?
+Jerome Nuwabaasa
+ask for access to it. So here is a I think I think the challenge we have our have to ignore so let me let me show you what the challenges so when you say I want to scroll down and see if I can find. something that Okay, so you see here when they say let's just even use the very first one when they say boneless when you say meat of bova and animals fresh or chilled boneless hmm. Even if they say meat.
+This meat when you are going to say chilled meat that is boneless that is packed and chilled and sold. It is the guys when they give you the manufacturing value added they consider cutting the animal and removing the bones they consider that as manufacturing.
+Hillary Arinda
+See that again, please.
+Jerome Nuwabaasa
+You see this in this category. 011 .1 to
+Hillary Arinda
+I see.
+Jerome Nuwabaasa
+meet of bovine animals fresh or chilled boneless
+Hillary Arinda
+Yes.
+Jerome Nuwabaasa
+The idea that you when you decide to make the meat boneless this is considered a process a manufacturing process.
+Hillary Arinda
+okay
+Jerome Nuwabaasa
+So this considered a manufacturing product.
+Hillary Arinda
+hmm
+Jerome Nuwabaasa
+That is the people who produce peace statistic. Is statistics limit fast take you back? Manufactured manufacture exports manufacturing value added especially in manufacturing value added in here in 1.8 billion. There is that meat that was that is boneless? okay however however in the manufacturing exports When these guys are determining manufacturing exports. Anything from zero if we just consider the first digit. To the end of four. Up to here is not considered manufactured only five and above is considered manufactured. You understand so it means.
+Hillary Arinda
+Yes.
+Solomon Ariho
+which five
+Hillary Arinda
+Hey, even gas is not manufactured.
+Jerome Nuwabaasa
+Yes animal oils and fats gas natural and manufactured electric current all that
+Hillary Arinda
+Electric current is not manufactured.
+Jerome Nuwabaasa
+is not considered manufactured only 51 onwards petroleum petroleum products and
+Hillary Arinda
+okay
+Jerome Nuwabaasa
+related materials call Coke and brigets.
+Hillary Arinda
+Those are raw materials. Oh in also a few will fuel is not basically manufactured I can see the energy introds. Sorry.
+Jerome Nuwabaasa
+Yes, so all these are not considered manufacture. I mean look at this. They don't even consider textile fibers manufactured harp. You can imagine pulp is not considered non-focus so
+Hillary Arinda
+How is persist so they want like an a product that is no yet yet? I understand
+Jerome Nuwabaasa
+yeah So you look at what they consider organic chemicals?
+Hillary Arinda
+is manufactured to come on. What is this man?
+Jerome Nuwabaasa
+So, this is that Iron and steel you can non-ferrous metal so this is their classification now this classification is not the same. Okay so okay, I think this is what we would have to do and and this is really when it comes to statistics. You know there is a legal aspect to statistics.
+Hillary Arinda
+I would imagine.
+Jerome Nuwabaasa
+because
+Solomon Ariho
+There we go. We are going to be arrested.
+Jerome Nuwabaasa
+no, no the legal so that's
+Hillary Arinda
+So when your biggest fear is to be arrested?
+Jerome Nuwabaasa
+okay so so
+Solomon Ariho
+Yeah again.
+Jerome Nuwabaasa
+solo Let Me Explain let me explain what I mean by illegal aspect.
+Hillary Arinda
+So before activity are.
+Jerome Nuwabaasa
+When you describing a statistic? It has a legal definition. And therefore you can't use sometimes you can't use the layman language to describe the statistic. There is a legal description, so I they is a law that
+Solomon Ariho
+mmm
+Jerome Nuwabaasa
+can describe what an industry is. Okay and that industry is only that which is described in the law for example. There's a lot that described who a Ugandan is and if you do not meet the description in that law then you're not a Uganda so for example a Uganda and must be what do I want to say which Ugandan is does not have Ugandan citizenship? Is Helen is Helen stew Garden by the way?
+Hillary Arinda
+Yeah, she has not yet. She's not yet. Kenyan as far as I know.
+Jerome Nuwabaasa
+She's not Kenyan okay, so if Helen decided to drop her Ugandan passport and get the Kenyan passport. legally Helen is not Ugandan You cannot come and say but you see she was born in Uganda this is a village maybe whatever no legally so when we are looking at the statistics of ugandans, she's not included and that's what I mean solo on that statistic.
+Solomon Ariho
+but She goes in.
+Jerome Nuwabaasa
+Yeah, but if you see that's my point is that that ndanga montu can change? so my sister Natasha who left announced in Canada with her children is not Uganda yes, he had montu and she does what but she changed her Citizenship and she is no longer Ugandan
+Hillary Arinda
+correct
+Jerome Nuwabaasa
+so when when they come to count the family and we don't mention her as one of the Citizens We say we have one family member but she's not a citizen so it's the same here. It's like you can look at something and say this is supposed to be in manufacturing and this is not supposed to be but the Lego definition of manufacturing in this case is 51 to I think 69.
+And then is what the is also something that's called high tech high-tech manufactured products which are some figure after something after that but these these they are clear code so my view was. The problem with this is this is good data. Okay, if we got it broken down
+Hillary Arinda
+mmm
+Jerome Nuwabaasa
+completely broken down because this is export data and we can also get import data. If you got it broken down to kind of lower levels then maybe we could use it in both indicators now. Let me show you what I mean. You see this manufactured exports. It's an aggregated statistics. So you do not care whether the data is broken down or not because you give in the total.
+If you're looking at manufactured high tech manufactured exports you also giving the total so here you do not care. If it is broken down or not but when you come here. And you think how much cotonian am I importing now here you need it because now you are diagonizing a specific product. Now here you need it broken now. the next sense
+Hillary Arinda
+hmm
+Jerome Nuwabaasa
+And so at this point.
+Hillary Arinda
+No no no, so that again.
+Jerome Nuwabaasa
+when you come to cotonian You see the other time when you are aggregating you don't you didn't care that the data is broken down you could just because you're just speak in the total.
+Hillary Arinda
+yeah yeah
+Jerome Nuwabaasa
+But here when you come down to cotton to a specific order. A specific product then you will go into this data and look for this specific product and you will not find it because cottoniah is probably under 65 textilean fabrics made up. It is all aggregated, but then if you had a breakdown of 65 let's actually look for it. Because we have this not this thing, where did I drop this thing? Oh yeah native, let's try and scroll down 65 all the Iowa so you see 651 is textileian now if I go farther 6512 is yarn. 6511 is yarn of wool or animal here. But I even go further into six five one one two yarn of cuddle.
+Hillary Arinda
+So yeah, there's not something small it's an aggregate okay.
+Jerome Nuwabaasa
+It's white. It's an exactly it's an aggregate now when you're trying to deal with your industry as a country you need this broken down because you might say you might go and say we are importing so much yarn, but what kind of yarn because you might say we are putting so much yarn. Let's put a tax on the yarn, and then so that we can use our local yarn, and then you find you are importing a lot of synthetic yarn, and you are not importing a lot of cottonian and so when you put a tariff so that you can protect cottonian production. It didn't achieve anything.
+Because there was no market for cottonian. There was market for some other end, but you could not tell. Whether the issue was with autonian or other you could not tell that.
+
+✅
+Action Item
+Hillary Arinda
+okay go back to the go back to the Sankey Sani ki sanki, Sankey and I asked so what would you have wanted?
+Jerome Nuwabaasa
+So what I would have wanted is.
+Hillary Arinda
+This is cotton okay, I get you this is cottonian. It's very specific.
+Jerome Nuwabaasa
+you see it's specific, this is the
+Hillary Arinda
+And you don't have a reference from you. Don't have a reference from me you you and what you both.
+Jerome Nuwabaasa
+So I have a reference so from the ubos data, which I would have loved to use because it's very recent. I don't have a reference but from the ITC data. I do have a reference but that data is all.
+Hillary Arinda
+It's also it's not reliable. Oh my god.
+Jerome Nuwabaasa
+So I can either go with all data. okay
+Hillary Arinda
+Okay, let me ask another question. What's the best of both bad cases cause neither case is good?
+Jerome Nuwabaasa
+So, this is what you could probably do since you're basically dragged answer questions, so you could say here if I'm to break it down further I have to give you all data because I don't have new data. Of course. I'm trying to have a discussion with URA to see can I get very recent I'm trying to see if we can get this the next person entity that I will try to talk to will be URA
+Hillary Arinda
+Let me ask another question.
+Solomon Ariho
+if I mean choir
+Jerome Nuwabaasa
+hmm
+Solomon Ariho
+Are we having the problem because of the coding? What's wrong with you both data, then?
+Jerome Nuwabaasa
+No, no no okay, you see we want to determine which coding we use best on the data source if some guy has recent data coded in nature's codes, then we go with that. if some guy has recent data coded in sitc then report with S ITC because for us
+Hillary Arinda
+I think the issue is just the issue is just how how granular and recent is the
+
+✅
+Action Item
+Jerome Nuwabaasa
+as Romans
+Hillary Arinda
+data. That's what we want right.
+Jerome Nuwabaasa
+So we actually have we have granular data. That is not recent.
+Hillary Arinda
+no
+Jerome Nuwabaasa
+And recent data that is not granular.
+Hillary Arinda
+But you want you want to granular and recent.
+Jerome Nuwabaasa
+We want granular and reset and if we fail no, no, it's not.
+Hillary Arinda
+I don't think the code is the matter. And if we fail I have but you still haven't my question if you fail which one you can you go with both?
+Jerome Nuwabaasa
+Yes, so if you failed you could say that when I come here. You could say that when I'm going to tell you about manufactured exports. I'm not going to use ITC because this is aggregated data. I am going to use I don't need this to be granular so I am going to use a ITC you boss data, then when I am doing analysis of the value chains one by one I am going to use the ITC data.
+Hillary Arinda
+But then you put you put that exploimation guys this is all.
+Jerome Nuwabaasa
+You would have to put the yar of the data.
+Hillary Arinda
+Okay, who is your who is the customer with our customer here? You know this is the Minister or
+Jerome Nuwabaasa
+the out basically say the minister and developers the industrialists before trying to develop Industries
+Hillary Arinda
+So again to develop an industry, when you give you all data, how does it affect
+Jerome Nuwabaasa
+That is way to the problem so for example. Let me show you and this is how such
+Hillary Arinda
+you?
+Jerome Nuwabaasa
+a system could be used I can come and look into this value chain and say Uganda is doing its or manufacturing of bugs okay. And it is also producing its own Fabric of it fabric, but it is doing this fabric production using imported yarn. As I check along the value chain so I say oh, I know there is a market for yarn, because it is being important by people who are policing fabric for making bugs.
+
+💡
+Callout
+So I need to set up a factory for yarn production. Because this is where the I don't want to call it the bottleneck, but this is where Uganda fails and then goes into what into export into import sorry into
+Hillary Arinda
+index, but
+Jerome Nuwabaasa
+import. you get
+Hillary Arinda
+I'm following.
+Jerome Nuwabaasa
+It yeah, so but the problem is.
+Hillary Arinda
+You don't mind that is suicide should go today go to jail.
+Jerome Nuwabaasa
+Exactly you can give him data. You can give him data of 10 years ago. Sorry of you can give him data of two years ago and then the guy finds out that
+Hillary Arinda
+Right now to mirror.
+Jerome Nuwabaasa
+someone either this market died. So it's no longer there or someone came and set up an industry, but you had not yet seen.
+Hillary Arinda
+They're not being captured.
+Jerome Nuwabaasa
+Yeah, that's why here actually we want to have once we pick this HS code. We want to have the data and then we also want to have how many Industries do we have here that are producing this product? And actually would need to know the production capacity but for now even if we just go to know how many Industries then a person can take a decision and say oh there is a gap here.
+And actually the system itself if we have this data. I think we can even tell the system itself to run through an identify where they are gaps. So that if there is a gap it can flag it so that you you just do the sun key if you just did a sun key like this. You will see that on this value chain. This is where the opportunity.
+Hillary Arinda
+hmm
+Jerome Nuwabaasa
+Because it is flagged then you can open and go inside and okay, what is the opportunity here?
+Hillary Arinda
+Okay I have to understood. So what do we do? That's it?
+Solomon Ariho
+Wow, that seems like ITC that is dangerous.
+Hillary Arinda
+poisonous
+Jerome Nuwabaasa
+okay
+Hillary Arinda
+But no no, it's not dangerous. It gives you an idea like a it's indicately yeah,
+Jerome Nuwabaasa
+Yeah, there are things that helps you analyze trends.
+Hillary Arinda
+it is indica. Now. This is what indicative means Solomon
+Jerome Nuwabaasa
+I yeah, that's a very good example. Yes, you're right all right you really.
+Solomon Ariho
+Which one?
+Hillary Arinda
+In this context, this is a ticket man, let's continue let's continue.
+
+✅
+Action Item
+Solomon Ariho
+Which one I've missed it.
+Jerome Nuwabaasa
+Solomon Ariho
+roast again
+Jerome Nuwabaasa
+What do you mean?
+Solomon Ariho
+In big activ again here.
+Jerome Nuwabaasa
+anyway, so As in when you look at the data, it kind of points to something you indicates. What could be the case it doesn't tell you exactly what the case is but it
+Hillary Arinda
+Because it yeah.
+Jerome Nuwabaasa
+indicates. What could be the case?
+Hillary Arinda
+so now Jeremy
+Solomon Ariho
+Hillary Arinda
+yes, Solomon
+Solomon Ariho
+You record the was it today yesterday when were discussing the system you. Coming here for solar and the ones for the violas.
+Hillary Arinda
+Yes.
+Solomon Ariho
+What if you had data from that time?
+Hillary Arinda
+You can you would think.
+Solomon Ariho
+You would do you would come swimming you like about is a huge gap for solar you find the moon. They are the market. You have to be careful.
+Hillary Arinda
+You find designing Flux there's any flags of solar panels.
+Jerome Nuwabaasa
+exactly And by the way, let me tell you two years because you see this is this this
+Solomon Ariho
+you come with
+Jerome Nuwabaasa
+trademap data is 2024?
+Hillary Arinda
+Then mtic MTN I think mdic should hire us we have a big opportunity.
+Jerome Nuwabaasa
+yeah
+Hillary Arinda
+To make better, if only we can get to uria. I see this is a big opportunity. This is a big gap.
+Jerome Nuwabaasa
+It's a massive massive Cup so okay, that is let's do this. Let's do this now you
+Hillary Arinda
+In this is a bigger.
+Jerome Nuwabaasa
+get you guys have given me an idea of what we need to do. Let's do this. Let's put in the HS code all data. Then we shall go to the minister. I'll go to the minister and say this thing has already been configured to do the analysis by HS code. All you need to do. Is get us a plug into URA so that we can do this analysis using recent data because we can easily misinform someone. With all data.
+Hillary Arinda
+I think you have a good case if I'm a minister, I will get you that I would get
+Jerome Nuwabaasa
+So I because you would have already done the analysis of Solomon I know you
+Hillary Arinda
+you.
+Jerome Nuwabaasa
+still have the back logo yesterday's work. But right now.
+Hillary Arinda
+At hey this back loop.
+Jerome Nuwabaasa
+Yeah, there's what we agreed that he should do yesterday. He hasn't done it.
+Hillary Arinda
+Impose your demusola, yeah.
+Jerome Nuwabaasa
+Even me this I have I had just drawn the table of the I'm supposed to feel this table and once I feel it it's what would then work for the projection. this thing So, what would work for this thing? so I think now it's clear what we would do so for this for the aggregate information. Let's use let's use. This excels, I will Solomon since you're the one uploading data. I will I will tell you where to get this excels and you can upload them and I'm not
+Hillary Arinda
+Yeah, Solomon I think this is a good opportunity to test the pipeline to save it
+Jerome Nuwabaasa
+development.
+Hillary Arinda
+works.
+Jerome Nuwabaasa
+so You want to test it right now.
+Hillary Arinda
+No, no, no, yeah, so Solomon will be seeing as I am watching will be texting.
+Jerome Nuwabaasa
+Okay okay, so you will use you will upload you will.
+Hillary Arinda
+Don't have to be on call.
+Jerome Nuwabaasa
+Okay okay, so Solomon you will upload it and let me this is anyway, you will upload it. I will share with you because you will inform it. Let me see.
+Where is this definition? You should be a definition somewhere. A details okay, so you see and while bank holds it manufactures exports, but basically manufacturing exports using comprise commodities in sitc hmm section 5. Because section 6 so these are the sections. You get so you have to inform it. I think it comes from.
+Hillary Arinda
+hmm Hey this excited section.
+Jerome Nuwabaasa
+a I see section 5 section 6 section 7 section 8 excluding 68 68 so you have to exclude non-ferrous metals. but then so if you came to our Excel
+Hillary Arinda
+What is Jerome saying I hope Solomon following?
+Jerome Nuwabaasa
+If you came to our Excel okay, let me clarify if you came to like you see this number the first one. So this is sitc to this is sitc level 2 meaning it has two digits. the first digit Is is even higher than the second digit is more granular? Okay so for example. let's eh
+Hillary Arinda
+Stop pastor pastor player just give me one second. I look let's look at the Zeros all the Zeros
+Jerome Nuwabaasa
+So zero is a section.
+Hillary Arinda
+Now I'm just looking at the description.
+Jerome Nuwabaasa
+Let's see what let's see what zero is called.
+Hillary Arinda
+Then we need to ingest this thing as it been ingested already.
+Jerome Nuwabaasa
+It has so zero is food and live animals okay, so if you come here you will see all from zero zero zero zero one zero 202040506-0708-09. They will all be either
+Hillary Arinda
+food
+Jerome Nuwabaasa
+food or live animals.
+Hillary Arinda
+Hmm. Then two is the category of the life, so these level three with the third
+Jerome Nuwabaasa
+okay
+Hillary Arinda
+digit yeah. Yeah, so
+Jerome Nuwabaasa
+Yes, it goes up to five.
+Hillary Arinda
+so simple
+Jerome Nuwabaasa
+it goes up it keeps breaking down breaking down to be more specific now Hillary
+Hillary Arinda
+This guy is like a report like with different headings.
+Jerome Nuwabaasa
+if you want if you want to know if you want to know how countries like China beat Africa Is I want you to consider that poverty is a cancer?
+
+✅
+Action Item
+Okay and the deeper you go in analyzing of data. It's like the more you can target the cancer. Right so for us.
+Hillary Arinda
+So you basically DNA yeah? Yeah you go to the protein.
+Jerome Nuwabaasa
+You go into the DNA of the problem, so if you're saying I am having a problem in the Automotives industry. These guys can say actually your problem is in the batteries. The rest is okay
+Hillary Arinda
+mmm
+Jerome Nuwabaasa
+deal with the batteries. So they invest heavily in the battery industry for us. We say we have a problem in the automotive industry. Where the automotive industry? So we try to deal with the end, we try to invest in the entire automotiveness so our investment is not targeted. And because it is not.
+Hillary Arinda
+So you're saying our problem is that we do not break down things properly.
+Jerome Nuwabaasa
+We don't break down things so we can only push holistics Solutions which are very inefficient in this world of competition. Because your solving your problem that has already been solved in most cases.
+Hillary Arinda
+yeah, the Yeah, you cut down on efficiency and in this agent time if you're not efficient
+Jerome Nuwabaasa
+it's it's
+Hillary Arinda
+you did.
+Jerome Nuwabaasa
+You are dead someone who is efficient is living you by the day every single day his his adding some extra miles. So that's that's the problem that we have that would have to deal with.
+Hillary Arinda
+So, what's the desktop hand anyway? That's it.
+Jerome Nuwabaasa
+So now it's very clear. I think from this discussion. We so now what we are doing is. When we adding you more, so what we are doing is these manufactured export high tech exports these ones we are going to use yubosis aggregated data. Okay when it comes to the breakdown when it comes to here we are going to use HS codes as we had done try to make sure that we link with ITC and pick the Old data. That's okay, which I'll pick the Old data, then.
+We shall when we pick the Old data. We shall then our as long as this has been designed it means that if I push the new data and it is organized still by HS code then this one just updates then we'll have a discussion with the minister and say all you need to have up-to-date it. Yeah.
+Hillary Arinda
+Durham I think we should do up. We should not override we should do update such that someone has the ability to choose years then you start now seeing a trend let's not delete any data. That's my proposal.
+Jerome Nuwabaasa
+ah So this one anyway, this one is okay this the way we had captured it nature's courts is okay. The one that I would say would need to change.
+Solomon Ariho
+people
+Jerome Nuwabaasa
+would be Would be this one manufactured exports, so that we have more recent data at least of 2025 and then.
+Hillary Arinda
+The problem I have with losing data is already see what you went through to get to this now. You're just overrated.
+Jerome Nuwabaasa
+So, how do we you're saying? How do we do it? What do we do?
+Hillary Arinda
+As long as this data is like we already fixed the problem. All Our Data is in a database it follows a clear structure that means it can be grouped if data can be grouped you. Just get the differentiator the necropod data that way so what I'm going to say is you show the latest data but in case someone ever say that I want to like when the UI you will show the latest yes, but in the back end link, was you never know when you need it again because we went through a lot to get to this day. So you leave it there. Yeah, you may want it for something for
+Jerome Nuwabaasa
+No, but you see here.
+Hillary Arinda
+comparison for example yep unless this if it is wrong data. That is okay, but if it is accurate.
+Jerome Nuwabaasa
+hmm
+Hillary Arinda
+Don't trip of it. Just do not display it such that in case you want to do something more crazy you have a lot of you. See the more data. You have the more ideas. You will get you don't know it now, so don't lose it.
+Jerome Nuwabaasa
+yeah Okay, so you don't need to delete it, but you pick Solomon you pick data from u-bos now.
+Hillary Arinda
+It is most recent. Yes, yeah.
+Jerome Nuwabaasa
+And and try to be the one that you use here. Solomon is that okay?
+Solomon Ariho
+Yeah, I told you wouldn't send me the exhale or something.
+Jerome Nuwabaasa
+Okay, I will but I wanted actually wanted to show you because it's better that let me teach you how to fish. So basically when you go to the u-boss website I want to just start from you boss. And Solomon this is your this is your first point of employment. So when you come to the u-bos website and you over on statistics? Actually have a quick statistics. So it should connect to statistics.
+Okay, what is it saying also statistics but if you hover on statistics you see there is external trade. External trade is where we have input export now under external trade there is you can download an Excel of composition of exports from 1996. to March 2026 You can get composition of imports for the same period okay. Then you can get the direction these are Uganda imports. Where were they going? You can also get the direction of exports.
+And then you can get the what you call the total monthly merchandise trade. I don't know what is even in here any doubt and C I've never opened it. This one
+Solomon Ariho
+so each year they just
+Jerome Nuwabaasa
+is just
+Solomon Ariho
+Do they just make another tab 2027?
+Jerome Nuwabaasa
+No, yes, they just make another tab. with this e well I see in the a I sorted I think I sorted and He why would this be down? let me just Okay, I had tried to sort but you see this that's from 1996 97 98 and you can choose if you want financial year or calendar. You see 1996 87 it comes up to 2025 but financial year it should be able to bring you up to 2020 hey.
+not 20 25 26 okay because you see funny enough monthly okay 25 26 is about to end because now we are going to put in once they put in the data for apple May June As a bringing information, then they will put the New Year here 2025 2026. It
+Hillary Arinda
+the last quote
+Jerome Nuwabaasa
+will come here actually when I went to visit the I ended up getting into a large discussion with someone and then his boss had to come and say we have information to upload so first. Leave that guy. yeah, but yeah I think so Solomon you will look through it and see how best you can use calendar I think. Because it is also using trademark is also using calendar so you can use calendars.
+So you know what to get it now right?
+Solomon Ariho
+You just be looking for composition of exports composition.
+Jerome Nuwabaasa
+Yeah, you will look for both composition of okay. Let me see for Now You mainly need composition of exports because we only using it in manufactured exports and hated exports here are not doing major Analytics of import. And this we need to put it to because it will be import substitution. Maybe we just throw it there also. anyway so Actually what you could do. Is this tab? It should show you manufactured exports and imports and manufactured. Hi hi.
+Solomon Ariho
+Which one?
+Hillary Arinda
+Where are you?
+Jerome Nuwabaasa
+This one should show you.
+Solomon Ariho
+Where is the cast?
+Jerome Nuwabaasa
+how to take exports and inputs and this one should show you manufactured exports and imports so that you compare in terms of the manufactured ones How We Do
+Hillary Arinda
+Hey an aggregation you mean.
+Jerome Nuwabaasa
+No not an aggregation you show the exports and in the imports.
+Hillary Arinda
+I on the same card okay okay.
+Jerome Nuwabaasa
+on the same height
+Hillary Arinda
+So instead of USD 2.4b your show something coming and then something going out like that okay.
+Jerome Nuwabaasa
+exactly exactly Okay so for now. Let's first give soluble time to do this there is Yeah, this gives all maintained to do this. I was supposed to give you an update about the payment. I found out that because you know because the financial year was closing. I thought we had processed the payment to the company that was had for this and I discovered that the payment was not processed the excuse that was given was that solicit generally did not clear the payment.
+So I talk to the commission and he said it's okay. Just do all the other administrative requirements once the appear bring them to me and I'll make sure that within the first portal is payment is made. I don't know how easy that is but either way will find a way to make the payment so either we shall give out a new procurement and still pay it always shall use the old one and paid but either way. We shall we shall process the payment. Um but luckily enough for Solomon he had done some other activity.
+For which at least he was able to receive some payments, so it's I don't know not all bad news.
+Hillary Arinda
+correct
+Jerome Nuwabaasa
+Yeah, I again. I had to really fight with our HR to make sure that the contracts go to pac's office so I know I had said within this week. They should come out but most likely they will come next week, but they are backdated by the way, so they are contracted.
+
+🎯
+Decision
+They are structured to have been issued on the 24th because the idea is you are supposed to begin on first July so as far as we are concerned you've already begun.
+Hillary Arinda
+Okay so with that in mind Jerome how file with the processes man.
+Jerome Nuwabaasa
+I have deliberately taken tomorrow off.
+
+🎯
+Decision
+Hillary Arinda
+perfect
+Jerome Nuwabaasa
+For specifically for that. I am not going to the ministry and so I should be able to focus on it get it out of the way.
+Hillary Arinda
+Okay well now. I say the boys are discussions are ongoing we are still looking
+Jerome Nuwabaasa
+yeah
+Hillary Arinda
+in on the designs and technologies to use that's where that's the first we are all right. Yeah, so it's Like we had butts is what we are still chatting out once we get cleared for be good so now you're saying.
+Jerome Nuwabaasa
+And please remember the principle is we designed something from beginning to end, then we shall have a discussion with the guys of mesh for water and see which adjustments we need to do where you know because they alternative would
+Hillary Arinda
+Okay yes, yes that is true.
+Jerome Nuwabaasa
+have been to say let's simply start from whereas what I supposed to stop but I feel like if you try to design like that. You don't have a whole picture.
+Hillary Arinda
+I get you. So good point so now. Do we still need to meet them on Sunday or I continue with discussions on our
+Jerome Nuwabaasa
+No, I don't think we'll meet on Sunday actually continuing with it even when I
+Hillary Arinda
+side? Yeah?
+Jerome Nuwabaasa
+develop so I think again after thinking about it. I can really show you meetings with me if there is something you need me to address all there is an opportunity. You need to give for a decision to be taken.
+Hillary Arinda
+all right
+Jerome Nuwabaasa
+Yeah, so I will either request for a meeting if I want to push something but right now. I think I will limit the meetings to you. And then we shall let it flow like that. We will have general meetings when it is necessary.
+Hillary Arinda
+perfect
+Jerome Nuwabaasa
+okay
+Hillary Arinda
+Yeah, I think we still need minutes for this meetings at 0, but I don't think of an action point so you don't expect the other action point from this.
+Jerome Nuwabaasa
+No, I know I don't have an option going from this.
+Hillary Arinda
+So everything goes to Solomon I guess.
+Jerome Nuwabaasa
+yeah
+Hillary Arinda
+okay Hi, so give me like 15 minutes.
+Jerome Nuwabaasa
+Okay all right guys.
+Hillary Arinda
+Hey, wait, wait so low.
+Solomon Ariho
+Yes.
+Hillary Arinda
+So we had discussion the other day, but maybe this is not the right time did finally since we are still developing. There's no point to discuss why no deployment so it's okay, let's continue developing we'll go into that stagulator and the system mature.
+Jerome Nuwabaasa
+Okay, so low one more thing I see you've done some work when I click here. I see you both. But I don't.
+Solomon Ariho
+I had started yesterday that I didn't. I didn't I didn't say I didn't do nothing but I didn't do much.
+Jerome Nuwabaasa
+See you boss. All I see is you boss and I don't see.
+Solomon Ariho
+I will go in and rectify.
+Jerome Nuwabaasa
+Okay perfect okay okay, thank you.
+Solomon Ariho
+It's supposed to be picking the data from the database, but I think that not yet gone there or something.
+Jerome Nuwabaasa
+to the database
+Hillary Arinda
+okay
+Solomon Ariho
+Hmm. So the link is there but I think it's not seeing any data in the database.
+Jerome Nuwabaasa
+okay okay
+Solomon Ariho
+yeah
+Jerome Nuwabaasa
+all right
+Solomon Ariho
+all right
+Jerome Nuwabaasa
+Okay, thank you.
+Hillary Arinda
+Sure, bye hey we didn't pray guys. Let's have a question yeah causing crazy.
+Jerome Nuwabaasa
+I know yeah.
+Hillary Arinda
+solemongrassaba
+Solomon Ariho
+Thank you for today one. Thank you for everything we've discussed. I want you for every project and I'm going to every project where handling my everything we
+
+✅
+Action Item
+
+
+🎯
+
+✅
+
+❓
+
+💡
+
+
+
+do before the glory of your name as we break off. Let everyone have good rest and wake up energized that we can. How much is projects and let everything will do we do before the glory of your name Jesus team?
+Jerome Nuwabaasa
+amen
+Hillary Arinda
+Okay you have my you have okay.

@@ -10,7 +10,17 @@ The shared work queue, by owner. Jerome's feedback that needs a code change land
 section; data corrections go through the pipeline (Ask MIDD / re-ingestion), not here. Any agent
 reads this to know what to work on next. Tick items as they land.
 
-Last updated: 2026-06-24 (Solomon's dashboard-review queue landed — see notes)
+Last updated: 2026-07-03 (2026-07-03 meeting queue landed — Solomon only)
+
+## Solomon (from the 2026-07-03 meeting — data sources + manufactured-exports card)
+
+- [ ] Clear yesterday's backlog first (the work agreed last session that was not done).
+- [ ] Fix the dashboard so it actually reads from the database: the card shows the UBOS section but no data comes through (link present, but it is not seeing data in the DB). Values must render from PocketBase.
+- [ ] Download the UBOS composition-of-exports Excel (UBOS site, Statistics, External Trade, composition of exports, 1996 to March 2026). Use **calendar** year (matches TradeMap). Also grab composition of imports. Jerome will share the exact location.
+- [ ] Upload that Excel through the pipeline (staging upload, Ask MIDD, Apply to Production). Doubles as an end-to-end pipeline test.
+- [ ] Manufactured-exports + high-tech-exports indicators: use **UBOS aggregated** data = SITC sections 5, 6, 7, 8 **excluding 68** (non-ferrous metals). Keep the granular **HS-code TradeMap** data for the per-value-chain product breakdowns.
+- [ ] Manufactured exports + imports on the **same card** (inflow vs outflow, for the import-substitution story), not a single aggregate number.
+- [ ] On update, **never overwrite or delete** existing data: retain all years in the backend, group by year, display the latest but allow year selection + a trend view.
 
 ## Solomon (from the 2026-07-01 meeting — minister is data-driven; interactive demo due Monday)
 
