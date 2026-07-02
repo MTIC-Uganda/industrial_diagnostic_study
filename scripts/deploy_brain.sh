@@ -16,8 +16,12 @@ for f in $FILES; do cp "$BRAIN/repo/midd-brain/$f" "$BRAIN/$f"; done
 # app.py imports these modules but only touches pandas/sklearn lazily, so if the
 # install fails the brain still boots and the analytics path degrades to a normal answer.
 PIP="$BRAIN/venv/bin/pip"; [ -x "$PIP" ] || PIP="pip3"
+REQ="$BRAIN/repo/midd-brain/requirements.txt"
 echo "[deploy-brain] installing analytics deps with $PIP (best-effort)..."
-"$PIP" install -q -r "$BRAIN/repo/midd-brain/requirements.txt" \
+# Try a normal install; on an externally-managed system python (PEP 668) retry with
+# --break-system-packages (the brain runs on system python here, same as fastapi).
+"$PIP" install -q -r "$REQ" \
+  || "$PIP" install -q --break-system-packages -r "$REQ" \
   || echo "[deploy-brain] warning: analytics deps not installed — analytics will no-op until installed"
 
 echo "[deploy-brain] restarting STAGING brain (:8220)..."
