@@ -1,5 +1,11 @@
 # MIDD — Task Queue
 
+> **STANDARDS (enforced by CI — see CLAUDE.md "NON-NEGOTIABLE STANDARDS"):**
+> 1. **PocketBase is the only data source (ADR-017).** Change data IN PocketBase (Ask MIDD / admin), never in `data/dashboard/*` (those are a PB backup mirror). Generators reading a file = CI fails.
+> 2. **Tests required, >90% coverage on changed code (ADR-018).** `pytest` + `diff-cover` gate the build. Write code importable so it's testable.
+> 3. **ADR change ⇒ update `docs/architecture.dsl` in the same commit.**
+> These fail the build if broken — you cannot merge around them.
+
 The shared work queue, by owner. Jerome's feedback that needs a code change lands in Solomon's
 section; data corrections go through the pipeline (Ask MIDD / re-ingestion), not here. Any agent
 reads this to know what to work on next. Tick items as they land.

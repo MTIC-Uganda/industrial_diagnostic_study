@@ -1,5 +1,30 @@
 # Industrial Diagnostic Study — CLAUDE.md
 
+## NON-NEGOTIABLE STANDARDS (read first — enforced by CI, not just convention)
+
+These are enforced by `.github/workflows/deploy.yml` + `.githooks/pre-commit`. A
+violation FAILS the build, which blocks the deploy and the auto-merge. You cannot
+merge around them.
+
+1. **PocketBase is the ONLY data source (ADR-017).** The dashboard/explorer generators
+   read solely from PocketBase and hard-fail otherwise — there is NO CSV/JSON fallback.
+   - To change dashboard data, change it **in PocketBase** (via Ask MIDD correction, or
+     the admin UI), **never** by editing files. The `data/dashboard/*.csv|json` files are
+     a git-tracked **backup mirror** of PocketBase (the scheduled Drift Check syncs
+     PB → files), NOT a source. Do not seed from them, do not read them at runtime.
+   - `scripts/check_single_source.sh` runs in CI (first build step) + pre-commit and
+     fails if any generator reads a file or loses its guard. Do not try to add a fallback.
+2. **Tests are mandatory (ADR-018).** Every change to a generator / agent / pipeline
+   script ships with unit + integration tests; **new/changed code needs >90% coverage**.
+   `pytest` runs in CI before anything deploys; a failing test fails the build. Write
+   code **importable** (logic in functions, side effects behind `if __name__ == "__main__":`)
+   so it is unit-testable.
+3. **Docs move with the code.** An ADR change requires the matching `docs/architecture.dsl`
+   update in the same commit (pre-commit + CI enforce it).
+
+If a rule seems to block something legitimate, fix the design or ask Hillary — do not
+disable the guard.
+
 ## What This Project Is
 
 The MTIC Industrial Diagnostic Study for Uganda's Ministry of Trade, Industry

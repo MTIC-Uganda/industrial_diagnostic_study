@@ -294,13 +294,16 @@ jobs:
         with:
           python-version: "3.11"
 
-      # Tests gate the build (ADR-018): unit + integration tests must pass before
-      # anything is generated or deployed. Coverage on new/changed code is ratcheting
-      # toward >90% as the scripts are refactored into importable, testable units.
-      - name: Run tests (pytest)
+      # Tests gate the build (ADR-018): tests must pass, AND changed code must be
+      # >90% covered (diff-cover vs origin/main) before anything deploys. This is the
+      # enforcement — new/changed pipeline code without tests fails the build.
+      - name: Run tests + coverage gate on changed code (ADR-018)
         run: |
           pip install -r requirements-dev.txt
-          python -m pytest -q
+          python -m pytest -q --cov=scripts --cov=db --cov=agents --cov=uploader --cov=midd-brain --cov-report=xml
+          git fetch --no-tags --depth=1 origin main || true
+          # Fail if <90% of the lines changed in this push are covered by tests.
+          diff-cover coverage.xml --compare-branch=origin/main --fail-under=90
 
       - name: Generate dashboard from data files
         env:
