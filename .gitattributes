@@ -1,0 +1,13 @@
+# Force consistent LF line endings in the repo for text files that are
+# written by CI scripts on Linux and read back by git on Windows (where
+# autocrlf=true would otherwise cause spurious all-lines-changed diffs).
+# Without this, Python's csv module writes CRLF, git normalises to LF on
+# commit from Windows, and the CI-side comparison always shows every CSV
+# line as changed even with no real data difference.
+
+data/dashboard/*.csv      text eol=lf
+data/dashboard/**/*.csv   text eol=lf
+data/dashboard/**/*.json  text eol=lf
+
+# General best practice for everything else
+*                         text=auto

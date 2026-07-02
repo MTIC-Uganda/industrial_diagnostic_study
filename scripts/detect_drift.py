@@ -64,8 +64,11 @@ def pb_get(collection, sort=None):
     return items
 
 def write_csv(path, fieldnames, rows):
+    # lineterminator='\n' forces LF: csv module defaults to CRLF (\r\n),
+    # which differs from the LF git stores (autocrlf normalises CRLF→LF on
+    # commit), triggering spurious drift on every run even with no real change.
     with open(path, 'w', newline='', encoding='utf-8') as f:
-        w = csv.DictWriter(f, fieldnames=fieldnames)
+        w = csv.DictWriter(f, fieldnames=fieldnames, lineterminator='\n')
         w.writeheader()
         for r in rows:
             w.writerow({k: r.get(k, '') for k in fieldnames})

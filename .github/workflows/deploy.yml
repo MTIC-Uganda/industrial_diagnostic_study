@@ -47,8 +47,9 @@ env:
   MAX_HEAL_ATTEMPTS:  3
 
 permissions:
-  contents: write
-  actions:  write
+  contents:      write
+  actions:       write
+  pull-requests: write   # needed by the drift-check job to open review PRs
 
 jobs:
   # ── A. Ingestion Agent (only when uploads change) ─────────────────────────
