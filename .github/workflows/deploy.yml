@@ -557,6 +557,54 @@ jobs:
           gh workflow run deploy.yml --ref main -f reseed_followup=true
           echo "::notice::Dispatched a rebuild on main to pick up freshly-seeded PocketBase data"
 
+  # ── Deploy the Ask MIDD brain (staging → verify → prod), when its code changes ──
+  # Brings the brain into staging-first (ADR-019) instead of a hand-run script. Runs
+  # only on main when midd-brain/ changed, after the build+tests pass. The script does
+  # the gate: restart staging brain -> verify -> only then restart prod. Staging
+  # failure fails this job -> prod untouched -> workflow_run failure pings the group.
+  deploy-brain:
+    name: Deploy Brain (staging → prod)
+    runs-on: ubuntu-latest
+    needs: build
+    if: |
+      github.ref == 'refs/heads/main' && (
+        contains(toJson(github.event.commits.*.modified), 'midd-brain/') ||
+        contains(toJson(github.event.commits.*.added), 'midd-brain/')
+      )
+    steps:
+      - name: Set up SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.HETZNER_SSH_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H $HETZNER_HOST >> ~/.ssh/known_hosts
+      - name: Deploy brain staging → verify → prod
+        run: |
+          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no $HETZNER_USER@$HETZNER_HOST \
+            'export HOME=/root && cd /opt/midd-brain/repo && git checkout -f main -q && git pull --ff-only -q && bash scripts/deploy_brain.sh'
+
+  # ── Deploy the uploader (staging → verify → prod), when its code changes ────────
+  deploy-uploader:
+    name: Deploy Uploader (staging → prod)
+    runs-on: ubuntu-latest
+    needs: build
+    if: |
+      github.ref == 'refs/heads/main' && (
+        contains(toJson(github.event.commits.*.modified), 'uploader/') ||
+        contains(toJson(github.event.commits.*.added), 'uploader/')
+      )
+    steps:
+      - name: Set up SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.HETZNER_SSH_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H $HETZNER_HOST >> ~/.ssh/known_hosts
+      - name: Deploy uploader staging → verify → prod
+        run: |
+          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no $HETZNER_USER@$HETZNER_HOST \
+            'export HOME=/root && cd /opt/mtic-uploader/repo && git checkout -f main -q && git pull --ff-only -q && bash scripts/deploy_uploader.sh'
+
   # ── 5. Drift Check (scheduled — every 6h) ───────────────────────────────────
   # Per ADR-011, every PocketBase write is supposed to go through
   # data/dashboard/*.csv -> db/pb_setup.py, never a direct PocketBase admin-UI
