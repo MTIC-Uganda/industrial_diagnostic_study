@@ -1,49 +1,61 @@
 #!/usr/bin/env python3
 """
-Generate app/explorer/src/data/ironSteel.js from PocketBase + data/dashboard/explorer/*.
+Generate app/explorer/src/data/ironSteel.js from PocketBase (ADR-017).
 
-2026-06-30 dashboard data-source audit: this file used to be hand-written,
-hardcoded JS -- the one part of the whole platform with no PocketBase path
-at all. From now on PocketBase (explorer_products, explorer_categories,
+PocketBase is the ONLY source (explorer_products, explorer_categories,
 explorer_trade_hs4, explorer_raw_material_trade, explorer_phase_producers,
-explorer_product_firms, explorer_input_keywords -- see db/pb_setup_explorer.py)
-is the canonical source, and this script regenerates the JS data file the
-Explorer's vite build bundles, the same way scripts/generate_dashboard.py
-regenerates the main dashboard from PocketBase.
+explorer_product_firms, explorer_input_keywords — see db/pb_setup_explorer.py).
+There is no file fallback. This script regenerates the JS data file the Explorer's
+vite build bundles, the same way scripts/generate_dashboard.py regenerates the main
+dashboard from PocketBase.
 
-Data source (auto-detected):
-  - If PB_URL is set  -> fetch from PocketBase (CI / prod)
-  - Otherwise         -> fall back to data/dashboard/explorer/*.json|csv
+Structured for testability (ADR-018): all logic is in pure/importable functions;
+the only side effects (PocketBase fetch, file write) run under main().
 
-Usage:
-    python scripts/generate_explorer_data.py
-
-Output:
-    app/explorer/src/data/ironSteel.js
+Usage:  PB_URL=... python scripts/generate_explorer_data.py
+Output: app/explorer/src/data/ironSteel.js
 """
 
-import csv, json, os, sys, urllib.request, urllib.error, urllib.parse
+import json
+import os
+import sys
+import urllib.request
+import urllib.error
+import urllib.parse
 from pathlib import Path
 
-ROOT   = Path(__file__).resolve().parent.parent
-DATA   = ROOT / 'data' / 'dashboard' / 'explorer'
+ROOT = Path(__file__).resolve().parent.parent
 OUTPUT = ROOT / 'app' / 'explorer' / 'src' / 'data' / 'ironSteel.js'
 
-PB_URL = os.environ.get('PB_URL', '').rstrip('/')
-USE_POCKETBASE = bool(PB_URL)
+# logical key -> (PocketBase collection, sort)
+COLLECTIONS = {
+    'products':        ('explorer_products', 'display_order'),
+    'categories':      ('explorer_categories', 'display_order'),
+    'trade_hs4':       ('explorer_trade_hs4', 'display_order'),
+    'raw_material':    ('explorer_raw_material_trade', 'display_order'),
+    'phase_producers': ('explorer_phase_producers', 'display_order'),
+    'product_firms':   ('explorer_product_firms', 'display_order'),
+    'input_keywords':  ('explorer_input_keywords', 'display_order'),
+}
 
-# SINGLE SOURCE OF TRUTH (ADR-017): explorer data is built ONLY from PocketBase.
-# No CSV/JSON fallback. Fail loudly if PB_URL is unset.
-if not USE_POCKETBASE:
-    sys.exit('SINGLE SOURCE (ADR-017): PB_URL is required — explorer data comes only '
-             'from PocketBase; there is no file fallback.')
 
-# ── Data loading ──────────────────────────────────────────────────────────────
+# ── SINGLE SOURCE guards (ADR-017): no file fallback ──────────────────────────
+def load_csv(name):
+    sys.exit(f'SINGLE SOURCE VIOLATION (ADR-017): tried to read {name} from disk. '
+             f'Explorer data must live in PocketBase; there is no file fallback.')
 
-def pb_get(collection, sort=None):
+
+def load_json(name):
+    sys.exit(f'SINGLE SOURCE VIOLATION (ADR-017): tried to read {name} from disk. '
+             f'Explorer data must live in PocketBase; there is no file fallback.')
+
+
+# ── PocketBase fetch ──────────────────────────────────────────────────────────
+def pb_get(pb_url, collection, sort=None):
+    """Fetch all records from a PocketBase collection, paginating. None on error."""
     items, page = [], 1
     while True:
-        url = f'{PB_URL}/api/collections/{collection}/records?perPage=500&page={page}'
+        url = f'{pb_url}/api/collections/{collection}/records?perPage=500&page={page}'
         if sort:
             url += f'&sort={urllib.parse.quote(sort)}'
         try:
@@ -58,107 +70,119 @@ def pb_get(collection, sort=None):
         page += 1
     return items
 
-def load_csv(name):
-    # SINGLE SOURCE guard (ADR-017): no file fallback. See generate_dashboard.py.
-    sys.exit(f'SINGLE SOURCE VIOLATION (ADR-017): tried to read {name} from disk. '
-             f'Explorer data must live in PocketBase; there is no file fallback.')
 
-def load_json(name):
-    # SINGLE SOURCE guard (ADR-017): no file fallback.
-    sys.exit(f'SINGLE SOURCE VIOLATION (ADR-017): tried to read {name} from disk. '
-             f'Explorer data must live in PocketBase; there is no file fallback.')
+def fetch_all(pb_url):
+    """Fetch every explorer collection -> {logical_key: [rows] | None}."""
+    return {key: pb_get(pb_url, coll, sort) for key, (coll, sort) in COLLECTIONS.items()}
 
-def _pb_or_local(collection, sort, local_loader):
-    rows = pb_get(collection, sort=sort) if USE_POCKETBASE else None
-    if rows:
-        return rows
-    if USE_POCKETBASE:
-        print(f'  (no {collection} data in PocketBase yet — using local fallback)')
-    return local_loader()
 
-products_rows       = _pb_or_local('explorer_products', 'display_order', lambda: load_json('products.json'))
-categories_rows      = _pb_or_local('explorer_categories', 'display_order', lambda: load_json('categories.json'))
-trade_hs4_rows        = _pb_or_local('explorer_trade_hs4', 'display_order', lambda: load_csv('trade_hs4.csv'))
-raw_material_rows     = _pb_or_local('explorer_raw_material_trade', 'display_order', lambda: load_csv('raw_material_trade.csv'))
-phase_producers_rows  = _pb_or_local('explorer_phase_producers', 'display_order', lambda: load_json('phase_producers.json'))
-product_firms_rows    = _pb_or_local('explorer_product_firms', 'display_order', lambda: load_json('product_firms.json'))
-input_keywords_rows   = _pb_or_local('explorer_input_keywords', 'display_order', lambda: load_json('input_keywords.json'))
+# ── Pure reshape (unit-tested) ────────────────────────────────────────────────
+def _maybe_json(value, default=None):
+    """A PocketBase json field arrives as a python value or a JSON string; normalise."""
+    if isinstance(value, str):
+        return json.loads(value) if value else default
+    return value
 
-if not products_rows:
-    sys.exit('ERROR: no explorer_products data available (PocketBase empty/unreachable and no local fallback found).')
 
-# ── Reshape into the JS module's data shapes ───────────────────────────────────
+def build_products(rows):
+    out = {}
+    for r in rows or []:
+        out[r['slug']] = {
+            'id': r['slug'], 'name': r['name'], 'category': r['category'],
+            'color': r['color'], 'description': r['description'],
+            'chains': _maybe_json(r['chains']),
+        }
+    return out
 
-PRODUCTS = {}
-for r in products_rows:
-    chains = r['chains']
-    if isinstance(chains, str):
-        chains = json.loads(chains)
-    PRODUCTS[r['slug']] = {
-        'id': r['slug'], 'name': r['name'], 'category': r['category'],
-        'color': r['color'], 'description': r['description'], 'chains': chains,
-    }
 
-CATEGORIES = []
-for r in categories_rows:
-    products = r['products']
-    if isinstance(products, str):
-        products = json.loads(products)
-    CATEGORIES.append({'name': r['name'], 'color': r['color'], 'products': products})
+def build_categories(rows):
+    return [
+        {'name': r['name'], 'color': r['color'], 'products': _maybe_json(r['products'])}
+        for r in rows or []
+    ]
 
-TRADE_HS4 = {}
-for r in trade_hs4_rows:
-    TRADE_HS4[r['hs4_code']] = {
+
+def _trade_block(r):
+    return {
         'desc': r['desc'], 'year': int(float(r['year'])),
         'imports': {'uganda': float(r['imports_uganda']), 'eac': float(r['imports_eac'])},
         'exports': {'uganda': float(r['exports_uganda']), 'eac': float(r['exports_eac'])},
     }
 
-PRODUCT_HS4 = {r['slug']: r['hs4_code'] for r in products_rows if r.get('hs4_code')}
 
-RAW_MATERIAL_TRADE = {}
-RAW_MATERIAL_PHASE = {}
-for r in raw_material_rows:
-    RAW_MATERIAL_TRADE[r['item_name']] = {
-        'desc': r['desc'], 'year': int(float(r['year'])),
-        'imports': {'uganda': float(r['imports_uganda']), 'eac': float(r['imports_eac'])},
-        'exports': {'uganda': float(r['exports_uganda']), 'eac': float(r['exports_eac'])},
+def build_trade_hs4(rows):
+    return {r['hs4_code']: _trade_block(r) for r in rows or []}
+
+
+def build_product_hs4(product_rows):
+    return {r['slug']: r['hs4_code'] for r in product_rows or [] if r.get('hs4_code')}
+
+
+def build_raw_material(rows):
+    trade, phase = {}, {}
+    for r in rows or []:
+        trade[r['item_name']] = _trade_block(r)
+        if r.get('phase'):
+            phase[r['item_name']] = r['phase']
+    return trade, phase
+
+
+def build_phase_producers(rows):
+    producers, source = {}, ''
+    for r in rows or []:
+        producers[r['phase']] = {
+            'count': int(float(r['count'])), 'label': r['label'],
+            'examples': _maybe_json(r['examples']),
+        }
+        source = r.get('source') or source
+    return producers, source
+
+
+def build_product_firms(rows):
+    out = {}
+    for r in rows or []:
+        firms = _maybe_json(r['firms'], []) or []
+        phase_context = _maybe_json(r.get('phase_context'), None)
+        entry = {'status': r['status'], 'firms': firms, 'note': r.get('note') or ''}
+        if phase_context:
+            entry['phaseContext'] = phase_context
+        out[r['product_slug']] = entry
+    return out
+
+
+def build_input_keywords(rows):
+    hs4, phase = [], []
+    for r in rows or []:
+        row = {'source': r['pattern_source'], 'flags': r['pattern_flags'], 'value': r['target_value']}
+        (hs4 if r['target_type'] == 'hs4' else phase).append(row)
+    return hs4, phase
+
+
+def build_all(raw):
+    """Turn raw PocketBase rows into every shape the JS module needs."""
+    rm_trade, rm_phase = build_raw_material(raw['raw_material'])
+    phase_producers, phase_source = build_phase_producers(raw['phase_producers'])
+    kw_hs4, kw_phase = build_input_keywords(raw['input_keywords'])
+    return {
+        'PRODUCTS': build_products(raw['products']),
+        'CATEGORIES': build_categories(raw['categories']),
+        'TRADE_HS4': build_trade_hs4(raw['trade_hs4']),
+        'PRODUCT_HS4': build_product_hs4(raw['products']),
+        'RAW_MATERIAL_TRADE': rm_trade,
+        'RAW_MATERIAL_PHASE': rm_phase,
+        'PHASE_PRODUCERS': phase_producers,
+        'PHASE_SOURCE': phase_source,
+        'PRODUCT_FIRMS': build_product_firms(raw['product_firms']),
+        'INPUT_KEYWORD_HS4': kw_hs4,
+        'INPUT_KEYWORD_PHASE': kw_phase,
     }
-    if r.get('phase'):
-        RAW_MATERIAL_PHASE[r['item_name']] = r['phase']
 
-PHASE_PRODUCERS = {}
-PHASE_SOURCE = ''
-for r in phase_producers_rows:
-    examples = r['examples']
-    if isinstance(examples, str):
-        examples = json.loads(examples)
-    PHASE_PRODUCERS[r['phase']] = {'count': int(float(r['count'])), 'label': r['label'], 'examples': examples}
-    PHASE_SOURCE = r.get('source') or PHASE_SOURCE
 
-PRODUCT_FIRMS = {}
-for r in product_firms_rows:
-    firms = r['firms']
-    if isinstance(firms, str):
-        firms = json.loads(firms) if firms else []
-    phase_context = r.get('phase_context')
-    if isinstance(phase_context, str):
-        phase_context = json.loads(phase_context) if phase_context else None
-    entry = {'status': r['status'], 'firms': firms, 'note': r.get('note') or ''}
-    if phase_context:
-        entry['phaseContext'] = phase_context
-    PRODUCT_FIRMS[r['product_slug']] = entry
-
-INPUT_KEYWORD_HS4, INPUT_KEYWORD_PHASE = [], []
-for r in input_keywords_rows:
-    row = {'source': r['pattern_source'], 'flags': r['pattern_flags'], 'value': r['target_value']}
-    (INPUT_KEYWORD_HS4 if r['target_type'] == 'hs4' else INPUT_KEYWORD_PHASE).append(row)
-
-# ── Emit JS ──────────────────────────────────────────────────────────────────
-
+# ── JS emit ───────────────────────────────────────────────────────────────────
 def js_obj(value):
     """json.dumps output is valid JS object/array literal syntax."""
     return json.dumps(value, indent=2, ensure_ascii=False)
+
 
 def js_regex_array(rows, target_key):
     lines = ['[']
@@ -167,34 +191,34 @@ def js_regex_array(rows, target_key):
     lines.append(']')
     return '\n'.join(lines)
 
-out = f'''// GENERATED FILE — do not hand-edit. Regenerate with:
+
+def render_js(d):
+    """Render the whole ironSteel.js module from the built data dict."""
+    return f'''// GENERATED FILE — do not hand-edit. Regenerate with:
 //   python scripts/generate_explorer_data.py
-// Source of truth: PocketBase (explorer_products, explorer_categories,
-// explorer_trade_hs4, explorer_raw_material_trade, explorer_phase_producers,
-// explorer_product_firms, explorer_input_keywords — see db/pb_setup_explorer.py).
-// Local fallback: data/dashboard/explorer/*.
+// Source of truth: PocketBase (explorer_* collections — see db/pb_setup_explorer.py).
 
-const PRODUCTS = {js_obj(PRODUCTS)};
+const PRODUCTS = {js_obj(d['PRODUCTS'])};
 
-const CATEGORIES = {js_obj(CATEGORIES)};
+const CATEGORIES = {js_obj(d['CATEGORIES'])};
 
-const TRADE_HS4 = {js_obj(TRADE_HS4)};
+const TRADE_HS4 = {js_obj(d['TRADE_HS4'])};
 
-const PRODUCT_HS4 = {js_obj(PRODUCT_HS4)};
+const PRODUCT_HS4 = {js_obj(d['PRODUCT_HS4'])};
 
-const RAW_MATERIAL_TRADE = {js_obj(RAW_MATERIAL_TRADE)};
+const RAW_MATERIAL_TRADE = {js_obj(d['RAW_MATERIAL_TRADE'])};
 
-const RAW_MATERIAL_PHASE = {js_obj(RAW_MATERIAL_PHASE)};
+const RAW_MATERIAL_PHASE = {js_obj(d['RAW_MATERIAL_PHASE'])};
 
-const PHASE_PRODUCERS = {js_obj(PHASE_PRODUCERS)};
+const PHASE_PRODUCERS = {js_obj(d['PHASE_PRODUCERS'])};
 
-const PHASE_SOURCE = {json.dumps(PHASE_SOURCE)};
+const PHASE_SOURCE = {json.dumps(d['PHASE_SOURCE'])};
 
-const PRODUCT_FIRMS = {js_obj(PRODUCT_FIRMS)};
+const PRODUCT_FIRMS = {js_obj(d['PRODUCT_FIRMS'])};
 
 // Keyword -> HS-4 group, for matching free-text "Inputs" tab line items
 // to the same trade data used for raw materials and products above.
-const INPUT_KEYWORD_HS4 = {js_regex_array(INPUT_KEYWORD_HS4, 'hs4')};
+const INPUT_KEYWORD_HS4 = {js_regex_array(d['INPUT_KEYWORD_HS4'], 'hs4')};
 
 function matchInputTrade(text) {{
   const hit = INPUT_KEYWORD_HS4.find((k) => k.pattern.test(text));
@@ -202,7 +226,7 @@ function matchInputTrade(text) {{
 }}
 
 // Keyword -> verified Phase, for the same free-text "Inputs" line items.
-const INPUT_KEYWORD_PHASE = {js_regex_array(INPUT_KEYWORD_PHASE, 'phase')};
+const INPUT_KEYWORD_PHASE = {js_regex_array(d['INPUT_KEYWORD_PHASE'], 'phase')};
 
 function matchInputPhase(text) {{
   const hit = INPUT_KEYWORD_PHASE.find((k) => k.pattern.test(text));
@@ -212,10 +236,23 @@ function matchInputPhase(text) {{
 export {{ PRODUCTS, CATEGORIES, TRADE_HS4, PRODUCT_HS4, RAW_MATERIAL_TRADE, matchInputTrade, matchInputPhase, PRODUCT_FIRMS, PHASE_PRODUCERS, PHASE_SOURCE, RAW_MATERIAL_PHASE }};
 '''
 
-if USE_POCKETBASE:
-    print(f'Data source: PocketBase ({PB_URL})')
-else:
-    print('Data source: local files (data/dashboard/explorer/)')
 
-OUTPUT.write_text(out, 'utf-8')
-print(f'Generated {OUTPUT}  ({len(out):,} bytes, {len(PRODUCTS)} products)')
+# ── main (the only side effects) ──────────────────────────────────────────────
+def main(pb_url=None, out=OUTPUT, fetcher=fetch_all):
+    pb_url = pb_url if pb_url is not None else os.environ.get('PB_URL', '').rstrip('/')
+    if not pb_url:
+        sys.exit('SINGLE SOURCE (ADR-017): PB_URL is required — explorer data comes only '
+                 'from PocketBase; there is no file fallback.')
+    raw = fetcher(pb_url)
+    if not raw.get('products'):
+        sys.exit('ERROR: no explorer_products data in PocketBase (empty or unreachable).')
+    built = build_all(raw)
+    js = render_js(built)
+    Path(out).write_text(js, 'utf-8')
+    print(f'Data source: PocketBase ({pb_url})')
+    print(f'Generated {out}  ({len(js):,} bytes, {len(built["PRODUCTS"])} products)')
+    return js
+
+
+if __name__ == '__main__':
+    main()
