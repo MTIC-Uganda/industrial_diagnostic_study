@@ -1,8 +1,10 @@
 #!/bin/bash
 # ── SINGLE SOURCE OF TRUTH guard (ADR-017) ────────────────────────────────────
-# The dashboard + explorer are built ONLY from PocketBase. No committed-file data
-# source, no fallback. This runs in CI (blocking the build/merge) and as a
-# pre-commit hook, so NO agent — Solomon's, Hillary's, or any other — can quietly
+# The dashboard + explorer are built ONLY from PocketBase, with NO file fallback.
+# (The data/dashboard/*.csv|json files are a git-tracked BACKUP mirror of PocketBase,
+# kept in sync PB->files by the scheduled Drift Check — they are downstream of PB,
+# never a source, and the generators must never read them.) This runs in CI
+# (blocking the build/merge) and as a pre-commit hook, so NO agent can quietly
 # reintroduce a file-based data source. Exit non-zero on any violation.
 set -u
 ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
@@ -25,15 +27,9 @@ if grep -nE "csv\.DictReader|json\.loads\(\(DATA|open\(\s*DATA|DATA / name" $GEN
   echo "FAIL: a generator reads a data file directly — data must come from PocketBase"; fail=1
 fi
 
-# 3. No NEW committed data files under data/dashboard/ (the duplication surface).
-BASE="$(git merge-base HEAD origin/main 2>/dev/null || echo '')"
-if [ -n "$BASE" ]; then
-  ADDED="$(git diff --diff-filter=A --name-only "$BASE" HEAD 2>/dev/null | grep -E '^data/dashboard/.*\.(csv|json)$' || true)"
-  if [ -n "$ADDED" ]; then
-    echo "FAIL: new committed data files under data/dashboard/ (single-source bypass):"
-    echo "$ADDED" | sed 's/^/  - /'; fail=1
-  fi
-fi
+# (Note: we do NOT forbid files under data/dashboard/ — they are the PB->files
+# backup mirror maintained by the Drift Check. The real guarantee is that the
+# GENERATORS never read them, enforced by checks 1 and 2 above.)
 
 if [ "$fail" -eq 0 ]; then
   echo "single-source guard: OK (PocketBase is the only data source, ADR-017)"

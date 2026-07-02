@@ -290,6 +290,13 @@ for col in COLLECTIONS:
                 raise
     collection_ids[name] = cid
 
+# SINGLE SOURCE (ADR-017): schema-only in CI. Re-seeding explorer records from the
+# committed files on every deploy would overwrite live PocketBase data. PocketBase
+# is authoritative; the seeding below is BOOTSTRAP-ONLY (run without PB_SCHEMA_ONLY).
+if os.environ.get('PB_SCHEMA_ONLY') == '1':
+    print('\nPB_SCHEMA_ONLY=1 — explorer collections ensured; skipping record seeding (ADR-017).')
+    sys.exit(0)
+
 # ── Helper: upsert by an arbitrary unique field ─────────────────────────────
 
 def find_by_field(collection, field, value):

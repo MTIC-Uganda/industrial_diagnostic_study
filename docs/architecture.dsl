@@ -41,7 +41,7 @@ workspace "MIDD — Manufacturing Industry Diagnostics Dashboard" "As-built 2026
             # ── SHARED RECORD + ROUTING ───────────────────────────────────
             record = container "Shared Record" "The single source of decisions + state all agents read: ADRs (docs/adr), STATUS.md (live snapshot), TASKS.md (per-owner queue), meeting transcripts, CLAUDE.md. Brain reads a read-only clone pulled every 5 min." "Markdown/Git"
             nginx = container "nginx reverse proxy" "Host-routes midd-ug.com subdomains to the local services; self-signed origin cert behind Cloudflare Full." "Nginx"
-            ci = container "GitHub Actions CI" "On push: single-source guard (ADR-017) + pytest (ADR-018) gate the build -> build dashboard (from PocketBase) -> deploy staging -> promote prod -> auto-merge to main -> self-heal. Seed PocketBase job." "YAML"
+            ci = container "GitHub Actions CI" "On push: single-source guard (ADR-017) + pytest (ADR-018) gate the build -> build dashboard (from PocketBase) -> deploy staging -> promote prod -> auto-merge to main -> self-heal. Seed job is SCHEMA-ONLY (PB_SCHEMA_ONLY=1: ensures collections+fields, never re-seeds records, so a deploy can't clobber PocketBase; ADR-017). Drift Check mirrors PB->files as a git backup." "YAML"
         }
 
         # ── People -> doors ───────────────────────────────────────────────

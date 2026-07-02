@@ -535,6 +535,18 @@ for col in COLLECTIONS:
         # same as before this migration step existed at all.
         print(f'  WARNING: could not add missing field(s) to {name}: {e}')
 
+# ── SINGLE SOURCE (ADR-017): schema-only mode ─────────────────────────────────
+# Collections + any missing fields are now ensured. In CI (PB_SCHEMA_ONLY=1) we
+# STOP here. Re-seeding records from the committed CSVs on every deploy would
+# OVERWRITE live PocketBase data — including corrections Jerome makes via Ask MIDD.
+# PocketBase is the source of truth; the CSV seeding below is BOOTSTRAP-ONLY, for a
+# manual first seed of an empty PB (run this script WITHOUT PB_SCHEMA_ONLY). CI
+# never re-seeds curated data, so it can never clobber PocketBase.
+if os.environ.get('PB_SCHEMA_ONLY') == '1':
+    print('\nPB_SCHEMA_ONLY=1 — collections + fields ensured; skipping record seeding '
+          '(PocketBase is authoritative, ADR-017).')
+    sys.exit(0)
+
 # ── Helper: upsert by slug field ──────────────────────────────────────────────
 
 def find_by_slug(collection, slug):

@@ -22,7 +22,15 @@ ADR-011 said PocketBase is the single source of truth, but it was a *document an
 
 **Better:** the dashboard/explorer can only render from PocketBase; if data is missing the build fails visibly instead of showing stale file data; the recurring bypass is structurally prevented, not just documented.
 
-**Worse / watch for:** the build now hard-depends on PocketBase being up and seeded — that is intended (surfaces gaps immediately), and both env PBs are verified populated. Two follow-ups remain to reach *pure* single-source (tracked, not yet done): (a) the CI "Seed PocketBase" job still upserts curated collections from committed CSVs on deploy, which can overwrite PB edits — it must become schema-only; (b) the now-unused committed data files under `data/dashboard/` should be removed once (a) lands. Until then the guard prevents *new* bypasses and the runtime never reads those files.
+**Worse / watch for:** the build now hard-depends on PocketBase being up and seeded — that is intended (surfaces gaps immediately), and both env PBs are verified populated.
+
+**The full data-flow, now single-source and coherent:**
+- **Runtime** (`generate_dashboard`/`generate_explorer`) reads ONLY PocketBase, hard-fails otherwise (this ADR).
+- **CI deploy** runs `db/pb_setup.py` / `db/pb_setup_explorer.py` with `PB_SCHEMA_ONLY=1` — ensures collections + missing fields, but **never re-seeds records**, so a deploy can no longer overwrite live PocketBase data (this closed the last hole: previously the CSVs overwrote PB on every deploy).
+- **`data/dashboard/*.csv|json` are a git-tracked BACKUP mirror of PocketBase**, downstream of it, kept in sync **PB → files** by the scheduled Drift Check (`scripts/detect_drift.py`, opens a PR when PB changes). They are the DR copy + review surface + the bootstrap seed for an empty PB (`pb_setup` run WITHOUT `PB_SCHEMA_ONLY`). They are never a source, and the generators never read them.
+- **DR restore** is `scripts/restore_from_git.py` (files → PB), manual only.
+
+So there is one source (PocketBase); the files are its backup, not a competing source. The guard prevents any generator from reading a file; CI schema-only prevents any deploy from clobbering PB.
 
 ## Testing (ADR-018 to follow)
 Going forward, all new pipeline/generator code ships with unit + integration tests at >90% coverage, gated in CI. The single-source guard itself has a negative test (reintroducing a fallback must fail it).

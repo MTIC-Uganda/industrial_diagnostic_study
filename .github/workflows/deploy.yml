@@ -510,18 +510,24 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Seed PocketBase collections
+      # SCHEMA-ONLY (ADR-017): ensure collections + fields exist, but NEVER re-seed
+      # records from committed CSVs — that would overwrite live PocketBase data
+      # (incl. Ask MIDD corrections). PocketBase is the source of truth. Bootstrap
+      # of an empty PB is a manual run of these scripts WITHOUT PB_SCHEMA_ONLY.
+      - name: Ensure PocketBase schema (no data re-seed)
         env:
           PB_URL: ${{ secrets.PB_URL }}
           PB_ADMIN_EMAIL: ${{ secrets.PB_ADMIN_EMAIL }}
           PB_ADMIN_PASSWORD: ${{ secrets.PB_ADMIN_PASSWORD }}
+          PB_SCHEMA_ONLY: "1"
         run: python db/pb_setup.py
 
-      - name: Seed Value Chain Explorer PocketBase collections
+      - name: Ensure Explorer PocketBase schema (no data re-seed)
         env:
           PB_URL: ${{ secrets.PB_URL }}
           PB_ADMIN_EMAIL: ${{ secrets.PB_ADMIN_EMAIL }}
           PB_ADMIN_PASSWORD: ${{ secrets.PB_ADMIN_PASSWORD }}
+          PB_SCHEMA_ONLY: "1"
         run: python db/pb_setup_explorer.py
 
       - name: Verify seeding
