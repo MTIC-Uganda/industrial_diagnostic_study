@@ -1332,7 +1332,11 @@ function buildRegionDataForFilter(districtDataTable, filterKey){
 
 // Render the grouped-districts view for a cross-filter, and build the legend.
 // Reused by both sector and subsector cross-filters.
-function showCrossFilteredGrouped(wrapId, legendEl, regionData, onDistrictClick){
+// onDistrictClick — fires when a district cell is clicked (cross-filters sector).
+// onRegionClick  — fires when a legend region entry is clicked (drills into
+//                  just that region's districts for the current filter). Pass
+//                  null to keep the legend non-clickable (e.g. leaf views).
+function showCrossFilteredGrouped(wrapId, legendEl, regionData, onDistrictClick, onRegionClick){
   if (!Object.keys(regionData).length){
     document.getElementById(wrapId).innerHTML =
       '<div style="padding:20px;color:var(--muted);font-size:12px">No establishments found for this filter.</div>';
@@ -1342,15 +1346,21 @@ function showCrossFilteredGrouped(wrapId, legendEl, regionData, onDistrictClick)
   const regionTotals = renderGroupedDistrictsSVG(
     wrapId, regionData, TREEMAP_REGION_COLORS, TREEMAP_REGION_ICONS, 6, onDistrictClick
   );
+  const clickable = !!onRegionClick;
   legendEl.innerHTML = Object.entries(regionTotals)
     .sort((a, b) => b[1].count - a[1].count)
     .map(([name, {count, color}]) => {
       const iconClass = TREEMAP_REGION_ICONS[name] || '';
       const icon = iconClass
         ? `<i class="bi ${iconClass}" style="color:${treemapIconColor(color)}"></i>` : '';
-      return `<span class="tl-item"><span class="sw" style="background:${color}">${icon}</span>`
-        + `${name} — ${count.toLocaleString()}</span>`;
+      return `<span class="tl-item" ${clickable ? `style="cursor:pointer" data-region="${name}"` : ''}>`
+        + `<span class="sw" style="background:${color}">${icon}</span>${name} — ${count.toLocaleString()}</span>`;
     }).join('');
+  if (clickable){
+    legendEl.querySelectorAll('.tl-item[data-region]').forEach(el => {
+      el.addEventListener('click', () => onRegionClick(el.dataset.region));
+    });
+  }
 }
 
 function crossFilterRegionBySector(sectorName){
@@ -1361,7 +1371,8 @@ function crossFilterRegionBySector(sectorName){
   const regionData = buildRegionDataForFilter(TREEMAP_DISTRICT_SECTOR_DATA, sectorName);
   const onClick = districtName =>
     crossFilterSectorByMix(districtName, TREEMAP_DISTRICT_SECTOR_DATA[districtName], 'District');
-  showCrossFilteredGrouped('treemap-region-wrap', legendEl, regionData, onClick);
+  const onRegionClick = regionName => crossFilterDistrictBySectorAndRegion(sectorName, regionName);
+  showCrossFilteredGrouped('treemap-region-wrap', legendEl, regionData, onClick, onRegionClick);
 }
 
 function crossFilterDistrictBySectorAndRegion(sectorName, regionName){
@@ -1400,7 +1411,8 @@ function crossFilterRegionBySubsector(subsectorName){
   const regionData = buildRegionDataForFilter(TREEMAP_DISTRICT_SUBSECTOR_DATA, subsectorName);
   const onClick = districtName =>
     crossFilterSectorByMix(districtName, TREEMAP_DISTRICT_SECTOR_DATA[districtName], 'District');
-  showCrossFilteredGrouped('treemap-region-wrap', legendEl, regionData, onClick);
+  const onRegionClick = regionName => crossFilterDistrictBySubsectorAndRegion(subsectorName, regionName);
+  showCrossFilteredGrouped('treemap-region-wrap', legendEl, regionData, onClick, onRegionClick);
 }
 
 function crossFilterDistrictBySubsectorAndRegion(subsectorName, regionName){
