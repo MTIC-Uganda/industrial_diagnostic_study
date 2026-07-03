@@ -121,6 +121,12 @@ def build_public_brief():
               for c in _pb_items("value_chains", "&sort=display_order") if c.get("name")]
     kpis = _pb_items("key_indicators", "&sort=display_order")
     categories = _pb_items("key_indicator_categories", "&sort=indicator_slug,display_order")
+    # 'credit' rows store Shs-trillions in `pct` (not a %), same as the dashboard's credit
+    # donut. Convert to share-of-total so the brief reports a correct percentage.
+    credit = [r for r in categories if r.get("indicator_slug") == "credit"]
+    ctot = sum(float(r.get("pct") or 0) for r in credit) or 1
+    for r in credit:
+        r["pct"] = round(float(r.get("pct") or 0) / ctot * 100)
     macro = _pb_items("macro_trend", "&sort=display_order")
     sector_counts, region_counts = {}, {}
     for r in _pb_items("industries", "&filter=" + urllib.parse.quote('reg_number !~ "FAC-"')):

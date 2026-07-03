@@ -103,7 +103,11 @@ def test_build_public_brief_includes_breakdowns(monkeypatch):
         "key_indicators": [{"label": "Value added", "value": "14.5%"}],
         "key_indicator_categories": [
             {"indicator_slug": "tax", "category": "Manufacturing", "pct": 34,
-             "value_label": "Shs 7.19trn"}],
+             "value_label": "Shs 7.19trn"},
+            {"indicator_slug": "credit", "category": "Real Estate", "pct": 5.0,
+             "value_label": "Shs 5.0trn"},
+            {"indicator_slug": "credit", "category": "Trade", "pct": 15.0,
+             "value_label": "Shs 15trn"}],
         "macro_trend": [{"label": "Mfg growth", "fy2021_value": "3%", "fy2025_value": "6.4%"}],
         "industries": [{"sector_name": "Food", "region": "Central"}],
     }
@@ -113,4 +117,6 @@ def test_build_public_brief_includes_breakdowns(monkeypatch):
     assert "Iron & Steel" in brief
     assert "tax contribution by sector" in brief and "Manufacturing 34%" in brief
     assert "Mfg growth" in brief
+    # credit pct (Shs-trillions) is converted to share-of-total: 5 of 20 -> 25%
+    assert "Real Estate 25%" in brief
     app._brief_cache.update(text="", at=0.0)              # leave cache clean for other tests
