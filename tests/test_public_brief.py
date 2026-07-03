@@ -95,3 +95,50 @@ def test_brief_macro_without_values_dropped():
 def test_brief_macro_only_fy2021():
     out = b.format_public_brief([], [], {}, {}, macro=[{"label": "Old metric", "fy2021_value": "2.0%"}])
     assert "Old metric: 2.0%." in out
+
+
+def test_as_list_variants():
+    assert b._as_list(None) == []
+    assert b._as_list(["a", " b ", ""]) == ["a", "b"]
+    assert b._as_list('["x", "y"]') == ["x", "y"]
+    assert b._as_list("plain") == ["plain"]
+    assert b._as_list("[broken") == ["[broken"]
+    assert b._as_list(5) == ["5"]
+
+
+def test_brief_chain_diagnostics():
+    chains = [{"name": "Textiles", "position_tag": "Net importer", "priority_tag": "Priority 1",
+               "target_2040": "US$1B", "current": ["2 mills running"],
+               "constraints": '["high yarn cost", "old machines"]',
+               "priorities": ["local yarn"], "gap": "no local yarn production"}]
+    out = b.format_public_brief(chains, [], {}, {})
+    assert "position: Net importer" in out and "priority: Priority 1" in out
+    assert "current state: 2 mills running" in out
+    assert "constraints: high yarn cost; old machines" in out
+    assert "priorities: local yarn" in out
+    assert "gap/opportunity: no local yarn production" in out
+
+
+def test_brief_targets_glossary_synergies():
+    out = b.format_public_brief(
+        [], [], {}, {},
+        targets=[{"label": "Mfg GDP", "current_value": "USD 5B", "ndp_value": "USD 10B",
+                  "tenfold_value": "USD 50B"}],
+        glossary=[{"term": "HS Code", "definition": "Harmonised System code"}],
+        synergies=[{"title": "Shared inputs", "description": "steel feeds autos"}])
+    assert "Tenfold growth targets" in out
+    assert "Mfg GDP: USD 5B -> USD 10B -> USD 50B" in out
+    assert "HS Code = Harmonised System code" in out
+    assert "Shared inputs: steel feeds autos" in out
+
+
+def test_brief_risks_exclude_owner_names():
+    out = b.format_public_brief(
+        [], [], {}, {},
+        risks=[{"risk": "Data staleness", "severity": "high",
+                "mitigation": "refresh often", "owner": "Hillary Arinda"}],
+        milestones=[{"year_label": "2025", "value_chain": "Iron & Steel",
+                     "project": "Steel mill", "status": "in_progress"}])
+    assert "Data staleness (severity high); mitigation: refresh often" in out
+    assert "Hillary" not in out                       # owner/person never enters the brief
+    assert "2025 Iron & Steel: Steel mill (in_progress)" in out

@@ -117,7 +117,10 @@ def build_public_brief():
     if _brief_cache["text"] and now - _brief_cache["at"] < BRIEF_TTL:
         return _brief_cache["text"]
     chains = [{"name": c.get("name"), "key_export_2024": c.get("key_export_2024"),
-               "key_import_2024": c.get("key_import_2024"), "target_2040": c.get("target_2040")}
+               "key_import_2024": c.get("key_import_2024"), "target_2040": c.get("target_2040"),
+               "position_tag": c.get("position_tag"), "priority_tag": c.get("priority_tag"),
+               "gap": c.get("map_gap"), "current": c.get("status_current"),
+               "constraints": c.get("status_constraints"), "priorities": c.get("status_priorities")}
               for c in _pb_items("value_chains", "&sort=display_order") if c.get("name")]
     kpis = _pb_items("key_indicators", "&sort=display_order")
     categories = _pb_items("key_indicator_categories", "&sort=indicator_slug,display_order")
@@ -128,6 +131,11 @@ def build_public_brief():
     for r in credit:
         r["pct"] = round(float(r.get("pct") or 0) / ctot * 100)
     macro = _pb_items("macro_trend", "&sort=display_order")
+    targets = _pb_items("kpi_indicators", "&sort=display_order")
+    glossary = _pb_items("glossary", "&sort=display_order")
+    risks = _pb_items("risk_register", "&sort=display_order")
+    milestones = _pb_items("milestones", "&sort=display_order")
+    synergies = _pb_items("chain_synergies", "&sort=display_order")
     sector_counts, region_counts = {}, {}
     for r in _pb_items("industries", "&filter=" + urllib.parse.quote('reg_number !~ "FAC-"')):
         sec, reg = r.get("sector_name"), r.get("region")
@@ -136,7 +144,9 @@ def build_public_brief():
         if reg:
             region_counts[reg] = region_counts.get(reg, 0) + 1
     text = format_public_brief(chains, kpis, sector_counts, region_counts,
-                               categories=categories, macro=macro)
+                               categories=categories, macro=macro, targets=targets,
+                               glossary=glossary, risks=risks, milestones=milestones,
+                               synergies=synergies)
     if text:
         _brief_cache.update(text=text, at=now)
     return text
