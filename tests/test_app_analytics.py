@@ -95,3 +95,22 @@ def test_ask_endpoint_wrong_password():
     client = TestClient(app.app)
     r = client.post("/ask", data={"password": "nope", "q": "x"})
     assert "Wrong password" in r.text
+
+
+def test_build_public_brief_includes_breakdowns(monkeypatch):
+    data = {
+        "value_chains": [{"name": "Iron & Steel", "key_export_2024": "US$10M"}],
+        "key_indicators": [{"label": "Value added", "value": "14.5%"}],
+        "key_indicator_categories": [
+            {"indicator_slug": "tax", "category": "Manufacturing", "pct": 34,
+             "value_label": "Shs 7.19trn"}],
+        "macro_trend": [{"label": "Mfg growth", "fy2021_value": "3%", "fy2025_value": "6.4%"}],
+        "industries": [{"sector_name": "Food", "region": "Central"}],
+    }
+    monkeypatch.setattr(app, "_pb_items", lambda coll, params="": list(data.get(coll, [])))
+    app._brief_cache.update(text="", at=0.0)              # bust the TTL cache
+    brief = app.build_public_brief()
+    assert "Iron & Steel" in brief
+    assert "tax contribution by sector" in brief and "Manufacturing 34%" in brief
+    assert "Mfg growth" in brief
+    app._brief_cache.update(text="", at=0.0)              # leave cache clean for other tests

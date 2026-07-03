@@ -120,6 +120,8 @@ def build_public_brief():
                "key_import_2024": c.get("key_import_2024"), "target_2040": c.get("target_2040")}
               for c in _pb_items("value_chains", "&sort=display_order") if c.get("name")]
     kpis = _pb_items("key_indicators", "&sort=display_order")
+    categories = _pb_items("key_indicator_categories", "&sort=indicator_slug,display_order")
+    macro = _pb_items("macro_trend", "&sort=display_order")
     sector_counts, region_counts = {}, {}
     for r in _pb_items("industries", "&filter=" + urllib.parse.quote('reg_number !~ "FAC-"')):
         sec, reg = r.get("sector_name"), r.get("region")
@@ -127,7 +129,8 @@ def build_public_brief():
             sector_counts[sec] = sector_counts.get(sec, 0) + 1
         if reg:
             region_counts[reg] = region_counts.get(reg, 0) + 1
-    text = format_public_brief(chains, kpis, sector_counts, region_counts)
+    text = format_public_brief(chains, kpis, sector_counts, region_counts,
+                               categories=categories, macro=macro)
     if text:
         _brief_cache.update(text=text, at=now)
     return text
