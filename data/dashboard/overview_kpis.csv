@@ -1,14 +1,14 @@
 id,label,current_value,current_pct,ndp_value,ndp_pct,tenfold_value,tenfold_pct,sub_value,confidence,source
 manufacturing_gdp,Manufacturing Value Added (% of GDP),USD 8.1B,14.5,USD 31.6B,20,USD 150.0B,30,"NDP IV target: 20% (NPA, NDP IV Ch.11 §11.4, 2024) &nbsp;|&nbsp; Tenfold target: 30%",exact,UBOS Annual GDP FY2024/25
 manufacturing_tax,Manufacturing Tax Contribution (% of total tax),USD 1.9B,34,,35,,40,of total tax revenue (URA FY2024/25) &nbsp;|&nbsp; NDP IV target not published for this sub-indicator — project estimate,estimated,URA
-mfg_exports,Manufactured Exports (% of total exports),USD 2.4B,12,,13.5,,50,"of total exports (ITC TradeMap 2024) &nbsp;|&nbsp; NDP IV target: 13.5% (NPA, NDP IV Ch.11 §11.4, 2024)",estimated,ITC TradeMap
+mfg_exports,Manufactured Exports (% of total exports),USD 1.6B,12,,13.5,,50,"of total exports (UBOS FY2024/25, SITC 5+6+7+8 excl. 68) &nbsp;|&nbsp; NDP IV target: 13.5% &nbsp;|&nbsp; Tenfold: >50%",exact,UBOS
 hightech_exports,High-Tech Exports (% of manufactured exports),USD 85M,2.3,,8,,15,"of manufactured exports (NPA, NDP IV Ch.11 Situation Analysis, 2024) &nbsp;|&nbsp; NDP IV/Tenfold targets not published — project estimates",indicative,NPA NDP IV / ITC TradeMap
 private_credit,Private Sector Credit to Manufacturing (% of total credit),USD 900M,3.4,,12,,20,UGX 3.4tn (Bank of Uganda FY2024/25 sectoral credit) &nbsp;|&nbsp; NDP IV target not published — project estimate,estimated,Bank of Uganda
 industrial_parks,Establishments in Industrial Parks (% of total),166,2.4,,5,,15,of registered establishments (Uganda Investment Authority 2025) &nbsp;|&nbsp; NDP IV target not published — project estimate,exact,Uganda Investment Authority
 fdi_manufacturing,FDI to Manufacturing (% of total FDI),USD 180M,5.5,,20,,30,of total FDI (UIA / UNCTAD 2024) &nbsp;|&nbsp; NDP IV target not published — project estimate,estimated,UIA / UNCTAD
 manufacturing_employment,Manufacturing Employment (% of total employment),"~712,000",3.2,,12,,20,of total employment (UBOS National Human Resource Survey 2023/24) &nbsp;|&nbsp; NDP IV target not published — project estimate,estimated,UBOS
 export_variety,Variety of Manufactured Exports (% of global HS6 categories),~380,7.6,600,12,"1,000",20,"of ~5,000 manufactured HS6 categories traded globally (ITC TradeMap 2024) &nbsp;|&nbsp; NDP IV target not published — project estimate",indicative,ITC TradeMap
-uganda_gdp,Uganda GDP,USD 53.2B,10,USD 158B,31,~USD 500B,100,NDP IV: USD 158B by 2029/30 &nbsp;|&nbsp; Tenfold: ~USD 500B by 2040,exact,UBOS Annual GDP 2024/25
+uganda_gdp,Uganda GDP,USD 65.2B,14.5,USD 158B,31,~USD 500B,100,FY 2025/26 preliminary &nbsp;|&nbsp; NDP IV: USD 158B by 2029/30 &nbsp;|&nbsp; Tenfold: ~USD 500B by 2040,exact,UBOS
 capacity_util,Capacity Utilisation,~30%,30,60%,60,80%,80,NDP IV target: 60% &nbsp;|&nbsp; Tenfold target: 80%,estimated,UNIDO PCP diagnostic interviews
 per_capita,Per Capita Income,"USD 1,146",12,"USD 2,008",21,"USD 9,500",100,"NDP IV: USD 2,008 &nbsp;|&nbsp; Vision 2040: USD 9,500",exact,UBOS Annual GDP 2024/25
-gdp_growth,GDP Growth Rate,6.6%,44,10.1%,67,12-15% p.a.,100,NDP IV target: 10.1% &nbsp;|&nbsp; Tenfold: 12-15% p.a.,exact,UBOS Annual GDP 2024/25
+gdp_growth,GDP Growth Rate,6.4%,43,10.1%,67,12-15% p.a.,100,FY 2025/26 annual &nbsp;|&nbsp; NDP IV target: 10.1% &nbsp;|&nbsp; Tenfold: 12-15% p.a.,exact,UBOS
