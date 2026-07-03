@@ -1134,6 +1134,102 @@ function renderTreemapSVG(wrapId, nodes, total, onCellClick){
   });
 }
 
+// Two-level treemap: squarify regions first, then squarify each region's
+// districts within its allocated rectangle. Districts stay visually grouped
+// inside their region's block; the region boundary is the gap between colour
+// clusters, not a labelled parent rectangle.
+// regionGap controls the whitespace between region groups (districts across
+// different regions never touch); within a group the normal cell stroke
+// (stroke:#fff) handles intra-district spacing.
+function renderGroupedDistrictsSVG(wrapId, regionData, regionColors, regionIcons, regionGap, onCellClick){
+  const wrap = document.getElementById(wrapId);
+  const bbox = wrap.getBoundingClientRect();
+  const W = bbox.width || 400, H = bbox.height || 380;
+
+  // ── 1. Lay out regions (as sized containers) ───────────────────────────────
+  const regionItems = Object.entries(regionData)
+    .map(([name, districts]) => ({
+      name,
+      value: Object.values(districts).reduce((a,b) => a + b, 0),
+      districts,
+    }))
+    .filter(r => r.value > 0)
+    .sort((a, b) => b.value - a.value);
+
+  squarify(regionItems, { x: 0, y: 0, w: W, h: H });
+
+  // ── 2. Within each region rectangle, lay out its districts ─────────────────
+  const halfGap = regionGap / 2;
+  const allDistricts = [];
+  const regionTotal = {};
+
+  regionItems.forEach(region => {
+    const color = regionColors[region.name] || '#90a4ae';
+    regionTotal[region.name] = { count: region.value, color };
+
+    const distItems = Object.entries(region.districts)
+      .map(([name, value]) => ({ name, value, color, leaf: false }))
+      .sort((a, b) => b.value - a.value);
+    if (!distItems.length) return;
+
+    // Inset the region rect by halfGap on every side so there's a clear gap
+    // between colour groups.
+    squarify(distItems, {
+      x: region.x + halfGap,
+      y: region.y + halfGap,
+      w: Math.max(1, region.w - regionGap),
+      h: Math.max(1, region.h - regionGap),
+    });
+    allDistricts.push(...distItems);
+  });
+
+  // ── 3. Render (identical to renderTreemapSVG minus the region-level rects) ──
+  const total = allDistricts.reduce((s, n) => s + n.value, 0);
+  const tooltip = document.getElementById('treemap-tooltip');
+  let svg = `<svg viewBox="0 0 ${W} ${H}">`;
+  allDistricts.forEach(n => {
+    const fit = treemapFitText(n.name, n.value, n.w, n.h);
+    svg += `<g class="treemap-cell-group" data-name="${n.name.replace(/"/g,'&quot;')}">`;
+    svg += `<rect class="treemap-cell" x="${n.x.toFixed(1)}" y="${n.y.toFixed(1)}" `
+         + `width="${Math.max(n.w, 0).toFixed(1)}" height="${Math.max(n.h, 0).toFixed(1)}" fill="${n.color}"/>`;
+    if (fit) {
+      const cx = n.x + n.w / 2, cy = n.y + n.h / 2;
+      svg += `<text class="treemap-cell-label" x="${cx.toFixed(1)}" y="${(cy - 4).toFixed(1)}" `
+           + `font-size="${fit.labelSize.toFixed(1)}" text-anchor="middle">`
+           + `${escTreemapLabel(n.name, n.w, fit.labelSize)}</text>`;
+      svg += `<text class="treemap-cell-value" x="${cx.toFixed(1)}" y="${(cy + fit.labelSize).toFixed(1)}" `
+           + `font-size="${fit.valueSize.toFixed(1)}" text-anchor="middle">${n.value.toLocaleString()}</text>`;
+    }
+    svg += `</g>`;
+  });
+  svg += `</svg>`;
+  wrap.innerHTML = svg;
+
+  wrap.querySelectorAll('.treemap-cell-group').forEach((g, i) => {
+    const n = allDistricts[i];
+    g.addEventListener('mouseenter', () => {
+      tooltip.style.display = 'block';
+      const pct = ((n.value / total) * 100).toFixed(1);
+      tooltip.innerHTML = `<strong>${n.name}</strong>${n.value.toLocaleString()} establishments<br>`
+                        + `<span class="tt-pct">${pct}%</span>`;
+    });
+    g.addEventListener('mousemove', e => {
+      const margin = 14, tw = tooltip.offsetWidth || 220, th = tooltip.offsetHeight || 50;
+      let left = e.clientX + margin, top = e.clientY + 10;
+      if (left + tw > window.innerWidth)  left = e.clientX - tw - margin;
+      if (top  + th > window.innerHeight) top  = e.clientY - th - 10;
+      tooltip.style.left = Math.max(4, left) + 'px';
+      tooltip.style.top  = Math.max(4, top) + 'px';
+    });
+    g.addEventListener('mouseleave', () => { tooltip.style.display = 'none'; });
+    g.addEventListener('click', () => onCellClick && onCellClick(n.name));
+  });
+
+  // ── 4. Legend — one entry per region with total count ──────────────────────
+  // (returned so caller can place it; returns null if legendEl not supplied)
+  return regionTotal;
+}
+
 function escTreemapLabel(name, cellW, fontSize){
   const maxChars = Math.floor(cellW / (fontSize * 0.58));
   const safe = name.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
@@ -1316,33 +1412,24 @@ function initRegionTreemap(){
   const legendEl = document.getElementById('treemap-region-legend');
 
   function showTop(resetOther){
-    // Show all districts directly at top level, each coloured by its parent
-    // region. Region is identified by colour in the legend, not by a label
-    // on the treemap cell. Legend shows name + total count.
-    // Request 2026-07-03: "remove the word Central from the treemap and
-    // instead show the districts breakdown; put the total number of
-    // industries in the legend."
-    const allNodes = [];
-    const regionTotals = {};
-    Object.entries(TREEMAP_DISTRICT_DATA).forEach(([regionName, districts]) => {
-      const regionColor = TREEMAP_REGION_COLORS[regionName] || '#90a4ae';
-      let regionCount = 0;
-      Object.entries(districts).forEach(([distName, count]) => {
-        allNodes.push({ name: distName, value: count, color: regionColor, leaf: false });
-        regionCount += count;
-      });
-      if (regionCount > 0) regionTotals[regionName] = { count: regionCount, color: regionColor };
-    });
-    allNodes.sort((a, b) => b.value - a.value);
-    const total = allNodes.reduce((s, n) => s + n.value, 0);
-
+    // Districts grouped inside their region's allocated rectangle — same colour
+    // for all districts in a region, no region name on the cells (colour in the
+    // legend identifies the region). Request 2026-07-03.
     breadcrumbEl.innerHTML = `<span class="crumb" style="cursor:default;color:var(--text)">All Districts</span>`;
 
     const onClick = districtName =>
       crossFilterSectorByMix(districtName, TREEMAP_DISTRICT_SECTOR_DATA[districtName], 'District');
-    renderTreemapSVG('treemap-region-wrap', allNodes, total, onClick);
 
-    // Legend: one entry per REGION — colour swatch + region name + total count.
+    const regionTotals = renderGroupedDistrictsSVG(
+      'treemap-region-wrap',
+      TREEMAP_DISTRICT_DATA,
+      TREEMAP_REGION_COLORS,
+      TREEMAP_REGION_ICONS,
+      6,   // gap (px) between region groups
+      onClick
+    );
+
+    // Legend: one entry per region — colour swatch + icon + name + total count.
     legendEl.innerHTML = Object.entries(regionTotals)
       .sort((a, b) => b[1].count - a[1].count)
       .map(([name, {count, color}]) => {
