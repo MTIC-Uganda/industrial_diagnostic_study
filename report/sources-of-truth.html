@@ -651,14 +651,14 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-t
     <div class="section-title" style="margin-bottom:6px">🕓 Recently Updated</div>
     <div class="section-sub">Latest data, chapters, and reviews from the agentic pipeline — newest first.</div>
     <div class="card" style="margin-bottom:24px">
-      <div class="update-item"><span class="update-icon">🚀</span><span class="update-tag">Feature</span><span class="update-msg">OEC-style treemap palette — bold, saturated, high-contrast colours</span><span class="update-date">2026-07-03</span></div>
+      <div class="update-item"><span class="update-icon">🚀</span><span class="update-tag">Feature</span><span class="update-msg">exports+imports card (2026-07-03) + tick backlog in TASKS.md</span><span class="update-date">2026-07-03</span></div>
+    <div class="update-item"><span class="update-icon">🚀</span><span class="update-tag">Feature</span><span class="update-msg">OEC-style treemap palette — bold, saturated, high-contrast colours</span><span class="update-date">2026-07-03</span></div>
     <div class="update-item"><span class="update-icon">🚀</span><span class="update-tag">Feature</span><span class="update-msg">HS codes visible on every product in Explorer sidebar and header</span><span class="update-date">2026-07-02</span></div>
     <div class="update-item"><span class="update-icon">🚀</span><span class="update-tag">Feature</span><span class="update-msg">Sankey value-chain map visuals — vivid colours, wider spacing, hover labels</span><span class="update-date">2026-07-02</span></div>
     <div class="update-item"><span class="update-icon">🚀</span><span class="update-tag">Feature</span><span class="update-msg">minister demo prep — labels, source hover, per-product data slots</span><span class="update-date">2026-07-02</span></div>
     <div class="update-item"><span class="update-icon">🛠️</span><span class="update-tag">Fix</span><span class="update-msg">wire TradeMap data into graph nodes — resolves "not yet available" bug</span><span class="update-date">2026-07-02</span></div>
     <div class="update-item"><span class="update-icon">🛠️</span><span class="update-tag">Fix</span><span class="update-msg">drift-check CRLF false-positive + PR creation permission</span><span class="update-date">2026-07-02</span></div>
     <div class="update-item"><span class="update-icon">🚀</span><span class="update-tag">Feature</span><span class="update-msg">email + WhatsApp alerts on PocketBase drift detection</span><span class="update-date">2026-06-30</span></div>
-    <div class="update-item"><span class="update-icon">🛠️</span><span class="update-tag">Fix</span><span class="update-msg">make additive field migration non-fatal; try full field shape</span><span class="update-date">2026-06-30</span></div>
     </div>
   </div>
 
@@ -3498,7 +3498,7 @@ function crossFilterRegionBySector(sectorName){
     name, value: (TREEMAP_REGION_SECTOR_DATA[name] && TREEMAP_REGION_SECTOR_DATA[name][sectorName]) || 0,
     color: TREEMAP_REGION_COLORS[name] || '#90a4ae', leaf: false  // clickable: drills into that region's districts for this sector
   })).filter(n => n.value > 0).sort((a,b) => b.value - a.value);
-  breadcrumbEl.innerHTML = `<span class="crumb" onclick="window._treemapRegionShowTop()">All Regions</span><span class="sep">›</span><span style="color:var(--text)">Sector: ${sectorName}</span>`;
+  breadcrumbEl.innerHTML = `<span class="crumb" onclick="window._treemapRegionShowTop()">All Districts</span><span class="sep">›</span><span style="color:var(--text)">Sector: ${sectorName}</span>`;
   if (!nodes.length){
     document.getElementById('treemap-region-wrap').innerHTML = '';
     legendEl.innerHTML = '';
@@ -3521,7 +3521,7 @@ function crossFilterDistrictBySectorAndRegion(sectorName, regionName){
     color: shadeColor(baseColor, (i % 6) * 0.09), leaf: true
   })).filter(n => n.value > 0).sort((a,b) => b.value - a.value);
   breadcrumbEl.innerHTML =
-    `<span class="crumb" onclick="window._treemapRegionShowTop()">All Regions</span><span class="sep">›</span>` +
+    `<span class="crumb" onclick="window._treemapRegionShowTop()">All Districts</span><span class="sep">›</span>` +
     `<span class="crumb" onclick="crossFilterRegionBySector('${sectorName.replace(/'/g,"\\'")}')">Sector: ${sectorName}</span><span class="sep">›</span>` +
     `<span style="color:var(--text)">${regionName}</span>`;
   if (!nodes.length){
@@ -3546,7 +3546,7 @@ function crossFilterRegionBySubsector(subsectorName){
     name, value: (TREEMAP_REGION_SUBSECTOR_DATA[name] && TREEMAP_REGION_SUBSECTOR_DATA[name][subsectorName]) || 0,
     color: TREEMAP_REGION_COLORS[name] || '#90a4ae', leaf: false
   })).filter(n => n.value > 0).sort((a,b) => b.value - a.value);
-  breadcrumbEl.innerHTML = `<span class="crumb" onclick="window._treemapRegionShowTop()">All Regions</span><span class="sep">›</span><span style="color:var(--text)">Product: ${subsectorName}</span>`;
+  breadcrumbEl.innerHTML = `<span class="crumb" onclick="window._treemapRegionShowTop()">All Districts</span><span class="sep">›</span><span style="color:var(--text)">Product: ${subsectorName}</span>`;
   if (!nodes.length){
     document.getElementById('treemap-region-wrap').innerHTML = '';
     legendEl.innerHTML = '';
@@ -3569,7 +3569,7 @@ function crossFilterDistrictBySubsectorAndRegion(subsectorName, regionName){
     color: shadeColor(baseColor, (i % 6) * 0.09), leaf: true
   })).filter(n => n.value > 0).sort((a,b) => b.value - a.value);
   breadcrumbEl.innerHTML =
-    `<span class="crumb" onclick="window._treemapRegionShowTop()">All Regions</span><span class="sep">›</span>` +
+    `<span class="crumb" onclick="window._treemapRegionShowTop()">All Districts</span><span class="sep">›</span>` +
     `<span class="crumb" onclick="crossFilterRegionBySubsector('${subsectorName.replace(/'/g,"\\'")}')">Product: ${subsectorName}</span><span class="sep">›</span>` +
     `<span style="color:var(--text)">${regionName}</span>`;
   if (!nodes.length){
@@ -3589,18 +3589,43 @@ function initRegionTreemap(){
   const legendEl = document.getElementById('treemap-region-legend');
 
   function showTop(resetOther){
-    const names = Object.keys(TREEMAP_DISTRICT_DATA);
-    const nodes = names.map(name => ({
-      name, value: Object.values(TREEMAP_DISTRICT_DATA[name]).reduce((a,b)=>a+b,0),
-      color: TREEMAP_REGION_COLORS[name] || '#90a4ae', leaf: false
-    })).sort((a,b) => b.value - a.value);
-    const total = nodes.reduce((s,n)=>s+n.value,0);
-    breadcrumbEl.innerHTML = `<span class="crumb" style="cursor:default;color:var(--text)">All Regions</span>`;
-    renderTreemapSVG('treemap-region-wrap', nodes, total, regionName => showRegion(regionName));
-    renderTreemapLegend(legendEl, nodes, TREEMAP_REGION_ICONS, regionName => showRegion(regionName));
-    // Going back to "All Regions" must also clear any cross-filter left on
-    // Sector Distribution (e.g. from clicking a district/region here) —
-    // otherwise it stays stuck showing that filtered breakdown.
+    // Show all districts directly at top level, each coloured by its parent
+    // region. Region is identified by colour in the legend, not by a label
+    // on the treemap cell. Legend shows name + total count.
+    // Request 2026-07-03: "remove the word Central from the treemap and
+    // instead show the districts breakdown; put the total number of
+    // industries in the legend."
+    const allNodes = [];
+    const regionTotals = {};
+    Object.entries(TREEMAP_DISTRICT_DATA).forEach(([regionName, districts]) => {
+      const regionColor = TREEMAP_REGION_COLORS[regionName] || '#90a4ae';
+      let regionCount = 0;
+      Object.entries(districts).forEach(([distName, count]) => {
+        allNodes.push({ name: distName, value: count, color: regionColor, leaf: false });
+        regionCount += count;
+      });
+      if (regionCount > 0) regionTotals[regionName] = { count: regionCount, color: regionColor };
+    });
+    allNodes.sort((a, b) => b.value - a.value);
+    const total = allNodes.reduce((s, n) => s + n.value, 0);
+
+    breadcrumbEl.innerHTML = `<span class="crumb" style="cursor:default;color:var(--text)">All Districts</span>`;
+
+    const onClick = districtName =>
+      crossFilterSectorByMix(districtName, TREEMAP_DISTRICT_SECTOR_DATA[districtName], 'District');
+    renderTreemapSVG('treemap-region-wrap', allNodes, total, onClick);
+
+    // Legend: one entry per REGION — colour swatch + region name + total count.
+    legendEl.innerHTML = Object.entries(regionTotals)
+      .sort((a, b) => b[1].count - a[1].count)
+      .map(([name, {count, color}]) => {
+        const iconClass = TREEMAP_REGION_ICONS[name] || '';
+        const icon = iconClass
+          ? `<i class="bi ${iconClass}" style="color:${treemapIconColor(color)}"></i>` : '';
+        return `<span class="tl-item"><span class="sw" style="background:${color}">${icon}</span>`
+          + `${name} — ${count.toLocaleString()} est.</span>`;
+      }).join('');
+
     if (resetOther !== false && window._treemapSectorShowTop) window._treemapSectorShowTop(false);
   }
 
@@ -3613,7 +3638,7 @@ function initRegionTreemap(){
       color: shadeColor(baseColor, (i % 6) * 0.09), leaf: false  // clickable: cross-filters Sector Distribution
     })).sort((a,b) => b.value - a.value);
     const total = nodes.reduce((s,n)=>s+n.value,0);
-    breadcrumbEl.innerHTML = `<span class="crumb" onclick="window._treemapRegionShowTop()">All Regions</span><span class="sep">›</span><span style="color:var(--text)">${regionName}</span>`;
+    breadcrumbEl.innerHTML = `<span class="crumb" onclick="window._treemapRegionShowTop()">All Districts</span><span class="sep">›</span><span style="color:var(--text)">${regionName}</span>`;
     const onClick = districtName => {
       crossFilterSectorByMix(districtName, TREEMAP_DISTRICT_SECTOR_DATA[districtName], 'District');
     };
@@ -4438,8 +4463,20 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape'){ closeChapter
 <style>
 #midd-fab{position:fixed;right:22px;bottom:22px;width:58px;height:58px;border-radius:50%;
   background:#1565c0;color:#fff;border:none;cursor:pointer;box-shadow:0 6px 20px rgba(0,0,0,.25);
-  display:flex;align-items:center;justify-content:center;z-index:9998;transition:transform .15s}
-#midd-fab:hover{transform:scale(1.06)}
+  display:flex;align-items:center;justify-content:center;z-index:9998;transition:transform .15s;
+  animation:midd-bounce 2.8s ease-in-out infinite}
+#midd-fab:hover{transform:scale(1.06);animation:none}
+#midd-fab.midd-quiet{animation:none}
+@keyframes midd-bounce{0%,55%,100%{transform:translateY(0)}65%{transform:translateY(-9px)}
+  75%{transform:translateY(0)}83%{transform:translateY(-4px)}90%{transform:translateY(0)}}
+@keyframes midd-pop{from{opacity:0;transform:translateY(10px) scale(.92)}to{opacity:1;transform:translateY(0) scale(1)}}
+@media (prefers-reduced-motion: reduce){#midd-fab{animation:none}}
+#midd-teaser{position:fixed;right:22px;bottom:92px;max-width:244px;background:#fff;color:#1a2330;
+  padding:12px 30px 12px 14px;border-radius:14px 14px 4px 14px;box-shadow:0 10px 30px rgba(0,0,0,.22);
+  font:600 13px/1.45 Inter,system-ui,Arial,sans-serif;z-index:9997;cursor:pointer;display:none;
+  animation:midd-pop .4s ease}
+#midd-teaser.show{display:block}
+#midd-teaser-x{position:absolute;top:5px;right:8px;background:none;border:none;font-size:16px;color:#94a3b8;cursor:pointer;line-height:1;padding:2px}
 #midd-fab svg{width:26px;height:26px}
 #midd-panel{position:fixed;right:22px;bottom:90px;width:360px;max-width:calc(100vw - 32px);
   height:500px;max-height:calc(100vh - 120px);background:#fff;border-radius:14px;z-index:9999;
@@ -4465,6 +4502,10 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape'){ closeChapter
 <button id="midd-fab" aria-label="Ask MIDD" onclick="middToggle()">
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-8.5 8.5 8.5 8.5 0 0 1-3.8-.9L3 21l1.9-5.7A8.38 8.38 0 0 1 4 11.5 8.5 8.5 0 0 1 12.5 3 8.38 8.38 0 0 1 21 11.5z"/></svg>
 </button>
+<div id="midd-teaser" onclick="middToggle()">
+  <button id="midd-teaser-x" onclick="middDismissTeaser(event)" aria-label="Dismiss">&times;</button>
+  Hi there! 👋 Curious about Uganda's manufacturing? Ask me anything on this dashboard.
+</div>
 <div id="midd-panel" role="dialog" aria-label="Ask MIDD chat">
   <div id="midd-head"><h4>Ask MIDD</h4><p>Ask about Uganda's manufacturing data</p>
     <button id="midd-x" onclick="middToggle()" aria-label="Close">&times;</button></div>
@@ -4485,13 +4526,24 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape'){ closeChapter
   var nav = document.getElementById('midd-team-nav');
   if (nav) nav.style.display = isStaging ? '' : 'none';
   var msgs = [], opened = false, busy = false;
+  var THINKING = ['Digging through the register…','Crunching the numbers…',
+    'Counting establishments…','Sifting the value chains…','Consulting the diagnostics…',
+    'Following the data trail…','Checking the figures…','Mapping it out…',
+    'Connecting the dots…','Reading between the sectors…','Weighing the evidence…'];
+  function middHideTeaser(){ var t=document.getElementById('midd-teaser'); if(t){ t.classList.remove('show'); } }
+  window.middDismissTeaser = function(e){ if(e){ e.stopPropagation(); } middHideTeaser(); try{ sessionStorage.setItem('midd_teaser_seen','1'); }catch(_){} };
   window.middToggle = function(){
     var p = document.getElementById('midd-panel');
     opened = !opened; p.classList.toggle('open', opened);
-    if (opened && !msgs.length){
-      middAdd('bot', "Hi! Ask me anything about Uganda's manufacturing industry on this dashboard — sectors, regions, establishment counts, or the diagnostic findings.");
+    if (opened){
+      middHideTeaser();
+      var fab=document.getElementById('midd-fab'); if(fab){ fab.classList.add('midd-quiet'); }
+      try{ sessionStorage.setItem('midd_teaser_seen','1'); }catch(_){}
+      if (!msgs.length){
+        middAdd('bot', "Hi! Ask me anything about Uganda's manufacturing industry on this dashboard — sectors, regions, establishment counts, or the diagnostic findings.");
+      }
+      setTimeout(function(){ var i=document.getElementById('midd-q'); if(i){ i.focus(); } }, 60);
     }
-    if (opened){ setTimeout(function(){ var i=document.getElementById('midd-q'); if(i) i.focus(); }, 60); }
   };
   function middAdd(who, text){
     var box = document.getElementById('midd-msgs');
@@ -4504,15 +4556,24 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape'){ closeChapter
     var inp = document.getElementById('midd-q'); var q = inp.value.trim(); if (!q) return false;
     inp.value = ''; middAdd('user', q);
     busy = true; document.getElementById('midd-send').disabled = true;
-    var typing = middAdd('bot', 'MIDD is typing…'); typing.classList.add('midd-typing');
+    var ti_i = Math.floor(Math.random()*THINKING.length);
+    var typing = middAdd('bot', THINKING[ti_i]); typing.classList.add('midd-typing');
+    var tb = typing.querySelector('.b');
+    var ti = setInterval(function(){ ti_i = (ti_i+1)%THINKING.length; if(tb){ tb.textContent = THINKING[ti_i]; } }, 1800);
     fetch('/api/ask', { method:'POST', headers:{'Content-Type':'application/json'},
         body: JSON.stringify({ q: q, history: msgs.slice(-6) }) })
       .then(function(r){ return r.json(); })
-      .then(function(d){ var a = (d && d.answer) || 'Sorry, no answer.'; typing.remove(); middAdd('bot', a); msgs.push({ q: q, a: a }); })
-      .catch(function(){ typing.remove(); middAdd('bot', 'Sorry, I could not reach the assistant. Please try again.'); })
+      .then(function(d){ clearInterval(ti); var a = (d && d.answer) || 'Sorry, no answer.'; typing.remove(); middAdd('bot', a); msgs.push({ q: q, a: a }); })
+      .catch(function(){ clearInterval(ti); typing.remove(); middAdd('bot', 'Sorry, I could not reach the assistant. Please try again.'); })
       .then(function(){ busy = false; document.getElementById('midd-send').disabled = false; var i=document.getElementById('midd-q'); if(i) i.focus(); });
     return false;
   };
+  // Attention teaser: pop up once per session, a few seconds after load, if not opened.
+  try{
+    if (!sessionStorage.getItem('midd_teaser_seen')){
+      setTimeout(function(){ if(!opened){ var t=document.getElementById('midd-teaser'); if(t){ t.classList.add('show'); } } }, 2800);
+    }
+  }catch(_){}
 })();
 </script>
 

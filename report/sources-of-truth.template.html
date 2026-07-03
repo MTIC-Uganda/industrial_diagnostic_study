@@ -1225,7 +1225,7 @@ function crossFilterRegionBySector(sectorName){
     name, value: (TREEMAP_REGION_SECTOR_DATA[name] && TREEMAP_REGION_SECTOR_DATA[name][sectorName]) || 0,
     color: TREEMAP_REGION_COLORS[name] || '#90a4ae', leaf: false  // clickable: drills into that region's districts for this sector
   })).filter(n => n.value > 0).sort((a,b) => b.value - a.value);
-  breadcrumbEl.innerHTML = `<span class="crumb" onclick="window._treemapRegionShowTop()">All Regions</span><span class="sep">›</span><span style="color:var(--text)">Sector: ${sectorName}</span>`;
+  breadcrumbEl.innerHTML = `<span class="crumb" onclick="window._treemapRegionShowTop()">All Districts</span><span class="sep">›</span><span style="color:var(--text)">Sector: ${sectorName}</span>`;
   if (!nodes.length){
     document.getElementById('treemap-region-wrap').innerHTML = '';
     legendEl.innerHTML = '';
@@ -1248,7 +1248,7 @@ function crossFilterDistrictBySectorAndRegion(sectorName, regionName){
     color: shadeColor(baseColor, (i % 6) * 0.09), leaf: true
   })).filter(n => n.value > 0).sort((a,b) => b.value - a.value);
   breadcrumbEl.innerHTML =
-    `<span class="crumb" onclick="window._treemapRegionShowTop()">All Regions</span><span class="sep">›</span>` +
+    `<span class="crumb" onclick="window._treemapRegionShowTop()">All Districts</span><span class="sep">›</span>` +
     `<span class="crumb" onclick="crossFilterRegionBySector('${sectorName.replace(/'/g,"\\'")}')">Sector: ${sectorName}</span><span class="sep">›</span>` +
     `<span style="color:var(--text)">${regionName}</span>`;
   if (!nodes.length){
@@ -1273,7 +1273,7 @@ function crossFilterRegionBySubsector(subsectorName){
     name, value: (TREEMAP_REGION_SUBSECTOR_DATA[name] && TREEMAP_REGION_SUBSECTOR_DATA[name][subsectorName]) || 0,
     color: TREEMAP_REGION_COLORS[name] || '#90a4ae', leaf: false
   })).filter(n => n.value > 0).sort((a,b) => b.value - a.value);
-  breadcrumbEl.innerHTML = `<span class="crumb" onclick="window._treemapRegionShowTop()">All Regions</span><span class="sep">›</span><span style="color:var(--text)">Product: ${subsectorName}</span>`;
+  breadcrumbEl.innerHTML = `<span class="crumb" onclick="window._treemapRegionShowTop()">All Districts</span><span class="sep">›</span><span style="color:var(--text)">Product: ${subsectorName}</span>`;
   if (!nodes.length){
     document.getElementById('treemap-region-wrap').innerHTML = '';
     legendEl.innerHTML = '';
@@ -1296,7 +1296,7 @@ function crossFilterDistrictBySubsectorAndRegion(subsectorName, regionName){
     color: shadeColor(baseColor, (i % 6) * 0.09), leaf: true
   })).filter(n => n.value > 0).sort((a,b) => b.value - a.value);
   breadcrumbEl.innerHTML =
-    `<span class="crumb" onclick="window._treemapRegionShowTop()">All Regions</span><span class="sep">›</span>` +
+    `<span class="crumb" onclick="window._treemapRegionShowTop()">All Districts</span><span class="sep">›</span>` +
     `<span class="crumb" onclick="crossFilterRegionBySubsector('${subsectorName.replace(/'/g,"\\'")}')">Product: ${subsectorName}</span><span class="sep">›</span>` +
     `<span style="color:var(--text)">${regionName}</span>`;
   if (!nodes.length){
@@ -1316,18 +1316,43 @@ function initRegionTreemap(){
   const legendEl = document.getElementById('treemap-region-legend');
 
   function showTop(resetOther){
-    const names = Object.keys(TREEMAP_DISTRICT_DATA);
-    const nodes = names.map(name => ({
-      name, value: Object.values(TREEMAP_DISTRICT_DATA[name]).reduce((a,b)=>a+b,0),
-      color: TREEMAP_REGION_COLORS[name] || '#90a4ae', leaf: false
-    })).sort((a,b) => b.value - a.value);
-    const total = nodes.reduce((s,n)=>s+n.value,0);
-    breadcrumbEl.innerHTML = `<span class="crumb" style="cursor:default;color:var(--text)">All Regions</span>`;
-    renderTreemapSVG('treemap-region-wrap', nodes, total, regionName => showRegion(regionName));
-    renderTreemapLegend(legendEl, nodes, TREEMAP_REGION_ICONS, regionName => showRegion(regionName));
-    // Going back to "All Regions" must also clear any cross-filter left on
-    // Sector Distribution (e.g. from clicking a district/region here) —
-    // otherwise it stays stuck showing that filtered breakdown.
+    // Show all districts directly at top level, each coloured by its parent
+    // region. Region is identified by colour in the legend, not by a label
+    // on the treemap cell. Legend shows name + total count.
+    // Request 2026-07-03: "remove the word Central from the treemap and
+    // instead show the districts breakdown; put the total number of
+    // industries in the legend."
+    const allNodes = [];
+    const regionTotals = {};
+    Object.entries(TREEMAP_DISTRICT_DATA).forEach(([regionName, districts]) => {
+      const regionColor = TREEMAP_REGION_COLORS[regionName] || '#90a4ae';
+      let regionCount = 0;
+      Object.entries(districts).forEach(([distName, count]) => {
+        allNodes.push({ name: distName, value: count, color: regionColor, leaf: false });
+        regionCount += count;
+      });
+      if (regionCount > 0) regionTotals[regionName] = { count: regionCount, color: regionColor };
+    });
+    allNodes.sort((a, b) => b.value - a.value);
+    const total = allNodes.reduce((s, n) => s + n.value, 0);
+
+    breadcrumbEl.innerHTML = `<span class="crumb" style="cursor:default;color:var(--text)">All Districts</span>`;
+
+    const onClick = districtName =>
+      crossFilterSectorByMix(districtName, TREEMAP_DISTRICT_SECTOR_DATA[districtName], 'District');
+    renderTreemapSVG('treemap-region-wrap', allNodes, total, onClick);
+
+    // Legend: one entry per REGION — colour swatch + region name + total count.
+    legendEl.innerHTML = Object.entries(regionTotals)
+      .sort((a, b) => b[1].count - a[1].count)
+      .map(([name, {count, color}]) => {
+        const iconClass = TREEMAP_REGION_ICONS[name] || '';
+        const icon = iconClass
+          ? `<i class="bi ${iconClass}" style="color:${treemapIconColor(color)}"></i>` : '';
+        return `<span class="tl-item"><span class="sw" style="background:${color}">${icon}</span>`
+          + `${name} — ${count.toLocaleString()} est.</span>`;
+      }).join('');
+
     if (resetOther !== false && window._treemapSectorShowTop) window._treemapSectorShowTop(false);
   }
 
@@ -1340,7 +1365,7 @@ function initRegionTreemap(){
       color: shadeColor(baseColor, (i % 6) * 0.09), leaf: false  // clickable: cross-filters Sector Distribution
     })).sort((a,b) => b.value - a.value);
     const total = nodes.reduce((s,n)=>s+n.value,0);
-    breadcrumbEl.innerHTML = `<span class="crumb" onclick="window._treemapRegionShowTop()">All Regions</span><span class="sep">›</span><span style="color:var(--text)">${regionName}</span>`;
+    breadcrumbEl.innerHTML = `<span class="crumb" onclick="window._treemapRegionShowTop()">All Districts</span><span class="sep">›</span><span style="color:var(--text)">${regionName}</span>`;
     const onClick = districtName => {
       crossFilterSectorByMix(districtName, TREEMAP_DISTRICT_SECTOR_DATA[districtName], 'District');
     };
