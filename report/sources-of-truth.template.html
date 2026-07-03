@@ -934,9 +934,13 @@ function showSubTab(id){
 // ═══════════════════ MANUFACTURING DISTRIBUTION TREEMAP ═══════════════════
 /*%%TREEMAP_DATA%%*/
 
+// OEC-style palette — bold, saturated, high-contrast (2026-07-03)
 const TREEMAP_REGION_COLORS = {
-  'Central':'#1565c0', 'Eastern':'#2e7d32', 'Northern':'#f57f17',
-  'Western':'#6a1b9a', 'Unclassified':'#9e9e9e'
+  'Central':      '#892EFF',  // deep violet  — largest region
+  'Eastern':      '#F4CE0F',  // golden yellow
+  'Northern':     '#C8140A',  // strong red
+  'Western':      '#1AB558',  // vivid green
+  'Unclassified': '#9C9FB2',  // muted slate
 };
 // Monochrome icon-font classes (Bootstrap Icons) — colour is set per-badge
 // at render time based on background luminance (treemapIconColor()), since
@@ -962,11 +966,34 @@ const TREEMAP_SECTOR_ICONS = {
   'Other Manufacturing':'bi-building-fill', 'Tobacco':'bi-flower1',
   'Machinery and Equipment':'bi-gear-wide-connected', 'Computer, Electronic and Optical Products':'bi-cpu-fill'
 };
+// OEC colour palette — all 32 hues, ordered so the most vivid and
+// distinct appear first (largest sectors get the most eye-catching colour).
 const TREEMAP_SECTOR_PALETTE = [
-  '#1565c0','#2e7d32','#f57f17','#6a1b9a','#c62828','#00838f',
-  '#ad1457','#558b2f','#e65100','#4527a0','#00695c','#d84315',
-  '#283593','#37474f','#9e9d24','#5d4037','#0277bd','#7b1fa2',
-  '#43a047','#bf360c','#1b5e20'
+  '#F4CE0F',  // Food Products                                     — golden yellow
+  '#EDB73E',  // Beverages                                         — warm amber
+  '#F46D2A',  // Fabricated Metal Products                         — medium orange
+  '#BA12CC',  // Chemical and Chemical Products                    — vivid magenta
+  '#2E97FF',  // Rubber and Plastic Products                       — medium blue
+  '#A53200',  // Basic Metals                                      — burnt dark orange
+  '#AA7329',  // Other Non-Metallic Mineral Products (cement)      — muted brown
+  '#DD0E31',  // Leather and Leather Products                      — crimson red
+  '#A0D447',  // Textiles                                          — lime green
+  '#0068FF',  // Pharmaceutical                                    — vivid cobalt
+  '#1AB558',  // Wood and Wood Products                            — vivid green
+  '#69C8ED',  // Electrical Equipment / Transport Equipment        — sky blue
+  '#9E0071',  // Motor Vehicles                                    — dark magenta/plum
+  '#ED40F2',  // Tobacco / Other Non-Metallic small                — hot pink/fuchsia
+  '#FF9100',  // Other Manufacturing                               — bright orange
+  '#02A347',  // Machinery and Equipment                           — dark green
+  '#2CBA0F',  // Computer, Electronic and Optical                  — vivid green
+  '#892EFF',  // Printing and Reproduction                         — deep violet
+  '#847290',  // Coke and Petroleum Products                       — dusty purple/gray
+  '#9C9FB2',  // Paper and Paper Products                          — muted slate
+  '#EFDC81',  // Other small categories                            — light straw
+  '#FF73FF',  // accent                                            — light pink/magenta
+  '#9CF2CF',  // accent                                            — pale mint
+  '#6DF2B0',  // accent                                            — mint/light green
+  '#F2AA86',  // accent                                            — light salmon
 ];
 
 function treemapSectorColors(sectorNames){
