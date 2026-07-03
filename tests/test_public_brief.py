@@ -110,13 +110,15 @@ def test_brief_chain_diagnostics():
     chains = [{"name": "Textiles", "position_tag": "Net importer", "priority_tag": "Priority 1",
                "target_2040": "US$1B", "current": ["2 mills running"],
                "constraints": '["high yarn cost", "old machines"]',
-               "priorities": ["local yarn"], "gap": "no local yarn production"}]
+               "priorities": ["local yarn"], "gap": "no local yarn production",
+               "companies": ["Fine Spinners", "Southern Range Nyanza"]}]
     out = b.format_public_brief(chains, [], {}, {})
     assert "position: Net importer" in out and "priority: Priority 1" in out
     assert "current state: 2 mills running" in out
     assert "constraints: high yarn cost; old machines" in out
     assert "priorities: local yarn" in out
     assert "gap/opportunity: no local yarn production" in out
+    assert "companies: Fine Spinners; Southern Range Nyanza" in out
 
 
 def test_brief_targets_glossary_synergies():

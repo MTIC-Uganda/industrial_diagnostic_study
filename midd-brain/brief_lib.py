@@ -70,7 +70,7 @@ def format_public_brief(chains, kpis, sector_counts, region_counts,
         if joined:
             lines.append("- " + joined)
         for key, lbl in (("current", "current state"), ("constraints", "constraints"),
-                         ("priorities", "priorities")):
+                         ("priorities", "priorities"), ("companies", "companies")):
             vals = _as_list(c.get(key))
             if vals:
                 lines.append(f"  {lbl}: " + "; ".join(vals))
