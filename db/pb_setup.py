@@ -294,6 +294,8 @@ COLLECTIONS = [
             text('year'),
             text('source'),
             text('source_detail'),   # full doc name/link; Jerome populates via Ask MIDD (2026-07-01 action)
+            text('import_value'),    # companion import figure for exports/hightech cards (2026-07-03)
+            text('import_sub'),      # import sub-label (e.g. "~X% of total imports")
             sel('confidence', ['exact', 'estimated', 'indicative']),
             num('display_order'),
         ],

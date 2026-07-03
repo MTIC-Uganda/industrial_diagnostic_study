@@ -409,13 +409,25 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-t
     </div>
 
     <div class="card" style="text-align:center">
-      <h3 style="justify-content:center">4. Manufactured Exports <!--%%KPI4_BADGE%%--></h3>
-      <div class="kpi-value-row" style="margin-top:12px">
-        <span class="kpi-icon"><!--%%KPI4_ICON%%--></span>
-        <div class="value"><!--%%KPI4_VALUE%%--></div>
+      <h3 style="justify-content:center">4. Manufactured Trade <!--%%KPI4_BADGE%%--></h3>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px">
+        <div style="border-right:1px solid var(--border);padding-right:8px">
+          <div style="font-size:9px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px">🚢 Exports</div>
+          <div class="kpi-value-row" style="justify-content:center">
+            <div class="value" style="font-size:20px"><!--%%KPI4_VALUE%%--></div>
+          </div>
+          <div class="sub-value" style="font-size:11px;font-weight:600;color:var(--blue);margin-top:3px"><!--%%KPI4_SUBVALUE%%--></div>
+        </div>
+        <div style="padding-left:8px">
+          <div style="font-size:9px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px">📥 Imports</div>
+          <div class="kpi-value-row" style="justify-content:center">
+            <div class="value" style="font-size:20px"><!--%%KPI4_IMPORT_VALUE%%--></div>
+          </div>
+          <div class="sub-value" style="font-size:11px;font-weight:600;color:var(--red);margin-top:3px"><!--%%KPI4_IMPORT_SUB%%--></div>
+          <!--%%KPI4_IMPORT_PENDING%%-->
+        </div>
       </div>
-      <div class="sub-value" style="font-size:15px;font-weight:700;color:var(--blue);margin-top:6px"><!--%%KPI4_SUBVALUE%%--></div>
-      <div class="kpi-source-line"><!--%%KPI4_SOURCE%%--></div>
+      <div class="kpi-source-line" style="margin-top:8px"><!--%%KPI4_SOURCE%%--></div>
     </div>
 
     <div class="card" style="text-align:center">

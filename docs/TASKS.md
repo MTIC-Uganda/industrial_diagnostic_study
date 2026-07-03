@@ -24,14 +24,14 @@ Last updated: 2026-07-03 (2026-07-03 meeting queue landed — Solomon only)
 
 ## Solomon (from the 2026-07-01 meeting — minister is data-driven; interactive demo due Monday)
 
-- [ ] Sources: footer on every card, consistent placement; detailed source (which UBOS report/link) shown on hover.
-- [ ] UBOS-first data policy: use UBOS where available; TradeMap only where UBOS has nothing or cannot break it down.
-- [ ] HS code(s) on every product/stage; support multiple codes per product (used vs new clothing); import value = sum across a product's codes.
-- [ ] Per-product data slots (blank OK for now): imports, exports, number of industries, total installed capacity. (Minister's per-product questions; example steel wire HS 7217.20.)
-- [ ] Fix "trade data not yet available" when the HS code is linked — TradeMap data exists (yellow/estimated is still usable) and should pull.
-- [ ] Value-chain map visuals: icons only (no labels), icons resembling the item; more vivid colours (blue too dull); wider group spacing; drill-down by district, both sides drillable. Reference: OEC.
-- [ ] Clarify estimated vs indicative labels for laymen.
-- [ ] Own the single document-upload workflow (staging upload → Ask MIDD corrections → Apply to Production). No direct PocketBase edits, no hand-created collections.
+- [x] Sources: footer on every KPI card, consistent placement; source shown on hover (dotted underline tooltip). `source_detail` field added to key_indicators schema — Jerome fills in specific doc names/links via Ask MIDD when available.
+- [ ] UBOS-first data policy: use UBOS where available; TradeMap only where UBOS has nothing or cannot break it down. (Blocked on Jerome's UBOS Excel URL and data upload.)
+- [x] HS code(s) on every product/stage in Explorer: shown in sidebar below product name + as blue pill badge in chain header. Compound codes displayed as "7305 + 7306".
+- [x] Per-product data slots in Explorer: trade block (imports/exports) moved to top of popup; installed capacity slot added (pending MTIC register data per product); HS code shown in footer.
+- [x] Fix "trade data not yet available": wire_trademap.py run, 75 nodes now show Uganda trade data in Sankey node detail panel.
+- [x] Value-chain map visuals: vivid OEC palette (Sankey), wider node spacing, labels on hover only; OEC treemap palette applied to Manufacturing Industry Distribution (bold saturated colours).
+- [x] Clarify estimated vs indicative labels: "Official figure" / "Estimated" / "Approximate" with plain-English legend. Live on prod.
+- [ ] Own the single document-upload workflow — ongoing process task, not a code item.
 
 ## Hillary (from the 2026-07-01 meeting)
 

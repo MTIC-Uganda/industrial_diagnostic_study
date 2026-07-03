@@ -409,13 +409,25 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-t
     </div>
 
     <div class="card" style="text-align:center">
-      <h3 style="justify-content:center">4. Manufactured Exports <span class="conf-badge conf-estimated" title="Source: ITC TradeMap, 2024">≈ Estimated</span></h3>
-      <div class="kpi-value-row" style="margin-top:12px">
-        <span class="kpi-icon">🚢</span>
-        <div class="value">USD 2.4B</div>
+      <h3 style="justify-content:center">4. Manufactured Trade <span class="conf-badge conf-estimated" title="Source: ITC TradeMap, 2024">≈ Estimated</span></h3>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px">
+        <div style="border-right:1px solid var(--border);padding-right:8px">
+          <div style="font-size:9px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px">🚢 Exports</div>
+          <div class="kpi-value-row" style="justify-content:center">
+            <div class="value" style="font-size:20px">USD 2.4B</div>
+          </div>
+          <div class="sub-value" style="font-size:11px;font-weight:600;color:var(--blue);margin-top:3px">~12% of total exports</div>
+        </div>
+        <div style="padding-left:8px">
+          <div style="font-size:9px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px">📥 Imports</div>
+          <div class="kpi-value-row" style="justify-content:center">
+            <div class="value" style="font-size:20px"></div>
+          </div>
+          <div class="sub-value" style="font-size:11px;font-weight:600;color:var(--red);margin-top:3px"></div>
+          <div style="font-size:9.5px;color:var(--muted);margin-top:4px">UBOS data upload pending</div>
+        </div>
       </div>
-      <div class="sub-value" style="font-size:15px;font-weight:700;color:var(--blue);margin-top:6px">~12% of total exports</div>
-      <div class="kpi-source-line">2024 &middot; <span style="cursor:help;border-bottom:1px dotted var(--muted)" title="ITC TradeMap">Source: ITC TradeMap</span></div>
+      <div class="kpi-source-line" style="margin-top:8px">2024 &middot; <span style="cursor:help;border-bottom:1px dotted var(--muted)" title="ITC TradeMap">Source: ITC TradeMap</span></div>
     </div>
 
     <div class="card" style="text-align:center">
@@ -639,14 +651,14 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-t
     <div class="section-title" style="margin-bottom:6px">🕓 Recently Updated</div>
     <div class="section-sub">Latest data, chapters, and reviews from the agentic pipeline — newest first.</div>
     <div class="card" style="margin-bottom:24px">
-      <div class="update-item"><span class="update-icon">🚀</span><span class="update-tag">Feature</span><span class="update-msg">HS codes visible on every product in Explorer sidebar and header</span><span class="update-date">2026-07-02</span></div>
+      <div class="update-item"><span class="update-icon">🚀</span><span class="update-tag">Feature</span><span class="update-msg">OEC-style treemap palette — bold, saturated, high-contrast colours</span><span class="update-date">2026-07-03</span></div>
+    <div class="update-item"><span class="update-icon">🚀</span><span class="update-tag">Feature</span><span class="update-msg">HS codes visible on every product in Explorer sidebar and header</span><span class="update-date">2026-07-02</span></div>
     <div class="update-item"><span class="update-icon">🚀</span><span class="update-tag">Feature</span><span class="update-msg">Sankey value-chain map visuals — vivid colours, wider spacing, hover labels</span><span class="update-date">2026-07-02</span></div>
     <div class="update-item"><span class="update-icon">🚀</span><span class="update-tag">Feature</span><span class="update-msg">minister demo prep — labels, source hover, per-product data slots</span><span class="update-date">2026-07-02</span></div>
     <div class="update-item"><span class="update-icon">🛠️</span><span class="update-tag">Fix</span><span class="update-msg">wire TradeMap data into graph nodes — resolves "not yet available" bug</span><span class="update-date">2026-07-02</span></div>
     <div class="update-item"><span class="update-icon">🛠️</span><span class="update-tag">Fix</span><span class="update-msg">drift-check CRLF false-positive + PR creation permission</span><span class="update-date">2026-07-02</span></div>
     <div class="update-item"><span class="update-icon">🚀</span><span class="update-tag">Feature</span><span class="update-msg">email + WhatsApp alerts on PocketBase drift detection</span><span class="update-date">2026-06-30</span></div>
     <div class="update-item"><span class="update-icon">🛠️</span><span class="update-tag">Fix</span><span class="update-msg">make additive field migration non-fatal; try full field shape</span><span class="update-date">2026-06-30</span></div>
-    <div class="update-item"><span class="update-icon">🛠️</span><span class="update-tag">Fix</span><span class="update-msg">send the full collection object on the additive field-migration PATCH</span><span class="update-date">2026-06-30</span></div>
     </div>
   </div>
 
