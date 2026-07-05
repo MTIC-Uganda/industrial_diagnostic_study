@@ -249,8 +249,6 @@ def load_data():
             'color': r.get('color') or '', 'rest_color': r.get('rest_color') or '',
             'year': r.get('year') or '', 'source': r.get('source') or '',
             'source_detail': r.get('source_detail') or '',
-            'import_value': r.get('import_value') or '',
-            'import_sub': r.get('import_sub') or '',
             'confidence': r.get('confidence') or 'estimated',
         } for r in _raw_key_indicators]
     else:
@@ -337,14 +335,6 @@ def kpi_value(slug):
 def kpi_subvalue(slug):
     r = KEY_INDICATORS.get(slug)
     return r['sub_value'] if r and r.get('sub_value') else ''
-
-def kpi_import_value(slug):
-    r = KEY_INDICATORS.get(slug)
-    return esc(r['import_value']) if r and r.get('import_value') else ''
-
-def kpi_import_sub(slug):
-    r = KEY_INDICATORS.get(slug)
-    return r['import_sub'] if r and r.get('import_sub') else ''
 
 def kpi_icon(slug):
     r = KEY_INDICATORS.get(slug)
@@ -1203,10 +1193,16 @@ def render(tmpl):
     '<!--%%KPI4_ICON%%-->':           kpi_icon('exports'),
     '<!--%%KPI4_VALUE%%-->':          kpi_value('exports'),
     '<!--%%KPI4_SUBVALUE%%-->':       kpi_subvalue('exports'),
-    '<!--%%KPI4_IMPORT_VALUE%%-->':   kpi_import_value('exports'),
-    '<!--%%KPI4_IMPORT_SUB%%-->':     kpi_import_sub('exports'),
-    '<!--%%KPI4_IMPORT_PENDING%%-->': '' if kpi_import_value('exports') else
-        '<div style="font-size:9.5px;color:var(--muted);margin-top:4px">UBOS data upload pending</div>',
+    # Imports side of the Manufactured Trade card — reads from its own
+    # mfg_imports key_indicator record (separate slug, separate PocketBase
+    # record). The ingestion brain writes import values here when Solomon
+    # uploads the UBOS imports workbook; it refuses to write import figures
+    # onto the exports record, which is correct behaviour (2026-07-05).
+    '<!--%%KPI4B_VALUE%%-->':        kpi_value('mfg_imports'),
+    '<!--%%KPI4B_SUBVALUE%%-->':     kpi_subvalue('mfg_imports'),
+    '<!--%%KPI4B_BADGE%%-->':        kpi_badge('mfg_imports'),
+    '<!--%%KPI4B_PENDING%%-->':      '' if kpi_value('mfg_imports') else
+        '<div style="font-size:9.5px;color:var(--muted);margin-top:4px">Upload UBOS imports workbook to populate</div>',
     '<!--%%KPI4_SOURCE%%-->':         kpi_source_line('exports'),
     '<!--%%KPI4_BADGE%%-->':          kpi_badge('exports'),
     '<!--%%KPI5_DONUT%%-->':          kpi_compact_donut('hightech', size=60, stroke_width=7),
