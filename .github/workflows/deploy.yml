@@ -357,12 +357,26 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 50   # generate_dashboard reads git log for the Recently Updated panel
 
       - name: Download dist
         uses: actions/download-artifact@v4
         with:
           name: frontend-dist
           path: dist/
+
+      - name: Rebuild dashboard index from STAGING PocketBase
+        # The build job renders index.html from PROD PocketBase (secrets.PB_URL). But staging
+        # is the DATA workshop: uploads land in staging PB (:8091) and Jerome reviews them there
+        # before Apply-to-production. So re-render index.html from STAGING PB here and swap it in,
+        # so staging reflects staging data instead of being clobbered with prod data. Prod
+        # (deploy-prod) keeps the prod-rendered artifact. generate_dashboard.py is stdlib-only.
+        env:
+          PB_URL: http://${{ secrets.HETZNER_HOST }}:8091
+        run: |
+          python3 scripts/generate_dashboard.py
+          cp report/sources-of-truth.html dist/index.html
 
       - name: Set up SSH
         run: |
