@@ -10,7 +10,21 @@ The shared work queue, by owner. Jerome's feedback that needs a code change land
 section; data corrections go through the pipeline (Ask MIDD / re-ingestion), not here. Any agent
 reads this to know what to work on next. Tick items as they land.
 
-Last updated: 2026-07-03 (2026-07-03 meeting queue landed — Solomon only)
+Last updated: 2026-07-06 (2026-07-06 meeting queue landed — HS/SITC translator model)
+
+## Solomon (from the 2026-07-06 meeting — HS-primary + SITC translator)
+
+- [ ] Review the Manufactured Imports card on staging (now displaying after Hillary's fix). Have your agent read Hillary's agent's fix, confirm the figure, then **Apply to production** if it looks right.
+- [ ] Build the **HS → SITC mapping table** (the translator) in PocketBase from the mapping file Jerome will share.
+- [ ] Model: all import/export data is stored as **HS**. Derived indicators (manufactured / high-tech exports & imports) are **computed** by the official code-aggregation rules — translate HS→SITC via the table when the rule is SITC-based, else use HS directly. The LLM only injects data; translation, aggregation, and display are Python + the rules (one source of truth per record, never store both HS and SITC).
+- [ ] Take Jerome's **source-annotated export-data Excel** and do the work to make the indicators display; upload the source reports it references where needed.
+- [ ] Keep the download-then-upload flow (manual) for now. Explore whether the AI can pull directly from TradeMap (needs data sorted before download). Continue one-month-at-a-time updates (loaded to 03/2026; 04 next).
+
+## Jerome (from the 2026-07-06 meeting)
+
+- [ ] Finish + share the **source-annotated Excel** (authentic source named per indicator) + the export data, with Solomon.
+- [ ] Provide the **HS → SITC mapping file** to load into PocketBase as the translator.
+- [ ] Later (market analysis): provide East African countries trade data.
 
 ## Solomon (from the 2026-07-03 meeting — data sources + manufactured-exports card)
 

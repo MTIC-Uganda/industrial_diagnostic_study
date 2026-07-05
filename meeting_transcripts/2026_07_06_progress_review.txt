@@ -1,0 +1,780 @@
+Jerome Nuwabaasa
+Hello. Are you from a Kim from meeting?
+Hillary Arinda
+Which is true Because We Are From Kim from like an hour ago?
+Jerome Nuwabaasa
+you know The funny thing is when I propose that we met at 9. I assume that if we made earlier. You'd be nikkim for meeting. okay
+Hillary Arinda
+When I was sitting up this meeting the other meeting was still on going I think by mistake. I Shot the same link.
+Jerome Nuwabaasa
+okay
+Hillary Arinda
+So Solomon should be doing soon.
+Jerome Nuwabaasa
+This way for him. How is it going?
+Hillary Arinda
+That's good not bad.
+Hi, I'm transcribing this call with my Tactiq AI Extension. https://tactiq.io/r/transcribing
+Jerome Nuwabaasa
+okay I've been actually over the weekend have been setting up like the Workspace for the utma team that will be here.
+Hillary Arinda
+hmm
+Jerome Nuwabaasa
+And I've just seen this.
+Hillary Arinda
+like Age Like A literal office
+Jerome Nuwabaasa
+Yeah, yeah, there's a little office.
+Hillary Arinda
+Hmm with disks like typical office with computers and what?
+Jerome Nuwabaasa
+yeah It's designed obstructed it like now. I wouldn't structure did like really small boardroom.
+Hillary Arinda
+mmm
+Jerome Nuwabaasa
+Because I want every EC UT map basically in my view like the work will be more like meetings then individuals. Go and work from whatever they want to work then meetings. They've gone walk from wherever you want to work. So if we agree that will have maybe two meetings within the week. we have the administrative side we have the Um the actual development side we meet we agree on things then I don't care if now that place. Is there if you want a physical place to work from and you want you know whatever you need but if you don't need it, then it stays there for those who need it yeah, but at least it is there for physical meetings.
+Hillary Arinda
+okay
+Jerome Nuwabaasa
+And so I now I think the only thing that I'm remaining with is setting up because it's supposed to have a video conferencing setup so a screen and the video conferencing. So I say I remember it because I saw the it's called what tiktok. The recording so I need you to help me that one once we've set up. I need that
+Hillary Arinda
+mmm That's the way.
+Jerome Nuwabaasa
+set up because basically what every meeting however small to be captured and transcribed.
+Hillary Arinda
+mmm
+Jerome Nuwabaasa
+And that's why actually literally set it up like that. yeah anyway So hello.
+Solomon Ariho
+Yeah, yeah.
+Jerome Nuwabaasa
+So you're now on your laptop? okay man welcome back to Proper operations you know now Solomon's phone. He doesn't have to use his phone anymore. He uses his laptop. So so the noise is good.
+Hillary Arinda
+Using the phone.
+Jerome Nuwabaasa
+The laptop didn't had the sound problem it. I think it might had a microphone
+Hillary Arinda
+Oh the sound was fixed.
+Jerome Nuwabaasa
+problem.
+Hillary Arinda
+What was the issue?
+
+✅
+Action Item
+Solomon Ariho
+problem
+Hillary Arinda
+So he just made you updated drivers and that's it.
+Solomon Ariho
+I uninstalled to other.
+Hillary Arinda
+mmm wonderful
+Jerome Nuwabaasa
+Yeah, imagine he made us suffer for that long.
+Hillary Arinda
+I can imagine.
+Jerome Nuwabaasa
+Okay, can we start with a Prayer admin?
+Hillary Arinda
+so who is Lady Gaga
+Jerome Nuwabaasa
+Hey, let me lead today. Okay, let's break. Heavenly father what to thank you for Gathering us yet again. We want to thank you for the wisdom you pistol opponers want to thank you for the responsibility that you've bestowed upon us to server country and to serve ourselves and our families through this project. We bring ourselves to you. We bring this project to you for your guidance and for your wisdom made some of your purpose made something that are over you to you to your country and to our people of this in the name of Jesus Christ our lord.
+amen
+Hillary Arinda
+amen
+Jerome Nuwabaasa
+okay where to start from Let's start with Solomon's issue actually today. I want us to deal with mainly
+
+✅
+Action Item
+two issues and then Solomon can focus on those I think it's better to always handle those small bits. So Solomon first take us through the problem you're having with pushing things to. the dashboard
+Solomon Ariho
+it's Where we are having some progress back in the morning. There was absolutely nothing that goes happening as far as the system was one son.
+Jerome Nuwabaasa
+okay, maybe I So we had a discussion alliance and you told me about this. I like I rather liked what Hillary has had done to to make sure that everything. Is curated it goes through a dash. Sorry B be upload into the database and like that because then you can trace any source of information that you have you can trace it. I now rear because I think from what I can gather the reason it was not accepting was because it was insisting that you have to upload it to the to the database for each to be pushed is that correct?
+Solomon Ariho
+It was worse.
+Jerome Nuwabaasa
+okay okay all right then so
+Solomon Ariho
+But the remaining parties for the information to go on the display, but I think the database is functional now.
+Jerome Nuwabaasa
+This is functional so anything that you want to upload you're pushing it through the your first putting it into the database you you are no longer picking directly from the maybe from one side and it goes on the dashboard directly.
+Solomon Ariho
+so what happens is it the AI downloads the files And then gives you the instructions on where you should put it so you have to select let me see the parts. There are parts to select then you also have to.
+Jerome Nuwabaasa
+You want to share your screen so that we look at this.
+Solomon Ariho
+It's okay. I just want it also just check that let me show you.
+Hillary Arinda
+hmm
+Solomon Ariho
+So I so the AI will give you a download the fire. And also give you what you should select here. Give you what you should best here. We are to find the location of the fire the password is it's always the same.
+Jerome Nuwabaasa
+okay So that means by that you would have reviewed the file before you can upload it.
+Solomon Ariho
+Yeah, but the other good news is at this to have something to reference when you ask for a reference you can produce the fire from which you yes, they ask for
+Jerome Nuwabaasa
+okay good good
+Solomon Ariho
+the fire you already know where I did.
+Jerome Nuwabaasa
+This is perfect. This is exactly what I needed. This is what we needed. I think this is good. This is Hillary thanks for this for structuring it like this. This is perfect.
+Hillary Arinda
+Malaysia pleasure absolute why can't the AI do all this for you because these
+Solomon Ariho
+yeah
+Hillary Arinda
+are just apis canteenth locate the file and call the same Endpoint
+Solomon Ariho
+laborator
+Hillary Arinda
+For example like when you type this what is this document this goes into the body this file it also goes into one of the metadata parts of the request so when it is sending the backend all these request goes in one word in one object that the AI should be able to formulate. So you tell the AI that now that you know the flow why don't you do it for me? You know the password so it calls the Endpoint for you such that you don't have to upload in short.
+Does that make sense?
+Solomon Ariho
+I I will ask it, but I think I've tried before and it will saying yes here that
+Hillary Arinda
+There's no way.
+Solomon Ariho
+you have to work.
+Jerome Nuwabaasa
+But I don't know I feel I like risk better.
+
+💡
+Callout
+Hillary Arinda
+Yeah, I think this is how he should be.
+Solomon Ariho
+I I tried my friend man.
+Jerome Nuwabaasa
+No, I like this better. It's I don't know I just feel like this is much better the fact that it gets the file packages it for you, then you just have to upload it. It's better until it becomes a bottle neck. Let's let's use it for now.
+Hillary Arinda
+Yeah, like you and like you put it it's easy to trace where issues because now when we're having errors the thing is the truth is we had never tested this so
+Jerome Nuwabaasa
+Yes.
+Hillary Arinda
+the time Solomon started using was the first time were testing and implementation are not been done to perfection. That's where I started seeing where issues could be in the pipeline and I think that helps because at the end of the day we want to make this system user agnostic meaning you don't really need to be experienced in. In what in AI but you need to be experienced in the data you uploading that's all we need from you. You know what you're up being yes, that's it. Yeah.
+Jerome Nuwabaasa
+Yes. Ma I agree. I agree with that okay. That's perfect. So now what's remaining what has not had been fixed.
+Solomon Ariho
+Just the last part because the work has gone through the pipeline. I know that stuff. But it needs to be displayed.
+Jerome Nuwabaasa
+And it's not being displayed. Is it is it like being displayed in the staging environment and not in the file in the final one or neither?
+Solomon Ariho
+I think the steering the
+Hillary Arinda
+Did you click on promotes to production? What does what is the area that your AI actually knows what it's doing because it has been now correcting mine on issues, so what is it say?
+Solomon Ariho
+I was still working but I'd not yet ready through the last instruction which I'm displaying right now. Maybe I can go through.
+Hillary Arinda
+Yeah, I think this would be a good time to go through quickly and then we close this loop. This is the final stage.
+Solomon Ariho
+That explains it the brain wrote The mfg. Imports directed to the Broad PB what 809 but
+Hillary Arinda
+mmm
+Solomon Ariho
+What have you understood?
+Hillary Arinda
+Yeah, I see the issue. I see the issue.
+
+✅
+Action Item
+Solomon Ariho
+I was going I I knew I had some progress. I was just going to continue so
+Hillary Arinda
+Yeah, we still have we still have no this is a small one.
+Solomon Ariho
+Yeah, so I'll read through then you know follow through.
+Hillary Arinda
+okay
+Solomon Ariho
+now I feel like the biggest problem is probably already so
+Hillary Arinda
+mmm
+Jerome Nuwabaasa
+Why is it landing in 8091 not 8090?
+Hillary Arinda
+That that is a buttonic Solomon send me that and we we fix that quickly.
+Solomon Ariho
+I send it right now. I send it right now. What's up?
+Hillary Arinda
+Yeah, send it right now. Yeah on what's up boy anyway such that I can give it to my agent. because we that is the
+Solomon Ariho
+Oh, I I do I give it your agent directory.
+Hillary Arinda
+Yeah, no. No give it to me. and I give it to my Local agent so there is one on his nah and there's one that I'm working with I prefer if like if I'm a Ville by prefer to work with this one that I'm working with. The one on his sometimes makes mistakes and this is too critical we cannot take chances.
+Solomon Ariho
+I've sent it on the group.
+Hillary Arinda
+Yeah, okay, let me just give it this. agents Okay we can continue in the meantime Jerome back to you.
+Jerome Nuwabaasa
+okay, I think that now can now we are dealing with this once this is solved Solomon is there any other issue from your side before I Bring up.
+
+✅
+Action Item
+Solomon Ariho
+I will not need the right now that was the only.
+Jerome Nuwabaasa
+all right great If that's the case, I am now going to share this screen, you'd stop sharing.
+Hillary Arinda
+I say it's done with the home okay. but in the
+Solomon Ariho
+one
+Hillary Arinda
+Uganda But take it.
+Solomon Ariho
+But then my new movie double.
+Hillary Arinda
+hey Wait they experience.
+Solomon Ariho
+And we got we cannot arrive one individual.
+Jerome Nuwabaasa
+I'm trying to find something else working with. Yeah, this should be it. No, it's not it. s not supposed to be
+okay so A I decided to kind of interrogate the data, let me show you which one I was interrogating. This data this information especially in the manufacturing value added what everything like that. Is I decided to first interrogate it? And when I did I actually found that a lot of it. Some of it was wrong. So I basically told to review Out guide it indicator by indicator and basically say tell me where you get this from. Tell me why you're getting this from and this actually make sure that it's correct so let me show you what Excel I called.
+I got It should be the latest version of the Excel but I'm still editing it. so it's
+Okay you can see but so when you say manufacturing value added. It shows you weight is take 14.5 from u-boss stroke dashboard. Ndp 20 it tells you where this information is coming from possessed to put that in the in the comments like this current USD 9 beer from u-bos a new GDP 2020 devoted 25 publication June 2026 release I don't know if you remember when I was telling youth that this is the information that I wanted.
+so long So I basically wanted to drill in and make sure that you know the actual reports from which this information is coming I given so I've been working on this so for example number of operational packs. You can see here current 8 confirmed in the UIA Industrial Park summary report of 6 February 2025 and then it covers
+
+💡
+Callout
+this you see it. It's it's more authentic information because it's very clear way, it is coming from. so I told
+Solomon Ariho
+So the kind of information you wanted if someone knows whoever's over.
+Jerome Nuwabaasa
+It no now. I just wanted to be in the background. You may not need to to have it when someone who was over. I just need it to be in the in the background.
+Solomon Ariho
+okay
+Jerome Nuwabaasa
+For now we can just have a brief source because when when you say. Any we'll see if it can I don't know because some of it. Is is a bit too long that it would be an issue. But what I wanted to talk about so I am preparing this in a next set sheet which
+
+✅
+Action Item
+I'll then share with you because when I was working on it initially it had wanted to do a direct update and I maybe it would have even failed but I said not as fast workout the Excel sheet with all the explanations of the sources of data, then we share with Solomon so maybe you can be reading through and if you need to upload some of those reports that it makes reference to you can upload them however.
+Solomon you remember Hillary remember the last discussion we had Was a conflict between granular data and updated data. We had one source which had up-to-date data, but not granular and another source which granular data but was not up to date.
+Hillary Arinda
+mm-hmm
+Jerome Nuwabaasa
+So we later discovered that actually the data that we thought was not up to date is actually up-to-date who are just not.
+Hillary Arinda
+Mtic is up to date the that.
+Jerome Nuwabaasa
+the ITC
+Hillary Arinda
+Sorry, what is it called? It's not mdic trademarks is up to them.
+Jerome Nuwabaasa
+trademaps It is equal ITC treatments so let's let's have a look at it. Here it is I'm even logged in so if I say all products. so anyway this was an issue that if you ask for data by Month
+
+✅
+Action Item
+If you ask for it by month, then actually it's up to date because you can see it's up to month three of 2026. And you can get granular data because you can ask it to go up to level six. And get really granular data. You know up to level six and very up-to-date. So this is Matrix so. Now we then discovered that no, this is a better source of information. We can have all our information coming from this okay. But whenever you solve a problem when you uncomes up.
+so when we were looking at the description of For example high tech imports and remember we also looked at the description of manufactured imports. Maybe it is here medium take. So this one is for medium take medium tag manufactured many of technology imports. And exports but we are also looked at things like manufactured inputs and exports the one who manufactured inputs and exports did not require graduate data, but this one requires granular data, but this one requires granular data in sitc.
+but now the granular data will have here is in HS Does that make sense? They description because now we would pick this description. Where is it this description all right? Throw it into cloud and then it would analyze the data and tell you which ones are for this chords, but now what we have is in HS And so the cloud cannot I mean you would be misleading it.
+but then
+Hillary Arinda
+They're holding hold on hold it. in a few words Context what is the problem?
+Jerome Nuwabaasa
+so You have indicators.
+Hillary Arinda
+hmm
+Jerome Nuwabaasa
+Let's come back here. You have an indicator called a manufactured exports and high tech exports.
+Hillary Arinda
+indicator communicate bi
+Jerome Nuwabaasa
+Yeah, it's it's an indicator that we are supposed to measure.
+Hillary Arinda
+mmm
+Jerome Nuwabaasa
+Okay, so we have the projections the projections are not the problem. We have the current so for the current. We feed it data and it reads this data and tells us it measures that indicator. is that okay so we have
+Hillary Arinda
+Just one particular example throughout to be alert easier to follow through yeah.
+Jerome Nuwabaasa
+So we have in data on manufactured exports. We have two data sources. We have u-boss and we have trademaps. if we went for the u-bos data It is in sitc. so if you just told Claude That just give me a second. okay If you told Claude to read the u-bos data and tell you what are the high-tech manufactured exports. okay You would be easy because the definition of the high-tech manufactured exports that we have aligns with the way the data is organized because the definition is based on sitc data.
+the only shortfall here is that the data is Not granular, Enough The data we have is 2 digits this description is 3 digit.
+Hillary Arinda
+how do we need for Pure growing granular D6
+Jerome Nuwabaasa
+No, we for this particular description. We only need. Three digit if we just if the goal was just to get the description of high tech
+
+🎯
+Decision
+manufactured products.
+Hillary Arinda
+And the same we have to dig it.
+Jerome Nuwabaasa
+We have two digit. Okay, but we have HS that is more granular, but the description is not inhs senior citc however the reason so.
+Hillary Arinda
+I thought the one we have that is not granularized the one that is in ITC no.
+Jerome Nuwabaasa
+No, the one in sitc okay, this is one of it. I think this is the easiest way to show you you see this is a mapping so this is now another way that the hundred so there are so many different forms of data. As you can see there is Isaac so you can see hs3 to Isaac hs3 to sitc3 this is where they are basically saying if you want to do a conversion if you had your HS data and you want to convert it into sitc data.
+This is how the mapping is done. So let's let me open for example this HS combined to sitc4. So it shows you how you convert. Why is this?
+Solomon Ariho
+If you see there, is that these these excels with the cloud to figure out the conversion?
+Jerome Nuwabaasa
+figure out the conversion
+Solomon Ariho
+Yes.
+Hillary Arinda
+the translation the mapping I think in the Data Base this should be We should have a map in the that in pocket base. This data should lie in the pocket base.
+Jerome Nuwabaasa
+Yes, that's the idea okay there you are. Wait a minute okay. With your back. so If you have so this is what it is basically saying that if you have this one goes this is HS up to level five like if you have one one. 0 1 for HS code under sitc, this is what it is. So it is showing you if you have this code under sitc. It is that if you have this one and I satc it is that So that you can make them mapping easier.
+Solomon Ariho
+Enough the same names.
+Jerome Nuwabaasa
+They kinda almost but yeah, no they don't but this is the mapping that can be used. It's a very long file well so many things to map. So the question is because what this would mean then is to say.
+Hillary Arinda
+mmm
+Jerome Nuwabaasa
+that In terms of description there are things that are described in sitc. They are discuss things that are described in HS I wouldn't mind this as long as I have the mapping. because what I would do is I would all my primary data would be HS then I would have the Si the mapping into sitc and where the description is based on sitc. You would map the data Claude would map the data and then. Measure the indicator best on sitc. I don't know if that makes sense.
+Hillary Arinda
+Okay now to get things clear the only thing is going to do. is What is going to really do maybe populate pocket base yeah, because there is that in jester, but apart from that everything is really rule best.
+Jerome Nuwabaasa
+Yeah, okay, maybe let me get it. So they they think of it like they are
+Hillary Arinda
+you don't need clothes if
+Jerome Nuwabaasa
+languages. And you have the initial whatever and then you have the transcribed by this mapper is like the transcriber. It actually not transcribable but more like the the translator.
+Hillary Arinda
+mmm
+Jerome Nuwabaasa
+it translates data that is in HSC in HS
+Hillary Arinda
+To it to sitc.
+Jerome Nuwabaasa
+to to sitc For a role that is described in sitc now in terms of the pocket base database, do I need to have input data stored? both in terms of HS and in terms of sitc
+Hillary Arinda
+No, that is duplication.
+Jerome Nuwabaasa
+hmm
+Hillary Arinda
+So, let's think of it this way, you should only have one source of truth what that means is like the way you put it you said pocket should be answered of truth, but then when you go deeper into pocket base you still need one source of truth for every record. That means if you have a source that gives you HS code. You don't need another source but gives you sitc. You just need a translator does that make sense.
+Jerome Nuwabaasa
+okay so
+Hillary Arinda
+because let me ask you have to sources one that gives you HS and sitc because if
+Jerome Nuwabaasa
+No, we are going to use one sauce. We're going to use one source.
+Hillary Arinda
+Yes. Because there's a world where both can actually work and the workflow would
+Jerome Nuwabaasa
+strictly
+Hillary Arinda
+change let me explain the first one in the first one where you have one source. That's the easy part because you have one source of Truth HS code comes in its translated to what you want to display very easy the only thing the llm. Does is the Issue injection into pocket base that's all the rest is just pure Python code
+
+✅
+Action Item
+that looks at the translation translates and then populates the UI second scenario is when you have HS and mitc there you need a comparator to see which one should you take is there any discrepancy between the two but to me that just that's West but if it's available you would compare the two and then if there is
+Jerome Nuwabaasa
+yeah
+Hillary Arinda
+any discrepancy you flag it if everything else is clear you you promote it to to the UI for display.
+Jerome Nuwabaasa
+okay Okay, I think that's so all I need to provide is this mapping tool. To then for Solomon to upload and then it becomes the what did you call it translator?
+Hillary Arinda
+translator yes
+Jerome Nuwabaasa
+okay
+Hillary Arinda
+So we just need to give it rules yeah, so our work with Solomon on what needs to really be done.
+Jerome Nuwabaasa
+okay
+Hillary Arinda
+Like the workflow is going to get tricked a bit on this, but the good thing is that we have all the minutes so the llm should know what we should do.
+Jerome Nuwabaasa
+okay
+Hillary Arinda
+Not a problem, so let me ask. Apparently, what do we have?
+Jerome Nuwabaasa
+On what is being displayed?
+Hillary Arinda
+Yes.
+Jerome Nuwabaasa
+I don't know I think we've been loading it with so much. So it has so many sources and now basically what we're trying to do is to be very described clearly. What are the authentic sources and what other sources should be ignored?
+Hillary Arinda
+Okay if I'm getting right now. We have a mixture. We don't know if it's HS or
+Jerome Nuwabaasa
+that's that's
+Hillary Arinda
+sit.
+Jerome Nuwabaasa
+We'd like to have HS right now.
+Hillary Arinda
+Ah, we likely have HS but ideally.
+Jerome Nuwabaasa
+We largely have a case but the for example we hadn't loaded it with the description of what is the manufactured product best on the description in sitc. We had not loaded them.
+Hillary Arinda
+I think I I get that issue. The big issue. Is that we started from the we
+
+✅
+Action Item
+started from the end towards the beginning and that's okay now we are trainual.
+Jerome Nuwabaasa
+Yes, we started from. So for example, let me let me give an example we have data now on exports, but then we also had data on what like calculated data on what manufactured exports are and now for me like from a report for me. I'm not comfortable picking if I have data on exports. I should have a formula for calculating what manufactured exports are and then it scans through the export data and says okay. This is what is manufactured exports, but what you have is export data.
+From ITC from from trademarks and then some report saying these are the manufactured exports, so it's not a calculation but for me I wanted to be a calculation. I want the best information to be the same and then they calculation so I keep loading the best information. I keep updating the base information the primary information and then all these other things are just automatically calculated.
+Hillary Arinda
+okay
+Jerome Nuwabaasa
+yeah
+Hillary Arinda
+And we have the rules for the calculation.
+Jerome Nuwabaasa
+Yeah, we have the rules for the calculations and they are not like our rules. They are ready pre-rated rules and they are very clear rules so they shouldn't
+Hillary Arinda
+okay
+Jerome Nuwabaasa
+bring the children resonations.
+Hillary Arinda
+So at this mathematical or they are descriptive in natural language.
+Jerome Nuwabaasa
+They are very mathematical there. I mean look at this. Let's look at this. So there this person is this this is the rule it's saying that. Country is ATC technology. Okay so satc medium technology is anything that is it gives you the exact one's two six six two six seven so you go and you see the exports under This chords that you add them up. It's not that something that has been this where you this way it is descriptive, but it's here it's very very clear. It's not it's a It gives you the exact codes.
+Hillary Arinda
+That you need to be include to aggregate. Yeah.
+Jerome Nuwabaasa
+And of which yeah that you need to include, so don't don't say but this one also looks like can I add no it's very specific on the cons.
+Hillary Arinda
+Okay and the quotes can the goods come with the data okay okay, that's okay.
+Jerome Nuwabaasa
+so they have to first organize the data to align with these calls so you
+Hillary Arinda
+So we have to clean Our Data basically.
+Jerome Nuwabaasa
+currently have the data in HS The moment you map it into sitc. Then this description is very easy to this translator is very it will work very easily because it then goes through and looks at everything that is under. sitc yeah, so under this specific continuous ITC
+Hillary Arinda
+So the way I see.
+Solomon Ariho
+There is a there isn't anything else for anything like this for it's just.
+Jerome Nuwabaasa
+there isn't ah a description like this for HSC
+Solomon Ariho
+Yes, yes.
+Jerome Nuwabaasa
+that is based on HSC
+Solomon Ariho
+rather than first converting another
+Jerome Nuwabaasa
+Okay, so maybe let me clarify when such rules are written. They can never be written in more than one category.
+Hillary Arinda
+Yeah, it all didn't make sense to me because like I say it in database design. You only need one source of truth and one only anything else is just a source of confusion because when you start joining data, you start using foreign keys for
+Jerome Nuwabaasa
+yeah
+Hillary Arinda
+example in this case you have the HS codes right and you have a data in HS codes
+Jerome Nuwabaasa
+Yes.
+Hillary Arinda
+and each this data and HS code format already has a primary key so when you start mapping it. You'll just go and get the key that corresponds to the sorry in the translator you'll have the HS code key and the east the corresponding STIs it. Yes, that's the table. You'll have only those two columns now it comes
+Jerome Nuwabaasa
+sitc S8 Yes.
+Hillary Arinda
+to mapping you just go to HS code. You like okay. What is the HS code here it is? This what is the corresponding sitc code for this HS code you bring it and you bring it in this table and you're done. So you don't need to now have to get two sources of data for the same thing. It's really poor design. Even if it was there I wouldn't say we go for it.
+Jerome Nuwabaasa
+okay okay
+Hillary Arinda
+yeah
+Jerome Nuwabaasa
+All right, so I think that is sorted that's the that's the one area I wanted it clarity on. So I think it is what?
+Hillary Arinda
+But now now that we have getting cleaner and cleaner. Don't you think we need to? But no, it's okay. I think it should be done on demand like the database cleanup.
+Jerome Nuwabaasa
+yeah
+Hillary Arinda
+Will keep click yeah, it's fine.
+Jerome Nuwabaasa
+Okay, so is it clear what needs to be done now?
+Hillary Arinda
+I cannot for Solomon answer.
+Jerome Nuwabaasa
+in a few sentences that all export and import data will come in in form of HS Any analysis of import and export data whether the rules are based on HS or sitc? They will have translators to enable that so if if there is a rule if it's an analytic that where the rule of that guides their analysis is based on HS then it just picks data directly and that's the analysis if it is based on sitc, then it first translates and then does the analysis.
+Hillary Arinda
+Displays in sitc is that correct?
+Jerome Nuwabaasa
+No, actually define on display doesn't talk about whether it's satco HS it's completely about something different so for example here a finally please
+Hillary Arinda
+a
+Jerome Nuwabaasa
+telling you about what are the what is the total value of High Technology
+Solomon Ariho
+just
+Jerome Nuwabaasa
+exports.
+Hillary Arinda
+understood understood
+Jerome Nuwabaasa
+Yeah, this is just within the formula the translation is to facilitate precisely
+Hillary Arinda
+It's just for the calculation okay.
+Jerome Nuwabaasa
+precisely.
+Hillary Arinda
+okay so Solomon They the thing correction and updated so I think what we need to do tonight or
+
+🎯
+Decision
+for the next step is to first resolve this issues, because it's saying it's done. You'll just give your agent read through what my agent has said and once we. Clear that hardo we work on this HS being the plan for this is going to come out from the minutes and then they workflow like we've always been working he's not going to change really.
+Jerome Nuwabaasa
+Hilary one more Maybe question I could ask so you see this data that this is now ugandas exports to the world okay. I can download it in Excel And upload it. You know we had said Solomon should craft something that can read directly.
+Hillary Arinda
+mmm
+Jerome Nuwabaasa
+I don't know if it is better for him to craft something that can redirectly or if it's better that we just download it and upload it.
+Solomon Ariho
+Currently what it does is downloaded. And then I upload it it.
+Jerome Nuwabaasa
+So has it for example downloaded for you all the export?
+Solomon Ariho
+No, no we started that with this this composition of yubos is the one who?
+Hillary Arinda
+okay he said
+Solomon Ariho
+But going forward I don't think I have an option apart from it downloading and then I upload.
+Jerome Nuwabaasa
+okay
+Solomon Ariho
+Those are the rules I gave they said you have to download then you know give me
+Jerome Nuwabaasa
+Okay, I don't know if it my question is I don't know you see okay for example
+Solomon Ariho
+these instructions then I upload.
+Jerome Nuwabaasa
+has it downloaded for you export composition from ibos?
+Solomon Ariho
+Yes.
+Jerome Nuwabaasa
+now that is easy because that's just one Excel file this one from trademaps it has to Idea, it could have to go in and fast sort the data that it's going to download
+Hillary Arinda
+alright
+Jerome Nuwabaasa
+I wonder if it can do that if it can't.
+Solomon Ariho
+Even even the composition. I think it downloaded One file. And then generated for me to for exports and import so it sorted the data itself.
+Jerome Nuwabaasa
+Know the I know I know the way that you boss that is it has both export in one Excel imports in an obxl.
+Solomon Ariho
+And I'm saying this one the AI created two files afterwards.
+Jerome Nuwabaasa
+okay
+Solomon Ariho
+so I have three I have three fires in Toto
+Hillary Arinda
+within
+Solomon Ariho
+I don't know if understood, what is it did? So what I'm trying to say is you're saying I'm thinking it has the ability to sort whatever it is. You're telling me to sort.
+Jerome Nuwabaasa
+okay
+Solomon Ariho
+if it doesn't now, do it manually but
+Jerome Nuwabaasa
+You know the beauty with this also why I wouldn't also is that they for example. The data that you load you don't have to loaded again. It's not like this data that just needs to give me just need to keep loading the monthly updates.
+Solomon Ariho
+I'm again.
+Jerome Nuwabaasa
+You see this export import data.
+Solomon Ariho
+hmm
+Jerome Nuwabaasa
+if I come here I see value in 2026 mo3 and Today is June it's usually three months behind so now that we've begun July okay.
+Solomon Ariho
+04 is about coming.
+Jerome Nuwabaasa
+Maybe in the yeah zero for is about to come in so the moment you've loaded up to zero three you just need to keep loading one month because all the Histories now there. You just keep need to keep getting one month at a time. You just need to keep getting this. Hey this one cannot even give you less than three. Let's see what it can even yeah, this one can always give you three of them, but you just need to keep downloading like this one this file because you see this what I've just done this one. I can now download it as an Excel file and then upload it.
+Solomon Ariho
+mmm
+Jerome Nuwabaasa
+yeah So the question what I'm wondering is that if it will be able to download this file.
+Solomon Ariho
+By itself.
+Jerome Nuwabaasa
+By itself.
+Solomon Ariho
+an egg that one month
+Jerome Nuwabaasa
+No, it's not about having one month because when it gets this you just updates you just updates the website. It's already the pocket pace anyway. If you think it can download it directly good if it cannot then you will download them and then upload them. They're not very many files to download.
+Solomon Ariho
+It's okay.
+Hillary Arinda
+okay
+Solomon Ariho
+Is it conduct them to their you I can't but you do this and get me and put it here.
+Jerome Nuwabaasa
+okay And like I told you we will also need for the East African countries. Because we want to look at the market somewhere else where we look at the market. What look at the market for Uganda but anyway we'll get there later for now. Let's not get there. It will get there later. We'll add it later. yeah Okay, I think that is it. that's already plenty of work for you to handle Solomon Let's maybe fast that from there.
+Hillary
+Hillary Arinda
+Yep. Yep.
+Jerome Nuwabaasa
+Okay, wait a minute. I want to look at something. I want to click something on se. Em imported value in okay. um But they want to stop here. Yes, I've been working on the I think honestly on the on the mid. Lips let's first handle what we have agreed on now. Once it's done in we can take one the rest so mainly the export data Solomon share this Excel that I've been working on export data and the work that you need to do for things to be able to display.
+Okay, I'm Hillary or new timber. I know I should have shared. I should have pushed I've been working on needs a bit still even here. I should be able to amongst stage 7 which one is the other processing facility. I should be able to finish the state seven and the coc today and push push because there is it's the other two remaining stages. Yeah, so nice. Yeah, and then push okay.
+then yeah, then we can start from there and also maybe I really hope I'll be able to because my expectation is that I should have you letters latest on Tuesday Tomorrow Tuesday I'll really try to see that they come out because it's very
+
+🎯
+Decision
+important that they do. yeah So, that's it. On that's the update that I have on on this.
+
+💡
+Callout
+Hillary Arinda
+Okay now, that's a good update.
+Jerome Nuwabaasa
+And please again just remember that the discussion that you have on your side is to try and fast structure this whole thing into a comprehensive thing of how you timber works, then we can look at breaking it down into what is ways. What is women's but we first need to have. a Coke a full
+Hillary Arinda
+holistic thing yeah, yes
+Jerome Nuwabaasa
+Holistic thing because if we quickly jump into what does this one do and what does the other one? Do then? We might miss something or we might we might
+Hillary Arinda
+I
+Jerome Nuwabaasa
+replicate something.
+Hillary Arinda
+hmm
+Jerome Nuwabaasa
+yeah
+Solomon Ariho
+all right
+Hillary Arinda
+I agree the first look at the whole system as one unit and was we have that
+Jerome Nuwabaasa
+okay exactly
+Hillary Arinda
+comprise then we break down handles, what and where yeah I agree.
+Jerome Nuwabaasa
+Yeah, exactly okay. Okay, I think that is it. for me
+Hillary Arinda
+Okay I saw the moon you wait for that minutes and then the agents will get to work.
+Solomon Ariho
+Jerome
+Jerome Nuwabaasa
+yeah
+Solomon Ariho
+before you
+Hillary Arinda
+Hey, yeah.
+Solomon Ariho
+I wanted you to explain here the NSF thing you explain to me that we can do it for our king from.
+Jerome Nuwabaasa
+Nssf. What did I tell you about it necessary now?
+Solomon Ariho
+The way they felt the dividend.
+Jerome Nuwabaasa
+Oh, yes, so the no the way necessf. I don't know the exact date but I think I think it is may be made of the year but the way they do it is they say. So first of all nssf does not pay your fund based on where your money went. They aggregate all the benefits and losses. So they don't when you put nssf physician profund. Although when your money goes into nss of some of your money Hillary right now is maybe in the nssf building now if the nssf building makes so much money Hillary does not get too much money that because where his money went they it when it was going there. It was it's considered an aggregation so whatever money the business is make.
+they they Aggregate and losses and then just pay a single interest based on the performance that year I don't know if that makes sense.
+Hillary Arinda
+I think that's particularly basically. I would give our imagined. That's how all you need trusts do it.
+Jerome Nuwabaasa
+Good now the question. There's only one single question.
+Hillary Arinda
+hmm
+Jerome Nuwabaasa
+the question becomes When we are going to pay out this interest. Assuming the interest was declared today. And Solomon saved his money yesterday. Does Solomon benefit? Eh, and the other is not. The answer is there is a date.
+Hillary Arinda
+mmm
+Jerome Nuwabaasa
+a certain number of days before the interest declaration date So if the interest declaration date is in October this debate Israel like six months before any investment that came after we only be considered for the next one not for this one.
+Hillary Arinda
+the next financial year but and just
+Jerome Nuwabaasa
+For the next financial year not for this financial year.
+Hillary Arinda
+I think that makes our kalot easier. That is we are going to propose it for
+Jerome Nuwabaasa
+yeah, that's
+Hillary Arinda
+model yeah, that's
+Jerome Nuwabaasa
+That's the model they use now if you are.
+Hillary Arinda
+But wait wait wait, but it also depends on how much you have invested in at the end of the day really at the innovative right.
+Jerome Nuwabaasa
+It always depends at the end of the day on how much you've invested in.
+Hillary Arinda
+Yeah, okay.
+Jerome Nuwabaasa
+yeah, it's it's two things so this is the the point if Any necessive is going to declare 15 percent interest. in in the same let's say and it's cut off date for for investment for for the figures that are considered is 30th June
+Hillary Arinda
+mmm
+Jerome Nuwabaasa
+If on 30th June I drove 10 million.
+Hillary Arinda
+You get your money.
+Jerome Nuwabaasa
+Ten million into the fund they will give me my 15 percent.
+Hillary Arinda
+hmm and understood
+Jerome Nuwabaasa
+In December if I drop it in on first July I will wait for the Declaration of the
+Hillary Arinda
+but there hmm
+Jerome Nuwabaasa
+next year.
+Hillary Arinda
+okay
+Jerome Nuwabaasa
+That is how it works.
+Hillary Arinda
+okay, I I think we are going to propose that model as well mix mix Mathematics
+Jerome Nuwabaasa
+Yeah all right. But that model that from the discussion that I had had with Solomon that model.
+Hillary Arinda
+and
+Jerome Nuwabaasa
+Is dependent on if you consider Kim Farm to be a pool of funds, not a channel for dedicated Investments because from the discussion that I've been having from what Solomon has been telling me. It's like people might be putting in money for specific Investments that's different it wouldn't work here.
+Hillary Arinda
+But that's a different. I didn't work for such an investment, but it would work
+Jerome Nuwabaasa
+it would
+Hillary Arinda
+for investment where kimberman was used.
+Jerome Nuwabaasa
+Precise it so ah has so many comes into Kym pharmacy pool.
+Hillary Arinda
+strictly yes
+Jerome Nuwabaasa
+And then him from is a fan that takes decision on decisions on wet to put its money.
+Hillary Arinda
+I think the world where both actually work, but I get the idea I clearly get the idea.
+Jerome Nuwabaasa
+And and it my experience is even when you're investing as a pool. If you if you're you see and even within ssf. If you went a little bit deeper to understand how the invest their money. They invest this money is in individual businesses even when they are kind of
+Hillary Arinda
+hmm
+Jerome Nuwabaasa
+innocences of businesses even if it's a building or whatever they are individual businesses. That have largely individual initiative and what I mean by this is. It's it will always be very difficult for Kim from Taken investment decision that has been initiated by Kim Farm it's always better.
+Hillary Arinda
+Is made of members man that?
+Jerome Nuwabaasa
+A heart so it's always better no, but let me explain it's always better when Hillary has a business idea. He comes to Kim farm for money. but they the business idea is Hillarys In Farm ownership of the business idea is entirely best on came from the Investment in fact. This business idea should be able to happen whether or not came from investing it. Should be viable whether or not came from in it because if viability is only based on the fact that Kim farm in it. Then most likely it's a bad idea. I don't know if that makes sense.
+If if I don't know if you get my point if you find that this is a night this idea if I didn't give it to Kim from nobody else will give me money.
+Hillary Arinda
+It's a very bad idea.
+Jerome Nuwabaasa
+That's right. That's your bad idea you get my point so how does give?
+Hillary Arinda
+that
+Jerome Nuwabaasa
+It's a question you see it's a it's a question of this is the principle this is a principle of maybe a family fund the principle is I have a brilliant guy called Solomon who will do amazing business things okay. Why will Solomon take money from external people use his brain to grow other people's money? Let him grow our money. But if we don't give him money he will still get money from external people and
+Hillary Arinda
+From somewhere you would then we continue yeah?
+Jerome Nuwabaasa
+grow it. We are not giving him money as a charity or he's a case. He's being has Faith
+Hillary Arinda
+It's like how you can invest in a unique Trust basically is a unit trust in short but very high profit making unit trust.
+Jerome Nuwabaasa
+it's Exactly, he is a viable. This is not this is what must be what you must really really avoid is a things that are nonviable.
+Hillary Arinda
+I got yeah, I get it and cows.
+Jerome Nuwabaasa
+Yes you I don't know just if you make that the principle of investment it will make things much as much easier. yeah
+Hillary Arinda
+Anyway, let us not over there Grace think we can close we have got the idea.
+Jerome Nuwabaasa
+okay all right
+Hillary Arinda
+and yeah
+Jerome Nuwabaasa
+Have a good evening.
+Hillary Arinda
+Carically, so I'll share the minutes shortly and then we'll progress.
+Solomon Ariho
+all right
+Hillary Arinda
+lucky but bye
+Solomon Ariho
+we're going to
