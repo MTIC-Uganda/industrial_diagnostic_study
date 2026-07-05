@@ -23,7 +23,8 @@ workspace "MIDD — Manufacturing Industry Diagnostics Dashboard" "As-built 2026
 
             # ── BRAIN / AGENTS (the workers, on the host) ──────────────────
             claudeCli = container "Claude CLI (brain engine)" "/usr/bin/claude on the host, headless. The single engine behind Ask MIDD, ingestion, and the orchestrator. No Anthropic API key; uses the Max plan." "Claude Code CLI"
-            orchestrator = container "Upload Orchestrator" "scripts/process_upload.py. On upload: CLI reads the intent, routes register->deterministic parse / sector->LLM ingestion, seeds PocketBase, rebuilds + publishes the dashboard, self-checks." "Python"
+            orchestrator = container "Upload Orchestrator" "scripts/process_upload.py (importable; pure route()). On upload: CLI reads the intent, then routes by folder AND file type: manufacturing-overview + register PDF -> deterministic parse; manufacturing-overview + spreadsheet -> key_indicators agent (updates existing KPI-card slugs from a UBOS scorecard, additive-only); any value-chain folder -> LLM ingestion. Then rebuilds + publishes the dashboard, self-checks." "Python"
+            keyIndicatorsAgent = container "Key Indicators Agent" "agents/key_indicators_agent.py. Maps a UBOS scorecard spreadsheet + the operator intent to updates for EXISTING key_indicators slugs (value/pct/year/source) and PATCHes PocketBase. Never creates, renames, or deletes a card (ADR-017 additive-only). Safety core validate_updates is unit-tested." "Python/Claude CLI"
             ingestionAgent = container "Ingestion Agent" "Extracts PDF/DOCX/XLSX (pdfplumber/python-docx/openpyxl) via the Claude CLI; folder-routed; reads the .task.md intent sidecar. Writes diagnostic_datapoints (sector docs)." "Python/Claude CLI"
             synthesisAgent = container "Synthesis Agent" "Datastore rows -> report/dashboard content." "Python/Claude CLI"
             reviewAgent = container "Review Agent" "Independent quality gate before publish." "Python/Claude CLI"
@@ -59,6 +60,9 @@ workspace "MIDD — Manufacturing Industry Diagnostics Dashboard" "As-built 2026
         orchestrator -> claudeCli "Reads the intent (LLM understands)"
         orchestrator -> deterministicParser "Register -> establishment rows"
         orchestrator -> ingestionAgent "Sector document -> datapoints"
+        orchestrator -> keyIndicatorsAgent "Manufacturing-overview spreadsheet -> KPI card updates"
+        keyIndicatorsAgent -> claudeCli "Maps scorecard + intent to existing slug updates"
+        keyIndicatorsAgent -> pocketbase "PATCHes existing key_indicators (additive-only)"
         ingestionAgent -> claudeCli "Extraction + mapping"
         deterministicParser -> pocketbase "Seeds industries"
         ingestionAgent -> pocketbase "Seeds diagnostic_datapoints"
