@@ -11,3 +11,4 @@ matplotlib>=3.7
 fastapi>=0.110
 httpx>=0.27
 python-multipart>=0.0.9
+openpyxl>=3.1
