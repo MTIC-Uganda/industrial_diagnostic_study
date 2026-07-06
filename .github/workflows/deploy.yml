@@ -372,9 +372,9 @@ jobs:
         # before Apply-to-production. So re-render index.html from STAGING PB here and swap it in,
         # so staging reflects staging data instead of being clobbered with prod data. Prod
         # (deploy-prod) keeps the prod-rendered artifact. generate_dashboard.py is stdlib-only.
-        env:
-          PB_URL: http://${{ secrets.HETZNER_HOST }}:8091
         run: |
+          # HETZNER_HOST is a workflow-level env var (literal IP), NOT a secret.
+          export PB_URL="http://$HETZNER_HOST:8091"
           python3 scripts/generate_dashboard.py
           cp report/sources-of-truth.html dist/index.html
 
