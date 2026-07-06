@@ -246,3 +246,111 @@ def test_import_has_no_side_effects():
     m = importlib.reload(g)
     assert m.PB_URL == ""          # not read from env at import
     assert m.USE_POCKETBASE is False
+
+
+# ── CY / FY toggle helpers (2026-07-06) ───────────────────────────────────────
+
+def _fy_fixtures():
+    """Minimal key_indicators fixture that includes FY alternate fields."""
+    base = _fixtures()
+    base["key_indicators"] = [
+        {"slug": "exports", "label": "Exports", "kind": "icon_figure",
+         "value": "USD 1.8B", "pct": "0",
+         "sub_value": "12.8% of total exports (CY2025)",
+         "year": "2025", "source": "UBOS", "source_detail": "", "confidence": "exact",
+         # FY fields populated:
+         "value_fy": "USD 1.6B", "pct_fy": "0",
+         "sub_value_fy": "14.7% of total exports (FY2024/25)",
+         "year_fy": "FY2024/25", "source_fy": "UBOS", "confidence_fy": "exact",
+         "import_value": "USD 7.8B", "import_sub": "40.9% of merchandise imports",
+         "import_value_fy": "USD 6.3B", "import_sub_fy": "45.1% of merchandise imports"},
+        {"slug": "mfg_imports", "label": "Imports", "kind": "icon_figure",
+         "value": "USD 7.8B", "pct": "0",
+         "sub_value": "40.9% of merchandise imports", "year": "2025",
+         "source": "UBOS", "source_detail": "", "confidence": "exact",
+         # No FY fields:
+         "value_fy": "", "pct_fy": "0", "sub_value_fy": "", "year_fy": "",
+         "source_fy": "", "confidence_fy": "", "import_value": "", "import_sub": "",
+         "import_value_fy": "", "import_sub_fy": ""},
+    ] + [
+        {"slug": s, "label": s.title(), "kind": "pie", "value": "10", "pct": "40",
+         "sub_value": "sub", "icon": "★", "color": "#1565c0", "rest_color": "#eee",
+         "year": "2025", "source": "UBOS", "source_detail": "", "confidence": "exact",
+         "value_fy": "", "pct_fy": 0, "sub_value_fy": "", "year_fy": "",
+         "source_fy": "", "confidence_fy": "", "import_value": "", "import_sub": "",
+         "import_value_fy": "", "import_sub_fy": ""}
+        for s in ["value_added", "growth", "tax", "hightech", "credit",
+                  "establishments", "region_dist", "parks", "fdi", "employment", "variety"]
+    ]
+    return base
+
+
+@pytest.fixture
+def fy_wired(monkeypatch):
+    fx = _fy_fixtures()
+    monkeypatch.setattr(g, "pb_get", lambda coll, **kw: list(fx.get(coll, [])))
+    monkeypatch.setattr(g, "pb_count", lambda coll, filter=None: 1234)
+    monkeypatch.setattr(g, "_treemaps_from_pocketbase", _treemap_agg)
+    monkeypatch.setattr(g, "PB_URL", "http://fixture")
+    monkeypatch.setattr(g, "USE_POCKETBASE", True)
+    return fx
+
+
+def test_fy_fields_loaded_into_key_indicators(fy_wired):
+    g.load_data()
+    exp = g.KEY_INDICATORS["exports"]
+    assert exp["value_fy"] == "USD 1.6B"
+    assert exp["sub_value_fy"] == "14.7% of total exports (FY2024/25)"
+    assert exp["year_fy"] == "FY2024/25"
+    assert exp["source_fy"] == "UBOS"
+    assert exp["confidence_fy"] == "exact"
+    assert exp["import_value_fy"] == "USD 6.3B"
+    assert exp["import_sub_fy"] == "45.1% of merchandise imports"
+
+
+def test_kpi_fy_value_populated(fy_wired):
+    g.load_data()
+    assert g.kpi_fy_value("exports") == "USD 1.6B"
+    assert g.kpi_fy_value("mfg_imports") == ""        # no FY data for this slug
+    assert g.kpi_fy_value("nonexistent") == ""
+
+
+def test_kpi_fy_subvalue(fy_wired):
+    g.load_data()
+    assert g.kpi_fy_subvalue("exports") == "14.7% of total exports (FY2024/25)"
+    assert g.kpi_fy_subvalue("mfg_imports") == ""
+
+
+def test_kpi_fy_source(fy_wired):
+    g.load_data()
+    src = g.kpi_fy_source("exports")
+    assert "FY2024/25" in src
+    assert "UBOS" in src
+    assert g.kpi_fy_source("mfg_imports") == ""      # year_fy is blank
+    assert g.kpi_fy_source("nonexistent") == ""
+
+
+def test_kpi_fy_badge(fy_wired):
+    g.load_data()
+    badge = g.kpi_fy_badge("exports")
+    assert "conf-exact" in badge or "Official" in badge
+    assert g.kpi_fy_badge("mfg_imports") == ""       # confidence_fy blank
+
+
+def test_kpi_fy_import_value(fy_wired):
+    g.load_data()
+    assert g.kpi_fy_import_value("exports") == "USD 6.3B"
+    assert g.kpi_fy_import_value("mfg_imports") == ""
+
+
+def test_kpi_fy_import_sub(fy_wired):
+    g.load_data()
+    assert g.kpi_fy_import_sub("exports") == "45.1% of merchandise imports"
+    assert g.kpi_fy_import_sub("mfg_imports") == ""
+
+
+def test_kpi_has_fy(fy_wired):
+    g.load_data()
+    assert g.kpi_has_fy("exports") is True       # has value_fy
+    assert g.kpi_has_fy("mfg_imports") is False  # all FY fields blank
+    assert g.kpi_has_fy("nonexistent") is False
