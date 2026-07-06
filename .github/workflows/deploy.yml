@@ -370,8 +370,10 @@ jobs:
         # The build job renders index.html from PROD PocketBase (secrets.PB_URL). But staging
         # is the DATA workshop: uploads land in staging PB (:8091) and Jerome reviews them there
         # before Apply-to-production. So re-render index.html from STAGING PB here and swap it in,
-        # so staging reflects staging data instead of being clobbered with prod data. Prod
-        # (deploy-prod) keeps the prod-rendered artifact. generate_dashboard.py is stdlib-only.
+        # so staging reflects staging data instead of being clobbered with prod data.
+        # deploy-prod promotes STAGING_DIR -> PROD_DIR byte-for-byte, so it MUST re-render
+        # index.html from PROD PB (:8090) afterwards (it does) — otherwise this staging-PB render
+        # leaks unpromoted data onto prod. generate_dashboard.py is stdlib-only.
         run: |
           # HETZNER_HOST is a workflow-level env var (literal IP), NOT a secret.
           export PB_URL="http://$HETZNER_HOST:8091"
@@ -454,6 +456,20 @@ jobs:
             $HETZNER_USER@$HETZNER_HOST \
             "rsync -a --delete $STAGING_DIR/ $PROD_DIR/"
           echo "prod: promoted at $(date -u '+%Y-%m-%d %H:%M UTC')"
+
+      - name: Re-render prod index from PROD PocketBase
+        # The promote above rsyncs STAGING_DIR -> PROD_DIR byte-for-byte, which brings
+        # staging's index.html — and that was re-rendered from STAGING PB (the data
+        # workshop, :8091) in deploy-staging. Prod must show ONLY promoted data (prod
+        # PB :8090, written by Apply-to-Production), so re-render index.html from prod
+        # PB here and overwrite the staging copy the promote brought. Without this, the
+        # staging-PB render leaks unreviewed data onto the live prod site.
+        # generate_dashboard.py is stdlib-only; ubuntu-latest ships python3.
+        run: |
+          export PB_URL="http://$HETZNER_HOST:8090"
+          python3 scripts/generate_dashboard.py
+          scp -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no \
+            report/sources-of-truth.html $HETZNER_USER@$HETZNER_HOST:$PROD_DIR/index.html
 
       - name: Verify prod
         run: |
