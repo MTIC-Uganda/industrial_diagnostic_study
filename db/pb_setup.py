@@ -297,6 +297,15 @@ COLLECTIONS = [
             text('import_value'),    # companion import figure for exports/hightech cards (2026-07-03)
             text('import_sub'),      # import sub-label (e.g. "~X% of total imports")
             sel('confidence', ['exact', 'estimated', 'indicative']),
+            # Financial-year alternate values for the CY/FY toggle (2026-07-06)
+            text('value_fy'),
+            num('pct_fy'),
+            text('sub_value_fy'),
+            text('year_fy'),
+            text('source_fy'),
+            sel('confidence_fy', ['exact', 'estimated', 'indicative']),
+            text('import_value_fy'),
+            text('import_sub_fy'),
             num('display_order'),
         ],
     },

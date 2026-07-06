@@ -142,6 +142,10 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#f0f2f5;color:#1a1a2e;fo
 .kpi-pie-wrap{display:flex;justify-content:center;margin:4px 0}
 .kpi-source-line{font-size:10px;color:var(--muted);margin-top:auto;padding-top:8px;border-top:1px solid #f0f0f0}
 .kpi-grid .card{display:flex;flex-direction:column}
+.kpi-year-toggle{display:flex;gap:4px;flex-shrink:0}
+.kyt-btn{font-size:11px;font-weight:600;padding:4px 10px;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;transition:background .15s,color .15s}
+.kyt-btn.active{background:var(--blue);color:#fff;border-color:var(--blue)}
+.kpi-no-fy{font-size:9px;color:var(--muted);font-style:italic;margin-top:4px}
 .kpi-region-strip{display:flex;height:32px;border-radius:6px;overflow:hidden;margin-top:6px}
 .kpi-region-seg{transition:opacity .15s}
 .kpi-region-seg:hover{opacity:.8}
@@ -379,11 +383,17 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-t
   </div>
 
   <div class="section-title">📊 Manufacturing Industry Key Indicators</div>
-  <div class="section-sub">Current status | Each indicator uses its latest available figure, with year and source shown on the card | <span style="color:var(--green)">● exact</span> &nbsp; <span style="color:var(--amber)">≈ estimated</span> &nbsp; <span style="color:var(--blue)">○ indicative</span></div>
+  <div class="section-sub" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
+    <span>Current status | Each indicator uses its latest available figure, with year and source shown on the card | <span style="color:var(--green)">● exact</span> &nbsp; <span style="color:var(--amber)">≈ estimated</span> &nbsp; <span style="color:var(--blue)">○ indicative</span></span>
+    <div class="kpi-year-toggle" id="kpi-year-toggle">
+      <button class="kyt-btn active" onclick="setKpiYear('cy',this)">📅 Calendar Year</button>
+      <button class="kyt-btn" onclick="setKpiYear('fy',this)">📆 Financial Year</button>
+    </div>
+  </div>
 
   <div class="kpi-grid kpi-grid-4col" id="tour-kpi-grid">
 
-    <div class="card" style="text-align:center">
+    <div class="card" style="text-align:center" <!--%%KPI_FY_DATA_1%%-->>
       <h3 style="justify-content:center">1. Manufacturing Value Added <!--%%KPI1_BADGE%%--></h3>
       <div class="kpi-donut-col">
         <!--%%KPI1_DONUT%%-->
@@ -393,7 +403,7 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-t
       <div class="kpi-source-line"><!--%%KPI1_SOURCE%%--></div>
     </div>
 
-    <div class="card" style="text-align:center">
+    <div class="card" style="text-align:center"> <!--%%KPI_FY_DATA_2%%-->
       <h3 style="justify-content:center">2. Manufacturing Growth <!--%%KPI2_BADGE%%--></h3>
       <div class="kpi-value-row" style="margin-top:12px">
         <span class="kpi-icon" style="color:#2e7d32"><!--%%KPI2_ICON%%--></span>
@@ -403,13 +413,13 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-t
       <div class="kpi-source-line"><!--%%KPI2_SOURCE%%--></div>
     </div>
 
-    <div class="card" style="text-align:center">
+    <div class="card" style="text-align:center"> <!--%%KPI_FY_DATA_3%%-->
       <h3 style="justify-content:center">3. Manufacturing Tax Contribution <!--%%KPI3_BADGE%%--></h3>
       <!--%%KPI3_DONUT%%-->
       <div class="kpi-source-line"><!--%%KPI3_SOURCE%%--></div>
     </div>
 
-    <div class="card" style="text-align:center">
+    <div class="card" style="text-align:center" <!--%%KPI_FY_DATA_4%%-->>
       <h3 style="justify-content:center">4. Manufactured Trade <!--%%KPI4_BADGE%%--></h3>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px">
         <div style="border-right:1px solid var(--border);padding-right:8px">
@@ -431,33 +441,33 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-t
       <div class="kpi-source-line"><!--%%KPI4_SOURCE%%--></div>
     </div>
 
-    <div class="card" style="text-align:center">
+    <div class="card" style="text-align:center"> <!--%%KPI_FY_DATA_5%%-->
       <h3 style="justify-content:center">5. High-Tech Exports <!--%%KPI5_BADGE%%--></h3>
       <!--%%KPI5_DONUT%%-->
       <div class="sub-value" style="font-size:14px;font-weight:700;color:var(--blue);margin-top:6px"><!--%%KPI5_SUBVALUE%%--></div>
       <div class="kpi-source-line"><!--%%KPI5_SOURCE%%--></div>
     </div>
 
-    <div class="card" style="text-align:center">
+    <div class="card" style="text-align:center"> <!--%%KPI_FY_DATA_6%%-->
       <h3 style="justify-content:center">6. Private Sector Credit <!--%%KPI6_BADGE%%--></h3>
       <!--%%KPI6_DONUT%%-->
       <div class="kpi-source-line"><!--%%KPI6_SOURCE%%--></div>
     </div>
 
-    <div class="card" style="text-align:center">
+    <div class="card" style="text-align:center"> <!--%%KPI_FY_DATA_7%%-->
       <h3 style="justify-content:center">7. Registered Manufacturing Establishments <!--%%KPI7_BADGE%%--></h3>
       <div class="kpi-icon-top"><!--%%KPI7_ICON%%--></div>
       <div class="value"><!--%%KPI7_VALUE%%--></div>
       <div class="kpi-source-line"><!--%%KPI7_SOURCE%%--></div>
     </div>
 
-    <div class="card" style="grid-column:span 1">
+    <div class="card" style="grid-column:span 1" <!--%%KPI_FY_DATA_8%%-->>
       <h3>8. Distribution by Region <!--%%KPI8_BADGE%%--></h3>
       <!--%%KPI8_REGION_STRIP%%-->
       <div class="kpi-source-line"><!--%%KPI8_SOURCE%%--></div>
     </div>
 
-    <div class="card" style="text-align:center">
+    <div class="card" style="text-align:center"> <!--%%KPI_FY_DATA_9%%-->
       <h3 style="justify-content:center">9. Establishments in Industrial Parks <!--%%KPI9_BADGE%%--></h3>
       <!--%%KPI9_PIE%%-->
       <div class="value"><!--%%KPI9_VALUE%%--></div>
@@ -465,7 +475,7 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-t
       <div class="kpi-source-line"><!--%%KPI9_SOURCE%%--></div>
     </div>
 
-    <div class="card" style="text-align:center">
+    <div class="card" style="text-align:center"> <!--%%KPI_FY_DATA_10%%-->
       <h3 style="justify-content:center">10. FDI to Manufacturing <!--%%KPI10_BADGE%%--></h3>
       <!--%%KPI10_PIE%%-->
       <div class="value"><!--%%KPI10_VALUE%%--></div>
@@ -473,7 +483,7 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-t
       <div class="kpi-source-line"><!--%%KPI10_SOURCE%%--></div>
     </div>
 
-    <div class="card" style="text-align:center">
+    <div class="card" style="text-align:center"> <!--%%KPI_FY_DATA_11%%-->
       <h3 style="justify-content:center">11. Manufacturing Employment <!--%%KPI11_BADGE%%--></h3>
       <!--%%KPI11_PIE%%-->
       <div class="value"><!--%%KPI11_VALUE%%--></div>
@@ -481,7 +491,7 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-t
       <div class="kpi-source-line"><!--%%KPI11_SOURCE%%--></div>
     </div>
 
-    <div class="card" style="text-align:center">
+    <div class="card" style="text-align:center"> <!--%%KPI_FY_DATA_12%%-->
       <h3 style="justify-content:center">12. Distinct Manufactured Product Categories Exported <!--%%KPI12_BADGE%%--></h3>
       <div class="kpi-value-row" style="margin-top:12px">
         <span class="kpi-icon"><!--%%KPI12_ICON%%--></span>
@@ -1254,6 +1264,72 @@ function setTenfoldView(mode, btnEl){
     seg.style.width = widths[i] + '%';
     seg.textContent = labels[i];
     cum += parseFloat(widths[i]);
+  });
+}
+
+// ── CY / FY toggle for Manufacturing Industry Key Indicators ────────────────
+// Each card stores its FY alternate values as data-fy-* attributes (set at
+// build time by generate_dashboard.py). On first switch to FY, we save the
+// live CY DOM text in data-cy-* so we can restore it on CY click.
+function setKpiYear(mode, btnEl){
+  document.querySelectorAll('#kpi-year-toggle .kyt-btn').forEach(b => b.classList.remove('active'));
+  btnEl.classList.add('active');
+
+  document.querySelectorAll('.kpi-grid .card').forEach(card => {
+    const valueEl   = card.querySelector('.value, .kpi-value-row .value');
+    const subEl     = card.querySelector('.sub-value');
+    const sourceEl  = card.querySelector('.kpi-source-line');
+    // Card 4 (Manufactured Trade) has two value divs — handle separately
+    const isTradeCard = !!card.querySelector('.kpi-value-row .value[style*="20px"]');
+
+    // Snapshot CY values on first switch (idempotent)
+    if (!card.dataset.cySnapped) {
+      if (valueEl) card.dataset.cyValue = valueEl.innerHTML;
+      if (subEl) card.dataset.cySub = subEl.innerHTML;
+      if (sourceEl) card.dataset.cySource = sourceEl.innerHTML;
+      card.dataset.cySnapped = '1';
+    }
+
+    if (mode === 'fy') {
+      const fyVal = card.dataset.fyValue || '';
+      if (fyVal) {
+        if (valueEl) valueEl.innerHTML = fyVal;
+        if (subEl && card.dataset.fySub) subEl.innerHTML = card.dataset.fySub;
+        if (sourceEl && card.dataset.fySource) sourceEl.innerHTML = card.dataset.fySource;
+      } else {
+        // No FY data for this card — add a note below the source
+        if (sourceEl && !sourceEl.querySelector('.fy-na-note')) {
+          const note = document.createElement('div');
+          note.className = 'kpi-no-fy fy-na-note';
+          note.textContent = 'FY data pending upload';
+          sourceEl.appendChild(note);
+        }
+      }
+      // Trade card: also swap imports side
+      const impVal = card.querySelectorAll('.value[style*="20px"]');
+      if (impVal.length === 2 && card.dataset.fyImp2) {
+        if (!card.dataset.cyImp2) card.dataset.cyImp2 = impVal[1].innerHTML;
+        impVal[1].innerHTML = card.dataset.fyImp2 || card.dataset.cyImp2;
+        const impSubEls = card.querySelectorAll('.sub-value');
+        if (impSubEls.length >= 2 && card.dataset.fyImpsub2) {
+          if (!card.dataset.cyImpsub2) card.dataset.cyImpsub2 = impSubEls[1].innerHTML;
+          impSubEls[1].innerHTML = card.dataset.fyImpsub2;
+        }
+      }
+    } else {
+      // Restore CY
+      if (valueEl && card.dataset.cyValue) valueEl.innerHTML = card.dataset.cyValue;
+      if (subEl && card.dataset.cySub) subEl.innerHTML = card.dataset.cySub;
+      if (sourceEl && card.dataset.cySource) sourceEl.innerHTML = card.dataset.cySource;
+      sourceEl && sourceEl.querySelectorAll('.fy-na-note').forEach(n => n.remove());
+      // Trade card: restore imports
+      const impVal = card.querySelectorAll('.value[style*="20px"]');
+      if (impVal.length === 2 && card.dataset.cyImp2) {
+        impVal[1].innerHTML = card.dataset.cyImp2;
+        const impSubEls = card.querySelectorAll('.sub-value');
+        if (impSubEls.length >= 2 && card.dataset.cyImpsub2) impSubEls[1].innerHTML = card.dataset.cyImpsub2;
+      }
+    }
   });
 }
 

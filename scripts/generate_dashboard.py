@@ -250,6 +250,13 @@ def load_data():
             'year': r.get('year') or '', 'source': r.get('source') or '',
             'source_detail': r.get('source_detail') or '',
             'confidence': r.get('confidence') or 'estimated',
+            # FY alternate values for the CY/FY toggle
+            'value_fy': r.get('value_fy') or '', 'pct_fy': r.get('pct_fy') or '',
+            'sub_value_fy': r.get('sub_value_fy') or '',
+            'year_fy': r.get('year_fy') or '', 'source_fy': r.get('source_fy') or '',
+            'confidence_fy': r.get('confidence_fy') or '',
+            'import_value': r.get('import_value') or '', 'import_sub': r.get('import_sub') or '',
+            'import_value_fy': r.get('import_value_fy') or '', 'import_sub_fy': r.get('import_sub_fy') or '',
         } for r in _raw_key_indicators]
     else:
         if USE_POCKETBASE:
@@ -359,6 +366,40 @@ def kpi_badge(slug):
         return ''
     sub = f"{r.get('source','')}, {r.get('year','')}".strip(', ')
     return confidence_badge_html(r.get('confidence', 'estimated'), sub)
+
+# ── FY alternate value helpers (for the CY/FY toggle) ─────────────────────────
+def kpi_fy_value(slug):
+    r = KEY_INDICATORS.get(slug)
+    return esc(r['value_fy']) if r and r.get('value_fy') else ''
+
+def kpi_fy_subvalue(slug):
+    r = KEY_INDICATORS.get(slug)
+    return r.get('sub_value_fy', '')
+
+def kpi_fy_source(slug):
+    r = KEY_INDICATORS.get(slug)
+    if not r or not r.get('year_fy'): return ''
+    year, source = r.get('year_fy',''), r.get('source_fy','') or r.get('source','')
+    return f'{esc(year)} &middot; <span style="cursor:help;border-bottom:1px dotted var(--muted)" title="{esc(source)}">Source: {esc(source)}</span>'
+
+def kpi_fy_badge(slug):
+    r = KEY_INDICATORS.get(slug)
+    if not r or not r.get('confidence_fy'): return ''
+    sub = f"{r.get('source_fy','')}, {r.get('year_fy','')}".strip(', ')
+    return confidence_badge_html(r.get('confidence_fy', 'estimated'), sub)
+
+def kpi_fy_import_value(slug):
+    r = KEY_INDICATORS.get(slug)
+    return esc(r['import_value_fy']) if r and r.get('import_value_fy') else ''
+
+def kpi_fy_import_sub(slug):
+    r = KEY_INDICATORS.get(slug)
+    return r.get('import_sub_fy', '')
+
+def kpi_has_fy(slug):
+    """True if this indicator has any FY data populated."""
+    r = KEY_INDICATORS.get(slug)
+    return bool(r and (r.get('value_fy') or r.get('sub_value_fy') or r.get('import_value_fy')))
 
 
 def _usd_billions(s):
@@ -1190,6 +1231,19 @@ def render(tmpl):
     '<!--%%KPI3_DONUT%%-->':          kpi_compact_donut('tax'),
     '<!--%%KPI3_SOURCE%%-->':         kpi_source_line('tax'),
     '<!--%%KPI3_BADGE%%-->':          kpi_badge('tax'),
+    # ── FY data attributes (all 12 cards; JS toggle reads these to swap text) ──
+    '<!--%%KPI_FY_DATA_1%%-->':       f'data-fy-value="{esc(kpi_fy_value("value_added"))}" data-fy-sub="{esc(kpi_fy_subvalue("value_added"))}" data-fy-source="{esc(kpi_fy_source("value_added"))}"' if kpi_has_fy("value_added") else '',
+    '<!--%%KPI_FY_DATA_2%%-->':       f'data-fy-value="{esc(kpi_fy_value("growth"))}" data-fy-sub="{esc(kpi_fy_subvalue("growth"))}" data-fy-source="{esc(kpi_fy_source("growth"))}"' if kpi_has_fy("growth") else '',
+    '<!--%%KPI_FY_DATA_3%%-->':       f'data-fy-value="{esc(kpi_fy_value("tax"))}" data-fy-sub="{esc(kpi_fy_subvalue("tax"))}" data-fy-source="{esc(kpi_fy_source("tax"))}"' if kpi_has_fy("tax") else '',
+    '<!--%%KPI_FY_DATA_4%%-->':       f'data-fy-value="{esc(kpi_fy_value("exports"))}" data-fy-sub="{esc(kpi_fy_subvalue("exports"))}" data-fy-source="{esc(kpi_fy_source("exports"))}" data-fy-imp="{esc(kpi_fy_import_value("exports"))}" data-fy-impsub="{esc(kpi_fy_import_sub("exports"))}" data-fy-imp2="{esc(kpi_fy_import_value("mfg_imports"))}" data-fy-impsub2="{esc(kpi_fy_import_sub("mfg_imports"))}"' if (kpi_has_fy("exports") or kpi_has_fy("mfg_imports")) else '',
+    '<!--%%KPI_FY_DATA_5%%-->':       f'data-fy-value="{esc(kpi_fy_value("hightech"))}" data-fy-sub="{esc(kpi_fy_subvalue("hightech"))}" data-fy-source="{esc(kpi_fy_source("hightech"))}"' if kpi_has_fy("hightech") else '',
+    '<!--%%KPI_FY_DATA_6%%-->':       f'data-fy-value="{esc(kpi_fy_value("credit"))}" data-fy-sub="{esc(kpi_fy_subvalue("credit"))}" data-fy-source="{esc(kpi_fy_source("credit"))}"' if kpi_has_fy("credit") else '',
+    '<!--%%KPI_FY_DATA_7%%-->':       f'data-fy-value="{esc(kpi_fy_value("establishments"))}" data-fy-sub="{esc(kpi_fy_subvalue("establishments"))}" data-fy-source="{esc(kpi_fy_source("establishments"))}"' if kpi_has_fy("establishments") else '',
+    '<!--%%KPI_FY_DATA_8%%-->':       f'data-fy-value="{esc(kpi_fy_value("region_dist"))}" data-fy-source="{esc(kpi_fy_source("region_dist"))}"' if kpi_has_fy("region_dist") else '',
+    '<!--%%KPI_FY_DATA_9%%-->':       f'data-fy-value="{esc(kpi_fy_value("parks"))}" data-fy-sub="{esc(kpi_fy_subvalue("parks"))}" data-fy-source="{esc(kpi_fy_source("parks"))}"' if kpi_has_fy("parks") else '',
+    '<!--%%KPI_FY_DATA_10%%-->':      f'data-fy-value="{esc(kpi_fy_value("fdi"))}" data-fy-sub="{esc(kpi_fy_subvalue("fdi"))}" data-fy-source="{esc(kpi_fy_source("fdi"))}"' if kpi_has_fy("fdi") else '',
+    '<!--%%KPI_FY_DATA_11%%-->':      f'data-fy-value="{esc(kpi_fy_value("employment"))}" data-fy-sub="{esc(kpi_fy_subvalue("employment"))}" data-fy-source="{esc(kpi_fy_source("employment"))}"' if kpi_has_fy("employment") else '',
+    '<!--%%KPI_FY_DATA_12%%-->':      f'data-fy-value="{esc(kpi_fy_value("variety"))}" data-fy-sub="{esc(kpi_fy_subvalue("variety"))}" data-fy-source="{esc(kpi_fy_source("variety"))}"' if kpi_has_fy("variety") else '',
     '<!--%%KPI4_ICON%%-->':           kpi_icon('exports'),
     '<!--%%KPI4_VALUE%%-->':          kpi_value('exports'),
     '<!--%%KPI4_SUBVALUE%%-->':       kpi_subvalue('exports'),
