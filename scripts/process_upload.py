@@ -29,8 +29,17 @@ import subprocess
 import sys
 from pathlib import Path
 
+import midd_notify  # best-effort WhatsApp progress notifier (opt-in, never raises)
+
 ROOT = Path(__file__).resolve().parent.parent
 SPREADSHEET_SUFFIXES = (".xlsx", ".xls", ".csv")
+
+# Human-friendly labels for the route() decision, used in the WhatsApp progress line.
+KIND_LABELS = {
+    "scorecard": "KPI scorecard (key indicators)",
+    "register": "industries register",
+    "sector": "value-chain document",
+}
 
 
 def log(m, env="staging"):
@@ -54,7 +63,11 @@ def run(cmd, env_name="staging", cwd=ROOT):
         log(r.stdout[-2000:], env_name)
     if r.returncode != 0:
         log("STDERR " + (r.stderr or "")[-2000:], env_name)
-        raise SystemExit(f"step failed ({r.returncode}): {cmd}")
+        # Keep raising SystemExit (callers + tests rely on it), but carry a short
+        # stderr tail so the WhatsApp "Failed" line can state a real reason.
+        tail = (r.stderr or "").strip().splitlines()
+        reason = tail[-1].strip() if tail else f"exit {r.returncode}"
+        raise SystemExit(f"step failed ({r.returncode}): {reason}")
     return r
 
 
@@ -89,28 +102,46 @@ def main(file=None, folder=None, env=None, www=None):
 
     # 2. Extract + store — route by folder AND file type
     kind = route(folder, file.suffix)
-    if kind == "scorecard":
-        log("Scorecard path: key_indicators agent -> update KPI cards from the spreadsheet", env)
-        run([sys.executable, "agents/key_indicators_agent.py", str(file)], env)
-    elif kind == "register":
-        log("Register path: deterministic parse -> industries.json -> seed PocketBase industries", env)
-        run([sys.executable, "scripts/extract_industries_to_records.py"], env)
-        run([sys.executable, "db/seed_industries.py"], env)
-    else:
-        log("Sector path: LLM ingestion agent -> diagnostic_datapoints", env)
-        run([sys.executable, "agents/ingestion_agent.py", str(file)], env)
+    label = KIND_LABELS.get(kind, kind)
+    # Tell the team it started (opt-in + best-effort; a no-op off the box).
+    midd_notify.notify_group(
+        f"Processing {file.name} ({env}): {label}. This takes a few minutes, "
+        "I will report the result here."
+    )
+    try:
+        if kind == "scorecard":
+            log("Scorecard path: key_indicators agent -> update KPI cards from the spreadsheet", env)
+            run([sys.executable, "agents/key_indicators_agent.py", str(file)], env)
+        elif kind == "register":
+            log("Register path: deterministic parse -> industries.json -> seed PocketBase industries", env)
+            run([sys.executable, "scripts/extract_industries_to_records.py"], env)
+            run([sys.executable, "db/seed_industries.py"], env)
+        else:
+            log("Sector path: LLM ingestion agent -> diagnostic_datapoints", env)
+            run([sys.executable, "agents/ingestion_agent.py", str(file)], env)
 
-    # 3. Rebuild dashboard (treemaps come from PocketBase) + publish
-    run([sys.executable, "scripts/generate_dashboard.py"], env)
-    www.mkdir(parents=True, exist_ok=True)
-    shutil.copy(ROOT / "report" / "sources-of-truth.html", www / "index.html")
-    log(f"Published dashboard -> {www}/index.html", env)
+        # 3. Rebuild dashboard (treemaps come from PocketBase) + publish
+        run([sys.executable, "scripts/generate_dashboard.py"], env)
+        www.mkdir(parents=True, exist_ok=True)
+        shutil.copy(ROOT / "report" / "sources-of-truth.html", www / "index.html")
+        log(f"Published dashboard -> {www}/index.html", env)
 
-    # 4. Self-check
-    html = (www / "index.html").read_text("utf-8")
-    ok = ("TREEMAP_DISTRICT_DATA" in html) and ("function squarify" in html)
-    log(f"Self-check: treemap data present = {ok}", env)
-    log("DONE" if ok else "DONE (warning: treemap data missing)", env)
+        # 4. Self-check
+        html = (www / "index.html").read_text("utf-8")
+        ok = ("TREEMAP_DISTRICT_DATA" in html) and ("function squarify" in html)
+        log(f"Self-check: treemap data present = {ok}", env)
+        log("DONE" if ok else "DONE (warning: treemap data missing)", env)
+    except BaseException as e:  # noqa: BLE001 - report the failure, then re-raise unchanged
+        reason = str(e).strip() or e.__class__.__name__
+        midd_notify.notify_group(
+            f"Failed ({env}): {file.name} did not finish ({label}). {reason}"
+        )
+        raise
+
+    warn = "" if ok else " (dashboard rebuilt, but treemap self-check warned)"
+    midd_notify.notify_group(
+        f"Done ({env}): {file.name} processed, dashboard updated.{warn}"
+    )
     return ok
 
 

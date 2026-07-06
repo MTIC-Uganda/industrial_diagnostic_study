@@ -92,3 +92,30 @@ def test_understand_logs_and_swallows_errors(monkeypatch, capsys):
     monkeypatch.setattr(pu.subprocess, "run", boom)
     pu.understand("some intent")     # must not raise
     assert "understanding skipped" in capsys.readouterr().out
+
+
+def test_main_notifies_start_and_done(wired, monkeypatch, tmp_path):
+    notes = []
+    monkeypatch.setattr(pu.midd_notify, "notify_group", lambda msg, *a, **k: notes.append(msg))
+    www = _www_with_markers(tmp_path)
+    ok = pu.main(file=str(tmp_path / "ubos.xlsx"), folder="manufacturing-overview",
+                 env="staging", www=str(www))
+    assert ok is True
+    assert notes[0].startswith("Processing") and "ubos.xlsx" in notes[0]
+    assert any(m.startswith("Done") for m in notes)
+
+
+def test_main_notifies_failure_and_reraises(monkeypatch, tmp_path):
+    notes = []
+    monkeypatch.setattr(pu.midd_notify, "notify_group", lambda msg, *a, **k: notes.append(msg))
+    monkeypatch.setattr(pu, "understand", lambda intent, env="staging": None)
+
+    def boom(cmd, *a, **k):
+        raise SystemExit("step failed (3): openpyxl could not read the sheet")
+
+    monkeypatch.setattr(pu, "run", boom)
+    with pytest.raises(SystemExit):
+        pu.main(file=str(tmp_path / "ubos.xlsx"), folder="manufacturing-overview",
+                env="staging", www=str(tmp_path))
+    assert any(m.startswith("Processing") for m in notes)
+    assert any(m.startswith("Failed") and "openpyxl" in m for m in notes)
