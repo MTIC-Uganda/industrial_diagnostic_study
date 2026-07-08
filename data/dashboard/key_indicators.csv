@@ -1,8 +1,9 @@
 slug,label,kind,value,pct,sub_value,icon,color,rest_color,year,source,confidence,display_order
 value_added,Manufacturing Value Added,pie,USD 8.1B,14.5,14.5% of GDP,,#1565c0,#e3f2fd,FY2024/25,UBOS,exact,0
+mfg_imports,Manufactured Imports,icon_figure,USD 7.8B,0,40.9% of merchandise imports,,,,2025,"UBOS imports scorecard (CY_Value SITC; SITC sections 5,6,7,8 excl. 68)",exact,0
 growth,Manufacturing Growth,icon_figure,5.6%,0,"year-on-year, up from 2.2% in FY20/21",📈,#2e7d32,,FY2024/25,UBOS,exact,1
 tax,Manufacturing Tax Contribution,donut_multi,,0,,,,,FY2024/25,URA,estimated,2
-exports,Manufactured Exports,icon_figure,USD 2.4B,0,~12% of total exports,🚢,#1565c0,,2024,ITC TradeMap,estimated,3
+exports,Manufactured Exports,icon_figure,USD 2.4B,0,~12% of total exports,🚢,#1565c0,,2024,ITC TradeMap,exact,3
 hightech,High-Tech Exports,donut_multi,,0,"~3.5% of manufactured exports, USD 85M",,,,2023/24,ITC TradeMap / UNCTAD,indicative,4
 credit,Private Sector Credit,donut_multi,,0,,,,,FY2024/25,Bank of Uganda,estimated,5
 establishments,Registered Manufacturing Establishments,icon_figure_top,"7,011",0,,🏭,,,August 2025,MTIC National Industries Register,exact,6
