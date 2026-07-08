@@ -14,13 +14,16 @@ import process_upload as pu  # noqa: E402
 
 
 @pytest.mark.parametrize("folder,suffix,expected", [
-    ("manufacturing-overview", ".xlsx", "scorecard"),
-    ("manufacturing-overview", ".XLSX", "scorecard"),
-    ("manufacturing-overview", ".csv", "scorecard"),
-    ("manufacturing-overview", ".pdf", "register"),
-    ("manufacturing-overview", ".docx", "register"),
-    ("automotive", ".pdf", "sector"),
-    ("textiles", ".xlsx", "sector"),      # spreadsheet only means scorecard in manufacturing-overview
+    ("manufacturing-overview", ".xlsx",  "scorecard"),
+    ("manufacturing-overview", ".XLSX",  "scorecard"),
+    ("manufacturing-overview", ".csv",   "scorecard"),
+    ("manufacturing-overview", ".pdf",   "pdf_scorecard"),   # PDF -> key_indicators PDF path
+    ("manufacturing-overview", ".PDF",   "pdf_scorecard"),   # case-insensitive
+    ("manufacturing-overview", ".docx",  "register"),        # other types -> register
+    ("industries-register",    ".pdf",   "register"),        # explicit register folder
+    ("industries-register",    ".xlsx",  "register"),
+    ("automotive",             ".pdf",   "sector"),
+    ("textiles",               ".xlsx",  "sector"),
 ])
 def test_route(folder, suffix, expected):
     assert pu.route(folder, suffix) == expected
@@ -51,11 +54,20 @@ def test_main_scorecard_branch(wired, tmp_path):
 
 def test_main_register_branch(wired, tmp_path):
     www = _www_with_markers(tmp_path)
-    pu.main(file=str(tmp_path / "register.pdf"), folder="manufacturing-overview",
+    # Register PDFs use the dedicated industries-register folder (not manufacturing-overview,
+    # which now routes PDFs to the key_indicators PDF path).
+    pu.main(file=str(tmp_path / "register.pdf"), folder="industries-register",
             env="staging", www=str(www))
     joined = [" ".join(c) for c in wired]
     assert any("extract_industries_to_records.py" in j for j in joined)
     assert any("seed_industries.py" in j for j in joined)
+
+
+def test_main_pdf_scorecard_branch(wired, tmp_path):
+    www = _www_with_markers(tmp_path)
+    pu.main(file=str(tmp_path / "ura.pdf"), folder="manufacturing-overview",
+            env="staging", www=str(www))
+    assert any("key_indicators_agent.py" in " ".join(c) for c in wired)
 
 
 def test_main_sector_branch_and_selfcheck_fail(wired, tmp_path):

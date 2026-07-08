@@ -1,20 +1,29 @@
 #!/usr/bin/env python3
 """
-key_indicators_agent — ingest a UBOS scorecard spreadsheet into the `key_indicators`
-collection, COMPUTING derived figures with the read-only analytics sandbox (ADR-020).
+key_indicators_agent — ingest a UBOS scorecard spreadsheet OR a KPI source PDF
+into the `key_indicators` collection, COMPUTING derived figures with the read-only
+analytics sandbox (ADR-020) for spreadsheets, or extracting them directly via the
+Claude CLI for PDFs.
 
-A UBOS "composition of imports/exports" workbook is raw SITC data, not a ready-made KPI.
-So this agent loads every sheet as a pandas DataFrame and asks the Claude CLI to write
-read-only Python that computes the figure the operator wants (e.g. manufactured imports
-= sum of SITC sections 5-8 excluding 68 for the latest year) and sets `result` to a list
-of updates for EXISTING key_indicators slugs. That code runs in analytics_sandbox — no
-PocketBase handle, no network, restricted builtins, resource-limited — so it can query
-and compute but never touch a data source. The result is applied additively to
-PocketBase: only existing slugs, only whitelisted display fields, never creating,
-renaming, or deleting a card (ADR-017). A wrong figure is caught in staging review; a
-missing/uncomputable one leaves the card untouched.
+Spreadsheet path (UBOS composition workbook):
+  Loads every sheet as a pandas DataFrame, asks the Claude CLI to write read-only
+  Python that computes the figure (e.g. manufactured imports = sum of SITC 5-8
+  excluding 68 for the latest year) and sets `result` to a list of updates for
+  EXISTING key_indicators slugs. Code runs in analytics_sandbox — no PocketBase
+  handle, no network, restricted builtins — so it can query and compute but never
+  touch a data source.
 
-Usage:  python agents/key_indicators_agent.py <spreadsheet-path>
+PDF path (URA tax handbook, banking sector report, UIA memo, UBOS NLFS, etc.):
+  Extracts text from the PDF via pypdf, then asks the Claude CLI to read the
+  operator intent and return the relevant figure(s) as a JSON array directly.
+  No sandbox needed — the model extracts, not computes.
+
+Both paths apply results additively to PocketBase: only existing slugs, only
+whitelisted display fields, never creating, renaming, or deleting a card (ADR-017).
+A wrong figure is caught in staging review; a missing/uncomputable one leaves the
+card untouched.
+
+Usage:  python agents/key_indicators_agent.py <spreadsheet-or-pdf-path>
 Env:    PB_URL, PB_ADMIN_EMAIL, PB_ADMIN_PASSWORD, CLAUDE_BIN
 """
 import json
@@ -29,10 +38,20 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "midd-brain"))
 import analytics_sandbox  # noqa: E402 - read-only compute sandbox (ADR-020)
 
-# Only these key_indicators fields may be written from a scorecard upload.
-UPDATABLE_FIELDS = {"value", "pct", "sub_value", "year", "source", "source_detail", "confidence"}
+SPREADSHEET_SUFFIXES = (".xlsx", ".xls", ".csv")
+PDF_SUFFIXES = (".pdf",)
+
+# Only these key_indicators fields may be written from an upload.
+# Includes FY variants and the import side of the exports card.
+UPDATABLE_FIELDS = {
+    "value", "pct", "sub_value", "year", "source", "source_detail", "confidence",
+    "value_fy", "pct_fy", "sub_value_fy", "year_fy", "source_fy", "confidence_fy",
+    "import_value", "import_sub", "import_value_fy", "import_sub_fy",
+}
+
 MAX_PREVIEW_ROWS = 14
 MAX_PREVIEW_CHARS = 2600
+MAX_PDF_CHARS = 9000
 
 
 def load_dataframes(path):
@@ -40,6 +59,18 @@ def load_dataframes(path):
     import pandas as pd
     xl = pd.ExcelFile(path)
     return {name: xl.parse(name, header=None) for name in xl.sheet_names}
+
+
+def load_pdf_text(path):
+    """Extract all text from a PDF using pypdf."""
+    import pypdf
+    reader = pypdf.PdfReader(str(path))
+    parts = []
+    for page in reader.pages:
+        t = page.extract_text() or ""
+        if t.strip():
+            parts.append(t)
+    return "\n\n".join(parts)
 
 
 def preview(dfs):
@@ -67,12 +98,44 @@ def code_prompt(intent, preview_text, current):
         "Write READ-ONLY Python (pandas as pd and numpy as np are already available; `dfs` holds the "
         "sheets) that COMPUTES the figure(s) the intent asks for and sets a variable `result` to a "
         "JSON-serializable list of updates. Each update is a dict with a `slug` from the list above "
-        "plus any of: value, pct, sub_value, year, source. Format value/sub_value as human display "
-        "strings (for example 'USD 6.3B' or '45.1% of imports'), not raw floats. Apply the correct "
-        "domain definition (for instance, manufactured trade = SITC sections 5,6,7,8 excluding 68). "
+        "plus any of: value, pct, sub_value, year, source, source_detail, confidence, "
+        "value_fy, pct_fy, sub_value_fy, year_fy, source_fy, import_value, import_sub, "
+        "import_value_fy, import_sub_fy. "
+        "Format value/sub_value/import_value/import_sub as human display strings "
+        "(for example 'USD 6.3B' or '45.1% of imports'), not raw floats. "
+        "If Calendar Year (CY) and Financial Year (FY) data are both available in the workbook, "
+        "include both: CY figures in the main fields (value/pct/sub_value/year), "
+        "FY figures in the _fy fields (value_fy/pct_fy/sub_value_fy/year_fy). "
+        "Apply the correct domain definition (for instance, manufactured trade = SITC sections "
+        "5,6,7,8 excluding 68). "
         "Only include a slug from the list; if you cannot compute a defensible figure, set result = []. "
         "Do not import os, sys, or subprocess, do not open files or the network — only dfs, pd, np. "
         "Output ONLY the Python code: no prose, no markdown fences."
+    )
+
+
+def pdf_extract_prompt(intent, text, current):
+    """Prompt asking the model to extract KPI figures directly from PDF text as JSON."""
+    cur = "\n".join("- %s: %s (current value: %s)"
+                    % (c.get("slug"), c.get("label"), c.get("value")) for c in current)
+    truncated = text[:MAX_PDF_CHARS] + ("\n...[truncated]..." if len(text) > MAX_PDF_CHARS else "")
+    return (
+        "You update Uganda's manufacturing dashboard KPI cards from a source document.\n"
+        "Read the OPERATOR INTENT to know which figure(s) to extract, then return ONLY "
+        "a JSON array of updates. Each update is a dict with a `slug` from the existing "
+        "list plus any of: value, pct, sub_value, year, source, source_detail, confidence, "
+        "value_fy, pct_fy, sub_value_fy, year_fy, source_fy.\n"
+        "Format value/sub_value as human display strings (e.g. 'UGX 5.2T' or '19.4% of tax revenue'). "
+        "Set confidence to 'exact' if the figure is an official published number, "
+        "'estimated' if derived or approximated.\n\n"
+        "EXISTING key_indicators slugs:\n" + cur + "\n\n"
+        "OPERATOR INTENT:\n" + intent + "\n\n"
+        "DOCUMENT TEXT (may be truncated):\n" + truncated + "\n\n"
+        "Return ONLY a valid JSON array, no prose, no markdown fences. "
+        "Example: [{\"slug\": \"tax\", \"value\": \"UGX 5.2T\", \"pct\": \"19.4\", "
+        "\"year\": \"FY2023/24\", \"source\": \"URA Taxation Handbook FY2023/24\", "
+        "\"confidence\": \"exact\"}]\n"
+        "If you cannot find a defensible figure, return []."
     )
 
 
@@ -88,10 +151,20 @@ def extract_code(text):
         if t.rstrip().endswith("```"):
             t = t.rsplit("```", 1)[0]
     t = t.strip()
-    # Normalize typographic characters the model tends to emit in comments/strings
-    # (en/em dash, smart quotes, non-breaking space) that would otherwise break ast.parse.
     return t.translate({0x2013: 0x2d, 0x2014: 0x2d, 0x2018: 0x27, 0x2019: 0x27,
                         0x201c: 0x22, 0x201d: 0x22, 0x00a0: 0x20})
+
+
+def extract_json(text):
+    """Strip markdown fences from a JSON response and return the raw JSON string."""
+    if not text:
+        return ""
+    t = text.strip()
+    if t.startswith("```"):
+        t = t.split("\n", 1)[1] if "\n" in t else ""
+        if t.rstrip().endswith("```"):
+            t = t.rsplit("```", 1)[0]
+    return t.strip()
 
 
 def validate_updates(raw, allowed_slugs):
@@ -126,7 +199,7 @@ def apply_updates(updates, id_for_slug, patch):
     return done
 
 
-# ── PocketBase I/O (thin; wired in main) ──────────────────────────────────────
+# ── PocketBase I/O ─────────────────────────────────────────────────────────────
 def _pb_url():
     return os.environ.get("PB_URL", "http://127.0.0.1:8090").rstrip("/")
 
@@ -174,24 +247,14 @@ def subprocess_claude(prompt):
         return ""
 
 
-def main(path):
-    path = Path(path)
-    sidecar = path.with_suffix(path.suffix + ".task.md")
-    intent = sidecar.read_text("utf-8") if sidecar.exists() else "(no intent provided)"
+def _compute_from_spreadsheet(path, intent, current, allowed):
+    """Excel/CSV path: generate + run pandas code in the analytics sandbox."""
     try:
         dfs = load_dataframes(path)
-    except Exception as e:  # noqa
+    except Exception as e:
         print("key_indicators_agent: cannot read spreadsheet: %s" % e)
         return []
-    current = fetch_key_indicators()
-    if not current:
-        print("key_indicators_agent: no existing key_indicators to update - aborting (no create).")
-        return []
-    allowed = [c["slug"] for c in current if c.get("slug")]
-    by_slug = {c["slug"]: c["id"] for c in current if c.get("slug")}
 
-    # Generate + run the compute, retrying with error feedback — model-written code is
-    # non-deterministic (a stray en-dash or truncated string on one attempt, clean the next).
     base = code_prompt(intent, preview(dfs), current)
     updates, last = [], ""
     for attempt in range(3):
@@ -215,6 +278,60 @@ def main(path):
         print("key_indicators_agent: attempt %d - %s" % (attempt + 1, last))
     if not updates:
         print("key_indicators_agent: no valid updates after retries (nothing changed).")
+    return updates
+
+
+def _extract_from_pdf(path, intent, current, allowed):
+    """PDF path: extract text and ask the model to return updates as JSON directly."""
+    try:
+        text = load_pdf_text(path)
+    except Exception as e:
+        print("key_indicators_agent: cannot read PDF: %s" % e)
+        return []
+    if not text.strip():
+        print("key_indicators_agent: PDF yielded no extractable text.")
+        return []
+
+    prompt = pdf_extract_prompt(intent, text, current)
+    raw_json = extract_json(subprocess_claude(prompt))
+    if not raw_json:
+        print("key_indicators_agent: model returned no output for PDF extraction.")
+        return []
+
+    try:
+        raw = json.loads(raw_json)
+    except (json.JSONDecodeError, ValueError) as e:
+        print("key_indicators_agent: PDF extraction returned invalid JSON: %s" % e)
+        return []
+
+    updates = validate_updates(raw, allowed)
+    if not updates:
+        print("key_indicators_agent: PDF extraction: no valid updates (result=%s)" % str(raw)[:200])
+    return updates
+
+
+def main(path):
+    path = Path(path)
+    sidecar = path.with_suffix(path.suffix + ".task.md")
+    intent = sidecar.read_text("utf-8") if sidecar.exists() else "(no intent provided)"
+
+    current = fetch_key_indicators()
+    if not current:
+        print("key_indicators_agent: no existing key_indicators to update - aborting (no create).")
+        return []
+    allowed = [c["slug"] for c in current if c.get("slug")]
+    by_slug = {c["slug"]: c["id"] for c in current if c.get("slug")}
+
+    suffix = path.suffix.lower()
+    if suffix in SPREADSHEET_SUFFIXES:
+        updates = _compute_from_spreadsheet(path, intent, current, allowed)
+    elif suffix in PDF_SUFFIXES:
+        updates = _extract_from_pdf(path, intent, current, allowed)
+    else:
+        print("key_indicators_agent: unsupported file type %s" % path.suffix)
+        return []
+
+    if not updates:
         return []
 
     token = pb_auth()
@@ -238,5 +355,5 @@ def main(path):
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
-        sys.exit("usage: key_indicators_agent.py <spreadsheet-path>")
+        sys.exit("usage: key_indicators_agent.py <spreadsheet-or-pdf-path>")
     main(sys.argv[1])
