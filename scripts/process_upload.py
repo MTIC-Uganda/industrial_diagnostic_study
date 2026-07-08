@@ -8,10 +8,10 @@ Flow:
   1. The Claude CLI reads the operator's intent (the .task.md sidecar) and states,
      in plain language, what the document is and what to do with it. Logged only.
   2. Route by folder AND file type:
-       manufacturing-overview + register PDF   -> deterministic register parse
-                                                  -> seed the `industries` collection
-       manufacturing-overview + spreadsheet    -> key_indicators agent (updates the
-                                                  KPI cards from a UBOS scorecard)
+       manufacturing-overview + spreadsheet    -> key_indicators agent (DataFrame path)
+       manufacturing-overview + PDF            -> key_indicators agent (PDF text path)
+       manufacturing-overview + other          -> register parse -> `industries` collection
+       industries-register + any              -> register parse -> `industries` collection
        any value-chain folder                  -> LLM ingestion agent -> diagnostic_datapoints
   3. Rebuild the dashboard with treemaps aggregated from PocketBase, deploy it.
   4. Self-check: confirm the treemap data made it into the page.
@@ -33,12 +33,14 @@ import midd_notify  # best-effort WhatsApp progress notifier (opt-in, never rais
 
 ROOT = Path(__file__).resolve().parent.parent
 SPREADSHEET_SUFFIXES = (".xlsx", ".xls", ".csv")
+PDF_SUFFIX = ".pdf"
 
 # Human-friendly labels for the route() decision, used in the WhatsApp progress line.
 KIND_LABELS = {
-    "scorecard": "KPI scorecard (key indicators)",
-    "register": "industries register",
-    "sector": "value-chain document",
+    "scorecard":     "KPI scorecard (key indicators)",
+    "pdf_scorecard": "KPI source document (PDF → key indicators)",
+    "register":      "industries register",
+    "sector":        "value-chain document",
 }
 
 
@@ -47,9 +49,22 @@ def log(m, env="staging"):
 
 
 def route(folder, suffix):
-    """Pure routing decision -> 'scorecard' | 'register' | 'sector'."""
+    """Pure routing decision -> 'scorecard' | 'pdf_scorecard' | 'register' | 'sector'.
+
+    manufacturing-overview + spreadsheet  -> scorecard (key_indicators agent, DataFrame path)
+    manufacturing-overview + PDF          -> pdf_scorecard (key_indicators agent, PDF text path)
+    manufacturing-overview + other        -> register (industries register refresh)
+    industries-register + anything        -> register (explicit register folder)
+    any other folder                      -> sector (LLM ingestion -> diagnostic_datapoints)
+    """
     if folder == "manufacturing-overview":
-        return "scorecard" if suffix.lower() in SPREADSHEET_SUFFIXES else "register"
+        if suffix.lower() in SPREADSHEET_SUFFIXES:
+            return "scorecard"
+        if suffix.lower() == PDF_SUFFIX:
+            return "pdf_scorecard"
+        return "register"
+    if folder == "industries-register":
+        return "register"
     return "sector"
 
 
@@ -109,8 +124,9 @@ def main(file=None, folder=None, env=None, www=None):
         "I will report the result here."
     )
     try:
-        if kind == "scorecard":
-            log("Scorecard path: key_indicators agent -> update KPI cards from the spreadsheet", env)
+        if kind in ("scorecard", "pdf_scorecard"):
+            label_path = "spreadsheet" if kind == "scorecard" else "PDF"
+            log(f"Scorecard path ({label_path}): key_indicators agent -> update KPI cards", env)
             run([sys.executable, "agents/key_indicators_agent.py", str(file)], env)
         elif kind == "register":
             log("Register path: deterministic parse -> industries.json -> seed PocketBase industries", env)
