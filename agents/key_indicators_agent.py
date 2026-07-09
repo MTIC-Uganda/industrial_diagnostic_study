@@ -180,8 +180,11 @@ def validate_updates(raw, allowed_slugs):
         slug = u.get("slug")
         if slug not in allowed:
             continue
-        fields = {k: ("" if v is None else str(v))
-                  for k, v in u.items() if k in UPDATABLE_FIELDS}
+        # Skip None and empty-string values — PocketBase rejects "" for number fields
+        # (pct, pct_fy) and we never want to blank out an existing value anyway.
+        fields = {k: str(v)
+                  for k, v in u.items()
+                  if k in UPDATABLE_FIELDS and v is not None and str(v).strip() != ""}
         if fields:
             clean.append({"slug": slug, "fields": fields})
     return clean
@@ -345,8 +348,13 @@ def main(path):
             _pb_url() + "/api/collections/key_indicators/records/%s" % rec_id,
             method="PATCH", data=json.dumps(fields).encode(),
             headers={"Content-Type": "application/json", "Authorization": token})
-        with urllib.request.urlopen(req, timeout=15) as r:
-            r.read()
+        try:
+            with urllib.request.urlopen(req, timeout=15) as r:
+                r.read()
+        except urllib.error.HTTPError as e:
+            body = e.read().decode("utf-8", errors="replace")
+            raise RuntimeError("PB PATCH %s failed %s: %s | fields sent: %s"
+                               % (rec_id, e.code, body, json.dumps(fields))) from e
 
     done = apply_updates(updates, by_slug.get, patch)
     print("key_indicators_agent: updated %d card(s): %s" % (len(done), ", ".join(done)))

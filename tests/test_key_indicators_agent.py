@@ -67,9 +67,12 @@ def test_validate_drops_unsafe(raw):
     assert k.validate_updates(raw, ["mfg_imports"]) == []
 
 
-def test_validate_none_becomes_empty_string():
-    assert k.validate_updates([{"slug": "mfg_imports", "value": None}], ["mfg_imports"]) == \
-        [{"slug": "mfg_imports", "fields": {"value": ""}}]
+def test_validate_skips_none_and_empty():
+    # None and "" must not be sent to PocketBase — they break number fields (pct, pct_fy).
+    result = k.validate_updates(
+        [{"slug": "exports", "value": "USD 1.8B", "pct_fy": None, "sub_value_fy": ""}],
+        ["exports"])
+    assert result == [{"slug": "exports", "fields": {"value": "USD 1.8B"}}]
 
 
 # ── extract_code: fences + typographic normalization ───────────────────────────
