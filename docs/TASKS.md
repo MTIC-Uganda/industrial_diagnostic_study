@@ -10,7 +10,25 @@ The shared work queue, by owner. Jerome's feedback that needs a code change land
 section; data corrections go through the pipeline (Ask MIDD / re-ingestion), not here. Any agent
 reads this to know what to work on next. Tick items as they land.
 
-Last updated: 2026-07-06 (2026-07-06 meeting queue landed — HS/SITC translator model)
+Last updated: 2026-07-10 (2026-07-10 catch-up: pipeline finish + agent-monitors-backend, cleanup, mapping tool)
+
+## Solomon (from the 2026-07-10 catch-up)
+
+- [ ] **Finish the pipeline** (target ~ tomorrow). It is your project: own any blockers, reach out directly when stuck instead of waiting.
+- [ ] Instruct your agent to **monitor the backend logs + infrastructure directly** (it has full access, like Hillary's) instead of waiting on WhatsApp notifications it cannot see. This is the fix for "it tells me to wait, then fails."
+- [ ] **After the pipeline is locked**, dashboard cleanup: restore the card/breakdown names that vanished during the color change (not a DB issue); one-color-per-region map shaded darkest→lightest by count (Kampala darkest); black label text + fix white-on-yellow contrast; icons-only legend; put the district count next to the district name in the detail panel plus one aggregated total on top; subdivide sectors (e.g. beverages) the way districts are.
+- [ ] Take Jerome's **metadata files** (formula + source per indicator, when sent) and upload them so each figure can explain how it was calculated and from which source.
+
+## Hillary (from the 2026-07-10 catch-up)
+
+- [ ] Get Solomon's agent onto **backend monitoring**; keep closing pipeline holes as they surface.
+- [ ] Once the ministers formalize the **all-industries mapping** ask: design the field data-collection tool as a **PWA module** of the existing app (new orchestrated source; structured input, so no AI cleaning layer needed). Budget as its own module, tightly coupled.
+- [ ] Line up **Dennis** to stress-test Ask MIDD (give him a test suite).
+
+## Jerome (from the 2026-07-10 catch-up)
+
+- [ ] Finish the **per-indicator metadata** (how each figure is calculated + the source file) and send the files to Solomon to upload.
+- [ ] Formalize the ministers' **mapping request** and the data-collection-tool ask.
 
 ## Solomon (from the 2026-07-06 meeting — HS-primary + SITC translator)
 
