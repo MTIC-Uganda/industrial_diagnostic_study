@@ -47,7 +47,8 @@ FOLDERS = {
     "Sugar & Confectionery": "sugar-confectionery",
     "Plastics & Packaging": "plastics-packaging",
     "Cement & Building Materials": "cement-building-materials",
-    "Manufacturing overview / industries register": "manufacturing-overview",
+    "Manufacturing overview (KPI sources)": "manufacturing-overview",
+    "Industries Register": "industries-register",
     "Policy framework (cross-cutting)": "policy-framework",
 }
 
