@@ -301,7 +301,7 @@ jobs:
         run: |
           pip install -r requirements-dev.txt
           python -m pytest -q --cov=scripts --cov=db --cov=agents --cov=uploader --cov=midd-brain --cov-report=xml
-          git fetch --no-tags --depth=1 origin main || true
+          git fetch --no-tags --depth=100 origin main || true
           # Fail if <90% of the lines changed in this push are covered by tests.
           diff-cover coverage.xml --compare-branch=origin/main --fail-under=90
 
