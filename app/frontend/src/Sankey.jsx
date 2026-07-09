@@ -1,9 +1,7 @@
 import React, { useMemo, useState } from "react";
 import { sankey, sankeyLinkHorizontal, sankeyLeft } from "d3-sankey";
 
-// Labels now shown only on hover/selection, so we reserve less margin.
-// A small buffer still leaves room for the hovered label to render without clipping.
-const LABEL_MARGIN = 80;
+const LABEL_MARGIN = 160;
 
 // Structural levels are coloured by label; components/inputs by their category
 // (component_type). Keys are split so a component's label ("Material",
@@ -200,23 +198,18 @@ export default function SankeyView({ graph, onNodeClick, selectedId, containerW 
               >
                 <title>{n.name} ({n.label})</title>
               </rect>
-              {/* Labels shown only on hover or selection — keeps the diagram
-                  clean at a glance (OEC-style icon/block-first), full
-                  text always accessible by hovering or clicking. */}
-              {(isHovered || isSelected) && (
-                <text
-                  x={right ? n.x1 + 6 : n.x0 - 6}
-                  y={(n.y0 + n.y1) / 2}
-                  dy="0.35em"
-                  textAnchor={right ? "start" : "end"}
-                  fontSize={10.5}
-                  fontWeight={700}
-                  fill={isSelected ? "#b34700" : "#111"}
-                  style={{ pointerEvents: "none" }}
-                >
-                  {n.name}
-                </text>
-              )}
+              <text
+                x={right ? n.x1 + 6 : n.x0 - 6}
+                y={(n.y0 + n.y1) / 2}
+                dy="0.35em"
+                textAnchor={right ? "start" : "end"}
+                fontSize={10.5}
+                fontWeight={isSelected || isHovered ? 700 : 500}
+                fill={isSelected ? "#b34700" : "#111"}
+                style={{ pointerEvents: "none" }}
+              >
+                {n.name}
+              </text>
             </g>
           );
         })}
