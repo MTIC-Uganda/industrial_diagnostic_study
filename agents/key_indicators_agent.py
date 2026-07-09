@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# v2 — pct coercion + sandbox exceptions (Hillary c1691dc); brain redeploy triggered here
 """
 key_indicators_agent — ingest a UBOS scorecard spreadsheet OR a KPI source PDF
 into the `key_indicators` collection, COMPUTING derived figures with the read-only

@@ -599,7 +599,11 @@ jobs:
     if: |
       github.ref == 'refs/heads/main' && (
         contains(toJson(github.event.commits.*.modified), 'midd-brain/') ||
-        contains(toJson(github.event.commits.*.added), 'midd-brain/')
+        contains(toJson(github.event.commits.*.added), 'midd-brain/') ||
+        contains(toJson(github.event.commits.*.modified), 'agents/') ||
+        contains(toJson(github.event.commits.*.added), 'agents/') ||
+        contains(toJson(github.event.commits.*.modified), 'scripts/process_upload') ||
+        contains(toJson(github.event.commits.*.added), 'scripts/process_upload')
       )
     steps:
       - name: Set up SSH
