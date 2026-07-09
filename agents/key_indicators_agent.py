@@ -28,6 +28,7 @@ Env:    PB_URL, PB_ADMIN_EMAIL, PB_ADMIN_PASSWORD, CLAUDE_BIN
 """
 import json
 import os
+import re
 import subprocess
 import sys
 import urllib.error
@@ -48,6 +49,26 @@ UPDATABLE_FIELDS = {
     "value_fy", "pct_fy", "sub_value_fy", "year_fy", "source_fy", "confidence_fy",
     "import_value", "import_sub", "import_value_fy", "import_sub_fy",
 }
+
+# PocketBase stores these key_indicators fields as NUMBER, not text. A display
+# string like "45.1% of imports" must be coerced to 45.1 or PocketBase 400s the
+# whole write (the real cause of the ubos_exports upload failure).
+NUMBER_FIELDS = {"pct", "pct_fy"}
+
+
+def coerce_field(name, value):
+    """Coerce one field to what PocketBase's schema expects.
+
+    Number fields -> the first numeric token as a float ("45.1% of imports" -> 45.1);
+    returns None when a number field carries no parseable number, so the caller drops
+    it rather than send a bad type and 400 the record. Text fields -> str (None -> "").
+    """
+    if name in NUMBER_FIELDS:
+        if value is None:
+            return None
+        m = re.search(r"-?\d+(?:\.\d+)?", str(value))
+        return float(m.group()) if m else None
+    return "" if value is None else str(value)
 
 MAX_PREVIEW_ROWS = 14
 MAX_PREVIEW_CHARS = 2600
@@ -180,8 +201,14 @@ def validate_updates(raw, allowed_slugs):
         slug = u.get("slug")
         if slug not in allowed:
             continue
-        fields = {k: ("" if v is None else str(v))
-                  for k, v in u.items() if k in UPDATABLE_FIELDS}
+        fields = {}
+        for k, v in u.items():
+            if k not in UPDATABLE_FIELDS:
+                continue
+            cv = coerce_field(k, v)
+            if cv is None:      # unparseable number -> skip it, never 400 the write
+                continue
+            fields[k] = cv
         if fields:
             clean.append({"slug": slug, "fields": fields})
     return clean

@@ -23,9 +23,10 @@ def test_validate_keeps_existing_slug_whitelisted_fields():
     raw = [{"slug": "mfg_imports", "value": "USD 7.8B", "sub_value": "40.9% of imports",
             "pct": "40.9", "year": "2025", "source": "UBOS", "bogus": "x", "id": "hack"}]
     out = k.validate_updates(raw, ["mfg_imports", "exports"])
+    # pct is a PocketBase NUMBER field, so it is coerced to a float (not "40.9").
     assert out == [{"slug": "mfg_imports",
                     "fields": {"value": "USD 7.8B", "sub_value": "40.9% of imports",
-                               "pct": "40.9", "year": "2025", "source": "UBOS"}}]
+                               "pct": 40.9, "year": "2025", "source": "UBOS"}}]
 
 
 def test_validate_accepts_fy_fields():
@@ -39,7 +40,8 @@ def test_validate_accepts_fy_fields():
     assert len(out) == 1
     fields = out[0]["fields"]
     assert fields["value_fy"] == "USD 1.6B"
-    assert fields["pct_fy"] == "14.70"
+    assert fields["pct_fy"] == 14.7          # number field -> coerced to float
+    assert fields["pct"] == 12.84            # ditto for the CY pct
     assert fields["sub_value_fy"] == "14.7% of FY exports"
     assert fields["year_fy"] == "FY2024/25"
     assert fields["source_fy"] == "UBOS Composition of Exports"
@@ -70,6 +72,30 @@ def test_validate_drops_unsafe(raw):
 def test_validate_none_becomes_empty_string():
     assert k.validate_updates([{"slug": "mfg_imports", "value": None}], ["mfg_imports"]) == \
         [{"slug": "mfg_imports", "fields": {"value": ""}}]
+
+
+def test_coerce_field_numbers_and_text():
+    # Number fields: parse the first numeric token out of a display string.
+    assert k.coerce_field("pct", "45.1% of imports") == 45.1
+    assert k.coerce_field("pct", "14.70") == 14.7
+    assert k.coerce_field("pct_fy", 12) == 12.0
+    assert k.coerce_field("pct", "n/a") is None      # unparseable number -> drop
+    assert k.coerce_field("pct", None) is None
+    # Text fields stay strings; None -> "".
+    assert k.coerce_field("value", "USD 6.3B") == "USD 6.3B"
+    assert k.coerce_field("source", None) == ""
+
+
+def test_validate_coerces_pct_and_drops_unparseable():
+    # The real failure: pct arriving as a %-suffixed display string. It must become a
+    # number (else PocketBase 400s the write); an unparseable pct is dropped, not sent.
+    raw = [{"slug": "exports", "value": "USD 1.8B", "pct": "14.7% of exports"}]
+    out = k.validate_updates(raw, ["exports"])
+    assert out[0]["fields"]["pct"] == 14.7
+    assert out[0]["fields"]["value"] == "USD 1.8B"
+
+    dropped = k.validate_updates([{"slug": "exports", "value": "USD 1.8B", "pct": "n/a"}], ["exports"])
+    assert "pct" not in dropped[0]["fields"] and dropped[0]["fields"]["value"] == "USD 1.8B"
 
 
 # ── extract_code: fences + typographic normalization ───────────────────────────

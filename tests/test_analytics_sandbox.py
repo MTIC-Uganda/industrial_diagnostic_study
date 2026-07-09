@@ -211,6 +211,25 @@ def test_capture_figure_none_without_matplotlib():
     assert out.get("image") is None or out["image"] is None
 
 
+def test_sandbox_exposes_common_exceptions():
+    # Regression (ADR-022 follow-up): model-written try/except must run. Previously
+    # failed with "NameError: name 'ValueError' is not defined" and burned retries.
+    code = ("try:\n"
+            "    int('nope')\n"
+            "    result = 'no error'\n"
+            "except ValueError:\n"
+            "    result = 'caught'\n")
+    out = sb.execute_restricted(code, {})
+    assert out["ok"] is True, out["error"]
+    assert out["result"] == "caught"
+
+
+def test_sandbox_raise_surfaces_real_exception_not_nameerror():
+    out = sb.execute_restricted("raise TypeError('bad')", {})
+    assert out["ok"] is False
+    assert out["error"].startswith("TypeError")   # not "NameError: name 'TypeError'..."
+
+
 # ── run_analysis: subprocess isolation happy path + timeout ────────────────────
 def test_run_analysis_subprocess(frames):
     out = sb.run_analysis("result = int(industries['employees'].sum())", frames, timeout=15)

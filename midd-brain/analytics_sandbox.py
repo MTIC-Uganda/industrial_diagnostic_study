@@ -68,6 +68,13 @@ _SAFE_BUILTIN_NAMES = frozenset({
     "map", "max", "min", "next", "oct", "ord", "pow", "range", "repr", "reversed",
     "round", "set", "slice", "sorted", "str", "sum", "tuple", "zip",
     "True", "False", "None",
+    # Exception classes — types only, no sandbox-escape surface, so model-written
+    # try/except and raise work. Missing these caused "NameError: name 'ValueError'
+    # is not defined" and burned the compute retries (ADR-020, ADR-022 follow-up).
+    "Exception", "ValueError", "TypeError", "KeyError", "IndexError",
+    "ZeroDivisionError", "ArithmeticError", "RuntimeError", "StopIteration",
+    "AttributeError", "NameError", "OverflowError", "FloatingPointError",
+    "NotImplementedError", "AssertionError",
 })
 
 
