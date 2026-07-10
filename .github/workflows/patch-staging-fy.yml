@@ -1,0 +1,119 @@
+name: Patch Staging FY Data
+
+# One-time manual dispatch to write the correct FY figures for exports and
+# mfg_imports directly into staging PocketBase (port 8091) and rebuild the
+# staging dashboard.  Use this when the upload pipeline produces correct CY
+# data but leaves FY fields empty — typically because the uploaded Excel has
+# trailing empty provisional columns that confuse the rightmost-nonzero scan.
+#
+# Values are computed from the canonical local UBOS exports/imports workbooks
+# in data/ubos_2026/ and are hardcoded here.  Re-verify against the local
+# files before running if the source data has been updated.
+#
+# After running: confirm FY toggle works on staging, then Apply to Production.
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm:
+        description: "Type YES to confirm patching staging PocketBase FY data"
+        required: true
+
+jobs:
+  patch-staging-fy:
+    runs-on: ubuntu-latest
+    env:
+      HETZNER_HOST: 89.167.121.193
+      HETZNER_USER: root
+      STAGING_DIR: /var/www/mtic-staging
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Guard — require explicit confirmation
+        run: |
+          if [ "${{ github.event.inputs.confirm }}" != "YES" ]; then
+            echo "Confirmation not given. Aborting."
+            exit 1
+          fi
+
+      - name: Patch exports + mfg_imports FY fields in staging PocketBase
+        env:
+          PB_ADMIN_EMAIL:    ${{ secrets.PB_ADMIN_EMAIL }}
+          PB_ADMIN_PASSWORD: ${{ secrets.PB_ADMIN_PASSWORD }}
+        run: |
+          python3 - << 'PYEOF'
+          import json, os, sys, urllib.request, urllib.error
+
+          pb_url = "http://89.167.121.193:8091"
+          email  = os.environ["PB_ADMIN_EMAIL"]
+          pw     = os.environ["PB_ADMIN_PASSWORD"]
+
+          # Authenticate (try PB v0.23+ superusers endpoint first, then v0.22 admins)
+          token = None
+          for ep in ("/api/collections/_superusers/auth-with-password",
+                     "/api/admins/auth-with-password"):
+              try:
+                  req = urllib.request.Request(
+                      pb_url + ep, method="POST",
+                      data=json.dumps({"identity": email, "password": pw}).encode(),
+                      headers={"Content-Type": "application/json"})
+                  with urllib.request.urlopen(req, timeout=15) as r:
+                      token = json.loads(r.read()).get("token")
+                  if token:
+                      print(f"Authenticated via {ep}")
+                      break
+              except urllib.error.HTTPError as e:
+                  print(f"Auth attempt {ep}: HTTP {e.code}")
+          if not token:
+              print("ERROR: Could not authenticate with staging PocketBase.")
+              sys.exit(1)
+
+          # FY figures computed from data/ubos_2026/ubos_exports.xlsx
+          # and data/ubos_2026/ubos_imports.xlsx (SITC 5–8 excl. 68, FY 2024/25).
+          patches = {
+              "5guy9o4linjfm7m": {   # slug = exports
+                  "value_fy":     "USD 1.6B",
+                  "pct_fy":       7.35,
+                  "sub_value_fy": "7.3% of total exports",
+                  "year_fy":      "2024/25",
+                  "source_fy":    "UBOS Composition of Exports (SITC 5-8 excl. 68)",
+                  "confidence_fy": "exact",
+              },
+              "1ryb2vygbr72fqg": {   # slug = mfg_imports
+                  "value_fy":     "USD 6.3B",
+                  "pct_fy":       22.55,
+                  "sub_value_fy": "22.6% of total imports",
+                  "year_fy":      "2024/25",
+                  "source_fy":    "UBOS Composition of Imports (SITC 5-8 excl. 68)",
+                  "confidence_fy": "exact",
+              },
+          }
+
+          for rec_id, fields in patches.items():
+              url = pb_url + "/api/collections/key_indicators/records/" + rec_id
+              req = urllib.request.Request(
+                  url, method="PATCH",
+                  data=json.dumps(fields).encode(),
+                  headers={"Content-Type": "application/json", "Authorization": token})
+              with urllib.request.urlopen(req, timeout=15) as r:
+                  result = json.loads(r.read())
+              print(f"Patched {rec_id}: value_fy={result.get('value_fy')!r} "
+                    f"pct_fy={result.get('pct_fy')} year_fy={result.get('year_fy')!r}")
+          PYEOF
+
+      - name: Set up SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.HETZNER_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H ${{ env.HETZNER_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Rebuild and redeploy staging dashboard
+        run: |
+          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no \
+              ${{ env.HETZNER_USER }}@${{ env.HETZNER_HOST }} \
+            "cd /opt/midd-brain/repo && \
+             PB_URL=http://127.0.0.1:8091 python3 scripts/generate_dashboard.py && \
+             cp report/sources-of-truth.html ${{ env.STAGING_DIR }}/index.html && \
+             echo 'Staging dashboard rebuilt and deployed.'"

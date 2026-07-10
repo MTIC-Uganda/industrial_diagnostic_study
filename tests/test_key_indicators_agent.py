@@ -526,6 +526,59 @@ def test_try_ubos_sitc_compute_slug_not_allowed():
     assert k._try_ubos_sitc_compute(dfs, ["mfg_imports", "tax"]) is None
 
 
+def test_sitc_mfg_compute_target_year_finds_explicit_column():
+    """target_year causes the function to prefer the matching column over the rightmost one."""
+    # FY-style: "2024/25" is at col2, "2023/24" is rightmost (col3) and has more data.
+    # Without target_year the rightmost nonzero wins (2023/24).
+    # With target_year="2024/25" the function should return the correct FY column.
+    df = _make_sitc_df(
+        ["2024/25", "2023/24"],
+        [("51", 1000, 200), ("01", 2000, 300)],
+    )
+    result = k._sitc_mfg_compute(df, target_year="2024/25")
+    assert result is not None
+    mfg, total, year = result
+    assert year == "2024/25"
+    assert mfg == pytest.approx(1000)   # SITC 5x only (code "51")
+    assert total == pytest.approx(3000) # 1000+2000
+
+
+def test_sitc_mfg_compute_target_year_empty_col_falls_back():
+    """When the target_year column exists but has total=0, falls back to rightmost nonzero."""
+    df = _make_sitc_df(
+        ["2023/24", "2024/25"],
+        [("51", 200, None), ("01", 300, None)],  # 2024/25 col is all NaN
+    )
+    # target_year "2024/25" is at col3 but empty → fallback to "2023/24" at col2
+    result = k._sitc_mfg_compute(df, target_year="2024/25")
+    assert result is not None
+    _, _, year = result
+    assert year == "2023/24"
+
+
+def test_sitc_mfg_compute_all_empty_returns_none():
+    """When every column has total<=0 the function returns None (covers the diagnostic print)."""
+    df = _make_sitc_df(
+        [2024.0, 2025.0],
+        [("51", None, None), ("01", None, None)],  # all NaN → all totals = 0
+    )
+    assert k._sitc_mfg_compute(df) is None
+
+
+def test_try_ubos_sitc_compute_nonyear_cy_label_skips_fy_derivation():
+    """When the CY year label is not an integer string, expected_fy stays None
+    and FY is still computed via the rightmost-nonzero scan (covers the except path)."""
+    pd = pytest.importorskip("pandas")
+    # CY sheet where rightmost col header is "" (unparseable as int) → cy[2] = ""
+    cy = _make_sitc_df([""], [("51", 100_000), ("01", 500_000)])
+    fy = _make_sitc_df(["2024/25"], [("51", 90_000), ("01", 400_000)])
+    dfs = {k._UBOS_EXP_CY: cy, k._UBOS_EXP_FY: fy}
+    raw = k._try_ubos_sitc_compute(dfs, ["exports"])
+    assert raw is not None
+    assert "value" in raw[0]     # CY data present
+    assert "value_fy" in raw[0]  # FY still computed via fallback scan
+
+
 def test_compute_from_spreadsheet_uses_deterministic_path(monkeypatch, tmp_path):
     """When the workbook has UBOS SITC sheets, the deterministic path runs and
     the LLM (subprocess_claude) is never called."""
