@@ -373,8 +373,14 @@ def main(path):
             _pb_url() + "/api/collections/key_indicators/records/%s" % rec_id,
             method="PATCH", data=json.dumps(fields).encode(),
             headers={"Content-Type": "application/json", "Authorization": token})
-        with urllib.request.urlopen(req, timeout=15) as r:
-            r.read()
+        try:
+            with urllib.request.urlopen(req, timeout=15) as r:
+                r.read()
+        except urllib.error.HTTPError as e:
+            body = e.read().decode("utf-8", errors="replace")[:400]
+            # Raise with body in message so it surfaces in the WhatsApp failure line.
+            raise RuntimeError("PB PATCH %s 400 | fields=%s | %s" % (
+                rec_id, json.dumps(fields), body)) from e
 
     done = apply_updates(updates, by_slug.get, patch)
     print("key_indicators_agent: updated %d card(s): %s" % (len(done), ", ".join(done)))

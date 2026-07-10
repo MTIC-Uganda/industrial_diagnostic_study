@@ -8,9 +8,11 @@ The safety guarantee is the point: updates can only touch EXISTING slugs and onl
 whitelisted display fields — never create, rename, or delete a card. So the
 validate_updates rejection cases matter as much as the happy path.
 """
+import io
 import json
 import pathlib
 import sys
+import urllib.error
 
 import pytest
 
@@ -340,3 +342,48 @@ def test_apply_updates_uses_injected_io():
     done = k.apply_updates(updates, ids.get, lambda rid, f: patched.append((rid, f)))
     assert done == ["mfg_imports"]
     assert patched == [("rec1", {"value": "USD 7.8B"})]
+
+
+# ── patch 400 → RuntimeError with PocketBase body ─────────────────────────────
+def test_main_patch_400_raises_runtime_error_with_body(monkeypatch, tmp_path):
+    """When PocketBase returns 400, the RuntimeError message includes the response body
+    so the failure reason surfaces in the WhatsApp notification."""
+    xlsx = tmp_path / "ubos.xlsx"
+    xlsx.write_bytes(b"fake")
+    monkeypatch.setattr(k, "fetch_key_indicators",
+                        lambda: [{"slug": "exports", "label": "Exports", "value": "", "id": "rec9"}])
+    monkeypatch.setattr(k, "_compute_from_spreadsheet",
+                        lambda *a, **kw: [{"slug": "exports", "fields": {"pct": 14.7}}])
+    monkeypatch.setattr(k, "pb_auth", lambda: "tok")
+
+    err_body = b'{"code":400,"message":"Failed to create record.","data":{"pct":{"code":"validation_not_number"}}}'
+    http_err = urllib.error.HTTPError(
+        "http://x", 400, "Bad Request",
+        {}, io.BytesIO(err_body))
+
+    monkeypatch.setattr(k.urllib.request, "urlopen", lambda req, timeout=15: (_ for _ in ()).throw(http_err))
+
+    with pytest.raises(RuntimeError, match="validation_not_number"):
+        k.main(str(xlsx))
+
+
+def test_main_patch_success_reads_response(monkeypatch, tmp_path):
+    """Successful PATCH: urlopen returns a 200 response and r.read() is called (covers the
+    success branch inside the try block added to surface PB error bodies)."""
+    xlsx = tmp_path / "ubos.xlsx"
+    xlsx.write_bytes(b"fake")
+    monkeypatch.setattr(k, "fetch_key_indicators",
+                        lambda: [{"slug": "exports", "label": "Exports", "value": "", "id": "rec9"}])
+    monkeypatch.setattr(k, "_compute_from_spreadsheet",
+                        lambda *a, **kw: [{"slug": "exports", "fields": {"pct": 14.7}}])
+    monkeypatch.setattr(k, "pb_auth", lambda: "tok")
+
+    class _FakeResp:
+        def __enter__(self): return self
+        def __exit__(self, *a): pass
+        def read(self): return b'{"id":"rec9"}'
+
+    monkeypatch.setattr(k.urllib.request, "urlopen", lambda req, timeout=15: _FakeResp())
+
+    result = k.main(str(xlsx))
+    assert result == ["exports"]
