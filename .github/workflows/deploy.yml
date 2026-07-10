@@ -563,6 +563,27 @@ jobs:
           PB_SCHEMA_ONLY: "1"
         run: python db/pb_setup_explorer.py
 
+      # Staging PB (:8091) schema must mirror production (:8090) — run the same
+      # additive migrations so uploads to staging can store all fields (e.g. FY).
+      # continue-on-error so a staging PB hiccup never blocks the already-live prod.
+      - name: Ensure STAGING PocketBase schema (no data re-seed)
+        continue-on-error: true
+        env:
+          PB_URL: "http://${{ env.HETZNER_HOST }}:8091"
+          PB_ADMIN_EMAIL: ${{ secrets.PB_ADMIN_EMAIL }}
+          PB_ADMIN_PASSWORD: ${{ secrets.PB_ADMIN_PASSWORD }}
+          PB_SCHEMA_ONLY: "1"
+        run: python db/pb_setup.py
+
+      - name: Ensure STAGING Explorer PocketBase schema (no data re-seed)
+        continue-on-error: true
+        env:
+          PB_URL: "http://${{ env.HETZNER_HOST }}:8091"
+          PB_ADMIN_EMAIL: ${{ secrets.PB_ADMIN_EMAIL }}
+          PB_ADMIN_PASSWORD: ${{ secrets.PB_ADMIN_PASSWORD }}
+          PB_SCHEMA_ONLY: "1"
+        run: python db/pb_setup_explorer.py
+
       - name: Verify seeding
         env:
           PB_URL: ${{ secrets.PB_URL }}

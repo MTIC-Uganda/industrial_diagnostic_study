@@ -37,6 +37,17 @@ jobs:
             exit 1
           fi
 
+      - name: Ensure staging PocketBase has FY fields in schema
+        # The seed-pocketbase CI job only targets production PB (secrets.PB_URL = :8090).
+        # Staging PB (:8091) never got the additive migration that added value_fy/pct_fy
+        # etc.  Run pb_setup.py schema-only here first so the PATCH below can store them.
+        env:
+          PB_URL:            "http://89.167.121.193:8091"
+          PB_ADMIN_EMAIL:    ${{ secrets.PB_ADMIN_EMAIL }}
+          PB_ADMIN_PASSWORD: ${{ secrets.PB_ADMIN_PASSWORD }}
+          PB_SCHEMA_ONLY:    "1"
+        run: python db/pb_setup.py
+
       - name: Patch exports + mfg_imports FY fields in staging PocketBase
         env:
           PB_ADMIN_EMAIL:    ${{ secrets.PB_ADMIN_EMAIL }}
