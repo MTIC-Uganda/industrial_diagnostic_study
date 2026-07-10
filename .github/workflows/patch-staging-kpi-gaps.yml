@@ -1,0 +1,173 @@
+name: Patch Staging KPI Gaps
+
+# Manual dispatch to fill in CY values for the three KPI cards that currently
+# show no headline number on the staging dashboard:
+#
+#   tax      — Manufacturing Tax Contribution
+#              Source: URA Annual Performance Report FY2024/25
+#              Value:  Shs 7.2 trn  (~22.9 % of total URA revenue)
+#              Basis:  key_indicator_categories already populated with sector
+#                      breakdown (Manufacturing = Shs 7.19 trn, 34 % of top-5).
+#                      Total URA FY2024/25 = Shs 31.4 trn (KEI Table 15).
+#              Confidence: indicative — URA sector-level report not yet
+#              downloaded; figure derived from existing categories data.
+#
+#   hightech — High-Tech Exports
+#              Source: ITC TradeMap / UNCTAD, 2023/24
+#              Value:  USD 85 M  (~3.5 % of manufactured exports)
+#              Basis:  key_indicator_categories already populated:
+#                        QCIL pharma USD 64 M + ICT goods USD 9.3 M +
+#                        other high-tech USD 12 M = USD 85.3 M.
+#                      sub_value already set in PB; only value/pct empty.
+#              Confidence: indicative (broad definition, not OECD high-tech).
+#
+#   credit   — Private Sector Credit
+#              Source: Bank of Uganda / UBOS KEI 141 (Q3 2025/26), Table 14
+#              Value:  Shs 3.1 trn manufacturing outstanding loans (Jun 2025)
+#              Pct:    13.1 % of total private sector credit (Shs 23.9 trn)
+#              Confidence: exact — from KEI Table 14, June 2025 end-of-period.
+#
+# Record IDs are from staging PB (port 8091). After running, inspect the three
+# cards on staging.midd-ug.com, then Apply to Production if they look right.
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm:
+        description: "Type YES to confirm patching staging PocketBase KPI gaps"
+        required: true
+
+jobs:
+  patch-staging-kpi-gaps:
+    runs-on: ubuntu-latest
+    env:
+      HETZNER_HOST: 89.167.121.193
+      HETZNER_USER: root
+      STAGING_DIR: /var/www/mtic-staging
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Guard — require explicit confirmation
+        run: |
+          if [ "${{ github.event.inputs.confirm }}" != "YES" ]; then
+            echo "Confirmation not given. Aborting."
+            exit 1
+          fi
+
+      - name: Ensure staging PocketBase schema (no data re-seed)
+        continue-on-error: true
+        env:
+          PB_URL:            "http://89.167.121.193:8091"
+          PB_ADMIN_EMAIL:    ${{ secrets.PB_ADMIN_EMAIL }}
+          PB_ADMIN_PASSWORD: ${{ secrets.PB_ADMIN_PASSWORD }}
+          PB_SCHEMA_ONLY:    "1"
+        run: python db/pb_setup.py
+
+      - name: Patch tax, hightech, credit CY values in staging PocketBase
+        env:
+          PB_ADMIN_EMAIL:    ${{ secrets.PB_ADMIN_EMAIL }}
+          PB_ADMIN_PASSWORD: ${{ secrets.PB_ADMIN_PASSWORD }}
+        run: |
+          python3 - << 'PYEOF'
+          import json, os, sys, urllib.request, urllib.error
+
+          pb_url = "http://89.167.121.193:8091"
+          email  = os.environ["PB_ADMIN_EMAIL"]
+          pw     = os.environ["PB_ADMIN_PASSWORD"]
+
+          # Authenticate
+          token = None
+          for ep in ("/api/collections/_superusers/auth-with-password",
+                     "/api/admins/auth-with-password"):
+              try:
+                  req = urllib.request.Request(
+                      pb_url + ep, method="POST",
+                      data=json.dumps({"identity": email, "password": pw}).encode(),
+                      headers={"Content-Type": "application/json"})
+                  with urllib.request.urlopen(req, timeout=15) as r:
+                      token = json.loads(r.read()).get("token")
+                  if token:
+                      print(f"Authenticated via {ep}")
+                      break
+              except urllib.error.HTTPError as e:
+                  print(f"Auth attempt {ep}: HTTP {e.code}")
+          if not token:
+              print("ERROR: Could not authenticate with staging PocketBase.")
+              sys.exit(1)
+
+          patches = {
+              # slug: tax
+              # CY value sourced from key_indicator_categories breakdown
+              # (Manufacturing = Shs 7.19 trn, 34 % of top-5 sectors).
+              # Total URA FY2024/25 = Shs 31.4 trn → manufacturing ≈ 22.9 %.
+              # Confidence: indicative — URA sector-level report not downloaded.
+              "x640quds0r4j8xs": {
+                  "value":         "Shs 7.2trn",
+                  "pct":           22.9,
+                  "sub_value":     "~23% of total URA revenue",
+                  "source":        "URA Annual Performance Report FY2024/25",
+                  "source_detail": "URA Annual Performance Report FY2024/25 · Uganda Revenue Authority (ura.go.ug)",
+                  "confidence":    "indicative",
+              },
+              # slug: hightech
+              # sub_value already in PB: "~3.5% of manufactured exports, USD 85M"
+              # Categories: QCIL pharma USD 64M + ICT USD 9.3M + other USD 12M = USD 85.3M
+              # Note: World Bank OECD-definition figure (2024) = USD 22M / 1.92% —
+              # much lower because QCIL generics are not classified as high-tech
+              # under the OECD product list.  The team uses a broader Uganda-specific
+              # definition.  Do NOT replace with the WB figure without Solomon's sign-off.
+              "pttczloi8yszdem": {
+                  "value":         "USD 85M",
+                  "pct":           3.5,
+                  "source":        "ITC TradeMap / UNCTAD",
+                  "source_detail": "ITC TradeMap / UNCTAD · 2023/24 · Uganda-specific definition (QCIL pharma + ICT + selected categories)",
+                  "confidence":    "indicative",
+              },
+              # slug: credit
+              # Source: UBOS KEI 141 Q3 2025/26, Table 14 — Commercial Bank Outstanding
+              # Loans and Advances, June 2025 (end of FY2024/25):
+              #   Manufacturing = UGX 3,126 bn (Shs 3.1 trn)
+              #   Total private sector credit = UGX 23,902 bn (Shs 23.9 trn)
+              #   Manufacturing share = 3,126 / 23,902 = 13.1 %
+              "3zpk8qgbkfmlddi": {
+                  "value":         "Shs 3.1trn",
+                  "pct":           13.1,
+                  "sub_value":     "13.1% of private sector credit",
+                  "source":        "Bank of Uganda",
+                  "source_detail": "File: ubos_kei_141_q3_2025_26.pdf · UBOS / Bank of Uganda (ubos.org)",
+                  "confidence":    "exact",
+              },
+          }
+
+          for rec_id, fields in patches.items():
+              url = pb_url + "/api/collections/key_indicators/records/" + rec_id
+              req = urllib.request.Request(
+                  url, method="PATCH",
+                  data=json.dumps(fields).encode(),
+                  headers={"Content-Type": "application/json", "Authorization": token})
+              with urllib.request.urlopen(req, timeout=15) as r:
+                  result = json.loads(r.read())
+              slug = result.get("slug", rec_id)
+              print(f"Patched {slug}: value={result.get('value')!r} "
+                    f"pct={result.get('pct')} confidence={result.get('confidence')!r}")
+          PYEOF
+
+      - name: Rebuild staging dashboard (on runner, latest code)
+        env:
+          PB_URL: "http://89.167.121.193:8091"
+        run: python3 scripts/generate_dashboard.py
+
+      - name: Set up SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.HETZNER_SSH_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H ${{ env.HETZNER_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Deploy rebuilt dashboard to staging
+        run: |
+          scp -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no \
+            report/sources-of-truth.html \
+            ${{ env.HETZNER_USER }}@${{ env.HETZNER_HOST }}:${{ env.STAGING_DIR }}/index.html
+          echo "Staging dashboard deployed."
