@@ -404,6 +404,31 @@ def test_kpi_fy_source_shows_source_detail(fy_wired, monkeypatch):
     assert "Uganda Bureau of Statistics" in src
 
 
+def test_kpi_fy_source_no_double_quotes(fy_wired, monkeypatch):
+    """kpi_fy_source output must never contain double-quote characters.
+
+    The return value is embedded verbatim inside a data-fy-source="..." HTML attribute
+    by esc() (which does NOT escape ").  Any " in the output would terminate the attribute
+    early and silently truncate the source text in the toggle JS.  Single-quoted HTML
+    attributes must be used throughout kpi_fy_source().
+    """
+    fx = _fy_fixtures()
+    exp = next(r for r in fx["key_indicators"] if r["slug"] == "exports")
+    exp["source_detail"] = "File: ubos_exports.xlsx · Uganda Bureau of Statistics (ubos.org)"
+    monkeypatch.setattr(g, "pb_get", lambda coll, **kw: list(fx.get(coll, [])))
+    monkeypatch.setattr(g, "pb_count", lambda coll, filter=None: 1234)
+    monkeypatch.setattr(g, "_treemaps_from_pocketbase", _treemap_agg)
+    monkeypatch.setattr(g, "PB_URL", "http://fixture")
+    monkeypatch.setattr(g, "USE_POCKETBASE", True)
+    g.load_data()
+    src = g.kpi_fy_source("exports")
+    assert '"' not in src, (
+        "kpi_fy_source() output contains a double-quote character — "
+        "this will break the data-fy-source attribute in the HTML. "
+        "Use single-quoted HTML attributes inside kpi_fy_source()."
+    )
+
+
 def test_kpi_source_line_shows_source_detail(fy_wired, monkeypatch):
     """kpi_source_line includes source_detail as a secondary line when different from source."""
     fx = _fy_fixtures()
