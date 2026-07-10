@@ -380,15 +380,20 @@ def kpi_fy_subvalue(slug):
     return r.get('sub_value_fy', '')
 
 def kpi_fy_source(slug):
+    # NOTE: this return value is stored verbatim in a data-fy-source="..." HTML attribute
+    # by the template marker (via esc(), which only escapes &/</>  — NOT ").  Any " inside
+    # this function's output would terminate the outer attribute early and silently truncate
+    # the source text.  Use single-quoted HTML attributes throughout so the output is safe
+    # to embed in a double-quoted attribute value.
     r = KEY_INDICATORS.get(slug)
     if not r or not r.get('year_fy'): return ''
     year = r.get('year_fy', '')
     source = r.get('source_fy', '') or r.get('source', '')
     detail = r.get('source_detail', '') or source
-    title = f' title="{esc(detail)}"' if detail else ''
-    parts = [f'{esc(year)} &middot; <span style="cursor:help;border-bottom:1px dotted var(--muted)"{title}>Source: {esc(source)}</span>']
+    title = f" title='{esc(detail)}'" if detail else ''
+    parts = [f"{esc(year)} &middot; <span style='cursor:help;border-bottom:1px dotted var(--muted)'{title}>Source: {esc(source)}</span>"]
     if detail and detail != source:
-        parts.append(f'<div style="font-size:10px;color:var(--muted);margin-top:2px">{esc(detail)}</div>')
+        parts.append(f"<div style='font-size:10px;color:var(--muted);margin-top:2px'>{esc(detail)}</div>")
     return ''.join(parts)
 
 def kpi_fy_badge(slug):
