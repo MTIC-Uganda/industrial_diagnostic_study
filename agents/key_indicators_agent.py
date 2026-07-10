@@ -56,19 +56,32 @@ UPDATABLE_FIELDS = {
 # whole write (the real cause of the ubos_exports upload failure).
 NUMBER_FIELDS = {"pct", "pct_fy"}
 
+# PocketBase SELECT fields: only these values are accepted. Any other value causes a 400.
+SELECT_FIELDS = {
+    "confidence": {"exact", "estimated", "indicative"},
+    "confidence_fy": {"exact", "estimated", "indicative"},
+}
+
 
 def coerce_field(name, value):
     """Coerce one field to what PocketBase's schema expects.
 
     Number fields -> the first numeric token as a float ("45.1% of imports" -> 45.1);
     returns None when a number field carries no parseable number, so the caller drops
-    it rather than send a bad type and 400 the record. Text fields -> str (None -> "").
+    it rather than send a bad type and 400 the record.
+    SELECT fields -> validated against the allowed set; returns None for invalid values
+    so the caller drops them rather than sending an invalid option and 400ing the record.
+    Text fields -> str (None -> "").
     """
     if name in NUMBER_FIELDS:
         if value is None:
             return None
         m = re.search(r"-?\d+(?:\.\d+)?", str(value))
         return float(m.group()) if m else None
+    if name in SELECT_FIELDS:
+        if value is None or str(value) not in SELECT_FIELDS[name]:
+            return None
+        return str(value)
     return "" if value is None else str(value)
 
 MAX_PREVIEW_ROWS = 14
@@ -120,8 +133,9 @@ def code_prompt(intent, preview_text, current):
         "Write READ-ONLY Python (pandas as pd and numpy as np are already available; `dfs` holds the "
         "sheets) that COMPUTES the figure(s) the intent asks for and sets a variable `result` to a "
         "JSON-serializable list of updates. Each update is a dict with a `slug` from the list above "
-        "plus any of: value, pct, sub_value, year, source, source_detail, confidence, "
-        "value_fy, pct_fy, sub_value_fy, year_fy, source_fy, import_value, import_sub, "
+        "plus any of: value, pct, sub_value, year, source, source_detail, "
+        "confidence (MUST be exactly 'exact', 'estimated', or 'indicative' — no other value accepted), "
+        "value_fy, pct_fy, sub_value_fy, year_fy, source_fy, confidence_fy, import_value, import_sub, "
         "import_value_fy, import_sub_fy. "
         "Format value/sub_value/import_value/import_sub as human display strings "
         "(for example 'USD 6.3B' or '45.1% of imports'), not raw floats. "
@@ -148,8 +162,9 @@ def pdf_extract_prompt(intent, text, current):
         "list plus any of: value, pct, sub_value, year, source, source_detail, confidence, "
         "value_fy, pct_fy, sub_value_fy, year_fy, source_fy.\n"
         "Format value/sub_value as human display strings (e.g. 'UGX 5.2T' or '19.4% of tax revenue'). "
-        "Set confidence to 'exact' if the figure is an official published number, "
-        "'estimated' if derived or approximated.\n\n"
+        "confidence and confidence_fy MUST be exactly 'exact', 'estimated', or 'indicative' — "
+        "no other value is accepted. Use 'exact' for official published figures, "
+        "'estimated' for derived or approximated ones, 'indicative' for rough order-of-magnitude.\n\n"
         "EXISTING key_indicators slugs:\n" + cur + "\n\n"
         "OPERATOR INTENT:\n" + intent + "\n\n"
         "DOCUMENT TEXT (may be truncated):\n" + truncated + "\n\n"

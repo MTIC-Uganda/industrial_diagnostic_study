@@ -88,6 +88,35 @@ def test_coerce_field_numbers_and_text():
     assert k.coerce_field("source", None) == ""
 
 
+def test_coerce_field_select_valid_and_invalid():
+    # Valid confidence values pass through unchanged.
+    assert k.coerce_field("confidence", "exact") == "exact"
+    assert k.coerce_field("confidence", "estimated") == "estimated"
+    assert k.coerce_field("confidence", "indicative") == "indicative"
+    assert k.coerce_field("confidence_fy", "exact") == "exact"
+    # Invalid values (e.g. model hallucinated "high") are dropped (None -> caller skips).
+    assert k.coerce_field("confidence", "high") is None
+    assert k.coerce_field("confidence", "official") is None
+    assert k.coerce_field("confidence", None) is None
+    assert k.coerce_field("confidence_fy", "approximate") is None
+
+
+def test_validate_drops_invalid_confidence():
+    # An invalid confidence value must be dropped from the PATCH fields, not sent to PocketBase.
+    raw = [{"slug": "exports", "value": "USD 1.8B", "confidence": "high"}]
+    out = k.validate_updates(raw, ["exports"])
+    assert out[0]["fields"]["value"] == "USD 1.8B"
+    assert "confidence" not in out[0]["fields"]
+
+
+def test_validate_keeps_valid_confidence():
+    raw = [{"slug": "exports", "value": "USD 1.8B", "confidence": "exact",
+            "confidence_fy": "estimated"}]
+    out = k.validate_updates(raw, ["exports"])
+    assert out[0]["fields"]["confidence"] == "exact"
+    assert out[0]["fields"]["confidence_fy"] == "estimated"
+
+
 def test_validate_coerces_pct_and_drops_unparseable():
     # The real failure: pct arriving as a %-suffixed display string. It must become a
     # number (else PocketBase 400s the write); an unparseable pct is dropped, not sent.
