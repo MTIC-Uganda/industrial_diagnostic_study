@@ -692,6 +692,14 @@ jobs:
           fi
           git config user.name  "MTIC CI Bot"
           git config user.email "ci-bot@mtic-pipeline"
+          # Supersede: close any existing open drift PRs first so they never pile up.
+          # PocketBase drifts from the CSV mirror continuously (it is the source of truth,
+          # ADR-017), so without this every 6h run stacks a new PR. Cap it at one open.
+          gh pr list --state open --json number,headRefName \
+            -q '.[] | select(.headRefName | startswith("drift-check-")) | .number' \
+          | while read -r n; do
+              [ -n "$n" ] && gh pr close "$n" --comment "Superseded by a newer drift snapshot." --delete-branch || true
+            done
           BRANCH="drift-check-$(date +%Y%m%d-%H%M%S)"
           git checkout -b "$BRANCH"
           git add data/dashboard/
