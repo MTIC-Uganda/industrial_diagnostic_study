@@ -29,12 +29,6 @@ on:
         description: "Internal — set by CI when this run exists only to pick up freshly-seeded PocketBase data. Bounds the auto-chain to exactly one follow-up run; do not set manually more than once in a row."
         type: boolean
         default: false
-  # Drift Check (see the drift-check job below): per ADR-011 all PocketBase
-  # writes are supposed to go through the CSV -> db/pb_setup.py pipeline,
-  # never a direct admin-UI edit. Nothing technically stops that, so this
-  # checks on a timer rather than waiting for a push to notice.
-  schedule:
-    - cron: "0 */6 * * *"
 
 env:
   HETZNER_HOST:       89.167.121.193
@@ -49,7 +43,7 @@ env:
 permissions:
   contents:      write
   actions:       write
-  pull-requests: write   # needed by the drift-check job to open review PRs
+  pull-requests: write   # gap-fill PR (ingest) + auto-merge to main
 
 jobs:
   # ── A. Ingestion Agent (only when uploads change) ─────────────────────────
@@ -653,73 +647,3 @@ jobs:
         run: |
           ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no $HETZNER_USER@$HETZNER_HOST \
             'export HOME=/root && cd /opt/mtic-uploader/repo && git checkout -f main -q && git pull --ff-only -q && bash scripts/deploy_uploader.sh'
-
-  # ── 5. Drift Check (scheduled — every 6h) ───────────────────────────────────
-  # Per ADR-011, every PocketBase write is supposed to go through
-  # data/dashboard/*.csv -> db/pb_setup.py, never a direct PocketBase admin-UI
-  # edit. Nothing technically enforces that, so this runs scripts/detect_drift.py
-  # on a timer and opens a PR if PocketBase's live data no longer matches
-  # what's committed -- the human-readable diff IS the review surface: merge
-  # the PR to accept the change (git catches up), or close it and run
-  # scripts/restore_from_git.py to reject it (pushes git's values back into
-  # PocketBase, deleting any record git doesn't have).
-  drift-check:
-    name: Drift Check
-    runs-on: ubuntu-latest
-    if: github.event_name == 'schedule'
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
-
-      - name: Detect PocketBase drift
-        env:
-          PB_URL: ${{ secrets.PB_URL }}
-        run: python scripts/detect_drift.py
-
-      - name: Open a PR if drift was found
-        id: open-pr
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          if git diff --quiet data/dashboard/; then
-            echo "No drift detected."
-            echo "pr_url=" >> "$GITHUB_OUTPUT"
-            exit 0
-          fi
-          git config user.name  "MTIC CI Bot"
-          git config user.email "ci-bot@mtic-pipeline"
-          # Supersede: close any existing open drift PRs first so they never pile up.
-          # PocketBase drifts from the CSV mirror continuously (it is the source of truth,
-          # ADR-017), so without this every 6h run stacks a new PR. Cap it at one open.
-          gh pr list --state open --json number,headRefName \
-            -q '.[] | select(.headRefName | startswith("drift-check-")) | .number' \
-          | while read -r n; do
-              [ -n "$n" ] && gh pr close "$n" --comment "Superseded by a newer drift snapshot." --delete-branch || true
-            done
-          BRANCH="drift-check-$(date +%Y%m%d-%H%M%S)"
-          git checkout -b "$BRANCH"
-          git add data/dashboard/
-          git commit -m "drift: PocketBase data differs from committed files"
-          git push origin "$BRANCH"
-          PR_URL=$(gh pr create --title "PocketBase drift detected — review and merge or close" --base main --head "$BRANCH" --body "PocketBase's live data no longer matches what's committed in \`data/dashboard/\`. This usually means a record was edited directly in the PocketBase admin UI, bypassing the normal CSV -> \`db/pb_setup.py\` -> PocketBase pipeline (ADR-011 says writes shouldn't happen that way, but nothing technically blocks it).
-
-          **Review the diff in this PR carefully**, then:
-          - **If the change was intentional** — merge this PR. That brings git in sync with what's now live in PocketBase; no further action needed.
-          - **If the change was NOT intentional** — close this PR without merging, then run \`python scripts/restore_from_git.py\` (needs \`PB_ADMIN_EMAIL\`/\`PB_ADMIN_PASSWORD\`) to push git's last-known values back into PocketBase. That also deletes any record PocketBase has that git doesn't — covers someone adding a new row directly, not just editing an existing one.")
-          echo "pr_url=$PR_URL" >> "$GITHUB_OUTPUT"
-          echo "::notice::Opened drift-review PR on $BRANCH"
-
-      - name: Notify team by email and WhatsApp
-        if: steps.open-pr.outputs.pr_url != ''
-        continue-on-error: true
-        env:
-          SMTP_USER:    ${{ secrets.SMTP_USER }}
-          SMTP_PASS:    ${{ secrets.SMTP_PASS }}
-          TWILIO_SID:   ${{ secrets.TWILIO_SID }}
-          TWILIO_TOKEN: ${{ secrets.TWILIO_TOKEN }}
-          TWILIO_FROM:  ${{ secrets.TWILIO_FROM }}
-        run: python scripts/notify.py "${{ steps.open-pr.outputs.pr_url }}"
