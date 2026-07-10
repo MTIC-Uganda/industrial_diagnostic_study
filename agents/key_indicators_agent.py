@@ -131,12 +131,13 @@ def _sitc_mfg_compute(df, target_year=None):
     return None
 
 
-def _try_ubos_sitc_compute(dfs, allowed_slugs):
+def _try_ubos_sitc_compute(dfs, allowed_slugs, fname=""):
     """Deterministic manufactured-trade computation for UBOS SITC workbooks.
 
     Detects the workbook type (exports vs imports) from sheet names, computes
     CY and FY figures without calling the LLM, and returns a raw updates list
     (suitable for validate_updates) or None if the sheets are not recognised.
+    fname (optional) — the original filename; stored in source_detail for traceability.
     """
     sheets = set(dfs.keys())
 
@@ -178,6 +179,7 @@ def _try_ubos_sitc_compute(dfs, allowed_slugs):
         return None
 
     src_base = "UBOS Composition of %s (SITC 5-8 excl. 68)" % direction.capitalize()
+    src_detail = ("File: %s · Uganda Bureau of Statistics (ubos.org)" % fname) if fname else ""
     update = {"slug": slug}
 
     if cy:
@@ -189,20 +191,30 @@ def _try_ubos_sitc_compute(dfs, allowed_slugs):
             "sub_value": "%.1f%% of total %s" % (pct, direction),
             "year": year,
             "source": src_base,
+            "source_detail": src_detail,
             "confidence": "exact",
         })
 
     if fy:
         mfg_fy, total_fy, year_fy = fy
         pct_fy = round(mfg_fy / total_fy * 100, 2)
-        update.update({
-            "value_fy": "USD %.1fB" % (mfg_fy / 1e6),
+        fy_val = "USD %.1fB" % (mfg_fy / 1e6)
+        fy_sub = "%.1f%% of total %s" % (pct_fy, direction)
+        fy_fields = {
+            "value_fy": fy_val,
             "pct_fy": pct_fy,
-            "sub_value_fy": "%.1f%% of total %s" % (pct_fy, direction),
+            "sub_value_fy": fy_sub,
             "year_fy": year_fy,
             "source_fy": src_base,
             "confidence_fy": "exact",
-        })
+        }
+        # KPI4 dashboard card reads import_value_fy / import_sub_fy for the
+        # imports-side FY toggle; mirror value_fy → import_value_fy so that
+        # both the pipeline and direct PB reads use the same code path.
+        if slug == "mfg_imports":
+            fy_fields["import_value_fy"] = fy_val
+            fy_fields["import_sub_fy"] = fy_sub
+        update.update(fy_fields)
 
     return [update]
 
@@ -442,7 +454,7 @@ def _compute_from_spreadsheet(path, intent, current, allowed):
         print("key_indicators_agent: cannot read spreadsheet: %s" % e)
         return []
 
-    det = _try_ubos_sitc_compute(dfs, allowed)
+    det = _try_ubos_sitc_compute(dfs, allowed, fname=path.name)
     if det is not None:
         updates = validate_updates(det, allowed)
         if updates:

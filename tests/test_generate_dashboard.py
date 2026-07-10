@@ -354,3 +354,67 @@ def test_kpi_has_fy(fy_wired):
     assert g.kpi_has_fy("exports") is True       # has value_fy
     assert g.kpi_has_fy("mfg_imports") is False  # all FY fields blank
     assert g.kpi_has_fy("nonexistent") is False
+
+
+def test_kpi_fy_import_value_falls_back_to_value_fy(fy_wired, monkeypatch):
+    """When import_value_fy is empty, kpi_fy_import_value falls back to value_fy."""
+    fx = _fy_fixtures()
+    # Give mfg_imports a value_fy but leave import_value_fy empty
+    imp = next(r for r in fx["key_indicators"] if r["slug"] == "mfg_imports")
+    imp["value_fy"] = "USD 6.3B"
+    imp["year_fy"] = "2024/25"
+    imp["import_value_fy"] = ""
+    monkeypatch.setattr(g, "pb_get", lambda coll, **kw: list(fx.get(coll, [])))
+    monkeypatch.setattr(g, "pb_count", lambda coll, filter=None: 1234)
+    monkeypatch.setattr(g, "_treemaps_from_pocketbase", _treemap_agg)
+    monkeypatch.setattr(g, "PB_URL", "http://fixture")
+    monkeypatch.setattr(g, "USE_POCKETBASE", True)
+    g.load_data()
+    assert g.kpi_fy_import_value("mfg_imports") == "USD 6.3B"
+
+
+def test_kpi_fy_import_sub_falls_back_to_sub_value_fy(fy_wired, monkeypatch):
+    """When import_sub_fy is empty, kpi_fy_import_sub falls back to sub_value_fy."""
+    fx = _fy_fixtures()
+    imp = next(r for r in fx["key_indicators"] if r["slug"] == "mfg_imports")
+    imp["sub_value_fy"] = "22.6% of total imports"
+    imp["import_sub_fy"] = ""
+    monkeypatch.setattr(g, "pb_get", lambda coll, **kw: list(fx.get(coll, [])))
+    monkeypatch.setattr(g, "pb_count", lambda coll, filter=None: 1234)
+    monkeypatch.setattr(g, "_treemaps_from_pocketbase", _treemap_agg)
+    monkeypatch.setattr(g, "PB_URL", "http://fixture")
+    monkeypatch.setattr(g, "USE_POCKETBASE", True)
+    g.load_data()
+    assert g.kpi_fy_import_sub("mfg_imports") == "22.6% of total imports"
+
+
+def test_kpi_fy_source_shows_source_detail(fy_wired, monkeypatch):
+    """kpi_fy_source includes source_detail as a secondary line when populated."""
+    fx = _fy_fixtures()
+    exp = next(r for r in fx["key_indicators"] if r["slug"] == "exports")
+    exp["source_detail"] = "File: ubos_exports.xlsx · Uganda Bureau of Statistics (ubos.org)"
+    monkeypatch.setattr(g, "pb_get", lambda coll, **kw: list(fx.get(coll, [])))
+    monkeypatch.setattr(g, "pb_count", lambda coll, filter=None: 1234)
+    monkeypatch.setattr(g, "_treemaps_from_pocketbase", _treemap_agg)
+    monkeypatch.setattr(g, "PB_URL", "http://fixture")
+    monkeypatch.setattr(g, "USE_POCKETBASE", True)
+    g.load_data()
+    src = g.kpi_fy_source("exports")
+    assert "ubos_exports.xlsx" in src
+    assert "Uganda Bureau of Statistics" in src
+
+
+def test_kpi_source_line_shows_source_detail(fy_wired, monkeypatch):
+    """kpi_source_line includes source_detail as a secondary line when different from source."""
+    fx = _fy_fixtures()
+    exp = next(r for r in fx["key_indicators"] if r["slug"] == "exports")
+    exp["source_detail"] = "File: ubos_exports.xlsx · Uganda Bureau of Statistics (ubos.org)"
+    monkeypatch.setattr(g, "pb_get", lambda coll, **kw: list(fx.get(coll, [])))
+    monkeypatch.setattr(g, "pb_count", lambda coll, filter=None: 1234)
+    monkeypatch.setattr(g, "_treemaps_from_pocketbase", _treemap_agg)
+    monkeypatch.setattr(g, "PB_URL", "http://fixture")
+    monkeypatch.setattr(g, "USE_POCKETBASE", True)
+    g.load_data()
+    line = g.kpi_source_line("exports")
+    assert "ubos_exports.xlsx" in line
+    assert "Uganda Bureau of Statistics" in line

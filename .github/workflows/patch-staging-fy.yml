@@ -89,15 +89,21 @@ jobs:
                   "sub_value_fy": "7.3% of total exports",
                   "year_fy":      "2024/25",
                   "source_fy":    "UBOS Composition of Exports (SITC 5-8 excl. 68)",
+                  "source_detail": "File: ubos_exports.xlsx · Uganda Bureau of Statistics (ubos.org)",
                   "confidence_fy": "exact",
               },
               "1ryb2vygbr72fqg": {   # slug = mfg_imports
-                  "value_fy":     "USD 6.3B",
-                  "pct_fy":       22.55,
-                  "sub_value_fy": "22.6% of total imports",
-                  "year_fy":      "2024/25",
-                  "source_fy":    "UBOS Composition of Imports (SITC 5-8 excl. 68)",
-                  "confidence_fy": "exact",
+                  "value_fy":        "USD 6.3B",
+                  "pct_fy":          22.55,
+                  "sub_value_fy":    "22.6% of total imports",
+                  "year_fy":         "2024/25",
+                  "source_fy":       "UBOS Composition of Imports (SITC 5-8 excl. 68)",
+                  "source_detail":   "File: ubos_imports.xlsx · Uganda Bureau of Statistics (ubos.org)",
+                  "confidence_fy":   "exact",
+                  # KPI4 card reads import_value_fy / import_sub_fy for the imports-side
+                  # FY toggle — mirror value_fy so both code paths work.
+                  "import_value_fy": "USD 6.3B",
+                  "import_sub_fy":   "22.6% of total imports",
               },
           }
 
