@@ -71,11 +71,15 @@ _UBOS_IMP_CY = "CY_Value SITC"
 _UBOS_IMP_FY_BASE = "FY_Value SITC"   # may have trailing space in the actual file
 
 
-def _sitc_mfg_compute(df):
+def _sitc_mfg_compute(df, target_year=None):
     """Sum SITC sections 5,6,7,8 excl. 68 for the latest non-zero year in a UBOS SITC sheet.
 
     Sheet layout (header=None): rows 0-2 notes, row 3 = year labels, row 4+ = data.
     Column 0 = SITC 2-digit code, column 1 = description, columns 2+ = values by year.
+
+    target_year: if supplied (e.g. "2024/25"), scan for that column label first before
+    falling back to rightmost-non-zero.  Makes FY extraction robust against trailing
+    empty/provisional columns in the uploaded file.
 
     Returns (mfg_usd_thousands, total_usd_thousands, year_label) or None.
     """
@@ -89,6 +93,28 @@ def _sitc_mfg_compute(df):
     data = df.iloc[4:]
     codes = data.iloc[:, 0].astype(str).str.strip()
     is_mfg = codes.str.match(r"^[5-8]\d") & (codes != "68")
+
+    # If a target year is provided, search the header row for that label first.
+    if target_year is not None:
+        for ci in range(2, len(header)):
+            raw = str(header[ci]) if ci < len(header) else ""
+            try:
+                label = str(int(float(raw)))   # float64 2025.0 -> "2025"
+            except (ValueError, TypeError):
+                label = raw.strip()            # "2024/25" already a string
+            if label == target_year:
+                col = pd.to_numeric(data.iloc[:, ci], errors="coerce")
+                total = float(col.dropna().sum())
+                if total > 0:
+                    mfg = float(col[is_mfg.values].sum())
+                    print("key_indicators_agent: SITC target=%r col%d total=%.0f mfg=%.0f" % (
+                        target_year, ci, total, mfg))
+                    return mfg, total, label
+                # Column found but empty — log and fall through to rightmost scan.
+                print("key_indicators_agent: SITC target=%r col%d total=0 (no data); falling back" % (
+                    target_year, ci))
+                break
+
     for ci in range(df.shape[1] - 1, 1, -1):
         col = pd.to_numeric(data.iloc[:, ci], errors="coerce")
         total = float(col.dropna().sum())
@@ -101,6 +127,7 @@ def _sitc_mfg_compute(df):
         except (ValueError, TypeError):
             year_label = raw.strip()             # "2024/25" already a string
         return mfg, total, year_label
+    print("key_indicators_agent: SITC sheet shape=%s – all columns have total<=0" % str(df.shape))
     return None
 
 
@@ -127,7 +154,25 @@ def _try_ubos_sitc_compute(dfs, allowed_slugs):
         return None
 
     cy = _sitc_mfg_compute(dfs[cy_sheet]) if cy_sheet in dfs else None
-    fy = _sitc_mfg_compute(dfs[fy_sheet]) if fy_sheet and fy_sheet in dfs else None
+
+    # Derive the expected FY period from the CY year (e.g. CY 2025 → "2024/25") and
+    # pass it explicitly so the FY sheet is searched for that column first.  This makes
+    # extraction robust when the uploaded file has empty trailing columns for a
+    # provisional future year that have total=0 and would otherwise mask the real data.
+    expected_fy = None
+    if cy:
+        try:
+            y = int(cy[2])   # cy[2] is the year_label, e.g. "2025"
+            expected_fy = "%d/%02d" % (y - 1, y % 100)   # → "2024/25"
+        except (ValueError, TypeError):
+            pass
+
+    fy = _sitc_mfg_compute(dfs[fy_sheet], target_year=expected_fy) if fy_sheet and fy_sheet in dfs else None
+    print("key_indicators_agent: UBOS SITC %s: cy=%s fy=%s" % (
+        slug,
+        ("year=%s mfg=%.0f" % (cy[2], cy[0])) if cy else "None",
+        ("year=%s mfg=%.0f" % (fy[2], fy[0])) if fy else "None (expected=%s)" % expected_fy,
+    ))
 
     if not cy and not fy:
         return None
