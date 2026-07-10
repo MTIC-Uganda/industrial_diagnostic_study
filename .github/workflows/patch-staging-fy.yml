@@ -119,6 +119,15 @@ jobs:
                     f"pct_fy={result.get('pct_fy')} year_fy={result.get('year_fy')!r}")
           PYEOF
 
+      - name: Rebuild staging dashboard (on runner, latest code)
+        # Run generate_dashboard.py HERE on the CI runner so the latest checked-out
+        # code (including kpi_fy_source / kpi_fy_import_value fixes) is used, not
+        # the potentially-stale copy in /opt/midd-brain/repo on the server.
+        # This mirrors exactly what the deploy-staging CI job does.
+        env:
+          PB_URL: "http://89.167.121.193:8091"
+        run: python3 scripts/generate_dashboard.py
+
       - name: Set up SSH
         run: |
           mkdir -p ~/.ssh
@@ -126,11 +135,9 @@ jobs:
           chmod 600 ~/.ssh/deploy_key
           ssh-keyscan -H ${{ env.HETZNER_HOST }} >> ~/.ssh/known_hosts
 
-      - name: Rebuild and redeploy staging dashboard
+      - name: Deploy rebuilt dashboard to staging
         run: |
-          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no \
-              ${{ env.HETZNER_USER }}@${{ env.HETZNER_HOST }} \
-            "cd /opt/midd-brain/repo && \
-             PB_URL=http://127.0.0.1:8091 python3 scripts/generate_dashboard.py && \
-             cp report/sources-of-truth.html ${{ env.STAGING_DIR }}/index.html && \
-             echo 'Staging dashboard rebuilt and deployed.'"
+          scp -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no \
+            report/sources-of-truth.html \
+            ${{ env.HETZNER_USER }}@${{ env.HETZNER_HOST }}:${{ env.STAGING_DIR }}/index.html
+          echo "Staging dashboard deployed."
