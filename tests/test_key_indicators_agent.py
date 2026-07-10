@@ -600,3 +600,53 @@ def test_compute_from_spreadsheet_uses_deterministic_path(monkeypatch, tmp_path)
     assert updates
     assert updates[0]["slug"] == "exports"
     assert not called, "LLM was called despite deterministic path being available"
+
+
+def test_try_ubos_sitc_compute_imports_sets_import_value_fy():
+    """mfg_imports update must include import_value_fy and import_sub_fy so the
+    KPI4 FY toggle can swap the imports side of the card without a dashboard code change."""
+    pd = pytest.importorskip("pandas")
+    cy = _make_sitc_df([2025.0], [("51", 200_000), ("01", 1_000_000)])
+    fy = _make_sitc_df(["2024/25"], [("51", 180_000), ("01", 900_000)])
+    dfs = {k._UBOS_IMP_CY: cy, k._UBOS_IMP_FY_BASE + " ": fy}
+    raw = k._try_ubos_sitc_compute(dfs, ["mfg_imports"])
+    assert raw is not None
+    u = raw[0]
+    assert u["slug"] == "mfg_imports"
+    assert "import_value_fy" in u
+    assert "import_sub_fy" in u
+    assert u["import_value_fy"] == u["value_fy"]
+    assert u["import_sub_fy"] == u["sub_value_fy"]
+
+
+def test_try_ubos_sitc_compute_exports_has_no_import_value_fy():
+    """exports update must NOT inject import_value_fy — that field stays empty."""
+    pd = pytest.importorskip("pandas")
+    cy = _make_sitc_df([2025.0], [("51", 200_000), ("01", 1_000_000)])
+    fy = _make_sitc_df(["2024/25"], [("51", 180_000), ("01", 900_000)])
+    dfs = {k._UBOS_EXP_CY: cy, k._UBOS_EXP_FY: fy}
+    raw = k._try_ubos_sitc_compute(dfs, ["exports"])
+    assert raw is not None
+    assert "import_value_fy" not in raw[0]
+
+
+def test_try_ubos_sitc_compute_source_detail_includes_fname():
+    """source_detail includes the filename when fname is passed."""
+    pd = pytest.importorskip("pandas")
+    cy = _make_sitc_df([2025.0], [("51", 200_000), ("01", 1_000_000)])
+    fy = _make_sitc_df(["2024/25"], [("51", 180_000), ("01", 900_000)])
+    dfs = {k._UBOS_EXP_CY: cy, k._UBOS_EXP_FY: fy}
+    raw = k._try_ubos_sitc_compute(dfs, ["exports"], fname="ubos_exports.xlsx")
+    assert raw is not None
+    assert "ubos_exports.xlsx" in raw[0].get("source_detail", "")
+    assert "ubos.org" in raw[0]["source_detail"]
+
+
+def test_try_ubos_sitc_compute_source_detail_empty_without_fname():
+    """source_detail is empty when no fname is given (backwards-compatible)."""
+    pd = pytest.importorskip("pandas")
+    cy = _make_sitc_df([2025.0], [("51", 200_000), ("01", 1_000_000)])
+    dfs = {k._UBOS_EXP_CY: cy, k._UBOS_EXP_FY: cy}
+    raw = k._try_ubos_sitc_compute(dfs, ["exports"])
+    assert raw is not None
+    assert raw[0].get("source_detail", "") == ""

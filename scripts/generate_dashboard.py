@@ -358,7 +358,10 @@ def kpi_source_line(slug):
     # not yet populated — Jerome's action point from 2026-07-01 meeting.
     detail = r.get('source_detail', '') or source
     title = f' title="{esc(detail)}"' if detail else ''
-    return f'{esc(year)} &middot; <span style="cursor:help;border-bottom:1px dotted var(--muted)"{title}>Source: {esc(source)}</span>'
+    parts = [f'{esc(year)} &middot; <span style="cursor:help;border-bottom:1px dotted var(--muted)"{title}>Source: {esc(source)}</span>']
+    if detail and detail != source:
+        parts.append(f'<div style="font-size:10px;color:var(--muted);margin-top:2px">{esc(detail)}</div>')
+    return ''.join(parts)
 
 def kpi_badge(slug):
     r = KEY_INDICATORS.get(slug)
@@ -379,8 +382,14 @@ def kpi_fy_subvalue(slug):
 def kpi_fy_source(slug):
     r = KEY_INDICATORS.get(slug)
     if not r or not r.get('year_fy'): return ''
-    year, source = r.get('year_fy',''), r.get('source_fy','') or r.get('source','')
-    return f'{esc(year)} &middot; <span style="cursor:help;border-bottom:1px dotted var(--muted)" title="{esc(source)}">Source: {esc(source)}</span>'
+    year = r.get('year_fy', '')
+    source = r.get('source_fy', '') or r.get('source', '')
+    detail = r.get('source_detail', '') or source
+    title = f' title="{esc(detail)}"' if detail else ''
+    parts = [f'{esc(year)} &middot; <span style="cursor:help;border-bottom:1px dotted var(--muted)"{title}>Source: {esc(source)}</span>']
+    if detail and detail != source:
+        parts.append(f'<div style="font-size:10px;color:var(--muted);margin-top:2px">{esc(detail)}</div>')
+    return ''.join(parts)
 
 def kpi_fy_badge(slug):
     r = KEY_INDICATORS.get(slug)
@@ -390,11 +399,13 @@ def kpi_fy_badge(slug):
 
 def kpi_fy_import_value(slug):
     r = KEY_INDICATORS.get(slug)
-    return esc(r['import_value_fy']) if r and r.get('import_value_fy') else ''
+    if not r: return ''
+    return esc(r.get('import_value_fy') or r.get('value_fy') or '')
 
 def kpi_fy_import_sub(slug):
     r = KEY_INDICATORS.get(slug)
-    return r.get('import_sub_fy', '')
+    if not r: return ''
+    return r.get('import_sub_fy') or r.get('sub_value_fy') or ''
 
 def kpi_has_fy(slug):
     """True if this indicator has any FY data populated."""
