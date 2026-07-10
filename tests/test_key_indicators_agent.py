@@ -416,3 +416,134 @@ def test_main_patch_success_reads_response(monkeypatch, tmp_path):
 
     result = k.main(str(xlsx))
     assert result == ["exports"]
+
+
+# ── _sitc_mfg_compute + _try_ubos_sitc_compute ────────────────────────────────
+def _make_sitc_df(year_labels, codes_and_vals):
+    """Build a minimal UBOS SITC DataFrame: 4 header rows, then data rows.
+
+    year_labels: list of column headers for cols 2+ (e.g. [2024.0, 2025.0])
+    codes_and_vals: list of (sitc_code, *values) tuples
+    """
+    pd = pytest.importorskip("pandas")
+    # Row 3 = header row: [SITC_col_name, Description, year1, year2, ...]
+    header_row = ["SITC2", "Description"] + year_labels
+    rows = [
+        ["note", None] + [None] * len(year_labels),   # row 0
+        ["note2", None] + [None] * len(year_labels),  # row 1
+        ["note3", None] + [None] * len(year_labels),  # row 2
+        header_row,                                    # row 3
+    ]
+    for code, *vals in codes_and_vals:
+        rows.append([code, "desc"] + list(vals))
+    return pd.DataFrame(rows)
+
+
+def test_sitc_mfg_compute_basic():
+    pd = pytest.importorskip("pandas")
+    # CY-style: year labels are floats
+    df = _make_sitc_df(
+        [2024.0, 2025.0],
+        [
+            ("51", 100, 200),   # section 5 → manufactured
+            ("68", 50, 80),     # excluded
+            ("71", 300, 400),   # section 7 → manufactured
+            ("01", 500, 600),   # food → NOT manufactured
+        ],
+    )
+    result = k._sitc_mfg_compute(df)
+    assert result is not None
+    mfg, total, year = result
+    assert year == "2025"
+    assert mfg == pytest.approx(600)    # 200 + 400
+    assert total == pytest.approx(1280) # 200+80+400+600
+
+
+def test_sitc_mfg_compute_fy_label():
+    # FY-style: year labels are strings like "2024/25"
+    df = _make_sitc_df(
+        ["2023/24", "2024/25"],
+        [("52", 100, 200), ("01", 300, 400)],
+    )
+    _, _, year = k._sitc_mfg_compute(df)
+    assert year == "2024/25"
+
+
+def test_sitc_mfg_compute_skips_empty_latest_col():
+    pd = pytest.importorskip("pandas")
+    # Latest column is all NaN — should fall back to prior year
+    df = _make_sitc_df(
+        [2024.0, 2025.0],
+        [("51", 200, None), ("01", 400, None)],
+    )
+    result = k._sitc_mfg_compute(df)
+    assert result is not None
+    _, _, year = result
+    assert year == "2024"
+
+
+def test_try_ubos_sitc_compute_exports():
+    pd = pytest.importorskip("pandas")
+    cy = _make_sitc_df([2024.0, 2025.0], [("51", 100_000, 200_000), ("01", 500_000, 1_000_000)])
+    fy = _make_sitc_df(["2023/24", "2024/25"], [("51", 90_000, 180_000), ("01", 400_000, 800_000)])
+    dfs = {k._UBOS_EXP_CY: cy, k._UBOS_EXP_FY: fy}
+    raw = k._try_ubos_sitc_compute(dfs, ["exports", "mfg_imports"])
+    assert raw is not None
+    u = raw[0]
+    assert u["slug"] == "exports"
+    assert "USD" in u["value"]
+    assert "exports" in u["sub_value"]
+    assert u["confidence"] == "exact"
+    assert "value_fy" in u
+    assert u["confidence_fy"] == "exact"
+    assert "exports" in u["sub_value_fy"]
+
+
+def test_try_ubos_sitc_compute_imports():
+    pd = pytest.importorskip("pandas")
+    cy = _make_sitc_df([2024.0, 2025.0], [("51", 100_000, 200_000), ("01", 500_000, 1_000_000)])
+    fy = _make_sitc_df(["2023/24", "2024/25"], [("51", 90_000, 180_000), ("01", 400_000, 800_000)])
+    # Imports workbook sheet names (with trailing space on FY sheet)
+    dfs = {k._UBOS_IMP_CY: cy, k._UBOS_IMP_FY_BASE + " ": fy}
+    raw = k._try_ubos_sitc_compute(dfs, ["exports", "mfg_imports"])
+    assert raw is not None
+    assert raw[0]["slug"] == "mfg_imports"
+    assert "imports" in raw[0]["sub_value"]
+
+
+def test_try_ubos_sitc_compute_returns_none_for_unknown():
+    pd = pytest.importorskip("pandas")
+    dfs = {"SomeOtherSheet": pd.DataFrame()}
+    assert k._try_ubos_sitc_compute(dfs, ["exports"]) is None
+
+
+def test_try_ubos_sitc_compute_slug_not_allowed():
+    pd = pytest.importorskip("pandas")
+    cy = _make_sitc_df([2025.0], [("51", 100_000), ("01", 500_000)])
+    fy = _make_sitc_df(["2024/25"], [("51", 90_000), ("01", 400_000)])
+    dfs = {k._UBOS_EXP_CY: cy, k._UBOS_EXP_FY: fy}
+    # "exports" slug not in allowed_slugs — should return None
+    assert k._try_ubos_sitc_compute(dfs, ["mfg_imports", "tax"]) is None
+
+
+def test_compute_from_spreadsheet_uses_deterministic_path(monkeypatch, tmp_path):
+    """When the workbook has UBOS SITC sheets, the deterministic path runs and
+    the LLM (subprocess_claude) is never called."""
+    pd = pytest.importorskip("pandas")
+    openpyxl = pytest.importorskip("openpyxl")
+
+    cy = _make_sitc_df([2025.0], [("51", 500_000), ("01", 1_000_000)])
+    fy = _make_sitc_df(["2024/25"], [("52", 450_000), ("01", 900_000)])
+
+    called = []
+    monkeypatch.setattr(k, "subprocess_claude", lambda p: called.append(p) or "")
+    monkeypatch.setattr(k, "load_dataframes",
+                        lambda p: {k._UBOS_EXP_CY: cy, k._UBOS_EXP_FY: fy})
+
+    current = [{"slug": "exports", "label": "Manufactured Exports", "value": "", "id": "r1"}]
+    updates = k._compute_from_spreadsheet(
+        tmp_path / "fake.xlsx", "update exports", current, ["exports"]
+    )
+    assert updates
+    assert updates[0]["slug"] == "exports"
+    assert not called, "LLM was called despite deterministic path being available"

@@ -62,6 +62,105 @@ SELECT_FIELDS = {
     "confidence_fy": {"exact", "estimated", "indicative"},
 }
 
+# ── Deterministic UBOS SITC computation (bypasses the LLM for known workbook formats) ──
+# These sheets appear in every UBOS Composition of Exports/Imports workbook.
+# CY year columns are stored as numpy.float64 (e.g. 2025.0); FY as strings ("2024/25").
+_UBOS_EXP_CY = "CY_EXP_Value_SITC"
+_UBOS_EXP_FY = "FY_EXP_Value_SITC"
+_UBOS_IMP_CY = "CY_Value SITC"
+_UBOS_IMP_FY_BASE = "FY_Value SITC"   # may have trailing space in the actual file
+
+
+def _sitc_mfg_compute(df):
+    """Sum SITC sections 5,6,7,8 excl. 68 for the latest non-zero year in a UBOS SITC sheet.
+
+    Sheet layout (header=None): rows 0-2 notes, row 3 = year labels, row 4+ = data.
+    Column 0 = SITC 2-digit code, column 1 = description, columns 2+ = values by year.
+
+    Returns (mfg_usd_thousands, total_usd_thousands, year_label) or None.
+    """
+    try:
+        import pandas as pd
+    except ImportError:
+        return None
+    if df.shape[0] < 5 or df.shape[1] < 3:
+        return None
+    header = df.iloc[3].tolist()
+    data = df.iloc[4:]
+    codes = data.iloc[:, 0].astype(str).str.strip()
+    is_mfg = codes.str.match(r"^[5-8]\d") & (codes != "68")
+    for ci in range(df.shape[1] - 1, 1, -1):
+        col = pd.to_numeric(data.iloc[:, ci], errors="coerce")
+        total = float(col.dropna().sum())
+        if total <= 0:
+            continue
+        mfg = float(col[is_mfg.values].sum())
+        raw = str(header[ci]) if ci < len(header) else ""
+        try:
+            year_label = str(int(float(raw)))   # float64 2025.0 -> "2025"
+        except (ValueError, TypeError):
+            year_label = raw.strip()             # "2024/25" already a string
+        return mfg, total, year_label
+    return None
+
+
+def _try_ubos_sitc_compute(dfs, allowed_slugs):
+    """Deterministic manufactured-trade computation for UBOS SITC workbooks.
+
+    Detects the workbook type (exports vs imports) from sheet names, computes
+    CY and FY figures without calling the LLM, and returns a raw updates list
+    (suitable for validate_updates) or None if the sheets are not recognised.
+    """
+    sheets = set(dfs.keys())
+
+    if _UBOS_EXP_CY in sheets and _UBOS_EXP_FY in sheets:
+        slug, direction = "exports", "exports"
+        cy_sheet, fy_sheet = _UBOS_EXP_CY, _UBOS_EXP_FY
+    elif _UBOS_IMP_CY in sheets:
+        slug, direction = "mfg_imports", "imports"
+        cy_sheet = _UBOS_IMP_CY
+        fy_sheet = next((s for s in sheets if s.strip() == _UBOS_IMP_FY_BASE), None)
+    else:
+        return None
+
+    if slug not in allowed_slugs:
+        return None
+
+    cy = _sitc_mfg_compute(dfs[cy_sheet]) if cy_sheet in dfs else None
+    fy = _sitc_mfg_compute(dfs[fy_sheet]) if fy_sheet and fy_sheet in dfs else None
+
+    if not cy and not fy:
+        return None
+
+    src_base = "UBOS Composition of %s (SITC 5-8 excl. 68)" % direction.capitalize()
+    update = {"slug": slug}
+
+    if cy:
+        mfg, total, year = cy
+        pct = round(mfg / total * 100, 2)
+        update.update({
+            "value": "USD %.1fB" % (mfg / 1e6),
+            "pct": pct,
+            "sub_value": "%.1f%% of total %s" % (pct, direction),
+            "year": year,
+            "source": src_base,
+            "confidence": "exact",
+        })
+
+    if fy:
+        mfg_fy, total_fy, year_fy = fy
+        pct_fy = round(mfg_fy / total_fy * 100, 2)
+        update.update({
+            "value_fy": "USD %.1fB" % (mfg_fy / 1e6),
+            "pct_fy": pct_fy,
+            "sub_value_fy": "%.1f%% of total %s" % (pct_fy, direction),
+            "year_fy": year_fy,
+            "source_fy": src_base,
+            "confidence_fy": "exact",
+        })
+
+    return [update]
+
 
 def coerce_field(name, value):
     """Coerce one field to what PocketBase's schema expects.
@@ -291,12 +390,20 @@ def subprocess_claude(prompt):
 
 
 def _compute_from_spreadsheet(path, intent, current, allowed):
-    """Excel/CSV path: generate + run pandas code in the analytics sandbox."""
+    """Excel/CSV path: deterministic UBOS SITC path first, then LLM sandbox fallback."""
     try:
         dfs = load_dataframes(path)
     except Exception as e:
         print("key_indicators_agent: cannot read spreadsheet: %s" % e)
         return []
+
+    det = _try_ubos_sitc_compute(dfs, allowed)
+    if det is not None:
+        updates = validate_updates(det, allowed)
+        if updates:
+            print("key_indicators_agent: deterministic UBOS SITC path produced %d update(s)." % len(updates))
+            return updates
+        print("key_indicators_agent: deterministic UBOS SITC compute yielded no valid updates.")
 
     base = code_prompt(intent, preview(dfs), current)
     updates, last = [], ""
