@@ -365,3 +365,25 @@ def test_main_patch_400_raises_runtime_error_with_body(monkeypatch, tmp_path):
 
     with pytest.raises(RuntimeError, match="validation_not_number"):
         k.main(str(xlsx))
+
+
+def test_main_patch_success_reads_response(monkeypatch, tmp_path):
+    """Successful PATCH: urlopen returns a 200 response and r.read() is called (covers the
+    success branch inside the try block added to surface PB error bodies)."""
+    xlsx = tmp_path / "ubos.xlsx"
+    xlsx.write_bytes(b"fake")
+    monkeypatch.setattr(k, "fetch_key_indicators",
+                        lambda: [{"slug": "exports", "label": "Exports", "value": "", "id": "rec9"}])
+    monkeypatch.setattr(k, "_compute_from_spreadsheet",
+                        lambda *a, **kw: [{"slug": "exports", "fields": {"pct": 14.7}}])
+    monkeypatch.setattr(k, "pb_auth", lambda: "tok")
+
+    class _FakeResp:
+        def __enter__(self): return self
+        def __exit__(self, *a): pass
+        def read(self): return b'{"id":"rec9"}'
+
+    monkeypatch.setattr(k.urllib.request, "urlopen", lambda req, timeout=15: _FakeResp())
+
+    result = k.main(str(xlsx))
+    assert result == ["exports"]
