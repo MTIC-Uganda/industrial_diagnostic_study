@@ -1,7 +1,19 @@
 name: Patch Staging FY — Remaining Cards
 
-# Manual dispatch to write FY values for the 7 KPI cards that did not yet
-# have a CY/FY toggle:
+# Manual dispatch to write CY and FY values for 8 KPI cards that were missing
+# data or FY toggles on the staging dashboard:
+#
+#   mfg_imports  — Manufacturing Imports
+#                  CY (2024): USD 6.6B / 23.6% of total imports
+#                  FY (2024/25): USD 6.3B / 22.6% of total imports
+#                  Both computed from data/ubos_2026/ubos_imports.xlsx,
+#                  sheet CY_Value SITC and FY_Value SITC respectively.
+#                  SITC 5-8 excl. ch 68 (non-ferrous metals).
+#                  CY2024 total imports: USD 27.9B; mfg: USD 6,586M = 6.6B.
+#                  FY2024/25 total imports: USD 28.1B; mfg: USD 6,338M = 6.3B.
+#                  Confidence: exact — direct computation from UBOS SITC files.
+#                  Note: patch-staging-fy.yml previously set FY fields only;
+#                  this workflow adds the CY fields AND re-confirms the FY fields.
 #
 #   value_added  — Manufacturing Value Added
 #                  FY (CY2024): USD 7.8B / 14.8% of GDP
@@ -128,10 +140,41 @@ jobs:
               items = data.get("items", [])
               return items[0]["id"] if items else None
 
-          # FY patches keyed by slug. Computed data sources are documented above.
+          # Patches keyed by slug. Computed data sources are documented above.
           # For cards with no meaningful CY/FY split, value_fy mirrors the primary value
           # so the toggle appears and confirms the reporting period.
           slug_patches = {
+
+              # mfg_imports — both CY and FY are populated here because production PB
+              # has no data for this card at all (patch-staging-fy.yml only set FY fields
+              # in staging, and mfg_imports was never seeded into production PB).
+              # CY (2024) and FY (2024/25) are genuinely different values.
+              # Source: data/ubos_2026/ubos_imports.xlsx
+              #   CY_Value SITC sheet: SITC 5-8 excl.68, CY2024 = 6,586,000 USD-thousands
+              #     = USD 6.586B / 23.6% of total CY2024 imports (USD 27.9B total)
+              #   FY_Value SITC sheet: SITC 5-8 excl.68, FY2024/25 = 6,338,000 USD-thousands
+              #     = USD 6.338B / 22.6% of total FY2024/25 imports (USD 28.1B total)
+              "mfg_imports": {
+                  "value":           "USD 6.6B",
+                  "pct":             23.6,
+                  "sub_value":       "23.6% of total imports (Jan-Dec 2024)",
+                  "year":            "2024",
+                  "source":          "UBOS Composition of Imports (SITC 5-8 excl. 68)",
+                  "source_detail":   ("File: ubos_imports.xlsx · Uganda Bureau of Statistics"
+                                      " · CY_Value SITC sheet · SITC sections 5-8 excl. ch 68"
+                                      " (non-ferrous metals) · includes formal and informal trade"),
+                  "confidence":      "exact",
+                  # FY toggle — July 2024 to June 2025
+                  "value_fy":        "USD 6.3B",
+                  "pct_fy":          22.6,
+                  "sub_value_fy":    "22.6% of total imports (FY2024/25)",
+                  "year_fy":         "FY2024/25",
+                  "source_fy":       "UBOS Composition of Imports (SITC 5-8 excl. 68)",
+                  "confidence_fy":   "exact",
+                  # Mirror to import_value_fy / import_sub_fy for generate_dashboard.py KPI4 path
+                  "import_value_fy": "USD 6.3B",
+                  "import_sub_fy":   "22.6% of total imports (FY2024/25)",
+              },
 
               # value_added — CY2024 alternative (Jan-Dec 2024 sum from Table 13 QGDP).
               # Primary display stays at FY2024/25 (USD 8.1B). FY toggle shows CY2024
