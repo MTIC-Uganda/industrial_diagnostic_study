@@ -1179,10 +1179,14 @@ function renderGroupedDistrictsSVG(wrapId, regionData, regionColors, regionIcons
     const color = regionColors[region.name] || '#90a4ae';
     regionTotal[region.name] = { count: region.value, color };
 
-    const distItems = Object.entries(region.districts)
+    const rawDist = Object.entries(region.districts)
       .map(([name, value]) => ({ name, value, leaf: false }))
-      .sort((a, b) => b.value - a.value)
-      .map((d, i) => ({ ...d, color: shadeColor(color, (i % 6) * 0.09) }));
+      .sort((a, b) => b.value - a.value);
+    const nDist = rawDist.length;
+    const distItems = rawDist.map((d, i) => ({
+      ...d,
+      color: shadeColor(color, nDist > 1 ? (i / (nDist - 1)) * 0.45 : 0),
+    }));
     if (!distItems.length) return;
 
     // Inset the region rect by halfGap on every side so there's a clear gap
