@@ -97,8 +97,8 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#f0f2f5;color:#1a1a2e;fo
 .treemap-cell{cursor:pointer;stroke:#fff;stroke-width:1.5;transition:opacity .15s}
 .treemap-cell:hover{opacity:.85}
 .treemap-cell.leaf{cursor:default}
-.treemap-cell-label{pointer-events:none;font-weight:700;fill:#fff}
-.treemap-cell-value{pointer-events:none;fill:#fff;opacity:.85}
+.treemap-cell-label{pointer-events:none;font-weight:700}
+.treemap-cell-value{pointer-events:none;opacity:.85}
 .treemap-tooltip{position:fixed;display:none;background:#1a1a2e;color:#fff;padding:8px 12px;border-radius:6px;font-size:12px;pointer-events:none;z-index:2000;box-shadow:0 4px 16px rgba(0,0,0,.3);max-width:220px}
 .treemap-tooltip strong{display:block;margin-bottom:2px;font-size:13px}
 .treemap-tooltip .tt-pct{color:#90caf9}
@@ -1112,8 +1112,9 @@ function renderTreemapSVG(wrapId, nodes, total, onCellClick){
     svg += `<rect class="treemap-cell${n.leaf?' leaf':''}" x="${n.x.toFixed(1)}" y="${n.y.toFixed(1)}" width="${Math.max(n.w,0).toFixed(1)}" height="${Math.max(n.h,0).toFixed(1)}" fill="${n.color}"/>`;
     if (fit){
       const cx = n.x + n.w/2, cy = n.y + n.h/2;
-      svg += `<text class="treemap-cell-label" x="${cx.toFixed(1)}" y="${(cy-4).toFixed(1)}" font-size="${fit.labelSize.toFixed(1)}" text-anchor="middle">${escTreemapLabel(n.name, n.w, fit.labelSize)}</text>`;
-      svg += `<text class="treemap-cell-value" x="${cx.toFixed(1)}" y="${(cy+fit.labelSize).toFixed(1)}" font-size="${fit.valueSize.toFixed(1)}" text-anchor="middle">${n.value.toLocaleString()}</text>`;
+      const textFill = treemapIconColor(n.color);
+      svg += `<text class="treemap-cell-label" x="${cx.toFixed(1)}" y="${(cy-4).toFixed(1)}" font-size="${fit.labelSize.toFixed(1)}" text-anchor="middle" fill="${textFill}">${escTreemapLabel(n.name, n.w, fit.labelSize)}</text>`;
+      svg += `<text class="treemap-cell-value" x="${cx.toFixed(1)}" y="${(cy+fit.labelSize).toFixed(1)}" font-size="${fit.valueSize.toFixed(1)}" text-anchor="middle" fill="${textFill}">${n.value.toLocaleString()}</text>`;
     }
     svg += `</g>`;
   });
@@ -1179,8 +1180,9 @@ function renderGroupedDistrictsSVG(wrapId, regionData, regionColors, regionIcons
     regionTotal[region.name] = { count: region.value, color };
 
     const distItems = Object.entries(region.districts)
-      .map(([name, value]) => ({ name, value, color, leaf: false }))
-      .sort((a, b) => b.value - a.value);
+      .map(([name, value]) => ({ name, value, leaf: false }))
+      .sort((a, b) => b.value - a.value)
+      .map((d, i) => ({ ...d, color: shadeColor(color, (i % 6) * 0.09) }));
     if (!distItems.length) return;
 
     // Inset the region rect by halfGap on every side so there's a clear gap
@@ -1205,11 +1207,12 @@ function renderGroupedDistrictsSVG(wrapId, regionData, regionColors, regionIcons
          + `width="${Math.max(n.w, 0).toFixed(1)}" height="${Math.max(n.h, 0).toFixed(1)}" fill="${n.color}"/>`;
     if (fit) {
       const cx = n.x + n.w / 2, cy = n.y + n.h / 2;
+      const textFill = treemapIconColor(n.color);
       svg += `<text class="treemap-cell-label" x="${cx.toFixed(1)}" y="${(cy - 4).toFixed(1)}" `
-           + `font-size="${fit.labelSize.toFixed(1)}" text-anchor="middle">`
+           + `font-size="${fit.labelSize.toFixed(1)}" text-anchor="middle" fill="${textFill}">`
            + `${escTreemapLabel(n.name, n.w, fit.labelSize)}</text>`;
       svg += `<text class="treemap-cell-value" x="${cx.toFixed(1)}" y="${(cy + fit.labelSize).toFixed(1)}" `
-           + `font-size="${fit.valueSize.toFixed(1)}" text-anchor="middle">${n.value.toLocaleString()}</text>`;
+           + `font-size="${fit.valueSize.toFixed(1)}" text-anchor="middle" fill="${textFill}">${n.value.toLocaleString()}</text>`;
     }
     svg += `</g>`;
   });
@@ -1353,8 +1356,10 @@ function renderTreemapLegend(legendEl, nodes, iconMap, onClick){
     const iconClass = (iconMap && iconMap[n.name]) || '';
     const icon = iconClass ? `<i class="bi ${iconClass}" style="color:${treemapIconColor(n.color)}"></i>` : '';
     const cursor = onClick ? 'cursor:pointer' : '';
-    return `<span class="tl-item" data-name="${n.name.replace(/"/g,'&quot;')}" style="${cursor}">` +
-           `<span class="sw" style="background:${n.color}">${icon}</span>${n.name}</span>`;
+    const label = iconClass ? '' : n.name;
+    const title = n.name.replace(/"/g,'&quot;');
+    return `<span class="tl-item" data-name="${title}" title="${title}" style="${cursor}">` +
+           `<span class="sw" style="background:${n.color}">${icon}</span>${label}</span>`;
   }).join('');
   if (onClick){
     legendEl.querySelectorAll('.tl-item').forEach(el => {
@@ -1430,8 +1435,10 @@ function showCrossFilteredGrouped(wrapId, legendEl, regionData, onDistrictClick,
       const iconClass = TREEMAP_REGION_ICONS[name] || '';
       const icon = iconClass
         ? `<i class="bi ${iconClass}" style="color:${treemapIconColor(color)}"></i>` : '';
-      return `<span class="tl-item" ${clickable ? `style="cursor:pointer" data-region="${name}"` : ''}>`
-        + `<span class="sw" style="background:${color}">${icon}</span>${name} — ${count.toLocaleString()}</span>`;
+      const label = iconClass ? '' : `${name} — ${count.toLocaleString()}`;
+      const tip = `${name} — ${count.toLocaleString()}`;
+      return `<span class="tl-item" title="${tip}" ${clickable ? `style="cursor:pointer" data-region="${name}"` : ''}>`
+        + `<span class="sw" style="background:${color}">${icon}</span>${label}</span>`;
     }).join('');
   if (clickable){
     legendEl.querySelectorAll('.tl-item[data-region]').forEach(el => {
@@ -1544,8 +1551,10 @@ function initRegionTreemap(){
         const iconClass = TREEMAP_REGION_ICONS[name] || '';
         const icon = iconClass
           ? `<i class="bi ${iconClass}" style="color:${treemapIconColor(color)}"></i>` : '';
-        return `<span class="tl-item" style="cursor:pointer" data-region="${name}">`
-          + `<span class="sw" style="background:${color}">${icon}</span>${name} — ${count.toLocaleString()}</span>`;
+        const label = iconClass ? '' : `${name} — ${count.toLocaleString()}`;
+        const tip = `${name} — ${count.toLocaleString()}`;
+        return `<span class="tl-item" style="cursor:pointer" title="${tip}" data-region="${name}">`
+          + `<span class="sw" style="background:${color}">${icon}</span>${label}</span>`;
       }).join('');
 
     legendEl.querySelectorAll('.tl-item[data-region]').forEach(el => {
@@ -1569,7 +1578,17 @@ function initRegionTreemap(){
       crossFilterSectorByMix(districtName, TREEMAP_DISTRICT_SECTOR_DATA[districtName], 'District');
     };
     renderTreemapSVG('treemap-region-wrap', nodes, total, onClick);
-    renderTreemapLegend(legendEl, nodes, null, onClick);
+    // Aggregated total on top, then each district with count
+    legendEl.innerHTML =
+      `<span class="tl-item" style="font-weight:700;color:var(--text);cursor:default">` +
+      `<span class="sw" style="background:${baseColor}"></span>${regionName} — ${total.toLocaleString()}</span>` +
+      nodes.map(n =>
+        `<span class="tl-item" data-name="${n.name.replace(/"/g,'&quot;')}" style="cursor:pointer">` +
+        `<span class="sw" style="background:${n.color}"></span>${n.name} — ${n.value.toLocaleString()}</span>`
+      ).join('');
+    legendEl.querySelectorAll('.tl-item[data-name]').forEach(el => {
+      el.addEventListener('click', () => onClick(el.dataset.name));
+    });
     crossFilterSectorByMix(regionName, TREEMAP_REGION_SECTOR_DATA[regionName], 'Region');
   }
 
@@ -1583,16 +1602,30 @@ function initSectorTreemap(){
   const legendEl = document.getElementById('treemap-sector-legend');
 
   function showTop(resetOther){
-    const names = TREEMAP_ALL_SECTORS;
-    const nodes = names.map(name => ({
-      name, value: Object.values(TREEMAP_SECTOR_DATA[name]).reduce((a,b)=>a+b,0),
-      color: TREEMAP_SECTOR_COLOR_MAP[name], leaf: false
-    })).sort((a,b) => b.value - a.value);
-    const total = nodes.reduce((s,n)=>s+n.value,0);
     breadcrumbEl.innerHTML = `<span class="crumb" style="cursor:default;color:var(--text)">All Sectors</span>`;
-    const onClick = sectorName => showSector(sectorName);
-    renderTreemapSVG('treemap-sector-wrap', nodes, total, onClick);
-    renderTreemapLegend(legendEl, nodes, TREEMAP_SECTOR_ICONS, onClick);
+    // Group subsectors within each sector rectangle (same pattern as districts within regions)
+    const onSubsectorClick = subsectorName => crossFilterRegionBySubsector(subsectorName);
+    const sectorTotals = renderGroupedDistrictsSVG(
+      'treemap-sector-wrap',
+      TREEMAP_SECTOR_DATA,
+      TREEMAP_SECTOR_COLOR_MAP,
+      TREEMAP_SECTOR_ICONS,
+      4,
+      onSubsectorClick
+    );
+    legendEl.innerHTML = Object.entries(sectorTotals)
+      .sort((a, b) => b[1].count - a[1].count)
+      .map(([name, {count, color}]) => {
+        const iconClass = TREEMAP_SECTOR_ICONS[name] || '';
+        const icon = iconClass ? `<i class="bi ${iconClass}" style="color:${treemapIconColor(color)}"></i>` : '';
+        const label = iconClass ? '' : name;
+        const tip = `${name} — ${count.toLocaleString()}`;
+        return `<span class="tl-item" style="cursor:pointer" title="${tip}" data-sector="${name}">`
+          + `<span class="sw" style="background:${color}">${icon}</span>${label}</span>`;
+      }).join('');
+    legendEl.querySelectorAll('.tl-item[data-sector]').forEach(el => {
+      el.addEventListener('click', () => showSector(el.dataset.sector));
+    });
     // Symmetric fix: going back to "All Sectors" must also clear any
     // cross-filter left on Spatial Distribution.
     if (resetOther !== false && window._treemapRegionShowTop) window._treemapRegionShowTop(false);
