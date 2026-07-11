@@ -1182,10 +1182,12 @@ function renderGroupedDistrictsSVG(wrapId, regionData, regionColors, regionIcons
     const rawDist = Object.entries(region.districts)
       .map(([name, value]) => ({ name, value, leaf: false }))
       .sort((a, b) => b.value - a.value);
-    const nDist = rawDist.length;
-    const distItems = rawDist.map((d, i) => ({
+    const maxV = rawDist.length ? rawDist[0].value : 1;
+    const minV = rawDist.length ? rawDist[rawDist.length - 1].value : 0;
+    const span = Math.max(maxV - minV, 1);
+    const distItems = rawDist.map(d => ({
       ...d,
-      color: shadeColor(color, nDist > 1 ? (i / (nDist - 1)) * 0.45 : 0),
+      color: shadeColor(color, ((maxV - d.value) / span) * 0.5),
     }));
     if (!distItems.length) return;
 
