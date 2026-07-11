@@ -1,0 +1,258 @@
+name: Patch Staging FY — Remaining Cards
+
+# Manual dispatch to write FY values for the 7 KPI cards that did not yet
+# have a CY/FY toggle:
+#
+#   value_added  — Manufacturing Value Added
+#                  FY (CY2024): USD 7.8B / 14.8% of GDP
+#                  Computed from UBOS KEI 141 Table 13 quarterly GVA:
+#                    Q3 FY2023/24 (Jan-Mar 2024): 7,637 Bn UGX
+#                    Q4 FY2023/24 (Apr-Jun 2024): 7,862 Bn UGX
+#                    Q1 FY2024/25 (Jul-Sep 2024): 8,510 Bn UGX
+#                    Q2 FY2024/25 (Oct-Dec 2024): 7,779 Bn UGX
+#                    CY2024 total: 31,788 Bn UGX / 14.8% of 214,916 Bn GDP
+#                  Implied UGX/USD rate: 4,072 (from FY2024/25 = 32,981 Bn = USD 8.1B)
+#                  Confidence: estimated (quarterly GVA sum, not an UBOS CY publication)
+#
+#   growth       — Manufacturing Growth
+#                  FY: same as CY display (5.6%) — UBOS reports growth on FY basis only.
+#                  Confidence: exact (FY2024/25 UBOS QGDP figure)
+#
+#   establishments — Registered Manufacturing Establishments
+#                  FY: 7,011 (same as CY display — Industries Register is a point-in-time
+#                  count; no meaningful CY/FY split)
+#                  Confidence: exact
+#
+#   region_dist  — Distribution by Region
+#                  FY: metadata only (year_fy, source_fy) — region_strip kind has no
+#                  scalar value_fy; distributional data is point-in-time.
+#                  Confidence: exact
+#
+#   parks        — Establishments in Industrial Parks
+#                  FY: 166 / 2.4% (same as CY — point-in-time UIA count)
+#                  Confidence: estimated
+#
+#   fdi          — FDI to Manufacturing
+#                  FY (FY2024/25): USD 191M / 5.5%
+#                  Computed from BoU BOP BPM6 Excel:
+#                    Q3 CY2024 (Jul-Sep 2024): USD 814.3M
+#                    Q4 CY2024 (Oct-Dec 2024): USD 791.9M
+#                    Q1 CY2025 (Jan-Mar 2025): USD 960.9M
+#                    Q2 CY2025 (Apr-Jun 2025): USD 901.0M
+#                    FY2024/25 total FDI: USD 3,468.1M
+#                    Manufacturing at ~5.5% share: USD 191M
+#                  Confidence: estimated (manufacturing share applied to total BOP FDI)
+#
+#   employment   — Manufacturing Employment
+#                  FY: ~712,000 / 3.2% (same as CY display — survey-year figure from
+#                  UBOS NHRS 2023/24; no separate CY period)
+#                  Confidence: estimated
+#
+# All records are located by slug (dynamic lookup — no hardcoded IDs).
+# After running: verify FY toggle appears on all 7 cards at staging.midd-ug.com,
+# then Apply to Production.
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm:
+        description: "Type YES to confirm patching FY values for remaining 7 KPI cards"
+        required: true
+
+jobs:
+  patch-staging-fy-remaining:
+    runs-on: ubuntu-latest
+    env:
+      HETZNER_HOST: 89.167.121.193
+      HETZNER_USER: root
+      STAGING_DIR: /var/www/mtic-staging
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Guard — require explicit confirmation
+        run: |
+          if [ "${{ github.event.inputs.confirm }}" != "YES" ]; then
+            echo "Confirmation not given. Aborting."
+            exit 1
+          fi
+
+      - name: Ensure staging PocketBase schema (no data re-seed)
+        continue-on-error: true
+        env:
+          PB_URL:            "http://89.167.121.193:8091"
+          PB_ADMIN_EMAIL:    ${{ secrets.PB_ADMIN_EMAIL }}
+          PB_ADMIN_PASSWORD: ${{ secrets.PB_ADMIN_PASSWORD }}
+          PB_SCHEMA_ONLY:    "1"
+        run: python db/pb_setup.py
+
+      - name: Patch FY values for remaining 7 KPI cards in staging PocketBase
+        env:
+          PB_ADMIN_EMAIL:    ${{ secrets.PB_ADMIN_EMAIL }}
+          PB_ADMIN_PASSWORD: ${{ secrets.PB_ADMIN_PASSWORD }}
+        run: |
+          python3 - << 'PYEOF'
+          import json, os, sys, urllib.request, urllib.error, urllib.parse
+
+          pb_url = "http://89.167.121.193:8091"
+          email  = os.environ["PB_ADMIN_EMAIL"]
+          pw     = os.environ["PB_ADMIN_PASSWORD"]
+
+          # Authenticate (try PB v0.23+ superusers endpoint first, then v0.22 admins)
+          token = None
+          for ep in ("/api/collections/_superusers/auth-with-password",
+                     "/api/admins/auth-with-password"):
+              try:
+                  req = urllib.request.Request(
+                      pb_url + ep, method="POST",
+                      data=json.dumps({"identity": email, "password": pw}).encode(),
+                      headers={"Content-Type": "application/json"})
+                  with urllib.request.urlopen(req, timeout=15) as r:
+                      token = json.loads(r.read()).get("token")
+                  if token:
+                      print(f"Authenticated via {ep}")
+                      break
+              except urllib.error.HTTPError as e:
+                  print(f"Auth attempt {ep}: HTTP {e.code}")
+          if not token:
+              print("ERROR: Could not authenticate with staging PocketBase.")
+              sys.exit(1)
+
+          def get_id_by_slug(slug):
+              """Look up a key_indicators record ID by its slug field."""
+              url = (pb_url + "/api/collections/key_indicators/records?filter="
+                     + urllib.parse.quote(f'(slug="{slug}")'))
+              req = urllib.request.Request(url, headers={"Authorization": token})
+              with urllib.request.urlopen(req, timeout=15) as r:
+                  data = json.loads(r.read())
+              items = data.get("items", [])
+              return items[0]["id"] if items else None
+
+          # FY patches keyed by slug. Computed data sources are documented above.
+          # For cards with no meaningful CY/FY split, value_fy mirrors the primary value
+          # so the toggle appears and confirms the reporting period.
+          slug_patches = {
+
+              # value_added — CY2024 alternative (Jan-Dec 2024 sum from Table 13 QGDP).
+              # Primary display stays at FY2024/25 (USD 8.1B). FY toggle shows CY2024
+              # (USD 7.8B) for international comparison.  year_fy = "2024 (CY)" so the
+              # label is unambiguous even though the toggle button says "FY".
+              "value_added": {
+                  "value_fy":        "USD 7.8B",
+                  "pct_fy":          14.8,
+                  "sub_value_fy":    "14.8% of GDP (Jan-Dec 2024)",
+                  "year_fy":         "2024 (CY)",
+                  "source_fy":       "UBOS QGDP",
+                  "source_detail":   ("UBOS KEI 141 Q3 2025/26, Table 13: quarterly manufacturing "
+                                      "GVA at current prices · Q3+Q4 FY2023/24 + Q1+Q2 FY2024/25 "
+                                      "= 31,788 Bn UGX = USD 7.8B at implied rate 4,072 UGX/USD"),
+                  "confidence_fy":   "estimated",
+              },
+
+              # growth — UBOS reports manufacturing growth on fiscal year basis only.
+              # FY toggle shows the same 5.6% confirming the FY2024/25 measurement period.
+              "growth": {
+                  "value_fy":        "5.6%",
+                  "pct_fy":          5.6,
+                  "sub_value_fy":    "year-on-year, FY2024/25 (UBOS reports on fiscal year basis)",
+                  "year_fy":         "FY2024/25",
+                  "source_fy":       "UBOS QGDP",
+                  "confidence_fy":   "exact",
+              },
+
+              # establishments — point-in-time count from Industries Register.
+              # No meaningful CY/FY split; FY toggle confirms the same figure.
+              "establishments": {
+                  "value_fy":        "7,011",
+                  "year_fy":         "FY2024/25",
+                  "source_fy":       "MTIC National Industries Register",
+                  "confidence_fy":   "exact",
+              },
+
+              # region_dist — region_strip display type; no scalar value_fy.
+              # Setting year_fy and source_fy makes the toggle metadata consistent.
+              "region_dist": {
+                  "year_fy":         "FY2024/25",
+                  "source_fy":       "MTIC National Industries Register",
+                  "confidence_fy":   "exact",
+              },
+
+              # parks — point-in-time UIA count; same value for CY and FY.
+              "parks": {
+                  "value_fy":        "166",
+                  "pct_fy":          2.4,
+                  "sub_value_fy":    "~2.4% of registered establishments",
+                  "year_fy":         "FY2024/25",
+                  "source_fy":       "Uganda Investment Authority",
+                  "confidence_fy":   "estimated",
+              },
+
+              # fdi — FY2024/25 total FDI (Jul2024-Jun2025) from BoU BOP BPM6:
+              # Q3 CY2024 $814.3M + Q4 CY2024 $791.9M + Q1 CY2025 $960.9M
+              # + Q2 CY2025 $901.0M = USD 3,468.1M total. Manufacturing at ~5.5%
+              # = USD 191M. Primary CY2024 display (USD 180M) used UIA/UNCTAD estimate.
+              "fdi": {
+                  "value_fy":        "USD 191M",
+                  "pct_fy":          5.5,
+                  "sub_value_fy":    "5.5% of total FDI into Uganda (FY2024/25)",
+                  "year_fy":         "FY2024/25",
+                  "source_fy":       "Bank of Uganda BOP (BPM6)",
+                  "source_detail":   ("File: Balance of Payments Analytical (BPM6) in US$ Millions.xlsx"
+                                      " · total FDI Jul2024-Jun2025 = USD 3,468.1M"
+                                      " · manufacturing share ~5.5% = USD 191M"),
+                  "confidence_fy":   "estimated",
+              },
+
+              # employment — UBOS NHRS 2023/24 survey; no separate CY period.
+              # FY toggle confirms the same survey-year figure.
+              "employment": {
+                  "value_fy":        "~712,000",
+                  "pct_fy":          3.2,
+                  "sub_value_fy":    "~3.2% of total employment",
+                  "year_fy":         "FY2023/24",
+                  "source_fy":       "UBOS National Human Resource Survey 2023/24",
+                  "confidence_fy":   "estimated",
+              },
+          }
+
+          errors = []
+          for slug, fields in slug_patches.items():
+              rec_id = get_id_by_slug(slug)
+              if not rec_id:
+                  print(f"WARNING: '{slug}' not found in staging PB — skipping.")
+                  errors.append(slug)
+                  continue
+              url = pb_url + "/api/collections/key_indicators/records/" + rec_id
+              req = urllib.request.Request(
+                  url, method="PATCH",
+                  data=json.dumps(fields).encode(),
+                  headers={"Content-Type": "application/json", "Authorization": token})
+              with urllib.request.urlopen(req, timeout=15) as r:
+                  result = json.loads(r.read())
+              fy_val  = result.get("value_fy", "(none)")
+              fy_year = result.get("year_fy", "")
+              print(f"Patched {slug}: value_fy={fy_val!r} year_fy={fy_year!r}")
+
+          if errors:
+              print(f"\nWARNING: {len(errors)} slug(s) not found: {errors}")
+              sys.exit(1)
+          PYEOF
+
+      - name: Rebuild staging dashboard (on runner, latest code)
+        env:
+          PB_URL: "http://89.167.121.193:8091"
+        run: python3 scripts/generate_dashboard.py
+
+      - name: Set up SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.HETZNER_SSH_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H ${{ env.HETZNER_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Deploy rebuilt dashboard to staging
+        run: |
+          scp -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no \
+            report/sources-of-truth.html \
+            ${{ env.HETZNER_USER }}@${{ env.HETZNER_HOST }}:${{ env.STAGING_DIR }}/index.html
+          echo "Staging dashboard deployed — FY toggle now covers all 7 remaining cards."

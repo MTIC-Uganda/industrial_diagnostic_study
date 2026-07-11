@@ -1,39 +1,35 @@
 name: Patch Staging KPI Gaps
 
 # Manual dispatch to fill in CY values for KPI cards that are missing or
-# unverified on the staging dashboard.  Currently patches four cards:
+# unverified on the staging dashboard.  Patches four cards:
 #
 #   tax      — Manufacturing Tax Contribution
-#              Source: URA Annual Performance Report FY2024/25
-#              Value:  Shs 7.2 trn  (~22.9 % of total URA revenue)
-#              Basis:  key_indicator_categories already populated with sector
-#                      breakdown (Manufacturing = Shs 7.19 trn, 34 % of top-5).
-#                      Total URA FY2024/25 = Shs 31.4 trn (KEI Table 15).
-#              Confidence: indicative — URA sector-level report not yet
-#              downloaded; figure derived from existing categories data.
+#              CY value: Shs 7.2 trn  (~22.9 % of total URA revenue, FY2024/25)
+#              FY value: same as CY (URA reports on fiscal year basis only)
+#              Confidence: indicative — derived from key_indicator_categories breakdown
+#                          (Manufacturing = Shs 7.19 trn, 34 % of top-5 sectors).
 #
 #   hightech — High-Tech Exports
-#              Source: ITC TradeMap / UNCTAD, 2023/24
-#              Value:  USD 85 M  (~3.5 % of manufactured exports)
-#              Basis:  key_indicator_categories already populated:
-#                        QCIL pharma USD 64 M + ICT goods USD 9.3 M +
-#                        other high-tech USD 12 M = USD 85.3 M.
-#                      sub_value already set in PB; only value/pct empty.
-#              Confidence: indicative (broad definition, not OECD high-tech).
+#              CY value: USD 85 M  (~3.5 % of manufactured exports)
+#              FY value: same as CY (ITC TradeMap/UNCTAD; UBOS SITC breakdown
+#                        not available for separate FY figure)
+#              Confidence: indicative (Uganda-specific broad definition).
 #
 #   credit   — Private Sector Credit
-#              Source: Bank of Uganda / UBOS KEI 141 (Q3 2025/26), Table 14
-#              Value:  Shs 3.1 trn manufacturing outstanding loans (Jun 2025)
-#              Pct:    13.1 % of total private sector credit (Shs 23.9 trn)
-#              Confidence: exact — from KEI Table 14, June 2025 end-of-period.
+#              CY value (Dec 2024 end-of-period): Shs 2.97 trn / 13.0 %
+#                        Source: BoU KEI 141 Q3 2025/26, Table 14, December 2024:
+#                                Manufacturing = 2,973 Bn UGX / Total = 22,819 Bn UGX
+#              FY value (Jun 2025 end-of-period): Shs 3.1 trn / 13.1 %
+#                        Source: same table, June 2025:
+#                                Manufacturing = 3,126 Bn UGX / Total = 23,902 Bn UGX
+#              Confidence: exact — both figures from KEI Table 14.
 #
 #   variety  — Distinct Manufactured Product Categories Exported
-#              Source: ITC TradeMap (file: ugandas-exports-to-world-by-product_all.xlsx)
-#              Value:  484 distinct HS6 codes (chapters 28–96 excl. ch 71
-#                      precious metals) with export value > USD 100k, 2025.
-#              Pct:    9.7 % of ~5,000 manufactured HS6 categories globally.
-#              Confidence: exact — computed directly from local TradeMap file.
-#              Previous value: ~380 (indicative estimate, replaced by this).
+#              CY value (2025): 484 HS6 codes / 9.7 % of ~5,000 manufactured categories
+#                        Source: ugandas-exports-to-world-by-product_all.xlsx
+#              FY value: same as CY (ITC TradeMap exports; no Apr-Jun period split)
+#              Confidence: exact.
+#              Previous value: ~380 (indicative, replaced by this).
 #
 # tax/hightech/credit use hardcoded staging PB record IDs (port 8091).
 # variety uses a slug lookup at runtime so no ID needs to be hardcoded.
@@ -112,13 +108,22 @@ jobs:
               # (Manufacturing = Shs 7.19 trn, 34 % of top-5 sectors).
               # Total URA FY2024/25 = Shs 31.4 trn → manufacturing ≈ 22.9 %.
               # Confidence: indicative — URA sector-level report not downloaded.
+              # FY value: same as CY (URA collects only on fiscal year basis).
               "x640quds0r4j8xs": {
                   "value":         "Shs 7.2trn",
                   "pct":           22.9,
                   "sub_value":     "~23% of total URA revenue",
+                  "year":          "FY2024/25",
                   "source":        "URA Annual Performance Report FY2024/25",
                   "source_detail": "URA Annual Performance Report FY2024/25 · Uganda Revenue Authority (ura.go.ug)",
                   "confidence":    "indicative",
+                  # FY toggle — same figure; URA does not publish CY breakdowns.
+                  "value_fy":      "Shs 7.2trn",
+                  "pct_fy":        22.9,
+                  "sub_value_fy":  "~23% of total URA revenue (URA reports on fiscal year basis only)",
+                  "year_fy":       "FY2024/25",
+                  "source_fy":     "URA Annual Performance Report FY2024/25",
+                  "confidence_fy": "indicative",
               },
               # slug: hightech
               # sub_value already in PB: "~3.5% of manufactured exports, USD 85M"
@@ -127,26 +132,46 @@ jobs:
               # much lower because QCIL generics are not classified as high-tech
               # under the OECD product list.  The team uses a broader Uganda-specific
               # definition.  Do NOT replace with the WB figure without Solomon's sign-off.
+              # FY toggle: same figure (no UBOS SITC breakdown for FY period separately).
               "pttczloi8yszdem": {
                   "value":         "USD 85M",
                   "pct":           3.5,
+                  "year":          "2024/25",
                   "source":        "ITC TradeMap / UNCTAD",
                   "source_detail": "ITC TradeMap / UNCTAD · 2023/24 · Uganda-specific definition (QCIL pharma + ICT + selected categories)",
                   "confidence":    "indicative",
+                  # FY toggle — same figure; no FY-period SITC breakdown available.
+                  "value_fy":      "USD 85M",
+                  "pct_fy":        3.5,
+                  "sub_value_fy":  "~3.5% of manufactured exports (FY2024/25)",
+                  "year_fy":       "FY2024/25",
+                  "source_fy":     "ITC TradeMap / UNCTAD",
+                  "confidence_fy": "indicative",
               },
               # slug: credit
-              # Source: UBOS KEI 141 Q3 2025/26, Table 14 — Commercial Bank Outstanding
-              # Loans and Advances, June 2025 (end of FY2024/25):
-              #   Manufacturing = UGX 3,126 bn (Shs 3.1 trn)
-              #   Total private sector credit = UGX 23,902 bn (Shs 23.9 trn)
+              # CY (Dec 2024 end-of-calendar-year): KEI 141 Table 14
+              #   Manufacturing = UGX 2,973 bn = Shs 2.97 trn
+              #   Total private sector credit = UGX 22,819 bn
+              #   Manufacturing share = 2,973 / 22,819 = 13.0 %
+              # FY (Jun 2025 end-of-fiscal-year): KEI 141 Table 14
+              #   Manufacturing = UGX 3,126 bn = Shs 3.1 trn
+              #   Total private sector credit = UGX 23,902 bn
               #   Manufacturing share = 3,126 / 23,902 = 13.1 %
               "3zpk8qgbkfmlddi": {
-                  "value":         "Shs 3.1trn",
-                  "pct":           13.1,
-                  "sub_value":     "13.1% of private sector credit",
+                  "value":         "Shs 2.97trn",
+                  "pct":           13.0,
+                  "sub_value":     "13.0% of private sector credit (Dec 2024)",
+                  "year":          "Dec 2024",
                   "source":        "Bank of Uganda",
-                  "source_detail": "File: ubos_kei_141_q3_2025_26.pdf · UBOS / Bank of Uganda (ubos.org)",
+                  "source_detail": "File: ubos_kei_141_q3_2025_26.pdf · UBOS / Bank of Uganda · Table 14, December 2024",
                   "confidence":    "exact",
+                  # FY toggle — June 2025 (end of FY2024/25).
+                  "value_fy":      "Shs 3.1trn",
+                  "pct_fy":        13.1,
+                  "sub_value_fy":  "13.1% of private sector credit (Jun 2025)",
+                  "year_fy":       "FY2024/25",
+                  "source_fy":     "Bank of Uganda",
+                  "confidence_fy": "exact",
               },
           }
 
@@ -165,6 +190,8 @@ jobs:
           # Computed from data/ubos_2026/ugandas-exports-to-world-by-product_all.xlsx:
           #   484 distinct HS6 codes (chapters 28–96 excl. ch 71) with value > USD 100k.
           #   Share of ~5,000 global manufactured HS6 categories = 9.7 %.
+          # FY toggle: same figure — TradeMap exports are on calendar year basis; no
+          # Apr-Jun period breakdown available to compute a separate FY figure.
           variety_id = get_id_by_slug("variety")
           if variety_id:
               patches[variety_id] = {
@@ -173,10 +200,17 @@ jobs:
                   "sub_value":     "9.7% of ~5,000 manufactured HS6 categories globally",
                   "year":          "2025",
                   "source":        "ITC TradeMap",
-                  "source_detail": "File: ugandas-exports-to-world-by-product_all.xlsx"
-                                   " · ITC TradeMap 2025 · HS chapters 28–96 excl."
-                                   " precious metals (ch 71) · value > USD 100k",
+                  "source_detail": ("File: ugandas-exports-to-world-by-product_all.xlsx"
+                                    " · ITC TradeMap 2025 · HS chapters 28-96 excl."
+                                    " precious metals (ch 71) · value > USD 100k"),
                   "confidence":    "exact",
+                  # FY toggle — same figure; no FY-period split in TradeMap data.
+                  "value_fy":      "484",
+                  "pct_fy":        9.7,
+                  "sub_value_fy":  "9.7% of ~5,000 manufactured HS6 categories globally",
+                  "year_fy":       "FY2024/25",
+                  "source_fy":     "ITC TradeMap",
+                  "confidence_fy": "exact",
               }
           else:
               print("WARNING: variety record not found in staging PB — skipping.")
