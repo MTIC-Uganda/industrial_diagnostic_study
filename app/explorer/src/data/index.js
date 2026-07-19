@@ -57,18 +57,23 @@ const PHASE_SOURCE = ALL_CHAINS
   .filter(Boolean)
   .join(" · ");
 
-// Combined INPUT_KEYWORD_HS4 arrays (each chain contributes its own patterns)
-const _ALL_INPUT_KEYWORD_HS4 = ALL_CHAINS.flatMap(c => c.INPUT_KEYWORD_HS4 || []);
-const _ALL_INPUT_KEYWORD_PHASE = ALL_CHAINS.flatMap(c => c.INPUT_KEYWORD_PHASE || []);
-
+// INPUT_KEYWORD_HS4/PHASE are not exported by chain files (they're internal).
+// Delegate to each chain's own matcher functions instead, which use their
+// own keyword arrays and TRADE_HS4/PHASE_PRODUCERS correctly.
 function matchInputTrade(text) {
-  const hit = _ALL_INPUT_KEYWORD_HS4.find(k => k.pattern.test(text));
-  return hit ? TRADE_HS4[hit.hs4] : null;
+  for (const chain of ALL_CHAINS) {
+    const result = chain.matchInputTrade?.(text);
+    if (result) return result;
+  }
+  return null;
 }
 
 function matchInputPhase(text) {
-  const hit = _ALL_INPUT_KEYWORD_PHASE.find(k => k.pattern.test(text));
-  return hit ? PHASE_PRODUCERS[hit.phase] : null;
+  for (const chain of ALL_CHAINS) {
+    const result = chain.matchInputPhase?.(text);
+    if (result) return result;
+  }
+  return null;
 }
 
 export {
