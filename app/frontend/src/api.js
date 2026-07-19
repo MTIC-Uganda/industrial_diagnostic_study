@@ -21,8 +21,36 @@ function bundle() {
   return _bundle;
 }
 
+// The Explorer is the primary product list. The map shows only products that
+// have an Explorer entry — one product per Explorer card, matched by element_id.
+// To add a new product to the map: add it to the Explorer first, then add its
+// map element_id here.
+const EXPLORER_PRODUCTS = new Set([
+  // Iron & Steel (15)
+  "p_galv", "p_alzinc", "p_prepaint", "p_tinplate",
+  "p_crc", "p_hrc", "p_plate",
+  "p_rebar", "p_wirerod", "p_merchant", "p_sections", "p_rails", "p_piling",
+  "p_erw", "p_seamless",
+  // Copper & Allied Metals (5)
+  "cu_p_cable", "cu_p_wire", "cu_p_alu_cond", "cu_p_alu_prof", "cu_p_brass",
+  // Automotive (5)
+  "au_p_ev", "au_p_motorcycle", "au_p_trailer", "au_p_bus", "au_p_parts",
+  // Textiles & Garments (5)
+  "tx_p_yarn", "tx_p_fabric", "tx_p_tshirt", "tx_p_workwear", "tx_p_bags",
+  // Pharmaceuticals (5)
+  "ph_p_arv", "ph_p_antimal", "ph_p_tablets", "ph_p_inject", "ph_p_vaccine",
+  // Petrochemicals & Fertilizers (4)
+  "pc_p_npk", "pc_p_urea", "pc_p_pe", "pc_p_dap",
+  // Sugar & Confectionery (5)
+  "sg_p_white", "sg_p_brown", "sg_p_ethanol", "sg_p_hardcandy", "sg_p_softdrink",
+  // Plastics & Packaging (5)
+  "pl_p_bottles", "pl_p_pipes", "pl_p_bags", "pl_p_house", "pl_p_flexible",
+  // Cement & Building Materials (5)
+  "cm_p_opc", "cm_p_ppc", "cm_p_blocks", "cm_p_rmc", "cm_p_tiles",
+]);
+
 export async function getRoots() {
-  return bundle().roots || [];
+  return (bundle().roots || []).filter(r => EXPLORER_PRODUCTS.has(r.element_id));
 }
 
 // Breadth-first upstream walk from nodeId, keeping edges with weight >= threshold,
