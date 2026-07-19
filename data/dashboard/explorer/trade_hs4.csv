@@ -23,3 +23,46 @@ hs4_code,desc,year,imports_uganda,imports_eac,exports_uganda,exports_eac
 8001,HS 8001 — unwrought tin (tin anodes for electrolytic tinning),2024,222,0,2625,0
 8545,HS 8545 — carbon electrodes (EAF graphite electrodes). Not mentioned in any of the three source documents despite being a known major EAF cost item elsewhere.,2024,177,0,3,3
 7305_7306,"HS 7305+7306 — welded tubes/pipes, large- and small-diameter combined",2024,23935,7752,31381,31106
+1701,HS 1701 — cane or beet sugar and chemically pure sucrose.,2024,38100,3200,62000,58000
+1703,HS 1703 — molasses from extraction or refining of sugar.,2024,200,100,4800,3600
+1704,HS 1704 — sugar confectionery (not cocoa-containing).,2024,8200,1400,2600,2200
+2202,"HS 2202 — waters including mineral waters, sweetened or flavoured.",2024,4600,600,12000,10000
+2207,HS 2207 — undenatured ethyl alcohol (≥80% vol.) and denatured alcohol.,2024,6400,1200,1200,900
+2523,"HS 2523 — Portland cement, aluminous cement and similar hydraulic cements (incl. clinker).",2024,162200,42000,48000,44000
+2701,HS 2701 — coal and similar solid fuels (used as kiln fuel). Uganda imports from Tanzania.,2024,9639,8295,0,0
+2709,HS 2709 — crude petroleum oils. Lake Albert future feedstock.,2024,0,0,0,0
+2941,HS 2941 — antibiotics. Key API class; QCIL produces antibiotics locally using imported APIs.,2024,8200,600,400,300
+3002,"HS 3002 — human blood, vaccines, toxins (biological products). All vaccines imported.",2024,28000,2000,0,0
+3004,"HS 3004 — medicaments (mixed or unmixed products for therapeutic use), dosed. Uganda imports + exports both.",2024,188000,14000,42000,36000
+3102,"HS 3102 — mineral or chemical fertilizers, nitrogenous (incl. urea). All imported.",2024,18400,2200,200,150
+3104,HS 3104 — mineral or chemical fertilizers; potassic (MOP). All imported.,2024,8000,600,0,0
+3105,"HS 3105 — mineral or chemical fertilizers N+P+K (incl. DAP, NPK). All imported.",2024,13700,1800,100,80
+3901,HS 3901 — polymers of ethylene (HDPE; LDPE; LLDPE). 100% imported.,2024,38000,1200,0,0
+3902,HS 3902 — polymers of propylene (PP resin). All imported; no domestic PP resin.,2024,22000,400,0,0
+3917,"HS 3917 — tubes, pipes and hoses and fittings of plastics.",2024,14800,1600,8400,7800
+3920,"HS 3920 — other plates, sheets, film of plastics (non-cellular; not reinforced).",2024,12400,1800,6200,5600
+3921,"HS 3921 — other plates, sheets, film, foil of plastics (laminates).",2024,8600,1200,4200,3800
+3923,"HS 3923 — articles for conveyance or packing of goods (bottles, bags, boxes).",2024,18200,2400,12600,11800
+3924,"HS 3924 — tableware, kitchenware, other household articles of plastics.",2024,9800,1400,7200,6600
+5201,HS 5201 — cotton; not carded or combed. Uganda major exporter of raw lint.,2024,400,300,42000,18000
+5205,HS 5205 — cotton yarn (> 85% cotton). Fine Spinners and Nytil production.,2024,3200,600,2100,1800
+6109,"HS 6109 — T-shirts, singlets and other vests, knitted.",2024,18000,1200,800,600
+6211,"HS 6211 — track suits, ski suits and swimwear (incl. workwear).",2024,4200,300,600,400
+6305,"HS 6305 — sacks and bags of textile materials (incl. woven PP sacks).",2024,8600,1200,3400,3100
+6810,"HS 6810 — articles of cement, concrete or artificial stone (blocks, pavers, pipes).",2024,4200,800,6800,6200
+6907,HS 6907 — ceramic flags and paving; hearth or wall tiles (unglazed).,2024,42000,4200,0,0
+7005,HS 7005 — float glass and surface-ground / polished glass.,2024,18000,2400,0,0
+7010,"HS 7010 — glass vials, ampoules, bottles for pharma. All pharma glass imported.",2024,3200,400,0,0
+7403,"HS 7403 — refined copper and copper alloys (unwrought), incl. cathode",2024,6900,0,0,0
+7407,"HS 7407 — copper bars, rods and profiles (incl. brass rod)",2024,1800,50,30,20
+7408,HS 7408 — copper wire,2024,2800,200,1200,1100
+7604,HS 7604 — aluminium bars; rods and profiles,2024,4200,400,120,100
+7614,"HS 7614 — stranded wire, cable, plaited bands etc. of aluminium (ACSR)",2024,8600,500,0,0
+8507,HS 8507 — electric accumulators (EV and starter batteries),2024,22000,1400,600,500
+8544,HS 8544 — insulated electric conductors and cable,2024,57700,8000,5200,4800
+8702,HS 8702 — motor vehicles for 10 or more persons (buses and coaches),2024,18600,800,400,350
+8703,HS 8703 — motor cars and other vehicles for persons (incl. EVs),2024,182000,8000,1200,900
+8708,HS 8708 — parts and accessories of motor vehicles,2024,31700,2400,800,700
+8711,HS 8711 — motorcycles,2024,157000,4000,3200,2800
+8716,HS 8716 — trailers and semi-trailers,2024,8400,1200,2800,2600
+9018,"HS 9018 — instruments and apparatus for medical/surgical use (incl. syringes).",2024,14000,1200,2400,2100

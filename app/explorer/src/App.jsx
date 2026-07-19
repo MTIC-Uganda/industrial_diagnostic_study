@@ -1,5 +1,28 @@
-import { useState, useRef, useLayoutEffect } from "react";
+import { useState, useRef, useLayoutEffect, useEffect } from "react";
 import { PRODUCTS, CATEGORIES, TRADE_HS4, PRODUCT_HS4, RAW_MATERIAL_TRADE, matchInputTrade, matchInputPhase, PRODUCT_FIRMS, PHASE_PRODUCERS, PHASE_SOURCE, RAW_MATERIAL_PHASE } from "./data/index.js";
+
+// Resolve PocketBase URL from the page host so the same HTML works on staging and prod.
+function pbUrl() {
+  try {
+    const h = window.location.hostname;
+    if (h.includes("staging")) return "https://staging-db.midd-ug.com";
+    if (h.includes("midd-ug.com")) return "https://db.midd-ug.com";
+    return "http://89.167.121.193:8090"; // direct IP fallback for local dev
+  } catch { return "http://89.167.121.193:8090"; }
+}
+
+// Module-level cache that gets populated after the first live fetch.
+// Keyed by hs4_code; values override the static TRADE_HS4 from the JS bundle.
+const _liveTradeCache = {};
+
+function resolveTrade(hs4) {
+  if (!hs4) return null;
+  return _liveTradeCache[hs4] || TRADE_HS4[hs4] || null;
+}
+
+function resolveRawTrade(name) {
+  return RAW_MATERIAL_TRADE[name] || null;
+}
 
 function formatUsd(thousands) {
   if (thousands == null) return "—";
@@ -174,7 +197,7 @@ function ProducerBlock({ entry }) {
 }
 
 function ProductStatsPopup({ product, hs4, anchorRect }) {
-  const trade = hs4 ? TRADE_HS4[hs4] : null;
+  const trade = resolveTrade(hs4);
   const producers = PRODUCT_FIRMS[product.id];
   return (
     <StatsPopupShell title={product.name} anchorRect={anchorRect}>
@@ -215,7 +238,7 @@ function ProductStatsPopup({ product, hs4, anchorRect }) {
 }
 
 function RawMaterialPopup({ item, anchorRect }) {
-  const trade = RAW_MATERIAL_TRADE[item.name] || null;
+  const trade = resolveRawTrade(item.name);
   const phase = RAW_MATERIAL_PHASE[item.name];
   return (
     <StatsPopupShell title={item.name} anchorRect={anchorRect}>
@@ -457,6 +480,29 @@ export default function ValueChainExplorer() {
   const [selected, setSelected] = useState("galvanized");
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [hoverInfo, setHoverInfo] = useState(null);
+  const [, setLiveTradeVersion] = useState(0); // incremented after PocketBase fetch to trigger re-render
+
+  // Fetch trade data live from PocketBase on every page load so a refresh picks
+  // up the latest values without a new deploy. Silently falls back to the
+  // bundled static data if PocketBase is unreachable.
+  useEffect(() => {
+    const base = pbUrl();
+    fetch(`${base}/api/collections/explorer_trade_hs4/records?perPage=500&sort=hs4_code`)
+      .then(r => r.json())
+      .then(data => {
+        for (const row of data.items || []) {
+          _liveTradeCache[row.hs4_code] = {
+            desc: row.desc,
+            year: parseInt(row.year, 10),
+            imports: { uganda: parseFloat(row.imports_uganda), eac: parseFloat(row.imports_eac) },
+            exports: { uganda: parseFloat(row.exports_uganda), eac: parseFloat(row.exports_eac) },
+          };
+        }
+        setLiveTradeVersion(v => v + 1);
+      })
+      .catch(() => {}); // static fallback stays active if PocketBase unreachable
+  }, []);
+
   const product = PRODUCTS[selected];
 
   return (
