@@ -476,11 +476,45 @@ function Chain({ chain }) {
   );
 }
 
+const CHAINS = [
+  { id: "iron",      label: "Iron & Steel" },
+  { id: "copper",    label: "Copper & Allied Metals" },
+  { id: "auto",      label: "Automotive" },
+  { id: "textiles",  label: "Textiles & Garments" },
+  { id: "pharma",    label: "Pharmaceuticals" },
+  { id: "petrochem", label: "Petrochemicals & Fertilizers" },
+  { id: "sugar",     label: "Sugar & Confectionery" },
+  { id: "plastics",  label: "Plastics & Packaging" },
+  { id: "cement",    label: "Cement & Building Materials" },
+];
+
+function productChain(slug) {
+  if (slug.startsWith("cu_")) return "copper";
+  if (slug.startsWith("au_")) return "auto";
+  if (slug.startsWith("tx_")) return "textiles";
+  if (slug.startsWith("ph_")) return "pharma";
+  if (slug.startsWith("pc_")) return "petrochem";
+  if (slug.startsWith("sg_")) return "sugar";
+  if (slug.startsWith("pl_")) return "plastics";
+  if (slug.startsWith("cm_")) return "cement";
+  return "iron";
+}
+
 export default function ValueChainExplorer() {
   const [selected, setSelected] = useState("galvanized");
+  const [selectedChain, setSelectedChain] = useState("iron");
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [hoverInfo, setHoverInfo] = useState(null);
   const [, setLiveTradeVersion] = useState(0); // incremented after PocketBase fetch to trigger re-render
+
+  function handleChainChange(chainId) {
+    setSelectedChain(chainId);
+    const firstCat = CATEGORIES.find(cat => cat.products.some(pid => productChain(pid) === chainId));
+    if (firstCat) {
+      const firstPid = firstCat.products.find(pid => productChain(pid) === chainId);
+      if (firstPid) setSelected(firstPid);
+    }
+  }
 
   // Fetch trade data live from PocketBase on every page load so a refresh picks
   // up the latest values without a new deploy. Silently falls back to the
@@ -510,14 +544,29 @@ export default function ValueChainExplorer() {
 
       {/* Sidebar */}
       <div style={{ display: "flex", flexDirection: "column", backgroundColor: "#0f172a", width: sidebarOpen ? "200px" : "44px", flexShrink: 0, transition: "width 0.2s" }}>
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "10px 12px", borderBottom: "1px solid #1e293b" }}>
-          {sidebarOpen && <span style={{ color: "#94a3b8", fontSize: "10px", fontWeight: "700", letterSpacing: "0.1em", textTransform: "uppercase" }}>Products</span>}
-          <button onClick={() => setSidebarOpen(!sidebarOpen)} style={{ color: "#94a3b8", background: "none", border: "none", cursor: "pointer", fontSize: "14px", marginLeft: "auto" }}>
-            {sidebarOpen ? "◂" : "▸"}
-          </button>
+        <div style={{ borderBottom: "1px solid #1e293b" }}>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "10px 12px 6px" }}>
+            {sidebarOpen && <span style={{ color: "#94a3b8", fontSize: "10px", fontWeight: "700", letterSpacing: "0.1em", textTransform: "uppercase" }}>Value Chain</span>}
+            <button onClick={() => setSidebarOpen(!sidebarOpen)} style={{ color: "#94a3b8", background: "none", border: "none", cursor: "pointer", fontSize: "14px", marginLeft: "auto" }}>
+              {sidebarOpen ? "◂" : "▸"}
+            </button>
+          </div>
+          {sidebarOpen && (
+            <div style={{ padding: "0 10px 10px" }}>
+              <select
+                value={selectedChain}
+                onChange={e => handleChainChange(e.target.value)}
+                style={{ width: "100%", backgroundColor: "#1e293b", color: "#e2e8f0", border: "1px solid #334155", borderRadius: "5px", padding: "5px 8px", fontSize: "11px", cursor: "pointer", outline: "none" }}
+              >
+                {CHAINS.map(c => (
+                  <option key={c.id} value={c.id} style={{ backgroundColor: "#0f172a" }}>{c.label}</option>
+                ))}
+              </select>
+            </div>
+          )}
         </div>
         <div style={{ overflowY: "auto", flex: 1, paddingTop: "8px" }}>
-          {CATEGORIES.map((cat) => (
+          {CATEGORIES.filter(cat => cat.products.some(pid => productChain(pid) === selectedChain)).map((cat) => (
             <div key={cat.name} style={{ marginBottom: "12px" }}>
               {sidebarOpen && (
                 <div style={{ padding: "2px 12px 4px", fontSize: "9px", fontWeight: "700", letterSpacing: "0.08em", textTransform: "uppercase", color: cat.color === "#1e4976" || cat.color === "#235991" || cat.color === "#1e3a8a" ? "#60a5fa" : cat.color === "#b45309" ? "#f59e0b" : cat.color === "#7c3aed" ? "#a78bfa" : "#94a3b8" }}>
