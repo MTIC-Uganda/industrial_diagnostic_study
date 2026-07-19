@@ -320,6 +320,7 @@ function ItemList({ items, color, showTrade }) {
       {(items || []).map((item, i) => (
         <li key={i} className="text-xs flex items-start gap-1.5 text-slate-700"
           onMouseEnter={showTrade ? (e) => {
+            if (!matchInputTrade(item) && !matchInputPhase(item)) return;
             const r = e.currentTarget.getBoundingClientRect();
             setHover({ text: item, rect: r });
           } : undefined}
