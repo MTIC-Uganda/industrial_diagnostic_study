@@ -510,12 +510,17 @@ const PRODUCT_FIRMS = {
 };
 
 const INPUT_KEYWORD_HS4 = [
-  { pattern: /\bPET resin\b|\bPET.*pellets?\b/i, hs4: "3923" },
-  { pattern: /\bHDPE resin\b|\bLDPE resin\b/i, hs4: "3901" },
+  { pattern: /\bPET resin\b|\bPET.*pellets?\b/i, hs4: "3907" },
+  { pattern: /\bHDPE resin\b|\bLDPE resin\b|\bLLDPE\b|\bpolyethylene.*resin\b/i, hs4: "3901" },
   { pattern: /\bPP resin\b|\bpolypropylene.*pellets?\b/i, hs4: "3902" },
-  { pattern: /\bPVC resin\b/i, hs4: "3904" },
+  { pattern: /\bPVC resin\b|\bPVC.*K.value\b/i, hs4: "3904" },
   { pattern: /\baluminium foil\b/i, hs4: "7607" },
   { pattern: /\brecycled plastic\b|\bplastic.*regrind\b/i, hs4: "3915" },
+  { pattern: /\bcalcium carbonate\b|\bCaCO3\b/i, hs4: "2836" },
+  { pattern: /\bcarbon black\b/i, hs4: "2803" },
+  { pattern: /\btitanium dioxide\b|\bTiO2\b/i, hs4: "3206" },
+  { pattern: /\bprinting inks?\b|\bflexographic\b|\bgravure.*ink\b/i, hs4: "3215" },
+  { pattern: /\bcolourant\b|\bcolour masterbatch\b|\bmasterbatch\b/i, hs4: "3206" },
 ];
 
 const INPUT_KEYWORD_PHASE = [

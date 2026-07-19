@@ -486,10 +486,18 @@ const PRODUCT_FIRMS = {
 };
 
 const INPUT_KEYWORD_HS4 = [
-  { pattern: /\bAPI\b|\bactive pharmaceutical\b/i, hs4: "2941" },
-  { pattern: /\bglass vials?\b|\bborosilicate vials?\b/i, hs4: "7010" },
-  { pattern: /\bvaccine\b|\bantigen\b/i, hs4: "3002" },
-  { pattern: /\bsyringe\b|\bIV set\b/i, hs4: "9018" },
+  { pattern: /\bAPI\b|\bactive pharmaceutical\b|\bTDF\b|\b3TC\b|\bEFV\b|\bartemether\b|\blumefantrine\b/i, hs4: "2941" },
+  { pattern: /\bglass vials?\b|\bborosilicate vials?\b|\bampoules?\b/i, hs4: "7010" },
+  { pattern: /\bvaccine\b|\bantigen\b|\bmRNA\b|\badjuvant\b/i, hs4: "3002" },
+  { pattern: /\bsyringe\b|\bIV set\b|\bsingle.use.*bioprocess\b/i, hs4: "9018" },
+  { pattern: /\bexcipients?\b|\bMCC\b|\bmicrocrystalline cellulose\b|\bHPMC\b|\bCMC\b|\bcroscarmellose\b/i, hs4: "3912" },
+  { pattern: /\bfilm coat\b|\bOpadry\b|\bHPMC.*coat\b|\bcoating.*system\b/i, hs4: "3912" },
+  { pattern: /\bcapsule shells?\b|\bgelatin.*capsule\b|\bhard.*capsule\b/i, hs4: "3913" },
+  { pattern: /\bcastor oil\b/i, hs4: "1515" },
+  { pattern: /\brubber stopper\b|\bstopper.*vial\b|\bvial.*stopper\b|\bsiliconised stopper\b/i, hs4: "4015" },
+  { pattern: /\bcell culture media\b|\bculture media\b/i, hs4: "3821" },
+  { pattern: /\bblister foil\b|\bPVC.*blister\b|\bPVDC\b/i, hs4: "3920" },
+  { pattern: /\baluminium.*crimp\b|\bcrimp.*seal\b/i, hs4: "7607" },
 ];
 
 const INPUT_KEYWORD_PHASE = [

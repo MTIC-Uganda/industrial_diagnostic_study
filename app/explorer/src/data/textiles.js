@@ -557,10 +557,19 @@ const PRODUCT_FIRMS = {
 
 const INPUT_KEYWORD_HS4 = [
   { pattern: /\bcotton lint\b|\bginned cotton\b/i, hs4: "5201" },
-  { pattern: /\bpolyester.*fibre\b|\bPET.*staple\b/i, hs4: "5503" },
-  { pattern: /\breactive dyes?\b/i, hs4: "3204" },
+  { pattern: /\bpolyester.*fibre\b|\bPET.*staple\b|\bPSF\b/i, hs4: "5503" },
+  { pattern: /\breactive dyes?\b|\bdisperse dyes?\b|\bdirect dyes?\b/i, hs4: "3204" },
   { pattern: /\bPP.*resin\b|\bpolypropylene.*pellets?\b/i, hs4: "3902" },
   { pattern: /\bcotton yarn\b/i, hs4: "5205" },
+  { pattern: /\bviscose\b|\brayon staple\b|\bmodal\b|\blyocell\b/i, hs4: "5504" },
+  { pattern: /\bsoftener\b|\bfixative\b|\boptical brightener\b|\btextile.*auxiliary\b|\bmordant\b/i, hs4: "3809" },
+  { pattern: /\bsewing thread\b|\bpolyester thread\b|\boverlock thread\b/i, hs4: "5402" },
+  { pattern: /\bzip fastener\b|\bslide fastener\b|\bzip\b.*garment/i, hs4: "9607" },
+  { pattern: /\breflective tape\b|\bhi.vis.*tape\b|\bsafety tape\b/i, hs4: "3926" },
+  { pattern: /\bprinting inks?\b|\bflexographic.*ink\b|\bgarment.*ink\b/i, hs4: "3215" },
+  { pattern: /\bpoly.cotton.*fabric\b|\bworkwear.*fabric\b|\bsynthetic.*woven fabric\b/i, hs4: "5513" },
+  { pattern: /\bwoven labels?\b|\bcare labels?\b|\bbrand.*labels?\b/i, hs4: "5807" },
+  { pattern: /\bknitted fabric\b/i, hs4: "6006" },
 ];
 
 const INPUT_KEYWORD_PHASE = [

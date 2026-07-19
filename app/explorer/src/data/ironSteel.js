@@ -6366,8 +6366,8 @@ const PRODUCT_FIRMS = {
 const INPUT_KEYWORD_HS4 = [
   { pattern: /\bscrap\b/i, hs4: "7204" },
   { pattern: /\b(slab|billet|bloom|semi-finished)\b/i, hs4: "7207" },
-  { pattern: /\bzinc ingots?\b/i, hs4: "7901" },
-  { pattern: /\baluminum \(55% of bath/i, hs4: "7601" },
+  { pattern: /\bzinc ingots?\b|\bzinc \(43/i, hs4: "7901" },
+  { pattern: /\baluminu?m\b.*(bath|additive|alloy bath)|(bath|alloy bath).*\baluminu?m\b/i, hs4: "7601" },
   { pattern: /\btin anodes?\b/i, hs4: "8001" },
   { pattern: /\bferroalloy/i, hs4: "7202" },
   { pattern: /\bgraphite electrodes?\b/i, hs4: "8545" },
@@ -6376,7 +6376,14 @@ const INPUT_KEYWORD_HS4 = [
   { pattern: /\bchromic acid\b|\bchromium salts?\b/i, hs4: "2819" },
   { pattern: /\btitanium dioxide\b|\bpigments?\b|\bTiO2\b/i, hs4: "3206" },
   { pattern: /\btopcoat\b|\bprimer coat\b|\blacquer\b/i, hs4: "3208" },
-  { pattern: /\bargon gas\b|\boxygen\b/i, hs4: "2804" },
+  { pattern: /\bargon gas\b|\boxygen\b|\bnitrogen.*anneal\b|\binert gas.*anneal\b/i, hs4: "2804" },
+  { pattern: /\bpickling acid|\bHCl\b|\bhydrochloric acid\b/i, hs4: "2806" },
+  { pattern: /\bsulphuric acid\b|\bsulfuric acid\b|\bH2SO4\b/i, hs4: "2807" },
+  { pattern: /\biron ore\b|\bore pellets?\b|\biron burden\b|\bore fines\b/i, hs4: "2601" },
+  { pattern: /\bmetallurgical coke\b|\bcoke breeze\b|\bcoke \/ coal\b|\bcoal \/ coke\b|\bPCI\b/i, hs4: "2704" },
+  { pattern: /\bcoal\b/i, hs4: "2701" },
+  { pattern: /\bnatural gas\b/i, hs4: "2711" },
+  { pattern: /\bwelding.*consumable|\bweld.*wire\b|\bsubmerged arc\b/i, hs4: "8311" },
 ];
 
 function matchInputTrade(text) {
