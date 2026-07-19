@@ -261,23 +261,36 @@ function RawMaterialPopup({ item, anchorRect }) {
 function InputStatsPopup({ text, anchorRect }) {
   const trade = matchInputTrade(text);
   const phase = matchInputPhase(text);
+  const hasData = trade || phase;
   return (
     <StatsPopupShell title={text} anchorRect={anchorRect}>
-      <div style={{ fontWeight: 700, color: "#93c5fd", marginTop: "8px" }}>🏭 Industries &amp; capacity</div>
-      {phase ? (
-        <div style={{ color: "#cbd5e1" }}><strong>{phase.count} plants</strong> — {phase.label}</div>
+      {hasData ? (
+        <>
+          <div style={{ fontWeight: 700, color: "#93c5fd", marginTop: "8px" }}>🏭 Industries &amp; capacity</div>
+          {phase ? (
+            <div style={{ color: "#cbd5e1" }}><strong>{phase.count} plants</strong> — {phase.label}</div>
+          ) : (
+            <div style={{ color: "#94a3b8" }}>
+              This input is traded as a commodity but producer-count data is not separately tracked at this level —
+              see the finished-product card for named plant operators.
+            </div>
+          )}
+          <TradeBlock trade={trade} noDataLabel="No HS-code-specific trade data available for this input." />
+          <div style={{ color: "#64748b", fontSize: "9.5px", marginTop: "8px", borderTop: "1px solid #1e293b", paddingTop: "6px" }}>
+            {phase ? `Sources: ITC TradeMap (Uganda bilateral trade 2024) · ${PHASE_SOURCE}` : "Source: ITC TradeMap (Uganda bilateral trade 2024)"}
+          </div>
+        </>
       ) : (
-        <div style={{ color: "#94a3b8" }}>
-          No count exists for this intermediate stream specifically — it's produced inside whichever finished-product
-          plants use this process step. See that product's card for named producers, where known.
+        <div style={{ marginTop: "8px" }}>
+          <div style={{ fontWeight: 700, color: "#94a3b8", marginBottom: "6px" }}>⚙️ Process utility</div>
+          <div style={{ color: "#94a3b8", lineHeight: "1.55", fontSize: "10.5px" }}>
+            This input is consumed on-site — electricity, water, steam, cooling, inert gases, tooling, or other
+            plant-operating consumables. It doesn&apos;t generate a separate line in Uganda&apos;s bilateral goods
+            trade statistics; its cost is embedded in the plant&apos;s operating expenditure rather than appearing
+            as a discrete HS-classified import.
+          </div>
         </div>
       )}
-
-      <TradeBlock trade={trade} noDataLabel="No HS-code-specific trade data fetched yet for this input." />
-
-      <div style={{ color: "#64748b", fontSize: "9.5px", marginTop: "8px", borderTop: "1px solid #1e293b", paddingTop: "6px" }}>
-        {phase ? `Sources: ITC TradeMap (Uganda bilateral trade) · ${PHASE_SOURCE}` : "Source: ITC TradeMap (Uganda bilateral trade)"}
-      </div>
     </StatsPopupShell>
   );
 }
@@ -320,7 +333,6 @@ function ItemList({ items, color, showTrade }) {
       {(items || []).map((item, i) => (
         <li key={i} className="text-xs flex items-start gap-1.5 text-slate-700"
           onMouseEnter={showTrade ? (e) => {
-            if (!matchInputTrade(item) && !matchInputPhase(item)) return;
             const r = e.currentTarget.getBoundingClientRect();
             setHover({ text: item, rect: r });
           } : undefined}
