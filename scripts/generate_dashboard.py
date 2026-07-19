@@ -1312,10 +1312,9 @@ def render(tmpl):
     '<!--%%KPI12_BADGE%%-->':         kpi_badge('variety'),
     '<!--%%CREDIT_SECTOR_BARS%%-->':  sector_comparison_html('credit'),
     '<!--%%TENFOLD_PROGRESS_PANEL%%-->': tenfold_progress_panel_html(),
-    '/*%%CHAINS_DATA%%*/':            chains_js(),
-    '/*%%CHAIN_COLORS_DATA%%*/':      chain_colors_js(),
-    '/*%%FACTORIES_DATA%%*/':         factories_js(),
-    '/*%%TREEMAP_DATA%%*/':           treemap_data_js(),
+    # chains, CHAIN_COLORS, FACTORIES, TREEMAP_* removed from bake-in (2026-07-20):
+    # these are now fetched live from PocketBase in the browser at page load so the
+    # dashboard reflects PocketBase changes on every refresh without a CI rebuild.
     '<!--%%TOOLS_NAV%%-->':           tools_nav_html(),
     '<!--%%ESTABLISHMENT_COUNT%%-->': ESTABLISHMENT_COUNT_LABEL,
     '<!--%%CHAIN_SYNERGIES%%-->':     chain_synergies_html(),
