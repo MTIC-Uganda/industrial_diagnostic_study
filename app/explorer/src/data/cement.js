@@ -528,9 +528,15 @@ const PRODUCT_FIRMS = {
 const INPUT_KEYWORD_HS4 = [
   { pattern: /\bclinker\b/i, hs4: "2523" },
   { pattern: /\blimestone\b/i, hs4: "2521" },
-  { pattern: /\bcoal.*kiln\b|\bkiln.*fuel\b/i, hs4: "2701" },
+  { pattern: /\bcoal\b/i, hs4: "2701" },
   { pattern: /\bceramic tiles?\b/i, hs4: "6907" },
   { pattern: /\bflat glass\b|\bfloat glass\b/i, hs4: "7005" },
+  { pattern: /\bgypsum\b/i, hs4: "2520" },
+  { pattern: /\bsuperplasticis[ei]r\b|\bchemical admixture\b|\bwater reducer\b|\bMasterGlenium\b/i, hs4: "3824" },
+  { pattern: /\bpozzolana\b|\bvolcanic ash\b/i, hs4: "2621" },
+  { pattern: /\bglaze\b|\bfrit\b|\bopacifier\b/i, hs4: "3207" },
+  { pattern: /\bfeldspar\b/i, hs4: "2529" },
+  { pattern: /\bbauxite\b/i, hs4: "2606" },
 ];
 
 const INPUT_KEYWORD_PHASE = [

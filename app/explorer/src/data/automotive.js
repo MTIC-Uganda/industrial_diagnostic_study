@@ -553,10 +553,20 @@ const PRODUCT_FIRMS = {
 
 const INPUT_KEYWORD_HS4 = [
   { pattern: /\bEV battery\b|\blithium.ion\b|\bBMS\b/i, hs4: "8507" },
-  { pattern: /\bauto parts\b|\bspare parts\b/i, hs4: "8708" },
-  { pattern: /\btyres?\b|\btires?\b/i, hs4: "4011" },
+  { pattern: /\bauto parts\b|\bspare parts\b|\breplacement parts\b/i, hs4: "8708" },
+  { pattern: /\btyres?\b|\btires?\b|\btubes?\b.*\btyre\b/i, hs4: "4011" },
   { pattern: /\bwiring harness\b/i, hs4: "8544" },
-  { pattern: /\bautomotive steel\b|\bflat steel\b.*\bcar\b/i, hs4: "7208" },
+  { pattern: /\bautomotive steel\b|\bflat steel\b.*\bcar\b|\bsteel plate\b|\bmild steel sheet\b/i, hs4: "7208" },
+  { pattern: /\bstructural steel section\b|\bI-beam\b|\bsteel.*section\b|\bsteel tube.*section\b/i, hs4: "7216" },
+  { pattern: /\bCKD engine\b|\bIC engine\b|\bpiston engine\b|\bspark.ignition engine\b/i, hs4: "8407" },
+  { pattern: /\bchassis frame\b|\bbare chassis\b|\bCKD.*chassis\b/i, hs4: "8706" },
+  { pattern: /\bframe.*fork\b|\bmotorcycle.*frame\b|\bframe.*motorcycle\b|\bCKD.*frame\b/i, hs4: "8714" },
+  { pattern: /\bsafety glass\b|\btempered.*glass\b|\blaminated glass\b|\bglaz/i, hs4: "7007" },
+  { pattern: /\bGRP panel\b|\bfibreglass.*panel\b|\bglass.*fibre\b|\bfibre.*glass\b/i, hs4: "7019" },
+  { pattern: /\btraction motor\b|\belectric.*drive motor\b|\bEV.*motor\b/i, hs4: "8501" },
+  { pattern: /\brubber seals?\b|\bgaskets?\b|\brubber.*gasket\b|\banti.vibration\b/i, hs4: "4016" },
+  { pattern: /\bpaint\b|\bcoating\b.*\bvehicle\b|\bvehicle.*\bcoat/i, hs4: "3208" },
+  { pattern: /\bwelding consumables?\b|\bMIG wire\b|\bweld.*electrode\b/i, hs4: "8311" },
 ];
 
 const INPUT_KEYWORD_PHASE = [

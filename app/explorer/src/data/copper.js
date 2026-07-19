@@ -539,8 +539,14 @@ const INPUT_KEYWORD_HS4 = [
   { pattern: /\bcopper scrap\b/i, hs4: "7404" },
   { pattern: /\bcopper wire rod\b/i, hs4: "7408" },
   { pattern: /\bzinc ingots?\b/i, hs4: "7901" },
-  { pattern: /\baluminium billet\b|\baluminium wire rod\b/i, hs4: "7604" },
+  { pattern: /\baluminium billet\b|\baluminium wire rod\b|\bEC.grade.*wire\b|\baluminium.*strand\b/i, hs4: "7604" },
   { pattern: /\bPVC.*insulation\b|\bXLPE\b/i, hs4: "3904" },
+  { pattern: /\baluminium foil tape\b|\bfoil tape\b/i, hs4: "7607" },
+  { pattern: /\bsteel wire armour\b|\bSWA\b|\bgalvanised.*steel wire\b/i, hs4: "7217" },
+  { pattern: /\benamel.*resin\b|\bpolyurethane.*resin\b|\bpolyesterimide\b/i, hs4: "3907" },
+  { pattern: /\blead ingots?\b/i, hs4: "7801" },
+  { pattern: /\bbrass rod\b/i, hs4: "7407" },
+  { pattern: /\bnitrogen.*anneal\b|\bforming gas\b|\binert gas.*anneal\b/i, hs4: "2804" },
 ];
 
 const INPUT_KEYWORD_PHASE = [

@@ -443,12 +443,18 @@ const PRODUCT_FIRMS = {
 };
 
 const INPUT_KEYWORD_HS4 = [
-  { pattern: /\burea\b/i, hs4: "3102" },
+  { pattern: /\burea\b|\bammonium nitrate\b|\bCAN\b.*fertiliz/i, hs4: "3102" },
   { pattern: /\bDAP\b|\bdiammonium phosphate\b/i, hs4: "3105" },
   { pattern: /\bNPK\b|\bcompound fertilizer\b/i, hs4: "3105" },
-  { pattern: /\bPE resin\b|\bpolyethylene.*resin\b/i, hs4: "3901" },
-  { pattern: /\bsulphuric acid\b|\bH2SO4\b/i, hs4: "2807" },
+  { pattern: /\bPE resin\b|\bpolyethylene.*resin\b|\bHDPE.*resin\b|\bLDPE.*resin\b|\bLLDPE\b/i, hs4: "3901" },
+  { pattern: /\bsulphuric acid\b|\bsulfuric acid\b|\bH2SO4\b/i, hs4: "2807" },
   { pattern: /\bpotash\b|\bMOP\b|\bmuriate of potash\b/i, hs4: "3104" },
+  { pattern: /\bammonia\b|\banhydrous.*ammonia\b|\bNH3\b/i, hs4: "2814" },
+  { pattern: /\bphosphate rock\b|\bSukulu\b/i, hs4: "2510" },
+  { pattern: /\bethylene monomer\b|\bC2H4\b|\bco.monomer\b|\b1.butene\b|\b1.hexene\b/i, hs4: "2901" },
+  { pattern: /\bnaphtha\b/i, hs4: "2710" },
+  { pattern: /\bnatural gas\b|\bLake Albert.*gas\b|\bassociated gas\b/i, hs4: "2711" },
+  { pattern: /\bphosphoric acid\b|\bH3PO4\b/i, hs4: "2809" },
 ];
 
 const INPUT_KEYWORD_PHASE = [];

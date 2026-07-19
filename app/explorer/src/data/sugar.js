@@ -505,11 +505,20 @@ const PRODUCT_FIRMS = {
 };
 
 const INPUT_KEYWORD_HS4 = [
-  { pattern: /\bwhite sugar\b|\brefined.*sugar\b/i, hs4: "1701" },
+  { pattern: /\bwhite sugar\b|\brefined.*sugar\b|\bmill.white sugar\b/i, hs4: "1701" },
   { pattern: /\bcane molasses\b|\bmolasses\b/i, hs4: "1703" },
   { pattern: /\bethanol\b|\bspirits\b/i, hs4: "2207" },
   { pattern: /\bglucose syrup\b/i, hs4: "1702" },
-  { pattern: /\bflavour.*concentrate\b|\bflavouring\b/i, hs4: "3302" },
+  { pattern: /\bflavour.*concentrate\b|\bflavouring\b|\bflavours and colours\b/i, hs4: "3302" },
+  { pattern: /\bphosphoric acid\b/i, hs4: "2809" },
+  { pattern: /\blime\b|\bcalcium hydroxide\b|\bquicklime\b/i, hs4: "2522" },
+  { pattern: /\bsulphur dioxide\b|\bSO2\b/i, hs4: "2811" },
+  { pattern: /\bactivated carbon\b|\bbone char\b/i, hs4: "3802" },
+  { pattern: /\bsugarcane\b/i, hs4: "1212" },
+  { pattern: /\byeast\b|\bSaccharomyces\b/i, hs4: "2102" },
+  { pattern: /\bcitric acid\b/i, hs4: "2918" },
+  { pattern: /\belemental sulphur\b|\bsulphur for\b|\bsulphur.*SO2\b/i, hs4: "2503" },
+  { pattern: /\bCO2\b|\bcarbon dioxide\b.*carbonat/i, hs4: "2811" },
 ];
 
 const INPUT_KEYWORD_PHASE = [
