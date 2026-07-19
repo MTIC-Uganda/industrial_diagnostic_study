@@ -1,5 +1,5 @@
 import { useState, useRef, useLayoutEffect } from "react";
-import { PRODUCTS, CATEGORIES, TRADE_HS4, PRODUCT_HS4, RAW_MATERIAL_TRADE, matchInputTrade, matchInputPhase, PRODUCT_FIRMS, PHASE_PRODUCERS, PHASE_SOURCE, RAW_MATERIAL_PHASE } from "./data/ironSteel.js";
+import { PRODUCTS, CATEGORIES, TRADE_HS4, PRODUCT_HS4, RAW_MATERIAL_TRADE, matchInputTrade, matchInputPhase, PRODUCT_FIRMS, PHASE_PRODUCERS, PHASE_SOURCE, RAW_MATERIAL_PHASE } from "./data/index.js";
 
 function formatUsd(thousands) {
   if (thousands == null) return "—";
@@ -513,7 +513,7 @@ export default function ValueChainExplorer() {
           <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between" }}>
             <div>
               <div style={{ fontSize: "9px", fontWeight: "700", letterSpacing: "0.1em", textTransform: "uppercase", color: "#94a3b8" }}>
-                Tier 2 — Finished Mill Products · {product.category}
+                {product.tier || "Value Chain"} · {product.category}
               </div>
               <div style={{ display: "flex", alignItems: "baseline", gap: "10px", marginTop: "2px" }}>
                 <div style={{ fontSize: "18px", fontWeight: "900", color: "#0f172a" }}>{product.name}</div>
@@ -545,14 +545,7 @@ export default function ValueChainExplorer() {
         {/* Footer */}
         <div style={{ backgroundColor: "#fff", borderTop: "1px solid #e2e8f0", padding: "8px 20px", flexShrink: 0 }}>
           <div style={{ display: "flex", flexWrap: "wrap", gap: "12px", justifyContent: "center" }}>
-            {[
-              { color: "#1a3a5c", label: "Steel — BOF / blast furnace" },
-              { color: "#2b7ac5", label: "Steel — EAF / direct reduction" },
-              { color: "#7b3f00", label: "Zinc chain" },
-              { color: "#2d5a29", label: "Aluminum chain" },
-              { color: "#374151", label: "Tin / chromium chain" },
-              { color: "#7c3aed", label: "Paint & resin chain" },
-            ].map((item, i) => (
+            {(product.legend || []).map((item, i) => (
               <span key={i} style={{ display: "flex", alignItems: "center", gap: "4px", fontSize: "10px", color: "#94a3b8" }}>
                 <span style={{ width: "10px", height: "10px", borderRadius: "2px", backgroundColor: item.color, flexShrink: 0 }} />
                 {item.label}
