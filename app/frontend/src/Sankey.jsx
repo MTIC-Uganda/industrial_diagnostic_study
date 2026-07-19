@@ -76,20 +76,47 @@ export default function SankeyView({ graph, onNodeClick, selectedId, containerW 
   const { nodes, links } = useMemo(() => {
     if (!graph || !graph.nodes.length) return { nodes: [], links: [] };
 
-    const nodeList = graph.nodes.map((n) => ({
-      id: n.id,
-      name: n.properties.name,
-      label: n.labels[0],
-      componentType: n.properties.component_type,
-      strength: n.properties.strength,
-      raw: n,
-    }));
+    // Map view shows only inputs → products. TechnologyType nodes are intermediates
+    // (materials flow through them), so create bypass edges before hiding them.
+    // LaborCost and MachineryCost are leaf sources — just drop them and their edges.
+    const MAP_HIDE = new Set(['TechnologyType', 'LaborCost', 'MachineryCost']);
+    const hideIds = new Set(
+      graph.nodes.filter(n => MAP_HIDE.has(n.labels[0])).map(n => n.id)
+    );
+    const bypassRels = [];
+    for (const n of graph.nodes) {
+      if (n.labels[0] !== 'TechnologyType') continue;
+      const ins  = graph.relationships.filter(r => r.end_node_id   === n.id && !hideIds.has(r.start_node_id));
+      const outs = graph.relationships.filter(r => r.start_node_id === n.id && !hideIds.has(r.end_node_id));
+      for (const inR of ins) {
+        for (const outR of outs) {
+          bypassRels.push({
+            start_node_id: inR.start_node_id,
+            end_node_id:   outR.end_node_id,
+            properties: { weight: Math.min(inR.properties.weight || 0.001, outR.properties.weight || 0.001) },
+          });
+        }
+      }
+    }
+
+    const nodeList = graph.nodes
+      .filter(n => !hideIds.has(n.id))
+      .map((n) => ({
+        id: n.id,
+        name: n.properties.name,
+        label: n.labels[0],
+        componentType: n.properties.component_type,
+        strength: n.properties.strength,
+        raw: n,
+      }));
     const idIndex = new Map(nodeList.map((n, i) => [n.id, i]));
 
     // Edge direction: start = upstream input, end = downstream product.
     // For a left→right "final product → inputs" Sankey we draw root on the
     // left, so source = downstream (end), target = upstream (start).
-    const linkList = graph.relationships
+    const allRels = [...graph.relationships, ...bypassRels];
+    const linkList = allRels
+      .filter((r) => !hideIds.has(r.start_node_id) && !hideIds.has(r.end_node_id))
       .filter((r) => idIndex.has(r.start_node_id) && idIndex.has(r.end_node_id))
       .map((r) => ({
         source: idIndex.get(r.end_node_id),
