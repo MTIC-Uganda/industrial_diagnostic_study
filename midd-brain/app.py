@@ -26,7 +26,7 @@ from fastapi.responses import HTMLResponse, JSONResponse
 import sys as _sys
 _sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from brief_lib import format_public_brief  # pure, unit-tested (ADR-018)
-from query_tool import validate_spec, build_filter, return_fields  # DB-tool security boundary
+from query_tool import validate_spec, build_filter, return_fields, aggregate_rows  # DB-tool security boundary
 import analytics_sandbox  # read-only analytics executor (ADR-020)
 from analytics_lib import (build_dataframes, schema_hint, planner_prompt,
                            extract_code, format_analysis_result)
@@ -168,6 +168,11 @@ QUERY_PLANNER_PROMPT = (
     "Output ONLY a JSON object, no prose, e.g.:\n"
     '{"collection":"industries","filters":[{"field":"district","op":"=","value":"Gulu"}],"mode":"count"}\n'
     'Use mode "count" for how-many questions, "list" (add "limit") for which/list/show.\n'
+    'Use mode "group" with "group_by" for breakdown, by-category, "which sectors/regions", '
+    'and ranking/top questions (e.g. "which sectors are these industries in", "top districts", '
+    '"how many establishments by region"). group_by must be one of the filter fields above, '
+    'and "limit" caps how many groups come back. Example:\n'
+    '{"collection":"industries","mode":"group","group_by":"sector_name","limit":15}\n'
     "If the question needs no database lookup, is off-topic, or is about a person, output exactly: NONE"
 )
 
@@ -204,6 +209,14 @@ def run_query(spec):
     coll = spec["collection"]
     flt = build_filter(spec["filters"])
     params = ("&filter=" + urllib.parse.quote(flt)) if flt else ""
+    if spec["mode"] == "group":
+        gb = spec["group_by"]
+        # Match the brief's establishment counts: exclude the curated map-only FAC-* rows.
+        parts = [p for p in (flt, ('reg_number !~ "FAC-"' if coll == "industries" else "")) if p]
+        gparams = ("&filter=" + urllib.parse.quote("&&".join(parts))) if parts else ""
+        rows = _pb_items(coll, gparams + "&fields=" + urllib.parse.quote(gb))
+        return {"mode": "group", "collection": coll, "group_by": gb,
+                "filters": spec["filters"], "groups": aggregate_rows(rows, gb, spec["limit"])}
     if spec["mode"] == "count":
         url = f"{MIDD_PB_URL}/api/collections/{coll}/records?perPage=1{params}"
         with urllib.request.urlopen(url, timeout=15) as r:

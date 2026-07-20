@@ -294,7 +294,12 @@ jobs:
       - name: Run tests + coverage gate on changed code (ADR-018)
         run: |
           pip install -r requirements-dev.txt
-          python -m pytest -q --cov=scripts --cov=db --cov=agents --cov=uploader --cov=midd-brain --cov-report=xml
+          # Measure from the repo root (--cov=.) so coverage.xml records full repo-relative
+          # paths. Per-directory --cov sources record bare basenames, so two files sharing a
+          # basename (uploader/app.py and midd-brain/app.py) both become "app.py" and
+          # diff-cover cannot attribute a changed line, scoring a covered file 0%. Omit + the
+          # diff-cover gate below still only judge changed lines (see .coveragerc).
+          python -m pytest -q --cov=. --cov-report=xml
           git fetch --no-tags --depth=100 origin main || true
           # Fail if <90% of the lines changed in this push are covered by tests.
           diff-cover coverage.xml --compare-branch=origin/main --fail-under=90
