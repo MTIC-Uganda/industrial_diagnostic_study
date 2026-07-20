@@ -205,7 +205,7 @@ def test_render_replaces_markers(wired):
     assert "<!--CHAT_BUBBLE_START-->" not in out
     assert "1,234" in out                                   # establishment count landed
     assert "Iron &amp; Steel" in out                        # escaped chain name in a row
-    assert "TREEMAP_SECTOR_DATA" in out                     # treemap JS embedded
+    assert '"Bakery"' in out                               # treemap baked snapshot embedded
 
 
 def test_render_warns_on_missing_marker(wired, capsys):
