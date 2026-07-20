@@ -758,11 +758,46 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-t
 
 <script>
 // ═══════════════════ DATA ═══════════════════
-/*%%CHAINS_DATA%%*/
+// Resolves the PocketBase base URL from hostname at runtime (same logic as the
+// Explorer iframe) so a single build works on staging, prod, and local dev.
+function _pbUrl(){
+  const h=window.location.hostname;
+  if(h.includes('staging'))return'https://staging-db.midd-ug.com';
+  if(h.includes('midd-ug.com'))return'https://db.midd-ug.com';
+  return'http://localhost:8090';
+}
+
+// Baked CI snapshot — serves immediately and is the offline fallback.
+let chains=/*%%CHAINS_DATA%%*/;
+let CHAIN_COLORS=/*%%CHAIN_COLORS_DATA%%*/;
+// Live refresh: overwrites baked snapshot on success; keeps it silently on failure.
+(async function _fetchChains(){
+  try{
+    const r=await fetch(_pbUrl()+'/api/collections/value_chains/records?perPage=500&sort=display_order');
+    const d=await r.json();
+    const updated=[],newColors={};
+    (d.items||[]).forEach(function(rec){
+      newColors[rec.name]=rec.color||'';
+      updated.push({
+        id:rec.slug,name:rec.name,
+        map:{title:rec.map_title||'',desc:rec.map_description||'',
+             phases:rec.map_phases||[],gap:rec.map_gap||''},
+        status:{current:rec.status_current||[],companies:rec.status_companies||[],
+                constraints:rec.status_constraints||[],priorities:rec.status_priorities||[],
+                proj:rec.status_proj||{}}
+      });
+    });
+    if(updated.length){chains=updated;CHAIN_COLORS=newColors;}
+  }catch(e){console.warn('[dashboard] value_chains live refresh failed, using baked snapshot',e);}
+  renderStatus();
+})();
 
 // ═══════════════════ RENDER CHAIN STATUS ═══════════════════
 function renderStatus(){
+  if(!chains.length)return;
   const sel = document.getElementById('status-selector');
+  if(!sel)return;
+  sel.innerHTML=''; // idempotent: clear before re-render (called with baked data, then live)
   const disp = document.getElementById('status-display');
   chains.forEach((c,i)=>{
     const btn=document.createElement('button');
@@ -949,13 +984,65 @@ function showSubTab(id){
   try{ localStorage.setItem('mtic_activeSubTab',id); }catch(e){}
 }
 
-// ═══════════════════ INDUSTRY LOCATIONS MAP ═══════════════════
-/*%%CHAIN_COLORS_DATA%%*/
-
-/*%%FACTORIES_DATA%%*/
-
-// ═══════════════════ MANUFACTURING DISTRIBUTION TREEMAP ═══════════════════
-/*%%TREEMAP_DATA%%*/
+// ═══════════════════ INDUSTRY LOCATIONS MAP + MANUFACTURING DISTRIBUTION TREEMAP ═══════════════════
+// Baked CI snapshot — serves immediately and is the offline fallback for ministry meetings.
+// Live refresh below overwrites with fresh data from PocketBase view collections on every load.
+let FACTORIES=/*%%FACTORIES_DATA%%*/;
+const _BAKED_TREEMAPS=/*%%TREEMAP_DATA%%*/;
+let TREEMAP_SECTOR_DATA=_BAKED_TREEMAPS.s||{},
+    TREEMAP_DISTRICT_DATA=_BAKED_TREEMAPS.d||{},
+    TREEMAP_REGION_SECTOR_DATA=_BAKED_TREEMAPS.rs||{},
+    TREEMAP_DISTRICT_SECTOR_DATA=_BAKED_TREEMAPS.ds||{},
+    TREEMAP_REGION_SUBSECTOR_DATA=_BAKED_TREEMAPS.rss||{},
+    TREEMAP_DISTRICT_SUBSECTOR_DATA=_BAKED_TREEMAPS.dss||{};
+// Live refresh: GPS-filtered industries rows for the map (no more 7k-row pull);
+// six pre-aggregated PocketBase view collections for the treemaps.
+(async function _fetchIndustriesData(){
+  try{
+    const facRes=await fetch(_pbUrl()+'/api/collections/industries/records?perPage=500'
+      +'&filter=(latitude+!%3D+0)&fields=name,chain_name,latitude,longitude,location'
+      +',district,products,name_products,capacity_installed,capacity_utilised'
+      +',employees,established,ownership,exports');
+    const facD=await facRes.json();
+    const updatedFac=(facD.items||[])
+      .filter(function(r){return r.latitude&&r.longitude;})
+      .map(function(r){return{
+        name:r.name||'',chain:r.chain_name||'',
+        lat:r.latitude||0,lng:r.longitude||0,
+        loc:r.location||r.district||'',
+        products:r.products||r.name_products||'',
+        capacity_installed:r.capacity_installed||'',
+        capacity_utilised:r.capacity_utilised||'',
+        employees:r.employees||'',est:r.established||'',
+        ownership:r.ownership||'',exports:r.exports||''
+      };});
+    if(updatedFac.length)FACTORIES=updatedFac;
+    const _base=_pbUrl();
+    const [vs,vd,vrs,vds,vrss,vdss]=await Promise.all([
+      'v_treemap_sector_subsector','v_treemap_region_district',
+      'v_treemap_region_sector','v_treemap_district_sector',
+      'v_treemap_region_subsector','v_treemap_district_subsector'
+    ].map(function(n){
+      return fetch(_base+'/api/collections/'+n+'/records?perPage=500')
+        .then(function(r){return r.json();});
+    }));
+    function _buildNested(rows){
+      const out={};
+      (rows.items||[]).forEach(function(row){
+        if(!out[row.k1])out[row.k1]={};
+        out[row.k1][row.k2]=(out[row.k1][row.k2]||0)+row.cnt;
+      });
+      return out;
+    }
+    const ns=_buildNested(vs);
+    if(Object.keys(ns).length){
+      TREEMAP_SECTOR_DATA=ns;TREEMAP_DISTRICT_DATA=_buildNested(vd);
+      TREEMAP_REGION_SECTOR_DATA=_buildNested(vrs);TREEMAP_DISTRICT_SECTOR_DATA=_buildNested(vds);
+      TREEMAP_REGION_SUBSECTOR_DATA=_buildNested(vrss);TREEMAP_DISTRICT_SUBSECTOR_DATA=_buildNested(vdss);
+    }
+  }catch(e){console.warn('[dashboard] live refresh failed, using baked snapshot',e);}
+  requestAnimationFrame(function(){initRegionTreemap();initSectorTreemap();});
+})();
 
 // OEC-style palette — bold, saturated, high-contrast (2026-07-03)
 const TREEMAP_REGION_COLORS = {
@@ -1531,6 +1618,7 @@ function crossFilterDistrictBySubsectorAndRegion(subsectorName, regionName){
 
 // ── Spatial Distribution treemap (Region -> District) ────────────────────────
 function initRegionTreemap(){
+  if(!Object.keys(TREEMAP_DISTRICT_DATA).length)return;
   const breadcrumbEl = document.getElementById('treemap-region-breadcrumb');
   const legendEl = document.getElementById('treemap-region-legend');
 
@@ -1603,6 +1691,7 @@ function initRegionTreemap(){
 
 // ── Sector treemap (Sector -> Sub-sector) ────────────────────────────────────
 function initSectorTreemap(){
+  if(!Object.keys(TREEMAP_SECTOR_DATA).length)return;
   const breadcrumbEl = document.getElementById('treemap-sector-breadcrumb');
   const legendEl = document.getElementById('treemap-sector-legend');
 
@@ -1669,10 +1758,12 @@ function shadeColor(hex, amt){
 }
 
 // ═══════════════════ INIT ═══════════════════
-// renderStatus() must run after FACTORIES is defined above — renderStatusDetail()
-// cross-references FACTORIES by chain name for the full factory directory table.
+// Render immediately with the CI-baked snapshots above. The async IIFEs will
+// re-render with live PocketBase data once their fetches resolve; on failure
+// the baked snapshots remain active (no blank sections).
 renderStatus();
-requestAnimationFrame(() => { initRegionTreemap(); initSectorTreemap(); });
+initRegionTreemap();
+initSectorTreemap();
 let _treemapResizeTimer;
 window.addEventListener('resize', () => {
   clearTimeout(_treemapResizeTimer);
@@ -1699,7 +1790,8 @@ function initMap(){
       el.innerHTML='<div style="padding:20px;color:#c00;font-size:12px;font-family:monospace">Map JS error (line '+line+'): '+msg+'</div>';
   };
   const _spin=document.getElementById('map-spinner');if(_spin)_spin.remove();
-  // Populate factory search datalist (FACTORIES is defined by this point)
+  // Populate factory search datalist — FACTORIES is populated async from PocketBase;
+  // it will be ready by the time the user clicks the Locations tab to trigger initMap.
   const _dl=document.getElementById('factory-names');
   if(_dl&&!_dl.hasChildNodes())FACTORIES.forEach(f=>{const o=document.createElement('option');o.value=f.name;_dl.appendChild(o);});
   _leafletMap=L.map('industry-map').setView([1.3,32.5],7);

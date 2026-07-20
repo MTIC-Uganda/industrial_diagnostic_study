@@ -1149,49 +1149,23 @@ def _treemaps_from_pocketbase():
     f = lambda d: {k: dict(v) for k, v in d.items()}
     return f(sector), f(district), f(rsec), f(dsec), f(rsub), f(dsub)
 
-def treemap_data_js():
-    """Embeds the establishment-distribution datasets. Preferred source is the
-    PocketBase `industries` collection (the datastore); falls back to the static
-    treemap_*.json committed in data/dashboard/ when PocketBase is off/empty.
-    Original static files were produced by scripts/extract_industries_register.py:
-      - region->district (Spatial Distribution)
-      - sector->subsector (Sector Distribution)
-      - region->sector and district->sector (cross-filtering: selecting a
-        region/district updates Sector Distribution to that area's sector mix;
-        selecting a sector updates Spatial Distribution to that sector's
-        regional/district mix)
-      - region->subsector and district->subsector (same cross-filter, one
-        level deeper: selecting an individual product like "Bakery Products"
-        updates Spatial Distribution to that specific product's mix)."""
-    def _load(name):
-        # SINGLE SOURCE guard (ADR-017): treemaps come from the PocketBase industries
-        # collection, never a committed JSON. Reaching here = industries was empty.
+def treemap_data_json():
+    """Returns a compact JSON object {s,d,rs,ds,rss,dss} for the six treemap aggregates.
+    Baked into the template as the offline fallback; the browser overwrites at runtime
+    by fetching the six PocketBase view collections (v_treemap_*). Source is always the
+    PocketBase industries collection at CI build time (ADR-017 — no file fallback)."""
+    def _guard(name):
         sys.exit(f'SINGLE SOURCE VIOLATION (ADR-017): tried to read {name} from disk. '
                  f'Treemaps must be computed from the PocketBase industries collection.')
 
     agg = _treemaps_from_pocketbase() if USE_POCKETBASE else None
-    if agg:
-        (sector_data, district_data, region_sector_data,
-         district_sector_data, region_subsector_data, district_subsector_data) = agg
-        print(f'  Treemaps: {sum(sum(v.values()) for v in district_data.values())} '
-              f'establishments from PocketBase industries collection')
-    else:
-        sector_data             = _load('treemap_sector.json')
-        district_data           = _load('treemap_district.json')
-        region_sector_data      = _load('treemap_region.json')
-        district_sector_data    = _load('treemap_district_sector.json')
-        region_subsector_data   = _load('treemap_region_subsector.json')
-        district_subsector_data = _load('treemap_district_subsector.json')
-        if USE_POCKETBASE:
-            print('  Treemaps: PocketBase industries empty — static JSON fallback')
-    return (
-        'const TREEMAP_SECTOR_DATA = ' + json.dumps(sector_data, ensure_ascii=False) + ';\n'
-        'const TREEMAP_DISTRICT_DATA = ' + json.dumps(district_data, ensure_ascii=False) + ';\n'
-        'const TREEMAP_REGION_SECTOR_DATA = ' + json.dumps(region_sector_data, ensure_ascii=False) + ';\n'
-        'const TREEMAP_DISTRICT_SECTOR_DATA = ' + json.dumps(district_sector_data, ensure_ascii=False) + ';\n'
-        'const TREEMAP_REGION_SUBSECTOR_DATA = ' + json.dumps(region_subsector_data, ensure_ascii=False) + ';\n'
-        'const TREEMAP_DISTRICT_SUBSECTOR_DATA = ' + json.dumps(district_subsector_data, ensure_ascii=False) + ';'
-    )
+    if not agg:
+        _guard('industries (empty or unreachable)')
+    s, d, rs, ds, rss, dss = agg
+    print(f'  Treemaps: {sum(sum(v.values()) for v in d.values())} '
+          f'establishments baked from PocketBase industries collection')
+    return json.dumps({'s': s, 'd': d, 'rs': rs, 'ds': ds, 'rss': rss, 'dss': dss},
+                      ensure_ascii=False)
 
 def chains_js():
     return 'const chains = ' + json.dumps(chains, ensure_ascii=False, indent=2) + ';'
@@ -1312,10 +1286,14 @@ def render(tmpl):
     '<!--%%KPI12_BADGE%%-->':         kpi_badge('variety'),
     '<!--%%CREDIT_SECTOR_BARS%%-->':  sector_comparison_html('credit'),
     '<!--%%TENFOLD_PROGRESS_PANEL%%-->': tenfold_progress_panel_html(),
-    '/*%%CHAINS_DATA%%*/':            chains_js(),
-    '/*%%CHAIN_COLORS_DATA%%*/':      chain_colors_js(),
-    '/*%%FACTORIES_DATA%%*/':         factories_js(),
-    '/*%%TREEMAP_DATA%%*/':           treemap_data_js(),
+    # Baked-in snapshots: serve immediately and act as the offline fallback if
+    # PocketBase is unreachable at page load. The browser overwrites these with
+    # live-fetched data on every refresh (chains → value_chains collection;
+    # factories + treemaps → industries GPS filter + v_treemap_* view collections).
+    '/*%%CHAINS_DATA%%*/':       json.dumps(chains, ensure_ascii=False),
+    '/*%%CHAIN_COLORS_DATA%%*/': json.dumps(chain_colors, ensure_ascii=False),
+    '/*%%FACTORIES_DATA%%*/':    json.dumps(factories_list, ensure_ascii=False),
+    '/*%%TREEMAP_DATA%%*/':      treemap_data_json(),
     '<!--%%TOOLS_NAV%%-->':           tools_nav_html(),
     '<!--%%ESTABLISHMENT_COUNT%%-->': ESTABLISHMENT_COUNT_LABEL,
     '<!--%%CHAIN_SYNERGIES%%-->':     chain_synergies_html(),
