@@ -24,6 +24,26 @@ function resolveRawTrade(name) {
   return RAW_MATERIAL_TRADE[name] || null;
 }
 
+// Structure cache: populated by live PocketBase fetch; null fields fall back to
+// the bundled static imports (offline / before the fetch completes).
+const _liveStructure = {
+  products: null,      // map slug → product object
+  categories: null,    // array of category objects
+  productFirms: null,  // map product_slug → firms entry
+  phaseProducers: null,// map phase key → producers entry
+  productHs4: null,    // map slug → hs4 string
+  matchTrade: null,    // function(text) → trade object | null
+  matchPhase: null,    // function(text) → phase entry | null
+};
+
+function _resolveProducts()      { return _liveStructure.products      || PRODUCTS; }
+function _resolveCategories()    { return _liveStructure.categories    || CATEGORIES; }
+function _resolveProductFirms()  { return _liveStructure.productFirms  || PRODUCT_FIRMS; }
+function _resolvePhaseProducers(){ return _liveStructure.phaseProducers|| PHASE_PRODUCERS; }
+function _resolveProductHs4(slug){ return (_liveStructure.productHs4   || PRODUCT_HS4)[slug] || null; }
+function _resolveMatchTrade(text){ return _liveStructure.matchTrade ? _liveStructure.matchTrade(text) : matchInputTrade(text); }
+function _resolveMatchPhase(text){ return _liveStructure.matchPhase ? _liveStructure.matchPhase(text) : matchInputPhase(text); }
+
 function formatUsd(thousands) {
   if (thousands == null) return "—";
   const usd = thousands * 1000;
@@ -134,7 +154,7 @@ function StatsPopupShell({ title, anchorRect, children }) {
 }
 
 function PhaseCountBlock({ phase }) {
-  const p = PHASE_PRODUCERS[phase];
+  const p = _resolvePhaseProducers()[phase];
   if (!p) return null;
   return (
     <>
@@ -152,7 +172,7 @@ function PhaseCountBlock({ phase }) {
 // repeat the exact mistake this was built to fix.
 function PhaseContextNote({ phaseContext }) {
   if (!phaseContext) return null;
-  const p = PHASE_PRODUCERS[phaseContext.phase];
+  const p = _resolvePhaseProducers()[phaseContext.phase];
   if (!p) return null;
   return (
     <div style={{ color: "#64748b", fontSize: "9.5px", marginTop: "6px", borderTop: "1px solid #1e293b", paddingTop: "4px" }}>
@@ -198,7 +218,7 @@ function ProducerBlock({ entry }) {
 
 function ProductStatsPopup({ product, hs4, anchorRect }) {
   const trade = resolveTrade(hs4);
-  const producers = PRODUCT_FIRMS[product.id];
+  const producers = _resolveProductFirms()[product.id];
   return (
     <StatsPopupShell title={product.name} anchorRect={anchorRect}>
 
@@ -259,8 +279,8 @@ function RawMaterialPopup({ item, anchorRect }) {
 }
 
 function InputStatsPopup({ text, anchorRect }) {
-  const trade = matchInputTrade(text);
-  const phase = matchInputPhase(text);
+  const trade = _resolveMatchTrade(text);
+  const phase = _resolveMatchPhase(text);
   const hasData = trade || phase;
   return (
     <StatsPopupShell title={text} anchorRect={anchorRect}>
@@ -518,11 +538,11 @@ export default function ValueChainExplorer() {
   const [selectedChain, setSelectedChain] = useState("iron");
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [hoverInfo, setHoverInfo] = useState(null);
-  const [, setLiveTradeVersion] = useState(0); // incremented after PocketBase fetch to trigger re-render
+  const [, setLiveVersion] = useState(0); // incremented after any live PocketBase fetch to trigger re-render
 
   function handleChainChange(chainId) {
     setSelectedChain(chainId);
-    const firstCat = CATEGORIES.find(cat => cat.products.some(pid => productChain(pid) === chainId));
+    const firstCat = _resolveCategories().find(cat => cat.products.some(pid => productChain(pid) === chainId));
     if (firstCat) {
       const firstPid = firstCat.products.find(pid => productChain(pid) === chainId);
       if (firstPid) setSelected(firstPid);
@@ -545,12 +565,68 @@ export default function ValueChainExplorer() {
             exports: { uganda: parseFloat(row.exports_uganda), eac: parseFloat(row.exports_eac) },
           };
         }
-        setLiveTradeVersion(v => v + 1);
+        setLiveVersion(v => v + 1);
       })
       .catch(() => {}); // static fallback stays active if PocketBase unreachable
   }, []);
 
-  const product = PRODUCTS[selected];
+  // Fetch the five structure collections in parallel so any PocketBase edit
+  // (product description, firm list, phase count, keyword rule) shows on refresh.
+  // Static bundle stays active as an offline fallback until the fetch resolves.
+  useEffect(() => {
+    const base = pbUrl();
+    Promise.all([
+      fetch(`${base}/api/collections/explorer_products/records?perPage=500&sort=display_order`).then(r => r.json()),
+      fetch(`${base}/api/collections/explorer_categories/records?perPage=500&sort=display_order`).then(r => r.json()),
+      fetch(`${base}/api/collections/explorer_phase_producers/records?perPage=500&sort=display_order`).then(r => r.json()),
+      fetch(`${base}/api/collections/explorer_product_firms/records?perPage=500&sort=display_order`).then(r => r.json()),
+      fetch(`${base}/api/collections/explorer_input_keywords/records?perPage=500&sort=display_order`).then(r => r.json()),
+    ]).then(([prodData, catData, ppData, pfData, kwData]) => {
+      const products = {}, productHs4 = {};
+      for (const row of prodData.items || []) {
+        products[row.slug] = {
+          id: row.slug, name: row.name, category: row.category,
+          color: row.color, description: row.description, chains: row.chains || [],
+        };
+        if (row.hs4_code) productHs4[row.slug] = row.hs4_code;
+      }
+      const categories = (catData.items || []).map(row => ({
+        slug: row.slug, name: row.name, color: row.color, products: row.products || [],
+      }));
+      const phaseProducers = {};
+      for (const row of ppData.items || []) {
+        phaseProducers[row.phase] = { count: row.count, label: row.label, examples: row.examples || [], source: row.source };
+      }
+      const productFirms = {};
+      for (const row of pfData.items || []) {
+        productFirms[row.product_slug] = { status: row.status, firms: row.firms || [], note: row.note, phaseContext: row.phase_context || null };
+      }
+      // keyword rows arrive pre-sorted by display_order; first match wins
+      const keywords = kwData.items || [];
+      _liveStructure.matchTrade = function(text) {
+        for (const kw of keywords) {
+          if (kw.target_type !== 'hs4') continue;
+          try { if (new RegExp(kw.pattern_source, kw.pattern_flags || '').test(text)) return resolveTrade(kw.target_value); } catch {}
+        }
+        return null;
+      };
+      _liveStructure.matchPhase = function(text) {
+        for (const kw of keywords) {
+          if (kw.target_type !== 'phase') continue;
+          try { if (new RegExp(kw.pattern_source, kw.pattern_flags || '').test(text)) return phaseProducers[kw.target_value] || null; } catch {}
+        }
+        return null;
+      };
+      _liveStructure.products      = products;
+      _liveStructure.productHs4    = productHs4;
+      _liveStructure.categories    = categories;
+      _liveStructure.phaseProducers= phaseProducers;
+      _liveStructure.productFirms  = productFirms;
+      setLiveVersion(v => v + 1);
+    }).catch(() => {}); // static bundle fallback stays active if PocketBase unreachable
+  }, []);
+
+  const product = _resolveProducts()[selected];
 
   return (
     <div style={{ display: "flex", height: "100vh", backgroundColor: "#f8fafc", fontFamily: "system-ui, sans-serif", overflow: "hidden" }}>
@@ -579,7 +655,7 @@ export default function ValueChainExplorer() {
           )}
         </div>
         <div style={{ overflowY: "auto", flex: 1, paddingTop: "8px" }}>
-          {CATEGORIES.filter(cat => cat.products.some(pid => productChain(pid) === selectedChain)).map((cat) => (
+          {_resolveCategories().filter(cat => cat.products.some(pid => productChain(pid) === selectedChain)).map((cat) => (
             <div key={cat.name} style={{ marginBottom: "12px" }}>
               {sidebarOpen && (
                 <div style={{ padding: "2px 12px 4px", fontSize: "9px", fontWeight: "700", letterSpacing: "0.08em", textTransform: "uppercase", color: cat.color === "#1e4976" || cat.color === "#235991" || cat.color === "#1e3a8a" ? "#60a5fa" : cat.color === "#b45309" ? "#f59e0b" : cat.color === "#7c3aed" ? "#a78bfa" : "#94a3b8" }}>
@@ -587,7 +663,7 @@ export default function ValueChainExplorer() {
                 </div>
               )}
               {cat.products.map((pid) => {
-                const p = PRODUCTS[pid];
+                const p = _resolveProducts()[pid];
                 return (
                   <button key={pid} onClick={() => setSelected(pid)}
                     title={p.name}
@@ -598,9 +674,9 @@ export default function ValueChainExplorer() {
                     {sidebarOpen && (
                       <span style={{ overflow: "hidden" }}>
                         <span style={{ display: "block", fontSize: "11px", color: selected === pid ? "#f1f5f9" : "#94a3b8", fontWeight: selected === pid ? "600" : "400", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{p.name}</span>
-                        {PRODUCT_HS4[pid] && (
+                        {_resolveProductHs4(pid) && (
                           <span style={{ display: "block", fontSize: "9px", color: "#475569", marginTop: "1px" }}>
-                            HS {PRODUCT_HS4[pid].replace(/_/g, " + ")}
+                            HS {_resolveProductHs4(pid).replace(/_/g, " + ")}
                           </span>
                         )}
                       </span>
@@ -625,9 +701,9 @@ export default function ValueChainExplorer() {
               </div>
               <div style={{ display: "flex", alignItems: "baseline", gap: "10px", marginTop: "2px" }}>
                 <div style={{ fontSize: "18px", fontWeight: "900", color: "#0f172a" }}>{product.name}</div>
-                {PRODUCT_HS4[selected] && (
+                {_resolveProductHs4(selected) && (
                   <div style={{ fontSize: "11px", fontWeight: "600", color: "#1565c0", background: "#e3f2fd", borderRadius: "4px", padding: "1px 7px", flexShrink: 0 }}>
-                    HS {PRODUCT_HS4[selected].replace(/_/g, " + ")}
+                    HS {_resolveProductHs4(selected).replace(/_/g, " + ")}
                   </div>
                 )}
               </div>
@@ -664,7 +740,7 @@ export default function ValueChainExplorer() {
       </div>
 
       {hoverInfo && (
-        <ProductStatsPopup product={PRODUCTS[hoverInfo.pid]} hs4={PRODUCT_HS4[hoverInfo.pid]} anchorRect={hoverInfo.rect} />
+        <ProductStatsPopup product={_resolveProducts()[hoverInfo.pid]} hs4={_resolveProductHs4(hoverInfo.pid)} anchorRect={hoverInfo.rect} />
       )}
     </div>
   );
