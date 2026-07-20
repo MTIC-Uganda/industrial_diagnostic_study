@@ -224,11 +224,33 @@ def execute_restricted(code, dataframes):
             "image": _capture_figure()}
 
 
-def run_analysis(code, dataframes, timeout=8, memory_mb=512):
+# JUSTIFICATION-A3: new hardened_argv() + harden path for the ADR-025 public analytics tier.
+def hardened_argv(base_argv, unshare_path=None, setpriv_path=None,
+                  uid_name="nobody", gid_name="nogroup"):
+    """Wrap the python invocation with network isolation + privilege drop (public tier).
+
+    `unshare --net` runs the child in an empty network namespace (no egress), which closes
+    the one hole the in-namespace guards cannot: model code doing `pd.read_csv("http://...")`
+    to exfiltrate or reach internal services (SSRF). `setpriv` drops to an unprivileged user
+    so a hypothetical sandbox escape has no root. Each wrapper is applied only if its tool
+    path is provided (resolved by the caller); pure so it is unit-testable.
+    """
+    argv = list(base_argv)
+    if setpriv_path:
+        argv = [setpriv_path, "--reuid", uid_name, "--regid", gid_name,
+                "--clear-groups"] + argv
+    if unshare_path:
+        argv = [unshare_path, "--net", "--"] + argv
+    return argv
+
+
+def run_analysis(code, dataframes, timeout=8, memory_mb=512, harden=False):
     """Run execute_restricted in an isolated subprocess (CPU/mem rlimit + wall-clock timeout).
 
-    Falls back to in-process execution where subprocess isolation is unavailable (e.g. the
-    child cannot be spawned); the restricted-namespace guarantees still hold either way.
+    harden=True (public tier, ADR-025): wrap the child with `unshare --net` (no network) and
+    `setpriv` (drop to nobody) when those tools exist, and FAIL CLOSED — never fall back to
+    in-process execution, so public code cannot run un-isolated. harden=False (gated team
+    tier) keeps the original behaviour and may fall back in-process if a child cannot spawn.
     Returns the same dict shape as execute_restricted, plus {"timeout": True} on timeout.
     """
     import json
@@ -241,6 +263,8 @@ def run_analysis(code, dataframes, timeout=8, memory_mb=512):
     ok, reason = validate_code(code)   # fail fast before spawning
     if not ok:
         return {"ok": False, "error": reason, "result": None, "stdout": ""}
+
+    import shutil
 
     tmpdir = tempfile.mkdtemp(prefix="midd-analysis-")
     data_path = os.path.join(tmpdir, "data.pkl")
@@ -256,6 +280,19 @@ def run_analysis(code, dataframes, timeout=8, memory_mb=512):
         % (os.path.dirname(os.path.abspath(__file__)), data_path)
     )
 
+    base_argv = [sys.executable, "-c", child]
+    argv = base_argv
+    if harden:
+        unshare_path = shutil.which("unshare")
+        setpriv_path = shutil.which("setpriv")
+        argv = hardened_argv(base_argv, unshare_path, setpriv_path)
+        if setpriv_path:   # the dropped-privilege child must be able to read the pickle
+            try:
+                os.chmod(tmpdir, 0o755)
+                os.chmod(data_path, 0o644)
+            except OSError:
+                pass
+
     def _limit():   # pragma: no cover - runs only in the child process
         try:
             import resource
@@ -267,7 +304,7 @@ def run_analysis(code, dataframes, timeout=8, memory_mb=512):
 
     try:
         proc = subprocess.run(
-            [sys.executable, "-c", child],
+            argv,
             capture_output=True, text=True, timeout=timeout,
             preexec_fn=_limit if os.name == "posix" else None,
             env={"PATH": os.environ.get("PATH", ""), "MPLBACKEND": "Agg"},
@@ -277,7 +314,11 @@ def run_analysis(code, dataframes, timeout=8, memory_mb=512):
         return {"ok": False, "error": "analysis timed out", "result": None,
                 "stdout": "", "timeout": True}
     except Exception:
-        # Subprocess unavailable: fall back to in-process (guards still apply).
+        if harden:
+            # Public tier fails CLOSED: never run public code in-process (un-isolated).
+            return {"ok": False, "error": "analysis sandbox unavailable", "result": None,
+                    "stdout": ""}
+        # Gated tier: subprocess unavailable -> fall back to in-process (guards still apply).
         return execute_restricted(code, dataframes)
     finally:
         try:
