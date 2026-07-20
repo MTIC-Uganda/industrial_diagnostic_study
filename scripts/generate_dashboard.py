@@ -1159,19 +1159,11 @@ def treemap_data_json():
                  f'Treemaps must be computed from the PocketBase industries collection.')
 
     agg = _treemaps_from_pocketbase() if USE_POCKETBASE else None
-    if agg:
-        s, d, rs, ds, rss, dss = agg
-        print(f'  Treemaps: {sum(sum(v.values()) for v in d.values())} '
-              f'establishments baked from PocketBase industries collection')
-    else:
-        s   = _guard('treemap_sector.json')
-        d   = _guard('treemap_district.json')
-        rs  = _guard('treemap_region.json')
-        ds  = _guard('treemap_district_sector.json')
-        rss = _guard('treemap_region_subsector.json')
-        dss = _guard('treemap_district_subsector.json')
-        if USE_POCKETBASE:
-            print('  Treemaps: PocketBase industries empty — cannot bake snapshot')
+    if not agg:
+        _guard('industries (empty or unreachable)')
+    s, d, rs, ds, rss, dss = agg
+    print(f'  Treemaps: {sum(sum(v.values()) for v in d.values())} '
+          f'establishments baked from PocketBase industries collection')
     return json.dumps({'s': s, 'd': d, 'rs': rs, 'ds': ds, 'rss': rss, 'dss': dss},
                       ensure_ascii=False)
 

@@ -208,6 +208,14 @@ def test_render_replaces_markers(wired):
     assert '"Bakery"' in out                               # treemap baked snapshot embedded
 
 
+def test_treemap_data_json_exits_when_pocketbase_empty(monkeypatch):
+    monkeypatch.setattr(g, "_treemaps_from_pocketbase", lambda: None)
+    monkeypatch.setattr(g, "USE_POCKETBASE", True)
+    with pytest.raises(SystemExit) as exc:
+        g.treemap_data_json()
+    assert "SINGLE SOURCE VIOLATION" in str(exc.value)
+
+
 def test_render_warns_on_missing_marker(wired, capsys):
     g.load_data()
     g.render("<html>no markers here</html>")

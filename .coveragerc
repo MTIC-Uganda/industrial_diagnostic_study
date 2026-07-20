@@ -1,0 +1,7 @@
+[run]
+# Admin-only one-shot scripts that require live PocketBase credentials —
+# they cannot be unit-tested and are excluded from the coverage gate.
+omit =
+    db/pb_setup.py
+    db/pb_setup_explorer.py
+    db/pb_setup_treemap_views.py
