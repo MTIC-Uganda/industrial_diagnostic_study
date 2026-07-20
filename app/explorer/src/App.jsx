@@ -59,10 +59,10 @@ function TradeBlock({ trade, noDataLabel }) {
       {trade ? (
         <>
           <div style={{ color: "#cbd5e1" }}>
-            Imports — Uganda: <strong>{formatUsd(trade.imports.uganda)}</strong> · EAC: <strong>{formatUsd(trade.imports.eac)}</strong> · Global: <span style={{ color: "#64748b" }}>not yet sourced</span>
+            Imports — Uganda: <strong>{formatUsd(trade.imports.uganda)}</strong> · EAC: <strong>{formatUsd(trade.imports.eac)}</strong> · Global: <strong>{formatUsd(trade.imports.global)}</strong>
           </div>
           <div style={{ color: "#cbd5e1" }}>
-            Exports — Uganda: <strong>{formatUsd(trade.exports.uganda)}</strong> · EAC: <strong>{formatUsd(trade.exports.eac)}</strong>
+            Exports — Uganda: <strong>{formatUsd(trade.exports.uganda)}</strong> · EAC: <strong>{formatUsd(trade.exports.eac)}</strong> · Global: <strong>{formatUsd(trade.exports.global)}</strong>
           </div>
           <div style={{ color: "#64748b", fontSize: "9.5px", marginTop: "4px" }}>{trade.desc}</div>
         </>
@@ -561,8 +561,8 @@ export default function ValueChainExplorer() {
           _liveTradeCache[row.hs4_code] = {
             desc: row.desc,
             year: parseInt(row.year, 10),
-            imports: { uganda: parseFloat(row.imports_uganda), eac: parseFloat(row.imports_eac) },
-            exports: { uganda: parseFloat(row.exports_uganda), eac: parseFloat(row.exports_eac) },
+            imports: { uganda: parseFloat(row.imports_uganda), eac: parseFloat(row.imports_eac), global: row.imports_global ? parseFloat(row.imports_global) : null },
+            exports: { uganda: parseFloat(row.exports_uganda), eac: parseFloat(row.exports_eac), global: row.exports_global ? parseFloat(row.exports_global) : null },
           };
         }
         setLiveVersion(v => v + 1);

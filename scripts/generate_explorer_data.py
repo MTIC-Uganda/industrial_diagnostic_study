@@ -103,10 +103,11 @@ def build_categories(rows):
 
 
 def _trade_block(r):
+    def _g(key): return float(r[key]) if r.get(key) not in (None, '', 0) else None
     return {
         'desc': r['desc'], 'year': int(float(r['year'])),
-        'imports': {'uganda': float(r['imports_uganda']), 'eac': float(r['imports_eac'])},
-        'exports': {'uganda': float(r['exports_uganda']), 'eac': float(r['exports_eac'])},
+        'imports': {'uganda': float(r['imports_uganda']), 'eac': float(r['imports_eac']), 'global': _g('imports_global')},
+        'exports': {'uganda': float(r['exports_uganda']), 'eac': float(r['exports_eac']), 'global': _g('exports_global')},
     }
 
 
