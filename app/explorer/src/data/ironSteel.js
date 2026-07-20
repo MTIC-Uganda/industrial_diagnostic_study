@@ -6388,6 +6388,7 @@ const INPUT_KEYWORD_HS4 = [
   { pattern: /\bcoal\b/i,                                                                       hs4: "2701", essentiality:  7, scarcity: 10 },
   { pattern: /\bnatural gas\b/i,                                                                hs4: "2711", essentiality:  8, scarcity:  9 },
   { pattern: /\bwelding.*consumable|\bweld.*wire\b|\bsubmerged arc\b/i,                        hs4: "8311", essentiality:  6, scarcity:  7 },
+  { pattern: /\bcold-?rolled\s+(coil|sheet)\b|\bCRC\b|\bbase substrate\b/i,                  hs4: "7209", essentiality: 10, scarcity:  9 },
 ];
 
 function matchInputTrade(text) {
