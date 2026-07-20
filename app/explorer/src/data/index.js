@@ -76,6 +76,16 @@ function matchInputPhase(text) {
   return null;
 }
 
+// Returns { essentiality, scarcity, weight } for the first chain that matches,
+// or null when no keyword rule covers this input text.
+function getInputWeight(text) {
+  for (const chain of ALL_CHAINS) {
+    const result = chain.getInputWeight?.(text);
+    if (result) return result;
+  }
+  return null;
+}
+
 export {
   PRODUCTS,
   CATEGORIES,
@@ -84,6 +94,7 @@ export {
   RAW_MATERIAL_TRADE,
   matchInputTrade,
   matchInputPhase,
+  getInputWeight,
   PRODUCT_FIRMS,
   PHASE_PRODUCERS,
   PHASE_SOURCE,

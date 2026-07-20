@@ -2099,19 +2099,45 @@ function initMap(){
     if(!chainName){panel.style.display='none';return;}
     const cf=FACTORIES.filter(f=>f.chain===chainName);
     const emps=cf.map(f=>parseInt((f.employees||'').replace(/[^0-9]/g,''))).filter(n=>!isNaN(n)&&n>0);
+
+    // Capacity signal: parse installed capacity values (strip unit, keep number)
+    const capVals=cf.map(f=>{
+      const s=(f.capacity_installed||'').replace(/,/g,'');
+      const m=s.match(/[\d]+(\.\d+)?/);
+      return m?parseFloat(m[0]):NaN;
+    }).filter(n=>!isNaN(n)&&n>0);
+    const capUnit=cf.map(f=>f.capacity_installed||'').find(s=>s.includes('t/'))||'';
+    const unitLabel=capUnit.includes('t/')?' t/yr':'';
+    const capTotal=capVals.length?capVals.reduce((a,b)=>a+b,0):null;
+
+    // Iron & Steel capacity gap note (hardcoded from NDP IV targets until PocketBase field populated)
+    const isIronSteel=chainName==='Iron & Steel';
+    const gapNote=isIronSteel?`
+      <div style="margin:10px 16px 0;padding:10px 12px;background:#fff8e1;border-left:3px solid #f59e0b;border-radius:0 4px 4px 0;font-size:11px;line-height:1.5">
+        <div style="font-weight:700;color:#92400e;margin-bottom:3px">⚠️ Local capacity signal</div>
+        <div style="color:#78350f">Identified facilities above represent Uganda's <strong>existing</strong> steel production base.
+        NDP IV targets significant capacity expansion — populate <em>current_capacity</em> and <em>target_capacity</em>
+        in PocketBase <code>explorer_product_firms</code> to show the gap here.</div>
+      </div>`:'' ;
+
     panel.style.display='block';
     panel.innerHTML=`
       <div style="background:${col};color:#fff;padding:14px 16px;font-size:12px;font-weight:700;letter-spacing:.5px;text-transform:uppercase">${chainName}</div>
-      <div style="padding:10px 16px 4px;display:flex;gap:20px;font-size:12px;border-bottom:1px solid #f0f0f0">
+      <div style="padding:10px 16px 4px;display:flex;gap:16px;flex-wrap:wrap;font-size:12px;border-bottom:1px solid #f0f0f0">
         <div><span style="color:#999">Facilities</span> <strong style="color:${col}">${cf.length}</strong></div>
         ${emps.length?`<div><span style="color:#999">Employees</span> <strong style="color:${col}">&gt;${emps.reduce((a,b)=>a+b,0).toLocaleString()}</strong></div>`:''}
+        ${capTotal?`<div><span style="color:#999">Installed cap.</span> <strong style="color:${col}">${capTotal.toLocaleString()}${unitLabel}</strong></div>`:''}
       </div>
-      <div style="overflow-y:auto;max-height:480px">
+      ${gapNote}
+      <div style="overflow-y:auto;max-height:${isIronSteel?'380':'480'}px">
         ${cf.map((f,i)=>`
           <div data-fi="${i}" style="display:flex;align-items:center;gap:10px;padding:8px 16px;border-bottom:1px solid #f5f5f5;cursor:pointer;transition:background .12s"
             onmouseover="this.style.background='#f8f9ff'" onmouseout="this.style.background=''">
             <span style="width:22px;height:22px;border-radius:50%;background:${col};color:#fff;display:flex;align-items:center;justify-content:center;font-size:${i>=9?9:10}px;font-weight:700;flex-shrink:0">${i+1}</span>
-            <span style="font-size:12px;color:#333;line-height:1.3">${f.name}</span>
+            <div style="min-width:0">
+              <div style="font-size:12px;color:#333;line-height:1.3">${f.name}</div>
+              ${f.capacity_installed&&f.capacity_installed!=='—'?`<div style="font-size:10px;color:#888;margin-top:1px">Cap: ${f.capacity_installed}</div>`:''}
+            </div>
           </div>`).join('')}
       </div>`;
     panel.querySelectorAll('[data-fi]').forEach(chip=>{

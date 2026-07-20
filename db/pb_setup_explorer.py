@@ -415,6 +415,7 @@ replace_all('explorer_input_keywords', [
     {
         'target_type': r['target_type'], 'pattern_source': r['pattern_source'],
         'pattern_flags': r['pattern_flags'], 'target_value': r['target_value'],
+        'essentiality': r.get('essentiality'), 'scarcity': r.get('scarcity'),
         'display_order': r['display_order'],
     } for r in input_keywords_data
 ])
