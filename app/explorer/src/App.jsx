@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { PRODUCTS, CATEGORIES, TRADE_HS4, PRODUCT_HS4, RAW_MATERIAL_TRADE, matchInputTrade, matchInputPhase, PRODUCT_FIRMS, PHASE_PRODUCERS, PHASE_SOURCE, RAW_MATERIAL_PHASE } from "./data/index.js";
+import { PRODUCTS, CATEGORIES, TRADE_HS4, PRODUCT_HS4, RAW_MATERIAL_TRADE, matchInputTrade, matchInputPhase, getInputWeight, PRODUCT_FIRMS, PHASE_PRODUCERS, PHASE_SOURCE, RAW_MATERIAL_PHASE } from "./data/index.js";
 
 // Resolve PocketBase URL from the page host so the same HTML works on staging and prod.
 function pbUrl() {
@@ -27,13 +27,14 @@ function resolveRawTrade(name) {
 // Structure cache: populated by live PocketBase fetch; null fields fall back to
 // the bundled static imports (offline / before the fetch completes).
 const _liveStructure = {
-  products: null,      // map slug → product object
-  categories: null,    // array of category objects
-  productFirms: null,  // map product_slug → firms entry
-  phaseProducers: null,// map phase key → producers entry
-  productHs4: null,    // map slug → hs4 string
-  matchTrade: null,    // function(text) → trade object | null
-  matchPhase: null,    // function(text) → phase entry | null
+  products: null,          // map slug → product object
+  categories: null,        // array of category objects
+  productFirms: null,      // map product_slug → firms entry
+  phaseProducers: null,    // map phase key → producers entry
+  productHs4: null,        // map slug → hs4 string
+  matchTrade: null,        // function(text) → trade object | null
+  matchPhase: null,        // function(text) → phase entry | null
+  getKeywordWeight: null,  // function(text) → { essentiality, scarcity, weight } | null
 };
 
 function _resolveProducts()      { return _liveStructure.products      || PRODUCTS; }
@@ -42,6 +43,7 @@ function _resolveProductFirms()  { return _liveStructure.productFirms  || PRODUC
 function _resolvePhaseProducers(){ return _liveStructure.phaseProducers|| PHASE_PRODUCERS; }
 function _resolveProductHs4(slug){ return (_liveStructure.productHs4   || PRODUCT_HS4)[slug] || null; }
 function _resolveMatchPhase(text){ return _liveStructure.matchPhase ? _liveStructure.matchPhase(text) : matchInputPhase(text); }
+function _resolveGetInputWeight(text){ return _liveStructure.getKeywordWeight ? _liveStructure.getKeywordWeight(text) : getInputWeight(text); }
 
 // Product-as-input fallback: if the text exactly names a product (e.g. "Cold Rolled Coil"
 // appearing as an input), resolve its trade data via that product's HS code.
@@ -267,9 +269,35 @@ function RawMaterialDetailPanel({ item, onClose }) {
 function InputDetailPanel({ text, onClose }) {
   const trade = _resolveMatchTrade(text);
   const phase = _resolveMatchPhase(text);
+  const wt = _resolveGetInputWeight(text);
+  const status = inputStatus(text);
   const hasData = trade || phase;
   return (
     <SidePanel title={text} onClose={onClose}>
+      {/* Priority signal */}
+      <div style={{ display: "flex", alignItems: "center", gap: "8px", marginTop: "6px", marginBottom: "4px" }}>
+        <span style={{ width: "10px", height: "10px", borderRadius: "50%", backgroundColor: STATUS_COLOR[status], flexShrink: 0 }} />
+        <span style={{ fontSize: "10px", color: STATUS_COLOR[status], fontWeight: 700 }}>
+          {status === "green" ? "Domestic production confirmed" :
+           status === "orange" ? "Traded — no domestic producer identified" :
+           status === "red" ? "Capacity gap — must build domestically" :
+           "Process utility (not HS-traded)"}
+        </span>
+      </div>
+      {wt && (
+        <div style={{ backgroundColor: "#1e293b", borderRadius: "6px", padding: "8px 10px", marginBottom: "6px", fontSize: "10.5px" }}>
+          <div style={{ color: "#93c5fd", fontWeight: 700, marginBottom: "4px" }}>
+            ⚖️ Priority score: <strong style={{ color: "#fff" }}>{wt.weight}/100</strong>
+          </div>
+          <div style={{ display: "flex", gap: "16px", color: "#94a3b8" }}>
+            <span>Essentiality: <strong style={{ color: "#e2e8f0" }}>{wt.essentiality}/10</strong></span>
+            <span>Domestic scarcity: <strong style={{ color: "#e2e8f0" }}>{wt.scarcity}/10</strong></span>
+          </div>
+          <div style={{ color: "#475569", fontSize: "9.5px", marginTop: "4px" }}>
+            score = essentiality × scarcity — higher = address first
+          </div>
+        </div>
+      )}
       {hasData ? (
         <>
           <div style={{ fontWeight: 700, color: "#93c5fd", marginTop: "8px" }}>🏭 Industries &amp; capacity</div>
@@ -338,7 +366,14 @@ function ItemList({ items, color, onItemClick }) {
   const isInputs = !!onItemClick;
 
   const displayItems = isInputs
-    ? [...(items || [])].sort((a, b) => STATUS_ORDER[inputStatus(a)] - STATUS_ORDER[inputStatus(b)])
+    ? [...(items || [])].sort((a, b) => {
+        const sa = STATUS_ORDER[inputStatus(a)], sb = STATUS_ORDER[inputStatus(b)];
+        if (sa !== sb) return sa - sb;
+        // Within same status: higher essentiality × scarcity weight first
+        const wa = _resolveGetInputWeight(a)?.weight ?? 0;
+        const wb = _resolveGetInputWeight(b)?.weight ?? 0;
+        return wb - wa;
+      })
     : (items || []);
 
   return (
@@ -618,6 +653,18 @@ export default function ValueChainExplorer() {
         for (const kw of keywords) {
           if (kw.target_type !== 'phase') continue;
           try { if (new RegExp(kw.pattern_source, kw.pattern_flags || '').test(text)) return phaseProducers[kw.target_value] || null; } catch {}
+        }
+        return null;
+      };
+      _liveStructure.getKeywordWeight = function(text) {
+        for (const kw of keywords) {
+          try {
+            if (new RegExp(kw.pattern_source, kw.pattern_flags || '').test(text)) {
+              if (kw.essentiality && kw.scarcity)
+                return { essentiality: kw.essentiality, scarcity: kw.scarcity, weight: kw.essentiality * kw.scarcity };
+              return null;
+            }
+          } catch {}
         }
         return null;
       };

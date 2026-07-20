@@ -6363,27 +6363,31 @@ const PRODUCT_FIRMS = {
 
 // Keyword -> HS-4 group, for matching free-text "Inputs" tab line items
 // to the same trade data used for raw materials and products above.
+// essentiality (0–10): how critical this input is to the production process.
+// scarcity     (0–10): how unavailable it is domestically in Uganda.
+// weight = essentiality × scarcity — higher = must address first.
+// Derived from the Iron & Steel value-chain report and ITC TradeMap 2024 data.
 const INPUT_KEYWORD_HS4 = [
-  { pattern: /\bscrap\b/i, hs4: "7204" },
-  { pattern: /\b(slab|billet|bloom|semi-finished)\b/i, hs4: "7207" },
-  { pattern: /\bzinc ingots?\b|\bzinc \(43/i, hs4: "7901" },
-  { pattern: /\baluminu?m\b.*(bath|additive|alloy bath)|(bath|alloy bath).*\baluminu?m\b/i, hs4: "7601" },
-  { pattern: /\btin anodes?\b/i, hs4: "8001" },
-  { pattern: /\bferroalloy/i, hs4: "7202" },
-  { pattern: /\bgraphite electrodes?\b/i, hs4: "8545" },
-  { pattern: /\blimestone\b/i, hs4: "2521" },
-  { pattern: /\blime\b/i, hs4: "2522" },
-  { pattern: /\bchromic acid\b|\bchromium salts?\b/i, hs4: "2819" },
-  { pattern: /\btitanium dioxide\b|\bpigments?\b|\bTiO2\b/i, hs4: "3206" },
-  { pattern: /\btopcoat\b|\bprimer coat\b|\blacquer\b/i, hs4: "3208" },
-  { pattern: /\bargon gas\b|\boxygen\b|\bnitrogen.*anneal\b|\binert gas.*anneal\b/i, hs4: "2804" },
-  { pattern: /\bpickling acid|\bHCl\b|\bhydrochloric acid\b/i, hs4: "2806" },
-  { pattern: /\bsulphuric acid\b|\bsulfuric acid\b|\bH2SO4\b/i, hs4: "2807" },
-  { pattern: /\biron ore\b|\bore pellets?\b|\biron burden\b|\bore fines\b/i, hs4: "2601" },
-  { pattern: /\bmetallurgical coke\b|\bcoke breeze\b|\bcoke \/ coal\b|\bcoal \/ coke\b|\bPCI\b/i, hs4: "2704" },
-  { pattern: /\bcoal\b/i, hs4: "2701" },
-  { pattern: /\bnatural gas\b/i, hs4: "2711" },
-  { pattern: /\bwelding.*consumable|\bweld.*wire\b|\bsubmerged arc\b/i, hs4: "8311" },
+  { pattern: /\bscrap\b/i,                                                                      hs4: "7204", essentiality: 10, scarcity:  6 },
+  { pattern: /\b(slab|billet|bloom|semi-finished)\b/i,                                          hs4: "7207", essentiality:  9, scarcity:  9 },
+  { pattern: /\bzinc ingots?\b|\bzinc \(43/i,                                                   hs4: "7901", essentiality:  9, scarcity: 10 },
+  { pattern: /\baluminu?m\b.*(bath|additive|alloy bath)|(bath|alloy bath).*\baluminu?m\b/i,     hs4: "7601", essentiality:  8, scarcity: 10 },
+  { pattern: /\btin anodes?\b/i,                                                                hs4: "8001", essentiality:  7, scarcity: 10 },
+  { pattern: /\bferroalloy/i,                                                                   hs4: "7202", essentiality:  7, scarcity:  9 },
+  { pattern: /\bgraphite electrodes?\b/i,                                                       hs4: "8545", essentiality: 10, scarcity: 10 },
+  { pattern: /\blimestone\b/i,                                                                  hs4: "2521", essentiality:  6, scarcity:  3 },
+  { pattern: /\blime\b/i,                                                                       hs4: "2522", essentiality:  7, scarcity:  5 },
+  { pattern: /\bchromic acid\b|\bchromium salts?\b/i,                                          hs4: "2819", essentiality:  6, scarcity: 10 },
+  { pattern: /\btitanium dioxide\b|\bpigments?\b|\bTiO2\b/i,                                   hs4: "3206", essentiality:  7, scarcity: 10 },
+  { pattern: /\btopcoat\b|\bprimer coat\b|\blacquer\b/i,                                       hs4: "3208", essentiality:  8, scarcity:  7 },
+  { pattern: /\bargon gas\b|\boxygen\b|\bnitrogen.*anneal\b|\binert gas.*anneal\b/i,            hs4: "2804", essentiality:  8, scarcity:  4 },
+  { pattern: /\bpickling acid|\bHCl\b|\bhydrochloric acid\b/i,                                 hs4: "2806", essentiality:  8, scarcity:  8 },
+  { pattern: /\bsulphuric acid\b|\bsulfuric acid\b|\bH2SO4\b/i,                               hs4: "2807", essentiality:  6, scarcity:  8 },
+  { pattern: /\biron ore\b|\bore pellets?\b|\biron burden\b|\bore fines\b/i,                   hs4: "2601", essentiality:  9, scarcity:  7 },
+  { pattern: /\bmetallurgical coke\b|\bcoke breeze\b|\bcoke \/ coal\b|\bcoal \/ coke\b|\bPCI\b/i, hs4: "2704", essentiality: 9, scarcity: 10 },
+  { pattern: /\bcoal\b/i,                                                                       hs4: "2701", essentiality:  7, scarcity: 10 },
+  { pattern: /\bnatural gas\b/i,                                                                hs4: "2711", essentiality:  8, scarcity:  9 },
+  { pattern: /\bwelding.*consumable|\bweld.*wire\b|\bsubmerged arc\b/i,                        hs4: "8311", essentiality:  6, scarcity:  7 },
 ];
 
 function matchInputTrade(text) {
@@ -6393,9 +6397,9 @@ function matchInputTrade(text) {
 
 // Keyword -> verified Phase, for the same free-text "Inputs" line items.
 const INPUT_KEYWORD_PHASE = [
-  { pattern: /\bsponge iron\b|\bpig iron\b|\bDRI\b|\bHBI\b/i, phase: "II" },
-  { pattern: /\bscrap\b|\bliquid steel\b/i, phase: "III" },
-  { pattern: /\b(slab|billet|bloom)\b/i, phase: "IV" },
+  { pattern: /\bsponge iron\b|\bpig iron\b|\bDRI\b|\bHBI\b/i, phase: "II",  essentiality: 9, scarcity: 10 },
+  { pattern: /\bscrap\b|\bliquid steel\b/i,                    phase: "III", essentiality: 10, scarcity: 6 },
+  { pattern: /\b(slab|billet|bloom)\b/i,                       phase: "IV",  essentiality: 9, scarcity:  8 },
 ];
 
 function matchInputPhase(text) {
@@ -6403,4 +6407,14 @@ function matchInputPhase(text) {
   return hit ? PHASE_PRODUCERS[hit.phase] : null;
 }
 
-export { PRODUCTS, CATEGORIES, TRADE_HS4, PRODUCT_HS4, RAW_MATERIAL_TRADE, matchInputTrade, matchInputPhase, PRODUCT_FIRMS, PHASE_PRODUCERS, PHASE_SOURCE, RAW_MATERIAL_PHASE };
+// Returns { essentiality, scarcity, weight } for a matched input text, or null.
+// weight = essentiality × scarcity — surface the highest-weight gaps first.
+function getInputWeight(text) {
+  const h4 = INPUT_KEYWORD_HS4.find(k => k.pattern.test(text));
+  if (h4) return { essentiality: h4.essentiality, scarcity: h4.scarcity, weight: h4.essentiality * h4.scarcity };
+  const hp = INPUT_KEYWORD_PHASE.find(k => k.pattern.test(text));
+  if (hp) return { essentiality: hp.essentiality, scarcity: hp.scarcity, weight: hp.essentiality * hp.scarcity };
+  return null;
+}
+
+export { PRODUCTS, CATEGORIES, TRADE_HS4, PRODUCT_HS4, RAW_MATERIAL_TRADE, matchInputTrade, matchInputPhase, getInputWeight, PRODUCT_FIRMS, PHASE_PRODUCERS, PHASE_SOURCE, RAW_MATERIAL_PHASE };
