@@ -50,9 +50,23 @@ def test_hardened_argv_noops_without_tools():
     assert only_unshare[:3] == ["/u", "--net", "--"] and only_unshare[3:] == base
 
 
-def test_run_analysis_harden_executes_when_tools_absent():
-    # On a host without unshare/setpriv (e.g. macOS CI runner), harden falls back to a
-    # plain subprocess and still runs — proving the harden path doesn't break execution.
+def test_run_analysis_harden_runs_when_tools_absent(monkeypatch):
+    # Deterministic across platforms: force "no unshare/setpriv" so harden uses a plain
+    # subprocess and still executes (proving the harden branch doesn't break execution).
+    # (On a host WITH the tools but no privilege, harden fails closed by design; on the
+    # prod box, which runs as root, unshare --net succeeds and blocks egress.)
+    monkeypatch.setattr("shutil.which", lambda name: None)
     res = asb.run_analysis("result = 6 * 7", {}, timeout=10, harden=True)
     assert res["ok"] is True
     assert res["result"] == 42
+
+
+def test_run_analysis_harden_fails_closed_when_sandbox_cannot_spawn(monkeypatch):
+    # If the hardened child cannot spawn, the public tier must NOT fall back in-process.
+    monkeypatch.setattr("shutil.which", lambda name: "/bin/false")  # bogus wrapper path
+    import subprocess as _sp
+    monkeypatch.setattr(_sp, "run",
+                        lambda *a, **k: (_ for _ in ()).throw(OSError("no exec")))
+    res = asb.run_analysis("result = 1", {}, timeout=5, harden=True)
+    assert res["ok"] is False
+    assert res["result"] is None
