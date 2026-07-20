@@ -10,7 +10,40 @@ The shared work queue, by owner. Jerome's feedback that needs a code change land
 section; data corrections go through the pipeline (Ask MIDD / re-ingestion), not here. Any agent
 reads this to know what to work on next. Tick items as they land.
 
-Last updated: 2026-07-20 (2026-07-20 catch-up: map vs Explorer consistency + PocketBase live-fetch)
+Last updated: 2026-07-21 (big-picture strategy: Iron & Steel done-all-the-way for the demo)
+
+## Context for everything below (2026-07-21 strategy call)
+
+We are building toward a high-stakes external demonstration to a senior economist audience that rewards precision (trace every decision to a specific gap) over breadth. The demo needs ONE value chain, **Iron & Steel**, done fully and impressively; one chain done properly makes the case to replicate the rest. Complete one thing before starting the next. Full minutes: [meeting_transcripts/2026_07_21_big_picture_strategy.md](../meeting_transcripts/2026_07_21_big_picture_strategy.md).
+
+## Solomon (from the 2026-07-21 strategy call)
+
+- [ ] **Focus only on Iron & Steel and finish it end to end** before any other chain. Methodical, close one item at a time.
+- [ ] Finish the live-data refresh work already in progress (treemap views, etc.).
+- [ ] **Map:** click a product to open its dropdown with info populated, fetched live; where data is missing, make it fetch.
+- [ ] **Local-capacity signal** on map + Explorer: show where local capacity exists and where it is a gap (capture what is available; where absent, show the absence).
+- [ ] **Explorer inputs: hover to click.** A click opens a closable side panel (officials want click, look, move). Hover proved awkward in the demo.
+- [ ] **Traffic-light colour coding** (red / orange / green, possibly up to 5 levels) on the bullets/dots, worst first. Red = no domestic production, capacity must be built.
+- [ ] **Weight inputs by essentiality × scarcity** (like risk = impact × probability): essential-and-unavailable ranks highest and red; scarce-but-importable (e.g. flux acids) ranks lower. Use the AI to help derive it.
+- [ ] **Product-as-input consistency:** cold rolled coil is a product AND an input on the same HS code; it must carry its HS-coded trade data on the input side too (sources need not repeat).
+- [ ] **Genuine process utilities** (steam, water, energy) with no trade data: show an explanatory pop-up saying what it is and why no data, rather than nothing.
+- [ ] **Capacity-vs-target traceability** on inputs: show current capacity against the capacity needed at the target state, so the gap is comparable.
+- [ ] Research the data-architecture options (aggregation engine vs backend layer vs DB change) from a delivery standpoint.
+- [ ] Join the short evening check-in calls this week.
+
+## Hillary (from the 2026-07-21 strategy call)
+
+- [ ] **Decide the data-architecture direction** (aggregation engine on PocketBase / a backend layer / migrate to Postgres or Supabase), on delivery and simplicity. Continue on PocketBase this phase; plan a clean migration path. (See [ADR-024](adr/ADR-024-browser-direct-pocketbase-fetch.md).)
+- [ ] Produce **scaling estimates** (peak concurrent readers, read replicas, cloud scale-on-demand) so scale is planned, not reactive.
+- [ ] **Ask MIDD:** build the unanswered-question logging loop (Jerome logs, we build a skill per class), fix the sector-grouping gap, keep it answering only from PocketBase.
+- [ ] Onboard the growing team: add Baker to the WhatsApp group, give Benjamin read access, slot the intern into narrator + testing, prepare for William & Haifa, keep access read-only and scoped for now.
+
+## Jerome (from the 2026-07-21 strategy call)
+
+- [ ] Send Hillary the links/contacts for **Benjamin** and the **intern**.
+- [ ] **Log every question Ask MIDD fails to answer** (the backlog for new skills).
+- [ ] Provide corrected/improved data content where accuracy was flagged (e.g. the cold rolled coil source text).
+- [ ] Keep the team posted on the timing of the demonstration to the Permanent Secretary.
 
 ## Solomon (from the 2026-07-20 catch-up)
 
@@ -18,7 +51,7 @@ Last updated: 2026-07-20 (2026-07-20 catch-up: map vs Explorer consistency + Poc
 - [ ] Make the **map birds-eye only**: inputs leading to products / product stages. **Strip technologies and labour off the map** (those live in the Explorer detail).
 - [ ] Make all Explorer pages **fetch live from PocketBase**. Example: cold-rolled coil shows data in one view but "no HS-code trade data fetched yet" in another. A refresh must re-fetch, never fetch-once-render-forever. If the DB genuinely has no data, say so, but still fetch. Confirm whether pages currently fetch live or cache, then alert Jerome to review the structure.
 - [ ] Only **after** the structure is agreed and fetching is live, do the **data-correctness pass** (fix wrong values; the structure is otherwise good).
-- [ ] Dedicate close to full-time to MIDD this week (Jerome wants the assignment closed this week for July payment).
+- [ ] Dedicate close to full-time to MIDD this week (Jerome wants the assignment closed this week).
 
 ## Hillary (from the 2026-07-20 catch-up)
 
@@ -27,7 +60,7 @@ Last updated: 2026-07-20 (2026-07-20 catch-up: map vs Explorer consistency + Poc
 ## Jerome (from the 2026-07-20 catch-up)
 
 - [ ] Review the structure once Solomon signals the map/Explorer alignment and live fetching are done.
-- [ ] Process the **July payment**; wants the assignment fully closed this week.
+- [ ] Wants the assignment fully closed this week.
 
 ## Solomon (from the 2026-07-10 catch-up)
 
@@ -39,7 +72,7 @@ Last updated: 2026-07-20 (2026-07-20 catch-up: map vs Explorer consistency + Poc
 ## Hillary (from the 2026-07-10 catch-up)
 
 - [ ] Get Solomon's agent onto **backend monitoring**; keep closing pipeline holes as they surface.
-- [ ] Once the ministers formalize the **all-industries mapping** ask: design the field data-collection tool as a **PWA module** of the existing app (new orchestrated source; structured input, so no AI cleaning layer needed). Budget as its own module, tightly coupled.
+- [ ] Once the ministers formalize the **all-industries mapping** ask: design the field data-collection tool as a **PWA module** of the existing app (new orchestrated source; structured input, so no AI cleaning layer needed). Scope it as its own module, tightly coupled.
 - [ ] Line up **Dennis** to stress-test Ask MIDD (give him a test suite).
 
 ## Jerome (from the 2026-07-10 catch-up)

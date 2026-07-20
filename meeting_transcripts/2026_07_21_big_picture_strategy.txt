@@ -1,0 +1,658 @@
+MIDD big-picture / strategy meeting, 2026-07-21. Jerome, Solomon, Hillary. Whole-project mindset: direction, priorities, what the platform is ultimately for.
+
+============================================================
+PASTE RAW TRANSCRIPT BELOW THIS LINE
+============================================================
+
+Hillary Arinda
+So anyway two months but the Moments they test it and they are very very comfortable with it. right Trust me nobody. when you come to analyze this where we are heading as Uganda
+Jerome Nuwabaasa
+Hello. Hello.
+Hillary Arinda
+give me five minutes as we wait for Solomon
+Jerome Nuwabaasa
+pretty
+Hillary Arinda
+Sorry, I was incidentally on another call apologist is Solomon here. It's Solomon is not here. zero, can you
+Jerome Nuwabaasa
+I don't think yeah, let me call you.
+Hillary Arinda
+But it's busy pushing you can see the active.
+Hi, I'm transcribing this call with my Tactiq AI Extension. https://tactiq.io/r/transcribing
+the meeting pretty much pressure
+Jerome Nuwabaasa
+I think I that's that's what I'm suspecting solo.
+Hillary Arinda
+Just pushing okay.
+Jerome Nuwabaasa
+Ala Hey, we are waiting for you.
+Hillary Arinda
+Otherwise, hey what's going on. I had the meeting with Baker today mmm.
+Jerome Nuwabaasa
+okay
+Hillary Arinda
+Yeah, it went well. Yeah, that's all. I will see Let's Hear we're going from here. I've added him to the repo. I'm going to add WhatsApp group and then we'll take it out from there.
+Jerome Nuwabaasa
+okay and
+Hillary Arinda
+yeah If you give me the other guys at the Repos I've not yet added them.
+Jerome Nuwabaasa
+Actually, but with red rights.
+Hillary Arinda
+Yeah, only it yes. And current only rooms docks because that's what we are currently working on so I think that's what I'm giving them.
+Jerome Nuwabaasa
+Yeah, everything is in my expectation is in women's books. Yeah for this year.
+Hillary Arinda
+the animated okay
+Jerome Nuwabaasa
+Yeah, yeah. That's the animated That's My Brother by the way.
+Hillary Arinda
+pleasure
+Jerome Nuwabaasa
+yeah We'll see so what he supposed to do is whatever is in that. I think I've told you about this whatever is in there. He supposed to kind of like develop a
+Hillary Arinda
+He's called mukama.
+Jerome Nuwabaasa
+either and Yeah, no, it's called. It's called tarinika Benjamin but the original name was Mohammed arindeka.
+Hillary Arinda
+Nice name like what are the full name?
+Jerome Nuwabaasa
+yeah, that was a full name, but it was shortened eventually now fishery is called Benjamin yeah
+Hillary Arinda
+And give him read access.
+Jerome Nuwabaasa
+okay
+Hillary Arinda
+Only read they there is three age recommended for contributors who need to manage issues and pull requests without right access. Is it going to manage any pull requests no.
+Jerome Nuwabaasa
+Requests he might okay, so this is the thing this is his role, so you you
+Hillary Arinda
+Yeah, I think really might.
+Jerome Nuwabaasa
+decide. Whatever you guys are working on. His rule is to kind of work on the graphics for explainers basically.
+Hillary Arinda
+Then where does he keep his work?
+Jerome Nuwabaasa
+I don't know but I like all I can say is that if like a stage he needs to design graphics that explain it in a very simple way to like commissioner to make it easier for the commissioner to understand. Yeah, so he's he's supposed to design things that are for lay people to appreciate.
+Hillary Arinda
+Like storyboarding yes, yes.
+Jerome Nuwabaasa
+Yeah, so he does to rebooting but he can even make an animation you can yeah, that's his job. His job is to make sure that it's because if you push if you give. That's whatever you've developed like right now if you give it to the commission and we'll be very difficult for him to understand.
+Hillary Arinda
+I mean, it's a difficult for us ourselves working on it.
+Jerome Nuwabaasa
+Yeah, so that's why he has to keep and the idea is that he designs something and he can continuously improve it also on your side as you improve it now. They understanding is that if he has a clue if he's using Claude okay, let's say clothing this case. Claw disabled to explain to him. That this is how this works. And then he designs it and then he because he also used his.
+Hillary Arinda
+Okay, so if he has his own environment that he reduces his fine if it's not going to keep his work here then you can use whatever environment he reads and then what he does with it. Is it can be?
+Jerome Nuwabaasa
+Actually part of part of like ideally whatever he designs you should look at and say this makes sense. Yeah, you should look at it and see this mix.
+Hillary Arinda
+Sharing it for us to see. I think it makes sense for us to create. In okay, that's fast to read let him fast read canole is change this.
+Jerome Nuwabaasa
+The idea is that even right now as it is? He supposed to present it as it is right now because I've told him right now the moment you get rid rates start working. Don't worry that the thing is not yet final. If they make a change adjust whatever you've presented to to fit through to include the change.
+Hillary Arinda
+okay
+Jerome Nuwabaasa
+Yeah, but basically for you your explaining whatever is happening to a layperson, that's it. Yeah.
+Hillary Arinda
+mmm
+Jerome Nuwabaasa
+Okay, then I have an intern. I don't know what role he can play. But you can he can also be assigned. Things you can be assigned to run around and do things by the way.
+Hillary Arinda
+that's You know those games will Hillside when it comes to testing we need as many
+Jerome Nuwabaasa
+so I lost
+Hillary Arinda
+testers.
+Jerome Nuwabaasa
+okay
+Hillary Arinda
+It's accessible if any application really depends on how well it's tested.
+Jerome Nuwabaasa
+yeah, but I have him up to the
+Hillary Arinda
+so if
+Jerome Nuwabaasa
+By the way, I have him up to win. maybe having up to the end of July
+Hillary Arinda
+I'm going to do.
+Jerome Nuwabaasa
+No, wait, do I have him up to the end of July in the world best? I need to ask him. I think I have him up to the end of August
+Hillary Arinda
+If it's end of ocast.
+Jerome Nuwabaasa
+You know he's an intern so interns basically is going back to University so is basically but he can remain on even when it goes back. Because this is good for him to learn.
+Hillary Arinda
+So, what is his field for example?
+Jerome Nuwabaasa
+yeah He's studying computer science from mistake. Yeah, so this is kind of his field, but he he hasn't so what is interesting is a he hasn't focused his trying to do
+Hillary Arinda
+you can
+Jerome Nuwabaasa
+everything.
+Hillary Arinda
+That's fine.
+Jerome Nuwabaasa
+which is no that's not fine, Hillary
+Hillary Arinda
+I mean he's a student.
+Jerome Nuwabaasa
+Oh yeah, precisely at this stage. He hasn't picked an interest so and I think the reason he has been picked an interest is that it has a Fist a real challenge in problem to then appreciate a specialty and say oh, it's very good to be good at something like this because this actually solves.
+Hillary Arinda
+But right now. We're computer science has reach you need to wear many hats man. At least let him as long as he's fitting his in the Halls of 12 development life cycle. That's okay as long as it's not outside the stlc. It's okay, you can
+Jerome Nuwabaasa
+So right now.
+Hillary Arinda
+start by yeah.
+Jerome Nuwabaasa
+What do I do with him?
+Hillary Arinda
+Let him be a it was that role for was it narrator or something? Do you remember that?
+Jerome Nuwabaasa
+narrator ratels
+Hillary Arinda
+Because about right. Yes, that's right greater. We can work closely together. Basically because he's all over the place so it becomes easy. When we actually give him a tasks to resettle and so he joins the team right
+Jerome Nuwabaasa
+Yes.
+Hillary Arinda
+now, then we need help. Let's say research on something or to work on a small mini task. We just see how wax on it.
+Jerome Nuwabaasa
+okay okay All right, I'll also send you his his link.
+Hillary Arinda
+yeah
+Jerome Nuwabaasa
+Then the rest are clearly just re-rates once we've set them up out. They don't need the they should be two more that's William and Haifa the main we start engaging with the people from Ministry of water will open up several others that need to have retrained but that's after this has been done and we presented to the miss. yeah Okay, so low, are you here? okay since you are late leaders in a Prayer
+Solomon Ariho
+rumble Souls for our prayer Having father one. Thank you for today. I'm thank you for the gift of life. I think if everything you've done for us and if one around us. Having father and thank you for this opportunity for this meeting invite you to this meeting leaders with everything we do before your name having father. I invite you to. Bless us bless our families bless our country and let everything we do in this project. We are running before the success of Us family than the country at large Jesus is named and May
+Hillary Arinda
+Hey man.
+Jerome Nuwabaasa
+amen
+Hillary Arinda
+Oh mama.
+Solomon Ariho
+I got
+Hillary Arinda
+hey
+Solomon Ariho
+Okay, thank you.
+Jerome Nuwabaasa
+all right guys, so and no I called because I have an update but this update should is expected to create much more pressure Solomon Because I had a meeting today solemon I had the meeting with Jacqueline baccaru.
+Hillary Arinda
+Who is that?
+Jerome Nuwabaasa
+She is a senior PhD economist who does a lot of research for government. [Commercial-relationship and organisation details removed. This repo does not record finances or commercial terms.]
+Solomon Ariho
+machine
+Jerome Nuwabaasa
+You know I'm asking you Hilary because Lord know but you you okay.
+Hillary Arinda
+asking No, no sir.
+Jerome Nuwabaasa
+So, so she's she's actually the daughter of mother but anyway.
+Solomon Ariho
+I know him.
+Jerome Nuwabaasa
+The so one is quite she's really really impressed with the work. We've done with the mint. Even with the current gaps, she's very impressed with the kind of Analytics it can do. and at the ministry, we've been looking at how to really expand it like I had mentioned to you guys to even do natural white people Industries push that data in and then do more detailed diagnostics, so she told me that she had a
+Hillary Arinda
+yeah
+Jerome Nuwabaasa
+I had shared a concept for the international marketing and entry of data expansion. [Funding and commercial detail removed. This repo does not record finances.]
+So she told me they Ed of udc told her [funding-source discussion removed. This repo does not record finances.] So, they are scheduling a meeting but they basically say we are going to push the concept but we need to demonstrate we need to be able to say this is what we want to build but this is not yet there. But it should be somewhere where it's impressive enough.
+Does that make sense? So even if we have one value chain very well analyzed all the data there that's impressive enough to then say we want replicate this for all the others.
+Hillary Arinda
+hmm
+Jerome Nuwabaasa
+so solo Accounting or need to deliver this. So I that's again I want because I was checking so the areas for example. They mapping of the value chain to make sure that it aligns with the Explorer was not yet done. I wanted to know if there are any major obstacles and then we try to deal with them.
+Solomon Ariho
+Obstacles, it's just like I when I was doing. Unforgetting that what to use taking out the system was working it the Explorer was live but the rest of the the site was the dashboard was and so I was trying to sort it out.
+Jerome Nuwabaasa
+okay
+Solomon Ariho
+yeah
+Jerome Nuwabaasa
+okay So, how do we so you because I really need to see progress like.
+Solomon Ariho
+So that goes doing on. So that goes walking on the data itself. I was just walking on seeing it being big vegetable the time whenever someone refreshes.
+Jerome Nuwabaasa
+Okay okay, that's important. Yeah.
+
+💡
+Callout
+Solomon Ariho
+yeah
+Jerome Nuwabaasa
+and okay
+Solomon Ariho
+So I proceed and do the other work.
+Jerome Nuwabaasa
+Okay but again be very methodical about how you're doing things make sure that you deal with one thing completed move on to the next. And even if you do it with just one value chain so start with the iron and steel value chain make sure that everything aligns all the data is in there. Make sure that all these things are done properly because we can just demonstrate with the iron Steel value, chain and then Basically say we'll replicate this with all the others but at the same time.
+Also when you've done it with one or the way it's very easy for you to do it with the others.
+Solomon Ariho
+yeah
+Jerome Nuwabaasa
+That's what I see so um focus on the island. Still value chain. And I think let's have these short calls every evening for this whole week to make sure that this is Harvard I have not the meeting could happen a week from now two weeks from now. I don't know but I need is that. This thing is so we are going to keep working on it until it's where we wanted to be but as we do that. As soon as possible we need to have. A version that demonstrated almost everything that we are talking about.
+With justify, just know this they the pssd knowing him because first of all Jacqueline has worked with him and was able to explain to me what he would be interested in. He's an economist and with with a lot of analytical background for a very long time. He was a research and that's what they were friends. They were doing research together. And he likes. a things that logically add up So if I'm going to take a decision to do something there is illogical connection to everything then adds up. So I'll give a very simple example if I'm going to take a decision to provide if I say I want to enhance vari addition in Ireland still.
+and then I go into iron and steel and I find that we have a huge gap on Mechanical Engineers Then it becomes very easy for me to take a decision to give. To give educational loans specifically for that course because this gives me the skills that I need to develop iron and steel what it doesn't like is the random saying let's have engineers without knowing where these engineers are going to take us guys. Give me a second.
+Hillary Arinda
+okay
+Jerome Nuwabaasa
+yes, so this is the logic that we need to show because and my view is that we've done this but And it's a Solomon we and again if we do it in steps it will be much much easier. So if we work on the value chain map. and remember that it's aligned with the with the Explorer Then you remember this this work that you had done where if we have local
+Hillary Arinda
+mmm
+Jerome Nuwabaasa
+capacity it shows if we do not have local capacity it indicates that there is a gap. So you make sure that it is fetching data to make sure that all the local capacity that is available it captures it and if the local capacity is not available. It doesn't capture it right so These are the things you need to work on step by step so on the map when I click on a particular product. Does it bring that cut drop down list? And is the information in there the information is not in there then maybe make sure that it is fetched.
+if it is in there good, then I move on to the next one right then also when I go into the Explorer And I I have these different inputs and I click on the inputs does the information come good and I remember we had said on the Explorer the information comes on hoover. But we might need to do it like like the other ones. But maybe yeah, we might need to do it like like the one you did in where like when you click on an input it brings the what do you call it?
+Solomon Ariho
+Jerome Nuwabaasa
+It brings aside bar about that input then you can close it because I've noticed when I was demonstrating that the hoover one is more difficult kind of to work with. Especially for these people they want to click and then have a look and then move right now. We might need to also be creative with color coding. And color coding really what you're trying to do here is. You want to use like this three colors red orange green to indicate.
+In any any area if so for example if you have an input which Uganda completely is unable to produce then that's in red. Because we need to build our capacity to produce it. Okay, so if I am going to if I came and I was going to look at everything I need to see. I don't need to look at things where we are doing well. I need to start with things where we are really doing badly.
+And then work my way so I want to say where are we really doing badly and this is you. I also again feel like I'm pushing too much information, but since we are we are recording we can so if I have an input let me maybe let me do this. Let me share my screen so that I can demonstrate. and these are basically kind of insights that I got through my discussion with Jackie And the skill can be more than the three red yellow green it can be it can be I don't know we can have a scale of like up to five because three is also two sometimes it can be too narrowing but let me see here and I show you something.
+If I mean here, so I have you see these tabs these dots they discovered the bullet. I can even choose to use the bullet and you use the coloring of the bullet, so if this bullet is red because I may not color the the font I can color the bullet or whatever I chose to color but if here I see of the inputs. I have a red input. Then that means that that is the critical problem that I need to deal with.
+Now my expectation is that if galvanized sheets are generally a problem then you can find that all the inputs are a problem. You see my point you can find that all my inputs are in red and if all my input sine red so for example you see this is an interesting one non-producers. No domestic producers identified and it's written in red. That's interesting right. I don't know if this was kind of that. I feel like this is it I feel like it was already doing it. I don't know.
+Hillary Arinda
+some extent
+Jerome Nuwabaasa
+I see these kind of orange colors. I don't know if it if it was but you you see how it is bulleting with different colors this would be important.
+
+💡
+Callout
+now What is also interesting this one will be deeper analysis, but maybe a cloud could already do it for example I could have. Cold roll coils you find that I am unable to produce them right. I currently don't have production capacity and yet these cold roll, or I am able to produce 50% and yet, they are very very essential. Then it could be in red, but I could find that Flux acids.
+And not very essential like I can always import them right. So if something is not very essential but is in scarcity. It does not get the same weight you know like when you're doing an analysis of a problem like if the impact of the problem is so immense. But the probability of that problem happening is low. That is still considered a high risk. But if the probability of something happening is so high, but the impact when it happens is so low that is considered a low risk.
+
+💡
+Callout
+Does that make sense? so I want to pick an example that is based on like child protection where when you do doing the child-proofing in a household. You will find that there is something that has a possibility to harm your child but the level of harm can be so low that maybe a platform the child's foot. So the level of harm is minimal that you're not going to hide the plates very far but you will find that.
+a knife must be hidden so far because It has potential to do much greater harm. So these two do not carry the same weight. So one knife. Close to the child is more dangerous than 100 plates close to the child. So yeah, you will find that availability the plates are there there are many years. They are also part the can harm the child but they cannot create significant harm and so because of that. They are considered low risk.
+
+💡
+Callout
+And yet, just one knife is considered very high risk, so it's the same here that
+
+💡
+Callout
+Saturn inputs certain professions certainty technologies are so essential that discussed the over those. Is so critical to the success of the industry? yeah That is one so Solomon you can ask it to do this analysis and then we we see how capture them and there's still addition analysis that we discuss so for example we discussed. And this this will come will do it later, but I can still just put it out there you remember that.
+we have the We have this again. This is what Jackie says the bssd will be looking out for a PSS the permanent secretary of opponent Secretary and secretary to the Treasury that's the title of the esophinance. now when when you have these When you're tracing how you're moving towards standfold. Have used that the way his analytical mind works is that this tracing must continue everywhere? So what does it mean that if you came to the value chain right? And you said cold rolled coil and this thing came up.
+I see when I try to go to the thing it disappears. That's why I thought it's better for a cut up to come for a car for something to come up but if you said cold rolled coils and let's say it shows you the capacity that we have now right ideally it should show you the capacity that we need at stenfold, so that you can compare you can know whether you're doing well or badly. Right if you're too far you're doing but if you're close you're doing very well.
+you see so it's You can see that there is this is not just things that out there that things that then informed decisions that say okay, we are lagging behind in zinc inwards, or we are lagging behind in terms of the kind of energy that we need that is where we are lagging behind and that's where we need to prepare for it. All. He needs to know is at any one moment within my industrial economy, where am I lagging behind therefore do I need to put money that is what he needs to know? So but but you see these did and you see when you say where am I he doesn't want you to say ah you need to put money in iron and steel no in I understand where.
+the more precise you are the better At utilizing having fun, but if you're good to be guessing because what happens right now what the biggest challenge that we have right now is to put money in this sector, but then they do not know where to put money in the sector. I think you've observed this generally like there's a lot of money that has been pushed into farming, but nobody has done their analysis to come and say okay.
+Where is the problem? Exactly where the problem so that I deal with that my assumption for example is that if you went to talk to Solomon with his Kim farm. He would tell you me I want an irrigation system. This is where the exact problem is so if you know that then you actually address someone's problem, but if you keep things general then you do not really as you will give someone seedlings when he needed when he did an irrigation system.
+It's been billions of shillings on scenering so this this is what we're trying to do. So a Solomon this is just to give it I say this because I know that we even when you're doing a small thing when you understand the bigger picture it helps you better design the small thing because you see how does this small thing Factor into the bigger picture? That's why I'm giving the bigger picture. I'm not saying all this must be done now. I'm saying eventually all these this is where we're going but as you do your your small the things that you've been doing that really have been impressive. Keep the other thing in mind and also once you appreciate this bigger picture. There are other things that you can do that. I haven't talked about here.
+That yeah a cupcake that what we are thinking about. so
+Hillary Arinda
+What you're saying is that if you work so need long enough with the bigger picture. He will have ideas that we have in conceived ourselves. Is that what you're saying.
+Jerome Nuwabaasa
+Absolutely absolutely because he will be asking himself those questions. I've been he will be seeing you will be looking at it as a am I addressing is this address in this question it doesn't look like it addresses that question. And then he says what if I did it like this. Oh, yeah this one addresses that question I mean most of the things that Solomon has come up with have been his own initiative in an attempt address a bigger thing that a bigger question that
+Hillary Arinda
+wonderful
+Jerome Nuwabaasa
+has been post. Right, so that's generally the bigger question the bigger question is we have a huge elephant but we need to break it down. And and know a exactly what to tackle. Yeah, yeah.
+Hillary Arinda
+okay So he said he has how much time for all this.
+Jerome Nuwabaasa
+No Solomon this is going to be continuous work. Oh, maybe this is one other thing. I've just so [commercial arrangement discussion removed. This repo does not record finances.]
+The team is being counted on to deliver. It's discussions like this. You know like you worked on all these data. You've put it in there and it is informing decisions, but then you're saying what more can we do you just ask him what more can I do to make this even more granular and more specific and more targeted right? It's it's if you've had about like cancer. Research is generally that research is every single day. They ask themselves. What can I do to be to target? To be to target more the Cancer cell and not attack any other to be more specific on my target and this is just general and you know poverty is essentially the Cancer of an economy.
+You're trying to say where in in this economy. I have some cancer cells where do I target and deal with them? So you want to be more specific more specific more specific with your data and so this is going to be continuous something that we can continuously improve if we're able to secure this arrangement but at the highest level we must be able to demonstrate that I must be able to open like the iron and steel thing click on the inputs click on the different inputs and the guy should be able to see okay this helps me decide better.
+Yeah, this thing shows me where the critical problem is it helps me see where the critical problem is. And if we cannot see if we are not able to show him that then he cannot see the value in the in the whatever but if we are in the system, but if we're able to show him that and that's why you see these three are literally what you need in any production. You have inputs you have the technology you have the Professionals these are the three that you need everything else is almost similar all over the world. What is very important. Is this we Are What
+
+💡
+Callout
+determine your competitiveness. I mean for example right now iPhone can only manufacture iPhone in China because of The Professionals not because of the technology are not because of the Labor, that's it. So you can do an analysis and say if you're going to set up a massive automotive industry. You must have this kind of labour in place. If you do not have it don't even describe. So it's that kind of information to be able to put out there. Yeah, so lastly. This is the egg is causing problems.
+Hillary Arinda
+Which one?
+Jerome Nuwabaasa
+this one
+Hillary Arinda
+Hey, we remove it.
+Jerome Nuwabaasa
+It cannot be removed anymore. They've already seen it. But it's it's people pick significant interest the moment they see it.
+Hillary Arinda
+okay
+Jerome Nuwabaasa
+So, not it, you don't need to do it right now, but I needed to really start thinking about how we activate it and it needs to be picking information only my view is that it should be picking information only from the dashboard. It shouldn't be analyzing external information then it just becomes any other AI
+Hillary Arinda
+Well, currently, it's got drilled to pick from pocket base.
+Jerome Nuwabaasa
+It's got real to pick from pocket pace. It's interesting. I find it very
+Hillary Arinda
+a
+Jerome Nuwabaasa
+interesting because for example whenever I ask it, how many Industries it can tell me but when I ask when I ask it. When I ask it. What are the sectors which sectors that this industries in it cannot tell me and yet? I know that those sectors are there. Anyway, my visa. It is something that we shall work on it. I need you to because okay so for example. What you
+Hillary Arinda
+Do one thing for me every time we ask the question. I can't answer just put it somewhere for me.
+Jerome Nuwabaasa
+I put that question somewhere.
+Hillary Arinda
+Yeah, then we shall just build skills for all kinds of questions.
+Jerome Nuwabaasa
+Okay because for example there are other questions which are more analytical for example I can ask it. Where is the biggest buttoning in ugandas, Island and steel industry. Then it should be able to and I don't want it because you see.
+Hillary Arinda
+Mmm and that was the goal that's really why it exists.
+
+🎯
+Decision
+Jerome Nuwabaasa
+Yeah, because what I see is that when when you ask AI it gives you a very wide answer, but this thing is designed to be. for Precision right, so it needs to even tell you diabis, but this is the most
+Hillary Arinda
+Yes.
+Jerome Nuwabaasa
+this is the
+Hillary Arinda
+Then it can group them. I think it's should be able to group right now. I tested it across such questions and it was passing. hmm
+Jerome Nuwabaasa
+It was able to group what?
+Hillary Arinda
+I ask you to a question about rating valid Chains by what I forgotten but it was lines and it was able to do it based on just reading pocket base okay. The thing
+Jerome Nuwabaasa
+okay okay
+Hillary Arinda
+is let the truth is. Just rethinking if pocket was the best idea for this scale now that I know. This whole time it's what I've been thinking about and I think I need to give it more so it.
+Jerome Nuwabaasa
+Yeah, so think about it and if we need to change it would change it. It's if it takes time it takes time but we change it.
+Hillary Arinda
+The whole thought process was that we are dealing with. Inputs that are not changing so much. but
+Jerome Nuwabaasa
+Yeah, I remember you asking me about that.
+Hillary Arinda
+Let me do some research also I prefer it structures see currently the way it's
+Jerome Nuwabaasa
+okay
+Hillary Arinda
+designed. It's not very at the way. I would have wanted a specially from a back in perspective you find that the UI has access directly to pocket base in that in case you want to change pocket base now a bit locked in so I need to rethink it. I like this is not how we are designing your team by let me put it that way because your timber we started from the database itself bacteria. We started from the from the files.
+Jerome Nuwabaasa
+Yes, yes. yeah
+Hillary Arinda
+The issue is not an issue, but it is something I need to think through very
+
+✅
+Action Item
+carefully now that we have reached a maturity stage. We know what we need initially it was more value chains. I would say I the way I thought about it was that the Data was going to be extremely dynamic in that putting it in like a relational database may be problematic, but where we've reached. Everything is almost relational now. Yeah the problem with pocket basis aggregation.
+Jerome Nuwabaasa
+that's
+Hillary Arinda
+Will have to build a layout on top of it. Yeah, it's good for collections and things of that nature, but when it comes to grouping aggregating it makes you write a whole new engine for that that a small query a normal database should have handled but then it gives you the advantage of it removes the need for the data access layer because it's was designed to be queried by what by the front end directly such that you don't need a back end, so now we are coating the middle.
+Jerome Nuwabaasa
+Where you need to kind of now build the back end.
+Hillary Arinda
+No to decide if we are going to go with pocket base then we need to build an engine for aggregating or we build the back end and layer it. But that's one thing we've decided between yes.
+Jerome Nuwabaasa
+Okay, so you're telling me that that's the decision you have to make whether you need to build an engine or you need to.
+Hillary Arinda
+Yes. Or change it database.
+Jerome Nuwabaasa
+okay if which if you and Your pros and cons are best on ability to deliver what you need or which one is simpler. Are you saying both can deliver?
+Hillary Arinda
+Delivery it comes down to delivery.
+Jerome Nuwabaasa
+okay
+Hillary Arinda
+Yes. So Solomon also on your end do the same because originally we are doing superbase and that is what originally proposed but then I found pocket base and then I did research on Need for the use case then it made sense, but now this thing has become big.
+Jerome Nuwabaasa
+yeah
+Hillary Arinda
+He's going to get bigger.
+Jerome Nuwabaasa
+It's going to get bigger actually that was going to be my next question if it becomes extremely big and it needs and it's going to be environ. Many people have visiting it. Is there any issue?
+
+✅
+Action Item
+Hillary Arinda
+It's raining when it's raining by bad applications but right now. It's mainly reads reads are not heavy no one is writing it so
+Jerome Nuwabaasa
+Nobody is going to nobody's going to be writing on okay, the only people that will be writing on it people who will be putting in information, but nobody else is good. This is something that you just read from but you don't write. yeah
+Hillary Arinda
+Okay, I'm going to give you the Numbers I'm like based on the current resources. We have. When we start when can we start facing performance choose?
+Jerome Nuwabaasa
+You can you can think of this you can think of this as a live dynamic report. so I upload data. Everything refreshes and then people start consuming it.
+Hillary Arinda
+yeah In any case we can spin replicas for reading but that's a little stage like that. We are looking at let's see is there a time where there will be 10,000 people querying it at the same time for example the time where you find like
+Jerome Nuwabaasa
+Is there what?
+Hillary Arinda
+that 10,000 people Reading from this. At the same time.
+Jerome Nuwabaasa
+He could be yes.
+Hillary Arinda
+How soon?
+Jerome Nuwabaasa
+No, not very soon.
+Hillary Arinda
+Okay no by that time of course this will have moved to tone independence server right now. It's on a test environment really.
+Jerome Nuwabaasa
+Yeah, yeah.
+Hillary Arinda
+Okay, I'll come up with the estimates. What is required let's say for at its peak. How many users do you see concurrently? Let's say three years for example.
+Jerome Nuwabaasa
+He has man. I don't know how to predict this to be honest, but maybe a thousand.
+Hillary Arinda
+But that's a beauty that's a bit of cloud computing we only use the resources. We need so that is not something we should be concerned about right now the fact
+Jerome Nuwabaasa
+okay
+Hillary Arinda
+that we should set it up to scale when that time comes without panicking.
+Jerome Nuwabaasa
+okay
+Hillary Arinda
+Now that's where the decisions we take now matter. Let's find it's not something you need to answer critically.
+Jerome Nuwabaasa
+yeah okay, so that is it from my side and
+Hillary Arinda
+okay
+Jerome Nuwabaasa
+Yeah, that is it.
+Hillary Arinda
+yeah, but I think let's do this for this current phase let's first continue with pocket base because we are already a lot going in yes until the time reaches
+Jerome Nuwabaasa
+I I agree. yeah
+Hillary Arinda
+when we now have to change but we change in the transition this is working but now we are migrating that would make
+Jerome Nuwabaasa
+So if I if we are doing this with pocket base. hmm Is there any issue okay? What's the major issue with pocket base right now?
+
+✅
+Action Item
+Hillary Arinda
+the media issue with pocket pace right now is aggregation That's not a big deal. It's mainly application. Then also the other issue, is that I would say I've not used pocket base heavily
+
+✅
+Action Item
+before so it has been a learning phase for me as well.
+Jerome Nuwabaasa
+Okay yeah this thing.
+Hillary Arinda
+Major issue than the aggregation. I didn't know it was having it had issues with aggregation and till I had to frustrate down way where the issues are.
+
+✅
+Action Item
+yeah
+Jerome Nuwabaasa
+Which are the platform would not have aggregation issues.
+Hillary Arinda
+the standard databases like postgrades
+Jerome Nuwabaasa
+Like what?
+Hillary Arinda
+post-grace
+Jerome Nuwabaasa
+So and you've used that before.
+Hillary Arinda
+Yeah, that's that's the one we always yeah. That's a common list to be fair.
+Jerome Nuwabaasa
+So in this case, why did you up for pocket base and not that one?
+Hillary Arinda
+Because I found it where depth to be fair. Social monies I guess it pocket originally it was super peace. So when I was reviewing the work I f*** it is where the pocket base come from
+Solomon Ariho
+yeah Turn it.
+Hillary Arinda
+waipukate base then the review was like okay based on the structure of what we are doing value chain right. It becomes very easy for you to ingest the file and then populate pocket-based collections. You get yes, it was very easy, so it made back since yes, and it's very light as
+Jerome Nuwabaasa
+ah So it had its advantage then it had disadvantage.
+Hillary Arinda
+well.
+Jerome Nuwabaasa
+okay
+Hillary Arinda
+And then it combines many things that once that means if you're spinning up something quickly within minutes. You'll have something and that's why we have
+Jerome Nuwabaasa
+hmm
+Hillary Arinda
+something already because pocket base abstract so much for you.
+Jerome Nuwabaasa
+I agree. Okay, so let's work with it because then it's very clear what it's advantage is.
+Hillary Arinda
+Yeah, yeah. For what it's going to deliver in the near Terme it is okay in the long term we
+Jerome Nuwabaasa
+okay
+Hillary Arinda
+can rethink.
+Jerome Nuwabaasa
+yeah okay
+Hillary Arinda
+yeah
+Jerome Nuwabaasa
+Solomon anything
+Solomon Ariho
+Just continuing and finishing up at least they are saying when they are.
+Jerome Nuwabaasa
+yeah, but it tried to Set targets of subspecific things that you will focus on and close.
+Solomon Ariho
+yeah
+Jerome Nuwabaasa
+And even if you don't close them within the day just remain folk. I say this I don't know if you have the same problem, but I have a problem where if I if I don't insist that I must fix this today. I'm easily picking up by disruptions. Within the same assignment so I try to something else then I try to do something
+
+✅
+Action Item
+
+🎯
+Decision
+else, then I find I'm taking a whole week to do something that would have done I
+
+🎯
+Decision
+would have done in one day. So these days, I have learned to be like I am doing this thing and I do not care if something else comes up and it claims to be so agit. I'm not going to give it attention until I've done with this. So and yet, I found that that helps because you close things you do something close it you do another thing close it so there is very very clear progress. Let me give you an example and I remember Solomon this eh.
+Solomon Ariho
+doesn't
+Jerome Nuwabaasa
+You walk to on this breakdown on the spatial distribution. And it took you another one week work on the sector distribution.
+Solomon Ariho
+work
+Jerome Nuwabaasa
+So on this partial distribution you work on it, then you went to work on other things. Then you keep and finish this thing up later.
+Hillary Arinda
+mmm
+Solomon Ariho
+I think that time is when we update trying to make things link up live.
+Jerome Nuwabaasa
+so I
+Solomon Ariho
+And we I don't know it. I would send messages here then. He does ransom's back was back and forth for some days.
+Jerome Nuwabaasa
+So, this is I think this is for me the best example if you say today. I am going to break down the these whatever I'm going to break them down like you eat right. Until you finish breaking them unless you've really landed on an obstacle that it's I mean you're going to be like I'll be wasting time if I insist. Until you've landed on that try to close it because when you close it, then this is done. This is functional it's working. It's clear. It's a deliverable but when you don't you can have a full site and have nothing working 100% and that means that almost.
+You can have a hundred percent of the site. That is complete trash as opposed to having five percent of a site that is completely working. So that's we need to find something close it so like we've said when you come here. you change a Close the iron and steel one. Make sure that everything that you need there is there and it is working well. And then you can move on to the next one.
+Solomon Ariho
+yeah
+Hillary Arinda
+Mmm. That's when value change okay.
+Jerome Nuwabaasa
+yeah So focus on the value chains now my sump is the that's what your own right now
+Hillary Arinda
+to him so
+Jerome Nuwabaasa
+right.
+Hillary Arinda
+So let me ask. Based on what we have and the data we have including the look and feel how what do you think that? What's the name you get told us the PhD I'll
+Jerome Nuwabaasa
+The PAC they are Jackie or Jackie Jacklin yeah.
+Hillary Arinda
+PhD yes, how would you say they rated this fall effort currently? in terms of percentages
+Jerome Nuwabaasa
+No, look Jacqueline has not a run through like that deeply here. She has just tested a few things and she hasn't even interrogated whether they the data not so for example you see this page that we are looking at. What we are looking at right now.
+Solomon Ariho
+what
+Jerome Nuwabaasa
+So for example, she is just impressed with the fact that you can identify that there is a gap and you can say that you have one commercial person that you have listened formation. She finds that very very impressive right. She hasn't gone into interrogate whether it is correct. She's just happy that the fact that you're able to present it. is important Then if that is faster and formed what needs to be in place.
+
+💡
+Callout
+Solomon Ariho
+I'd say luxury the other day.
+Jerome Nuwabaasa
+things like
+Solomon Ariho
+you said we do it when if the values are not correct but
+Jerome Nuwabaasa
+the values are not correct for her and
+Solomon Ariho
+the answer there
+Jerome Nuwabaasa
+Exactly and that that she finds very very impressive. But so now when I come like here. So this one is over a how come is it working? I don't work soon inputs, so you see when I go inputs the information there is It's really it's really not structured well. It doesn't seem to communicate anything.
+Solomon Ariho
+So that part of like quad road. Cole
+Jerome Nuwabaasa
+hmm
+Solomon Ariho
+We that's why you see if it's a process you utility. And the information is it's supposed to not even bring the pop up so I said but you can't just leave have no problem just because you can't have that information like for stillwater steam, so wherever it is not supposed to have a pop-up it will tell you what it is supposed to be and why it doesn't have information so code word coil is a process you Theatre then. It's supposed just a processity but down days I can explanation.
+Jerome Nuwabaasa
+But it's true. It's not a utility. Energy is a utility.
+Solomon Ariho
+What I'm saying is it's what I'm saying is it's part of the process. So the doesn't it can't have that information. I don't know if you understand what I'm saying. it's like you're making mango juice like
+Jerome Nuwabaasa
+it's kind of
+Solomon Ariho
+And then and then someone is asking you for the for the concentrate and then you find we go to mangoes and and made the concentrate during the process we don't have. Data on how much concentrate was made? Or use it if companies were not providing that that you get what I'm trying to explain.
+Jerome Nuwabaasa
+Yeah, but that's not the case here.
+Solomon Ariho
+hmm
+Jerome Nuwabaasa
+you see if I am exploring In fact what I expect you see here when I come cold roll coins. is data You see it.
+Solomon Ariho
+So when it says the code Road coil the other one is? I'm going to have to inquire this one is saying s*** slash s*** then the other ones.
+Jerome Nuwabaasa
+based substrate
+Solomon Ariho
+yeah
+Jerome Nuwabaasa
+It's the same.
+Solomon Ariho
+It's the same sheet.
+Jerome Nuwabaasa
+It's the same sheet here. It's a final product here. It's an input.
+Solomon Ariho
+hmm
+Jerome Nuwabaasa
+But it's the same. And in fact I expect here it should also the same HS code because I think it picks data by HS code.
+Solomon Ariho
+Because the parts we were these information in the on the input.
+Jerome Nuwabaasa
+So that's what I'm saying tell it to capture the information about the cold Road coil.
+Solomon Ariho
+all right
+Jerome Nuwabaasa
+Yeah, because it's it's a product but only this product is now an input because I need to say on my inputs. What is the status of my inputs? So it's the same it should have the same information. Here yeah. But don't put a sources. You may need not to put the sources. And farms on a from reports plant register not verified company also not that some cold rolls for roof inn, materials for galvanized sheets are produced domestically.
+alongside con input poverty chain report And I wish I'll improve this information, but yeah, this is the kind of we shall first of all let it be able to bring this information then we shall see how to improve it, but be able to bring it.
+Hillary Arinda
+okay
+Jerome Nuwabaasa
+Okay, I I think this mainly what I needed to communicate so Solomon this like we've agreed focus on iron and steel and let's do it all the way.
+Hillary Arinda
+okay
+Jerome Nuwabaasa
+okay
+Solomon Ariho
+alright
+Jerome Nuwabaasa
+thank
+Hillary Arinda
+no problem, Kali solo the meetings and whatever follow the same current so Let me do that now. Bye. I'm saying the minutes of the tasks will be done this.
+Solomon Ariho
+sorry
+Hillary Arinda
+Solomon Ariho
+yeah
+Hillary Arinda
+MD I think yeah karyakari
+Jerome Nuwabaasa
+Okay all right. I think you guys.
+Solomon Ariho
+all right
