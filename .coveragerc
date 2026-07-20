@@ -1,4 +1,9 @@
 [run]
+# Keep coverage paths repo-relative. Combined with `pytest --cov=.` (see deploy.yml), this
+# records full paths like midd-brain/app.py instead of bare basenames, so diff-cover can
+# attribute changed lines when two files share a basename (uploader/app.py vs
+# midd-brain/app.py). Without it a covered file can score 0% and fail the ADR-018 gate.
+relative_files = True
 # Admin-only one-shot scripts that require live PocketBase credentials —
 # they cannot be unit-tested and are excluded from the coverage gate.
 omit =

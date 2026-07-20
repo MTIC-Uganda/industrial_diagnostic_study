@@ -33,6 +33,16 @@ MAX_LIMIT = 50
 MAX_FILTERS = 4
 MAX_VALUE_LEN = 80
 
+# Fields the model may GROUP BY (aggregate counts over), per collection. This is the
+# security boundary for the "group" mode: only these dimensions can be broken down, so
+# the public bot can answer "which sectors / by region / rank districts" (ADR-025) without
+# code execution and without exposing anything outside the whitelist above.
+GROUPABLE = {
+    "industries": {"region", "district", "sector_name", "subsector_name",
+                   "chain_name", "status", "isic_2digit_desc"},
+    "value_chains": {"status_current", "position_tag", "priority_tag"},
+}
+
 
 def validate_spec(spec):
     """Validate a model-proposed query spec against the whitelist.
@@ -69,14 +79,42 @@ def validate_spec(spec):
         clean.append({"field": field, "op": op, "value": sval})
 
     mode = spec.get("mode", "count")
-    if mode not in ("count", "list"):
+    if mode not in ("count", "list", "group"):
         return None
     try:
         limit = int(spec.get("limit", 20))
     except (TypeError, ValueError):
         limit = 20
     limit = max(1, min(limit, MAX_LIMIT))
-    return {"collection": coll, "filters": clean, "mode": mode, "limit": limit}
+    out = {"collection": coll, "filters": clean, "mode": mode, "limit": limit}
+    if mode == "group":
+        group_by = spec.get("group_by")
+        if group_by not in GROUPABLE.get(coll, set()):
+            return None
+        out["group_by"] = group_by
+    return out
+
+
+def aggregate_rows(rows, group_by, limit=15):
+    """Count rows per distinct group_by value, highest first, top `limit`. Pure.
+
+    Feed it the ALREADY-projected rows from a validated 'group' query. Missing or blank
+    values are skipped (they are not a category). Ties break alphabetically so the output
+    is deterministic. Returns [{"value": <label>, "count": <n>}, ...].
+    """
+    counts = {}
+    for r in rows:
+        if not isinstance(r, dict):
+            continue
+        raw = r.get(group_by)
+        if raw is None:
+            continue
+        key = str(raw).strip()
+        if not key:
+            continue
+        counts[key] = counts.get(key, 0) + 1
+    top = sorted(counts.items(), key=lambda kv: (-kv[1], kv[0]))[:max(1, limit)]
+    return [{"value": k, "count": c} for k, c in top]
 
 
 def build_filter(filters):
