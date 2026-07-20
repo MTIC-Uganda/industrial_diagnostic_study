@@ -115,3 +115,52 @@ def test_build_filter_empty():
 def test_return_fields_excludes_contact():
     fields = qt.return_fields("industries")
     assert "name" in fields and "contact" not in fields and "notes" not in fields
+
+
+# JUSTIFICATION-A3: appending new group-mode test cases (ADR-025), not rewrapping existing logic.
+# ── group mode (ADR-025 aggregation) ──────────────────────────────────────────
+def test_valid_group_spec():
+    spec = qt.validate_spec({
+        "collection": "industries", "mode": "group",
+        "group_by": "sector_name", "limit": 10,
+    })
+    assert spec["mode"] == "group"
+    assert spec["group_by"] == "sector_name"
+    assert spec["limit"] == 10
+
+
+def test_group_spec_with_filter():
+    spec = qt.validate_spec({
+        "collection": "industries", "mode": "group", "group_by": "district",
+        "filters": [{"field": "region", "op": "=", "value": "Northern"}],
+    })
+    assert spec["group_by"] == "district"
+    assert spec["filters"] == [{"field": "region", "op": "=", "value": "Northern"}]
+
+
+def test_reject_group_without_group_by():
+    assert qt.validate_spec({"collection": "industries", "mode": "group"}) is None
+
+
+def test_reject_group_off_whitelist_dimension():
+    # 'contact' is never groupable; key_indicators has no GROUPABLE set at all
+    assert qt.validate_spec({"collection": "industries", "mode": "group",
+                             "group_by": "contact"}) is None
+    assert qt.validate_spec({"collection": "key_indicators", "mode": "group",
+                             "group_by": "slug"}) is None
+
+
+def test_aggregate_rows_counts_desc_and_caps():
+    rows = [{"sector_name": "Metals"}, {"sector_name": "Metals"},
+            {"sector_name": "Textiles"}, {"sector_name": "Metals"},
+            {"sector_name": "Textiles"}, {"sector_name": "Cement"}]
+    out = qt.aggregate_rows(rows, "sector_name", limit=2)
+    assert out == [{"value": "Metals", "count": 3}, {"value": "Textiles", "count": 2}]
+
+
+def test_aggregate_rows_skips_blank_and_missing_and_breaks_ties():
+    rows = [{"sector_name": "  "}, {"sector_name": None}, {},
+            {"sector_name": "Beta"}, {"sector_name": "Alpha"}, "notadict"]
+    out = qt.aggregate_rows(rows, "sector_name")
+    # both count 1, tie broken alphabetically; blanks/missing/non-dicts dropped
+    assert out == [{"value": "Alpha", "count": 1}, {"value": "Beta", "count": 1}]
