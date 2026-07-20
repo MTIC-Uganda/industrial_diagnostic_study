@@ -13,3 +13,8 @@ data_sources/trademap/browser_profile/
 # Generated dashboard output (built fresh from PocketBase every CI run + on the box).
 # Tracking it caused constant "would be overwritten by checkout" git conflicts.
 report/sources-of-truth.html
+
+# coverage artifacts (build-time, never committed)
+.coverage
+coverage.xml
+htmlcov/
