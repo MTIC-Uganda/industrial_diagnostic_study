@@ -240,6 +240,9 @@ COLLECTIONS = [
             js('firms'),
             text('note'),
             js('phase_context'),
+            text('current_capacity'),   # e.g. "120,000 t/yr (Roofings, Kiira)" — shown in detail panel
+            text('target_capacity'),    # e.g. "500,000 t/yr (NDP IV target)" — capacity-vs-target traceability
+            text('capacity_gap_note'),  # narrative explaining the gap
             num('display_order'),
         ],
     },
@@ -259,6 +262,11 @@ COLLECTIONS = [
             text('pattern_source', required=True),
             text('pattern_flags'),
             text('target_value'),
+            # essentiality × scarcity weighting (each 0–10): essentiality = how critical
+            # to the process; scarcity = how unavailable domestically. weight = their product.
+            # Populated via PocketBase admin or by AI analysis of the value chain report.
+            num('essentiality'),
+            num('scarcity'),
             num('display_order'),
         ],
     },

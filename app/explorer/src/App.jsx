@@ -1,4 +1,4 @@
-import { useState, useRef, useLayoutEffect, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { PRODUCTS, CATEGORIES, TRADE_HS4, PRODUCT_HS4, RAW_MATERIAL_TRADE, matchInputTrade, matchInputPhase, PRODUCT_FIRMS, PHASE_PRODUCERS, PHASE_SOURCE, RAW_MATERIAL_PHASE } from "./data/index.js";
 
 // Resolve PocketBase URL from the page host so the same HTML works on staging and prod.
@@ -41,8 +41,25 @@ function _resolveCategories()    { return _liveStructure.categories    || CATEGO
 function _resolveProductFirms()  { return _liveStructure.productFirms  || PRODUCT_FIRMS; }
 function _resolvePhaseProducers(){ return _liveStructure.phaseProducers|| PHASE_PRODUCERS; }
 function _resolveProductHs4(slug){ return (_liveStructure.productHs4   || PRODUCT_HS4)[slug] || null; }
-function _resolveMatchTrade(text){ return _liveStructure.matchTrade ? _liveStructure.matchTrade(text) : matchInputTrade(text); }
 function _resolveMatchPhase(text){ return _liveStructure.matchPhase ? _liveStructure.matchPhase(text) : matchInputPhase(text); }
+
+// Product-as-input fallback: if the text exactly names a product (e.g. "Cold Rolled Coil"
+// appearing as an input), resolve its trade data via that product's HS code.
+// This makes trade data consistent whether an item appears as a finished product or as an
+// upstream input — same HS code, same ITC TradeMap figures.
+function _resolveMatchTrade(text) {
+  const byKeyword = _liveStructure.matchTrade ? _liveStructure.matchTrade(text) : matchInputTrade(text);
+  if (byKeyword) return byKeyword;
+  const normText = text.trim().toLowerCase();
+  const prods = _resolveProducts();
+  for (const slug of Object.keys(prods)) {
+    if ((prods[slug].name || '').toLowerCase() === normText) {
+      const hs4 = _resolveProductHs4(slug);
+      if (hs4) return resolveTrade(hs4);
+    }
+  }
+  return null;
+}
 
 function formatUsd(thousands) {
   if (thousands == null) return "—";
@@ -50,6 +67,23 @@ function formatUsd(thousands) {
   if (usd >= 1_000_000) return `$${(usd / 1_000_000).toFixed(1)}m`;
   if (usd >= 1_000) return `$${(usd / 1_000).toFixed(0)}k`;
   return `$${usd}`;
+}
+
+// Traffic-light availability status for each input item.
+// green  = domestic production confirmed (phase count > 0)
+// orange = item is traded (HS-code matched) but no domestic producer identified
+// red    = traded commodity but no domestic production or trade data — capacity gap
+// utility = process utility (no HS code, not trade-tracked, e.g. steam/electricity)
+const STATUS_COLOR = { green: "#22c55e", orange: "#f97316", red: "#ef4444", utility: "#64748b" };
+const STATUS_ORDER = { red: 0, orange: 1, green: 2, utility: 3 };
+
+function inputStatus(text) {
+  const trade = _resolveMatchTrade(text);
+  const phase = _resolveMatchPhase(text);
+  if (!trade && !phase) return "utility";
+  if (phase && phase.count > 0) return "green";
+  if (trade) return "orange";
+  return "red";
 }
 
 function TradeBlock({ trade, noDataLabel }) {
@@ -73,82 +107,30 @@ function TradeBlock({ trade, noDataLabel }) {
   );
 }
 
-// This app is normally embedded in an <iframe> on the live dashboard. A
-// popup that stays within the iframe's OWN window.innerHeight can still run
-// off the bottom of what the user actually sees, if the iframe itself is
-// taller than the remaining space below the fold of the outer page (i.e.
-// the iframe is only partially scrolled into view). Same-origin iframes can
-// read window.frameElement to find their own position within the parent
-// page, so use that — when available — as the real clamp boundary instead
-// of just this document's own viewport.
-function getVisibleViewport() {
-  let top = 0, left = 0, height = window.innerHeight, width = window.innerWidth;
-  try {
-    if (window.frameElement && window.parent && window.parent !== window) {
-      const r = window.frameElement.getBoundingClientRect();
-      const pH = window.parent.innerHeight;
-      const pW = window.parent.innerWidth;
-      top = Math.max(0, -r.top);
-      left = Math.max(0, -r.left);
-      height = Math.max(0, Math.min(r.bottom, pH) - Math.max(r.top, 0));
-      width = Math.max(0, Math.min(r.right, pW) - Math.max(r.left, 0));
-    }
-  } catch (e) {
-    // Cross-origin or no parent access — fall back to this document's own viewport.
-  }
-  return { top, left, height, width };
-}
-
-// Renders the popup, measures its own size once mounted, and clamps/flips
-// it so it always stays fully within the visible viewport relative to the
-// hovered element's rect — regardless of where on the page that element is,
-// and regardless of how much of the embedding iframe is actually visible.
-function StatsPopupShell({ title, anchorRect, children }) {
-  const ref = useRef(null);
-  const [pos, setPos] = useState(null);
-
-  useLayoutEffect(() => {
-    const el = ref.current;
-    if (!el || !anchorRect) return;
-    const margin = 8;
-    const vp = getVisibleViewport();
-    const w = el.offsetWidth;
-    const h = el.offsetHeight;
-    const maxW = Math.max(50, vp.width - 2 * margin);
-    const maxH = Math.max(50, vp.height - 2 * margin);
-
-    let left = anchorRect.right + margin;
-    if (left + Math.min(w, maxW) > vp.left + vp.width - margin) {
-      left = anchorRect.left - Math.min(w, maxW) - margin; // flip to the left of the anchor
-    }
-    left = Math.max(vp.left + margin, Math.min(left, vp.left + vp.width - Math.min(w, maxW) - margin));
-
-    let top = anchorRect.top;
-    top = Math.max(vp.top + margin, Math.min(top, vp.top + vp.height - Math.min(h, maxH) - margin));
-
-    setPos({ top, left, maxW, maxH });
-  }, [anchorRect]);
-
+// Persistent right-hand detail panel — replaces the hover tooltip.
+// Stays open until the user hits ✕. Does not affect main layout (position: fixed).
+function SidePanel({ title, onClose, children }) {
   return (
-    <div
-      ref={ref}
-      style={{
-        position: "fixed", zIndex: 50,
-        top: pos ? pos.top : anchorRect.top, left: pos ? pos.left : anchorRect.right + 8,
-        visibility: pos ? "visible" : "hidden", width: "300px",
-        // Repositioning alone can't keep the popup on-screen if its content
-        // is taller than the visible viewport — cap its own size to fit,
-        // and let it scroll internally if needed.
-        maxWidth: pos ? `${pos.maxW}px` : "calc(100vw - 16px)",
-        maxHeight: pos ? `${pos.maxH}px` : "calc(100vh - 16px)",
-        overflowY: "auto",
-        backgroundColor: "#0f172a", color: "#e2e8f0", borderRadius: "8px",
-        padding: "12px 14px", boxShadow: "0 8px 24px rgba(0,0,0,0.4)",
-        fontSize: "11px", lineHeight: 1.5, pointerEvents: "none",
-      }}
-    >
-      <div style={{ fontWeight: 700, fontSize: "12px", color: "#fff" }}>{title}</div>
-      {children}
+    <div style={{
+      position: "fixed", zIndex: 50, top: 0, right: 0, height: "100vh", width: "320px",
+      backgroundColor: "#0f172a", color: "#e2e8f0",
+      boxShadow: "-8px 0 32px rgba(0,0,0,0.55)",
+      display: "flex", flexDirection: "column",
+      fontSize: "11px", lineHeight: 1.5,
+    }}>
+      <div style={{
+        display: "flex", alignItems: "flex-start", justifyContent: "space-between",
+        padding: "14px 14px 10px", borderBottom: "1px solid #1e293b", flexShrink: 0,
+      }}>
+        <div style={{ fontWeight: 700, fontSize: "13px", color: "#fff", flex: 1, paddingRight: "8px", lineHeight: 1.35 }}>{title}</div>
+        <button onClick={onClose} style={{
+          color: "#64748b", background: "none", border: "none", cursor: "pointer",
+          fontSize: "18px", lineHeight: 1, flexShrink: 0, padding: "0 2px",
+        }}>✕</button>
+      </div>
+      <div style={{ flex: 1, overflowY: "auto", padding: "12px 14px" }}>
+        {children}
+      </div>
     </div>
   );
 }
@@ -166,10 +148,6 @@ function PhaseCountBlock({ phase }) {
   );
 }
 
-// Phase-level context is shown only as secondary background, never as the
-// answer to "how many plants make this product" — it's the same number for
-// every product sharing that phase, so presenting it as the headline would
-// repeat the exact mistake this was built to fix.
 function PhaseContextNote({ phaseContext }) {
   if (!phaseContext) return null;
   const p = _resolvePhaseProducers()[phaseContext.phase];
@@ -202,8 +180,6 @@ function ProducerBlock({ entry }) {
       </>
     );
   }
-  // status === "named": firms the report chapter specifically attributes to
-  // THIS product — the most specific answer available, not a shared count.
   return (
     <>
       <div style={{ color: "#cbd5e1" }}>{entry.firms.join(" · ")}</div>
@@ -216,34 +192,40 @@ function ProducerBlock({ entry }) {
   );
 }
 
-function ProductStatsPopup({ product, hs4, anchorRect }) {
+// ─── Detail panel content components ────────────────────────────────────────
+// These render the inner body of the SidePanel — no anchorRect, no positioning.
+
+function ProductDetailPanel({ product, hs4, onClose }) {
   const trade = resolveTrade(hs4);
   const producers = _resolveProductFirms()[product.id];
   return (
-    <StatsPopupShell title={product.name} anchorRect={anchorRect}>
-
-      {/* ── Uganda trade (minister question: how much imported / exported) ── */}
+    <SidePanel title={product.name} onClose={onClose}>
       <TradeBlock trade={trade} noDataLabel="Trade data not yet fetched for this product's HS code." />
 
-      {/* ── Known producers + industry count ───────────────────────────── */}
       <div style={{ fontWeight: 700, color: "#93c5fd", marginTop: "10px" }}>🏭 Known producers</div>
       <ProducerBlock entry={producers} />
 
-      {/* ── Installed capacity (minister question) — populated from MTIC   */}
-      {/* ── National Industries Register; left blank until register data   */}
-      {/* ── is linked per product (interim: see phase count above).       */}
       <div style={{ fontWeight: 700, color: "#93c5fd", marginTop: "10px" }}>⚡ Total installed capacity</div>
       {producers?.capacity ? (
         <div style={{ color: "#cbd5e1" }}>{producers.capacity}</div>
       ) : (
         <div style={{ color: "#64748b", fontSize: "11px" }}>
           Capacity data per product is being compiled from the MTIC National Industries Register.
-          {producers?.phaseContext &&
-            " Phase-level capacity is referenced in the producers section above."}
+          {producers?.phaseContext && " Phase-level capacity is referenced in the producers section above."}
         </div>
       )}
 
-      {/* ── HS code(s) for traceability ───────────────────────────────── */}
+      {producers?.currentCapacity && producers?.targetCapacity && (
+        <>
+          <div style={{ fontWeight: 700, color: "#93c5fd", marginTop: "10px" }}>📊 Capacity vs target</div>
+          <div style={{ color: "#cbd5e1" }}>Current: <strong>{producers.currentCapacity}</strong></div>
+          <div style={{ color: "#cbd5e1" }}>Target: <strong>{producers.targetCapacity}</strong></div>
+          {producers.capacityGapNote && (
+            <div style={{ color: "#64748b", fontSize: "9.5px", marginTop: "4px" }}>{producers.capacityGapNote}</div>
+          )}
+        </>
+      )}
+
       {hs4 && (
         <div style={{ color: "#64748b", fontSize: "9.5px", marginTop: "6px" }}>
           HS code: <strong>{hs4.replace(/_/g, " + ")}</strong>
@@ -253,15 +235,19 @@ function ProductStatsPopup({ product, hs4, anchorRect }) {
       <div style={{ color: "#64748b", fontSize: "9.5px", marginTop: "8px", borderTop: "1px solid #1e293b", paddingTop: "6px" }}>
         Sources: ITC TradeMap (Uganda bilateral trade 2024) · {PHASE_SOURCE}
       </div>
-    </StatsPopupShell>
+    </SidePanel>
   );
 }
 
-function RawMaterialPopup({ item, anchorRect }) {
+function RawMaterialDetailPanel({ item, onClose }) {
   const trade = resolveRawTrade(item.name);
   const phase = RAW_MATERIAL_PHASE[item.name];
   return (
-    <StatsPopupShell title={item.name} anchorRect={anchorRect}>
+    <SidePanel title={item.name} onClose={onClose}>
+      {item.detail && (
+        <div style={{ color: "#94a3b8", fontSize: "10.5px", marginBottom: "8px" }}>{item.detail}</div>
+      )}
+
       <div style={{ fontWeight: 700, color: "#93c5fd", marginTop: "8px" }}>🏭 Industries &amp; capacity</div>
       {phase ? (
         <PhaseCountBlock phase={phase} />
@@ -274,16 +260,16 @@ function RawMaterialPopup({ item, anchorRect }) {
       <div style={{ color: "#64748b", fontSize: "9.5px", marginTop: "8px", borderTop: "1px solid #1e293b", paddingTop: "6px" }}>
         {phase ? `Sources: ITC TradeMap (Uganda bilateral trade) · ${PHASE_SOURCE}` : "Source: ITC TradeMap (Uganda bilateral trade)"}
       </div>
-    </StatsPopupShell>
+    </SidePanel>
   );
 }
 
-function InputStatsPopup({ text, anchorRect }) {
+function InputDetailPanel({ text, onClose }) {
   const trade = _resolveMatchTrade(text);
   const phase = _resolveMatchPhase(text);
   const hasData = trade || phase;
   return (
-    <StatsPopupShell title={text} anchorRect={anchorRect}>
+    <SidePanel title={text} onClose={onClose}>
       {hasData ? (
         <>
           <div style={{ fontWeight: 700, color: "#93c5fd", marginTop: "8px" }}>🏭 Industries &amp; capacity</div>
@@ -311,7 +297,7 @@ function InputStatsPopup({ text, anchorRect }) {
           </div>
         </div>
       )}
-    </StatsPopupShell>
+    </SidePanel>
   );
 }
 
@@ -346,22 +332,30 @@ function TabBar({ tab, setTab, color }) {
   );
 }
 
-function ItemList({ items, color, showTrade }) {
-  const [hover, setHover] = useState(null);
+// Inputs tab: colored availability dots (red/orange/green/grey) sorted worst-first.
+// Technology/Skills tabs: plain accent-color dots, original order.
+function ItemList({ items, color, onItemClick }) {
+  const isInputs = !!onItemClick;
+
+  const displayItems = isInputs
+    ? [...(items || [])].sort((a, b) => STATUS_ORDER[inputStatus(a)] - STATUS_ORDER[inputStatus(b)])
+    : (items || []);
+
   return (
     <ul className="space-y-1 pt-1">
-      {(items || []).map((item, i) => (
-        <li key={i} className="text-xs flex items-start gap-1.5 text-slate-700"
-          onMouseEnter={showTrade ? (e) => {
-            const r = e.currentTarget.getBoundingClientRect();
-            setHover({ text: item, rect: r });
-          } : undefined}
-          onMouseLeave={showTrade ? () => setHover(null) : undefined}>
-          <span className="mt-1 shrink-0 w-1.5 h-1.5 rounded-full" style={{ backgroundColor: color }} />
-          {item}
-        </li>
-      ))}
-      {hover && <InputStatsPopup text={hover.text} anchorRect={hover.rect} />}
+      {displayItems.map((item, i) => {
+        const status = isInputs ? inputStatus(item) : null;
+        const dotColor = isInputs ? STATUS_COLOR[status] : color;
+        return (
+          <li key={i}
+            className={`text-xs flex items-start gap-1.5 text-slate-700${isInputs ? " cursor-pointer hover:text-slate-900 hover:bg-slate-50 rounded px-1 -mx-1 py-0.5" : ""}`}
+            onClick={isInputs ? () => onItemClick(item) : undefined}
+            title={isInputs ? "Click for trade data and capacity details" : undefined}>
+            <span className="mt-1 shrink-0 w-1.5 h-1.5 rounded-full" style={{ backgroundColor: dotColor }} />
+            {item}
+          </li>
+        );
+      })}
     </ul>
   );
 }
@@ -382,20 +376,22 @@ function RouteLabel({ label, color, textColor }) {
   );
 }
 
-function SimpleCard({ node }) {
+function SimpleCard({ node, onItemClick }) {
   const [tab, setTab] = useState("inputs");
   return (
     <div className="rounded-lg overflow-hidden border border-slate-200 shadow-sm">
       <CardHeader stage={node.stage} label={node.label} color={node.color} textColor={node.textColor} />
       <div style={{ backgroundColor: node.color + "10" }}>
         <TabBar tab={tab} setTab={setTab} color={node.color} />
-        <div className="px-3 py-2"><ItemList items={node[tab]} color={node.color} showTrade={tab === "inputs"} /></div>
+        <div className="px-3 py-2">
+          <ItemList items={node[tab]} color={node.color} onItemClick={tab === "inputs" ? onItemClick : undefined} />
+        </div>
       </div>
     </div>
   );
 }
 
-function DualCard({ node }) {
+function DualCard({ node, onItemClick }) {
   const [tab, setTab] = useState("inputs");
   return (
     <div className="rounded-lg overflow-hidden border border-slate-200 shadow-sm">
@@ -406,7 +402,7 @@ function DualCard({ node }) {
           {[node.routeA, node.routeB].map((route, i) => (
             <div key={i} className="p-2">
               <RouteLabel label={route.label} color={node.color} textColor={node.textColor} />
-              <ItemList items={route[tab]} color={node.color} showTrade={tab === "inputs"} />
+              <ItemList items={route[tab]} color={node.color} onItemClick={tab === "inputs" ? onItemClick : undefined} />
             </div>
           ))}
         </div>
@@ -415,7 +411,7 @@ function DualCard({ node }) {
   );
 }
 
-function TripleCard({ node }) {
+function TripleCard({ node, onItemClick }) {
   const [tab, setTab] = useState("inputs");
   const routes = [node.routeA, node.routeB, node.routeC];
   return (
@@ -429,7 +425,7 @@ function TripleCard({ node }) {
               <div style={{ fontSize: "9px", fontWeight: "700", textAlign: "center", padding: "3px 4px", borderRadius: "4px", marginBottom: "6px", backgroundColor: node.color, color: node.textColor, lineHeight: "1.3" }}>
                 {route.label}
               </div>
-              <ItemList items={route[tab]} color={node.color} showTrade={tab === "inputs"} />
+              <ItemList items={route[tab]} color={node.color} onItemClick={tab === "inputs" ? onItemClick : undefined} />
             </div>
           ))}
         </div>
@@ -438,7 +434,7 @@ function TripleCard({ node }) {
   );
 }
 
-function GroupCard({ node }) {
+function GroupCard({ node, onItemClick }) {
   const [tab, setTab] = useState("inputs");
   return (
     <div className="rounded-lg overflow-hidden border border-slate-200 shadow-sm">
@@ -449,7 +445,7 @@ function GroupCard({ node }) {
           {node.groups.map((g, i) => (
             <div key={i} className={`p-2 ${i < 2 ? "border-b border-slate-200" : ""}`}>
               <RouteLabel label={g.label} color={node.color} textColor={node.textColor} />
-              <ItemList items={g[tab] || g.inputs} color={node.color} showTrade={tab === "inputs"} />
+              <ItemList items={g[tab] || g.inputs} color={node.color} onItemClick={tab === "inputs" ? onItemClick : undefined} />
             </div>
           ))}
         </div>
@@ -458,19 +454,15 @@ function GroupCard({ node }) {
   );
 }
 
-function RawCard({ node }) {
-  const [hover, setHover] = useState(null);
+function RawCard({ node, onItemClick }) {
   return (
     <div className="rounded-lg overflow-hidden border border-slate-200 shadow-sm">
       <CardHeader stage={node.stage} label={node.label} color={node.color} textColor={node.textColor} />
       <div className="divide-y divide-slate-200" style={{ backgroundColor: node.color + "10" }}>
         {node.items.map((item, i) => (
-          <div key={i} className="px-3 py-2 flex items-start gap-2"
-            onMouseEnter={(e) => {
-              const r = e.currentTarget.getBoundingClientRect();
-              setHover({ item, rect: r });
-            }}
-            onMouseLeave={() => setHover(null)}>
+          <div key={i} className="px-3 py-2 flex items-start gap-2 cursor-pointer hover:bg-slate-50"
+            onClick={() => onItemClick && onItemClick(item)}
+            title="Click for trade and capacity details">
             <span className="mt-1 shrink-0 w-1.5 h-1.5 rounded-full" style={{ backgroundColor: node.color }} />
             <div>
               <div className="text-xs font-bold text-slate-800">{item.name}</div>
@@ -479,20 +471,19 @@ function RawCard({ node }) {
           </div>
         ))}
       </div>
-      {hover && <RawMaterialPopup item={hover.item} anchorRect={hover.rect} />}
     </div>
   );
 }
 
-function NodeCard({ node }) {
-  if (node.triple) return <TripleCard node={node} />;
-  if (node.dual) return <DualCard node={node} />;
-  if (node.groups) return <GroupCard node={node} />;
-  if (node.rawMaterials) return <RawCard node={node} />;
-  return <SimpleCard node={node} />;
+function NodeCard({ node, onItemClick }) {
+  if (node.triple) return <TripleCard node={node} onItemClick={onItemClick} />;
+  if (node.dual) return <DualCard node={node} onItemClick={onItemClick} />;
+  if (node.groups) return <GroupCard node={node} onItemClick={onItemClick} />;
+  if (node.rawMaterials) return <RawCard node={node} onItemClick={onItemClick} />;
+  return <SimpleCard node={node} onItemClick={onItemClick} />;
 }
 
-function Chain({ chain }) {
+function Chain({ chain, onItemClick }) {
   return (
     <div className="flex flex-col min-w-0">
       <div className="text-center text-xs font-bold tracking-wider uppercase py-1.5 px-3 rounded-lg mb-2"
@@ -501,7 +492,7 @@ function Chain({ chain }) {
       </div>
       {chain.nodes.map((node, i) => (
         <div key={node.id || i}>
-          <NodeCard node={node} />
+          <NodeCard node={node} onItemClick={onItemClick} />
           {i < chain.nodes.length - 1 && <Arrow color={chain.accent} />}
         </div>
       ))}
@@ -533,11 +524,17 @@ function productChain(slug) {
   return "iron";
 }
 
+// detailPanel shape:
+//   null                                         → panel closed
+//   { type: 'product', product, hs4 }            → product detail (from sidebar click)
+//   { type: 'input',   text }                    → chain input detail (from card click)
+//   { type: 'raw',     item: { name, detail } }  → raw material detail (from RawCard click)
+
 export default function ValueChainExplorer() {
   const [selected, setSelected] = useState("galvanized");
   const [selectedChain, setSelectedChain] = useState("iron");
   const [sidebarOpen, setSidebarOpen] = useState(true);
-  const [hoverInfo, setHoverInfo] = useState(null);
+  const [detailPanel, setDetailPanel] = useState(null);
   const [, setLiveVersion] = useState(0); // incremented after any live PocketBase fetch to trigger re-render
 
   function handleChainChange(chainId) {
@@ -547,6 +544,7 @@ export default function ValueChainExplorer() {
       const firstPid = firstCat.products.find(pid => productChain(pid) === chainId);
       if (firstPid) setSelected(firstPid);
     }
+    setDetailPanel(null);
   }
 
   // Fetch trade data live from PocketBase on every page load so a refresh picks
@@ -599,7 +597,13 @@ export default function ValueChainExplorer() {
       }
       const productFirms = {};
       for (const row of pfData.items || []) {
-        productFirms[row.product_slug] = { status: row.status, firms: row.firms || [], note: row.note, phaseContext: row.phase_context || null };
+        productFirms[row.product_slug] = {
+          status: row.status, firms: row.firms || [], note: row.note,
+          phaseContext: row.phase_context || null,
+          currentCapacity: row.current_capacity || null,
+          targetCapacity: row.target_capacity || null,
+          capacityGapNote: row.capacity_gap_note || null,
+        };
       }
       // keyword rows arrive pre-sorted by display_order; first match wins
       const keywords = kwData.items || [];
@@ -627,6 +631,15 @@ export default function ValueChainExplorer() {
   }, []);
 
   const product = _resolveProducts()[selected];
+
+  function openInputPanel(item) {
+    // item is either a string (input text) or a raw-material object { name, detail }
+    if (typeof item === "string") {
+      setDetailPanel({ type: "input", text: item });
+    } else {
+      setDetailPanel({ type: "raw", item });
+    }
+  }
 
   return (
     <div style={{ display: "flex", height: "100vh", backgroundColor: "#f8fafc", fontFamily: "system-ui, sans-serif", overflow: "hidden" }}>
@@ -664,19 +677,22 @@ export default function ValueChainExplorer() {
               )}
               {cat.products.map((pid) => {
                 const p = _resolveProducts()[pid];
+                const hs4 = _resolveProductHs4(pid);
                 return (
-                  <button key={pid} onClick={() => setSelected(pid)}
+                  <button key={pid}
                     title={p.name}
-                    onMouseEnter={(e) => setHoverInfo({ pid, rect: e.currentTarget.getBoundingClientRect() })}
-                    onMouseLeave={() => setHoverInfo(null)}
+                    onClick={() => {
+                      setSelected(pid);
+                      setDetailPanel({ type: "product", product: p, hs4 });
+                    }}
                     style={{ width: "100%", textAlign: "left", padding: sidebarOpen ? "5px 12px" : "8px", background: selected === pid ? "#1e293b" : "transparent", border: "none", cursor: "pointer", display: "flex", alignItems: "center", gap: "8px" }}>
                     <span style={{ width: "6px", height: "6px", borderRadius: "50%", backgroundColor: p.color, flexShrink: 0 }} />
                     {sidebarOpen && (
                       <span style={{ overflow: "hidden" }}>
                         <span style={{ display: "block", fontSize: "11px", color: selected === pid ? "#f1f5f9" : "#94a3b8", fontWeight: selected === pid ? "600" : "400", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{p.name}</span>
-                        {_resolveProductHs4(pid) && (
+                        {hs4 && (
                           <span style={{ display: "block", fontSize: "9px", color: "#475569", marginTop: "1px" }}>
-                            HS {_resolveProductHs4(pid).replace(/_/g, " + ")}
+                            HS {hs4.replace(/_/g, " + ")}
                           </span>
                         )}
                       </span>
@@ -709,10 +725,23 @@ export default function ValueChainExplorer() {
               </div>
               <div style={{ fontSize: "11px", color: "#64748b", marginTop: "2px", maxWidth: "600px" }}>{product.description}</div>
             </div>
-            <div style={{ display: "flex", gap: "16px", fontSize: "11px", color: "#94a3b8", flexShrink: 0, marginLeft: "16px" }}>
-              <span>📦 <strong>Inputs</strong></span>
-              <span>⚙️ <strong>Technology</strong></span>
-              <span>🎓 <strong>Professionals</strong></span>
+            <div style={{ display: "flex", flexDirection: "column", gap: "6px", fontSize: "10px", color: "#94a3b8", flexShrink: 0, marginLeft: "16px", textAlign: "right" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "4px", justifyContent: "flex-end" }}>
+                <span style={{ width: "8px", height: "8px", borderRadius: "50%", backgroundColor: STATUS_COLOR.green, flexShrink: 0 }} />
+                <span>Domestic production confirmed</span>
+              </div>
+              <div style={{ display: "flex", alignItems: "center", gap: "4px", justifyContent: "flex-end" }}>
+                <span style={{ width: "8px", height: "8px", borderRadius: "50%", backgroundColor: STATUS_COLOR.orange, flexShrink: 0 }} />
+                <span>Imported; no domestic producer</span>
+              </div>
+              <div style={{ display: "flex", alignItems: "center", gap: "4px", justifyContent: "flex-end" }}>
+                <span style={{ width: "8px", height: "8px", borderRadius: "50%", backgroundColor: STATUS_COLOR.red, flexShrink: 0 }} />
+                <span>Capacity gap — must build</span>
+              </div>
+              <div style={{ display: "flex", alignItems: "center", gap: "4px", justifyContent: "flex-end" }}>
+                <span style={{ width: "8px", height: "8px", borderRadius: "50%", backgroundColor: STATUS_COLOR.utility, flexShrink: 0 }} />
+                <span>Process utility (on-site)</span>
+              </div>
             </div>
           </div>
         </div>
@@ -721,7 +750,7 @@ export default function ValueChainExplorer() {
         <div style={{ flex: 1, overflowY: "auto", padding: "16px" }}>
           <div style={{ display: "grid", gridTemplateColumns: product.chains.length === 1 ? "minmax(0,560px)" : `repeat(${product.chains.length}, minmax(0,1fr))`, gap: "20px", justifyContent: product.chains.length === 1 ? "center" : "stretch", margin: product.chains.length === 1 ? "0 auto" : "0" }}>
             {product.chains.map((chain, i) => (
-              <Chain key={i} chain={chain} />
+              <Chain key={i} chain={chain} onItemClick={openInputPanel} />
             ))}
           </div>
         </div>
@@ -739,8 +768,25 @@ export default function ValueChainExplorer() {
         </div>
       </div>
 
-      {hoverInfo && (
-        <ProductStatsPopup product={_resolveProducts()[hoverInfo.pid]} hs4={_resolveProductHs4(hoverInfo.pid)} anchorRect={hoverInfo.rect} />
+      {/* Detail panel — click-to-open, persistent, closable */}
+      {detailPanel && detailPanel.type === "product" && (
+        <ProductDetailPanel
+          product={detailPanel.product}
+          hs4={detailPanel.hs4}
+          onClose={() => setDetailPanel(null)}
+        />
+      )}
+      {detailPanel && detailPanel.type === "input" && (
+        <InputDetailPanel
+          text={detailPanel.text}
+          onClose={() => setDetailPanel(null)}
+        />
+      )}
+      {detailPanel && detailPanel.type === "raw" && (
+        <RawMaterialDetailPanel
+          item={detailPanel.item}
+          onClose={() => setDetailPanel(null)}
+        />
       )}
     </div>
   );
