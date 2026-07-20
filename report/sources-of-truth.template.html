@@ -1828,9 +1828,50 @@ function initMap(){
     });
   }
 
+  // Live product detail fetch: called when a product chip is clicked inside
+  // a factory popup. Slugifies the name, fetches explorer_products +
+  // explorer_product_firms from PocketBase, and expands a detail card inline.
+  window._openMapProduct = async function(productName, key) {
+    const el = document.getElementById(key);
+    if (!el) return;
+    if (el.dataset.active === productName) { el.innerHTML=''; el.dataset.active=''; return; }
+    el.dataset.active = productName;
+    el.innerHTML = '<div style="font-size:10px;color:#888;padding:4px 0">Loading…</div>';
+    const slug = productName.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+    const base = _pbUrl();
+    try {
+      const enc = encodeURIComponent;
+      const [pr, fr, tr] = await Promise.all([
+        fetch(`${base}/api/collections/explorer_products/records?filter=(slug="${enc(slug)}")&perPage=1`).then(r=>r.ok?r.json():{items:[]}),
+        fetch(`${base}/api/collections/explorer_product_firms/records?filter=(product_slug="${enc(slug)}")&perPage=1`).then(r=>r.ok?r.json():{items:[]}),
+        fetch(`${base}/api/collections/explorer_trade_hs4/records?perPage=1`).then(()=>({items:[]})),
+      ]);
+      const prod = pr.items?.[0], firm = fr.items?.[0];
+      if (!prod && !firm) {
+        el.innerHTML='<div style="font-size:10px;color:#888;padding:4px 0">No PocketBase record yet — Jerome can add it via the Explorer admin.</div>';
+        return;
+      }
+      let html = '<div style="border-top:1px solid #e8e8e8;margin-top:5px;padding-top:5px;font-size:10px;line-height:1.5">';
+      if (prod?.description) html += `<div style="color:#444;margin-bottom:3px">${prod.description}</div>`;
+      if (firm?.current_capacity) html += `<div><span style="color:#888">Current capacity:</span> <strong>${firm.current_capacity}</strong></div>`;
+      if (firm?.target_capacity)  html += `<div><span style="color:#888">Target:</span> ${firm.target_capacity}</div>`;
+      if (firm?.capacity_gap_note) html += `<div style="color:#c62828;margin-top:2px;font-style:italic">${firm.capacity_gap_note}</div>`;
+      if (prod?.hs4_code) html += `<div style="color:#888;margin-top:3px">HS ${prod.hs4_code} · <a href="#" onclick="document.getElementById('tab-btn-explorer')&&document.getElementById('tab-btn-explorer').click();return false;" style="color:#1565c0">Open in Explorer</a></div>`;
+      html += '</div>';
+      el.innerHTML = html;
+    } catch(e) {
+      el.innerHTML = '<div style="font-size:10px;color:#c62828">Could not fetch — check PocketBase connection.</div>';
+    }
+  };
+
   const markersByChain={};
-  FACTORIES.forEach(f=>{
+  FACTORIES.forEach((f,fi)=>{
     const col=CHAIN_COLORS[f.chain]||'#555';
+    const key='_mpd'+fi;
+    const prods=f.products?(f.products.split(',').map(p=>p.trim()).filter(Boolean)):[f.products].filter(Boolean);
+    const productHtml=prods.length
+      ? prods.map(p=>`<button onclick="window._openMapProduct('${p.replace(/'/g,"\\'")}','${key}')" style="background:#f0f4ff;border:1px solid #c3cfe2;border-radius:3px;cursor:pointer;font-size:10px;padding:1px 6px;margin:2px 2px 2px 0;font-family:inherit;color:#1a237e">${p}</button>`).join('')
+      : '<span style="color:#aaa;font-style:italic">—</span>';
     const m=L.marker([f.lat,f.lng],{icon:mkIcon(col)})
       .bindPopup(
         `<div style="min-width:260px;max-width:320px;font-family:Segoe UI,system-ui,sans-serif">
@@ -1838,8 +1879,10 @@ function initMap(){
           <div style="font-size:11px;color:#666;margin-bottom:1px">${f.chain}</div>
           <div style="font-size:11px;color:#555;margin-bottom:6px">📍 ${f.loc}</div>
           <hr style="margin:4px 0;border:none;border-top:1px solid #e8e8e8">
-          <table style="font-size:11px;width:100%;border-collapse:collapse;line-height:1.5">
-            <tr><td colspan="2" style="padding:3px 0;color:#333;font-style:italic">${f.products}</td></tr>
+          <div style="font-size:10px;font-weight:700;color:#888;margin:4px 0 2px">Products — click for details</div>
+          <div>${productHtml}</div>
+          <div id="${key}"></div>
+          <table style="font-size:11px;width:100%;border-collapse:collapse;line-height:1.5;margin-top:4px">
             ${f.capacity_installed!=='—'?`<tr><td style="color:#888;padding:2px 8px 2px 0;white-space:nowrap;vertical-align:top;width:42%">Installed cap.</td><td style="color:#222;padding:2px 0">${f.capacity_installed}</td></tr>`:''}
             ${f.capacity_utilised!=='—'?`<tr><td style="color:#888;padding:2px 8px 2px 0;white-space:nowrap;vertical-align:top">Current output</td><td style="color:#222;padding:2px 0">${f.capacity_utilised}</td></tr>`:''}
             ${f.employees!=='—'?`<tr><td style="color:#888;padding:2px 8px 2px 0;white-space:nowrap;vertical-align:top">Employees</td><td style="color:#222;padding:2px 0">${f.employees}</td></tr>`:''}

@@ -19,16 +19,16 @@ We are building toward a high-stakes external demonstration to a senior economis
 ## Solomon (from the 2026-07-21 strategy call)
 
 - [ ] **Focus only on Iron & Steel and finish it end to end** before any other chain. Methodical, close one item at a time.
-- [ ] Finish the live-data refresh work already in progress (treemap views, etc.).
-- [ ] **Map:** click a product to open its dropdown with info populated, fetched live; where data is missing, make it fetch.
-- [ ] **Local-capacity signal** on map + Explorer: show where local capacity exists and where it is a gap (capture what is available; where absent, show the absence).
-- [ ] **Explorer inputs: hover to click.** A click opens a closable side panel (officials want click, look, move). Hover proved awkward in the demo.
-- [ ] **Traffic-light colour coding** (red / orange / green, possibly up to 5 levels) on the bullets/dots, worst first. Red = no domestic production, capacity must be built.
-- [ ] **Weight inputs by essentiality × scarcity** (like risk = impact × probability): essential-and-unavailable ranks highest and red; scarce-but-importable (e.g. flux acids) ranks lower. Use the AI to help derive it.
-- [ ] **Product-as-input consistency:** cold rolled coil is a product AND an input on the same HS code; it must carry its HS-coded trade data on the input side too (sources need not repeat).
-- [ ] **Genuine process utilities** (steam, water, energy) with no trade data: show an explanatory pop-up saying what it is and why no data, rather than nothing.
-- [ ] **Capacity-vs-target traceability** on inputs: show current capacity against the capacity needed at the target state, so the gap is comparable.
-- [ ] Research the data-architecture options (aggregation engine vs backend layer vs DB change) from a delivery standpoint.
+- [x] Finish the live-data refresh work already in progress (treemap views, etc.). — done in feat/map-explorer-alignment-2026-07-20 (merged).
+- [x] **Map:** click a product to open its dropdown with info populated, fetched live; where data is missing, make it fetch. — done: product chips in factory popup, `_openMapProduct()` fetches `explorer_product_firms` on click (PR #119). Data populates once Jerome adds capacity fields in PocketBase admin.
+- [x] **Local-capacity signal** on map + Explorer: show where local capacity exists and where it is a gap. — done: `updateStats()` sums `capacity_installed`; Iron & Steel gap note shown; Explorer `ProductDetailPanel` shows `current_capacity`/`target_capacity`/`capacity_gap_note` (PR #118).
+- [x] **Explorer inputs: hover to click.** A click opens a closable side panel. — done in PR #117 (merged).
+- [x] **Traffic-light colour coding** (red / orange / green) on the dots, worst first. — done in PR #117 (merged).
+- [x] **Weight inputs by essentiality × scarcity**: essential-and-unavailable ranks highest. — done in PR #118: `getInputWeight()`, priority score block in panel, weight as secondary sort key.
+- [x] **Product-as-input consistency:** cold rolled coil carries HS trade data on the input side. — done in PR #117: `_resolveMatchTrade()` fallback matches product by name → HS code.
+- [x] **Genuine process utilities** with no trade data: explanatory pop-up says what it is and why no data. — done in PR #117: status `utility` shows an explanation block in `InputDetailPanel`.
+- [ ] **Capacity-vs-target traceability** on inputs: schema + UI done (PR #117); blocked on Jerome populating `current_capacity`, `target_capacity`, `capacity_gap_note` in PocketBase `explorer_product_firms`.
+- [x] Research the data-architecture options (aggregation engine vs backend layer vs DB change). — done: `docs/data-architecture-options.md` (PR #118).
 - [ ] Join the short evening check-in calls this week.
 
 ## Hillary (from the 2026-07-21 strategy call)
