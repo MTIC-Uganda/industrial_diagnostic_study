@@ -18,7 +18,8 @@
   { "target_type": "hs4",   "pattern_source": "\\bmetallurgical coke\\b|\\bcoke breeze\\b|\\bPCI\\b",               "pattern_flags": "i", "target_value": "2704", "essentiality":  9, "scarcity": 10, "display_order": 16 },
   { "target_type": "hs4",   "pattern_source": "\\bnatural gas\\b",                                                    "pattern_flags": "i", "target_value": "2711", "essentiality":  8, "scarcity":  9, "display_order": 17 },
   { "target_type": "hs4",   "pattern_source": "\\bwelding.*consumable|\\bweld.*wire\\b|\\bsubmerged arc\\b",          "pattern_flags": "i", "target_value": "8311", "essentiality":  6, "scarcity":  7, "display_order": 18 },
-  { "target_type": "phase", "pattern_source": "\\bsponge iron\\b|\\bpig iron\\b|\\bDRI\\b|\\bHBI\\b",              "pattern_flags": "i", "target_value": "II",   "essentiality":  9, "scarcity": 10, "display_order": 19 },
-  { "target_type": "phase", "pattern_source": "\\bscrap\\b|\\bliquid steel\\b",                                    "pattern_flags": "i", "target_value": "III",  "essentiality": 10, "scarcity":  6, "display_order": 20 },
-  { "target_type": "phase", "pattern_source": "\\b(slab|billet|bloom)\\b",                                         "pattern_flags": "i", "target_value": "IV",   "essentiality":  9, "scarcity":  8, "display_order": 21 }
+  { "target_type": "hs4",   "pattern_source": "\\bcold-?rolled\\s+(coil|sheet)\\b|\\bCRC\\b|\\bbase substrate\\b", "pattern_flags": "i", "target_value": "7209", "essentiality": 10, "scarcity":  9, "display_order": 19 },
+  { "target_type": "phase", "pattern_source": "\\bsponge iron\\b|\\bpig iron\\b|\\bDRI\\b|\\bHBI\\b",              "pattern_flags": "i", "target_value": "II",   "essentiality":  9, "scarcity": 10, "display_order": 20 },
+  { "target_type": "phase", "pattern_source": "\\bscrap\\b|\\bliquid steel\\b",                                    "pattern_flags": "i", "target_value": "III",  "essentiality": 10, "scarcity":  6, "display_order": 21 },
+  { "target_type": "phase", "pattern_source": "\\b(slab|billet|bloom)\\b",                                         "pattern_flags": "i", "target_value": "IV",   "essentiality":  9, "scarcity":  8, "display_order": 22 }
 ]
