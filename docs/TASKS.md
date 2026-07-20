@@ -10,7 +10,24 @@ The shared work queue, by owner. Jerome's feedback that needs a code change land
 section; data corrections go through the pipeline (Ask MIDD / re-ingestion), not here. Any agent
 reads this to know what to work on next. Tick items as they land.
 
-Last updated: 2026-07-10 (2026-07-10 catch-up: pipeline finish + agent-monitors-backend, cleanup, mapping tool)
+Last updated: 2026-07-20 (2026-07-20 catch-up: map vs Explorer consistency + PocketBase live-fetch)
+
+## Solomon (from the 2026-07-20 catch-up)
+
+- [ ] **By tomorrow:** align the **iron & steel** products in the Explorer to match the **map** exactly (rearrange the extra Explorer products), then bring every product into the same structure.
+- [ ] Make the **map birds-eye only**: inputs leading to products / product stages. **Strip technologies and labour off the map** (those live in the Explorer detail).
+- [ ] Make all Explorer pages **fetch live from PocketBase**. Example: cold-rolled coil shows data in one view but "no HS-code trade data fetched yet" in another. A refresh must re-fetch, never fetch-once-render-forever. If the DB genuinely has no data, say so, but still fetch. Confirm whether pages currently fetch live or cache, then alert Jerome to review the structure.
+- [ ] Only **after** the structure is agreed and fetching is live, do the **data-correctness pass** (fix wrong values; the structure is otherwise good).
+- [ ] Dedicate close to full-time to MIDD this week (Jerome wants the assignment closed this week for July payment).
+
+## Hillary (from the 2026-07-20 catch-up)
+
+- [ ] Send Solomon the **fetch-and-render architecture explainer** (database to repository/data-access to service to controller/API to UI viewer; a refresh re-fetches, so an updated record shows on reload).
+
+## Jerome (from the 2026-07-20 catch-up)
+
+- [ ] Review the structure once Solomon signals the map/Explorer alignment and live fetching are done.
+- [ ] Process the **July payment**; wants the assignment fully closed this week.
 
 ## Solomon (from the 2026-07-10 catch-up)
 
