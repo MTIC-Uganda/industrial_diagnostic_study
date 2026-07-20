@@ -37,7 +37,7 @@ workspace "MIDD — Manufacturing Industry Diagnostics Dashboard" "As-built 2026
             dashboardGen = container "Dashboard Generator" "scripts/generate_dashboard.py. Treemaps + locations map aggregate from PocketBase industries (static JSON fallback). Fills the template." "Python"
             reactBuild = container "React Sankey Build" "app/frontend -> dist (D3-sankey), embedded as sankey.html." "Node/Vite"
             explorerBuild = container "React Value Chain Explorer Build" "app/explorer -> dist (sidebar product picker + chain-of-cards drill-down: inputs/technology/professionals per stage), embedded as explorer.html. Iron & Steel only for v1." "Node/Vite/Tailwind"
-            dashboard = container "Dashboard (static)" "The public diagnostic dashboard. Prod midd-ug.com (:8201), staging staging.midd-ug.com (:8200). One build serves both: a hostname check at runtime shows, on prod, the public Ask MIDD bubble only; on staging, BOTH the team Upload/Ask links and the bubble (so the bubble is testable before prod) (ADR-016, Issue #71)." "Static HTML/Nginx"
+            dashboard = container "Dashboard (static shell + live-fetch)" "The public diagnostic dashboard. Prod midd-ug.com (:8201), staging staging.midd-ug.com (:8200). One build serves both: a hostname check at runtime shows, on prod, the public Ask MIDD bubble only; on staging, BOTH the team Upload/Ask links and the bubble (so the bubble is testable before prod) (ADR-016, Issue #71). Chain Status, treemap, locations map, and the Explorer (trade + structure) now live-fetch PocketBase in the browser on page load so a PocketBase edit shows on refresh with no rebuild; the last-built static data stays as an offline fallback if PocketBase is unreachable. Direct browser-to-PocketBase fetch was chosen over a layered Controller/Service/DAL/DB tier because PocketBase's REST API already is the backend and the scale does not justify the extra tier (ADR-024)." "Static HTML/Nginx"
 
             # ── SHARED RECORD + ROUTING ───────────────────────────────────
             record = container "Shared Record" "The single source of decisions + state all agents read: ADRs (docs/adr), STATUS.md (live snapshot), TASKS.md (per-owner queue), meeting transcripts, CLAUDE.md. Brain reads a read-only clone pulled every 5 min." "Markdown/Git"
@@ -53,6 +53,7 @@ workspace "MIDD — Manufacturing Industry Diagnostics Dashboard" "As-built 2026
         hillary -> midd "Builds and operates the harness, agents, datastore, domain"
         commissioner -> dashboard "Reviews the public dashboard"
         colleagues -> dashboard "View"
+        dashboard -> pocketbase "Browser live-fetches chains, factories, treemaps + explorer trade/structure at page load; static bundle fallback if unreachable (ADR-024)"
 
         # ── Data loop: document -> brain -> datastore -> dashboard ────────
         uploader -> github "Commits file + intent sidecar to data/<value-chain>/"
