@@ -33,6 +33,38 @@ def build_dataframes(fetch):
             for coll, name in ANALYTICS_COLLECTIONS.items()}
 
 
+# JUSTIFICATION-A3: new sanitize_dataframes() for the ADR-025 public analytics tier.
+# Column-name tokens that mark a PERSON or contact detail. The public analytics sandbox
+# (ADR-025 public tier) runs arbitrary model-written pandas, so the sanitized-brief guard
+# (numbers + labels, no people) is not enough on its own: arbitrary code would read raw
+# columns. We therefore DROP these columns from the DataFrames the public sandbox sees, so
+# no code path can surface a person. Company/factory names, sectors, districts, and figures
+# stay (Jerome: the public dashboard may name companies, never a person).
+# Note: "person" is deliberately EXCLUDED — it would nuke UBOS employment columns like
+# persons_engaged / persons_employed, which are core analytics figures, not PII.
+SENSITIVE_COL_TOKENS = (
+    "owner", "contact", "email", "e_mail", "phone", "tel", "mobile", "msisdn",
+    "respondent", "applicant", "proprietor", "director", "manager",
+    "official", "notes", "remark", "comment",
+)
+
+
+def sanitize_dataframes(dataframes):
+    """Return a copy of the DataFrames with person/contact columns dropped (public tier).
+
+    A column is dropped if its (lowercased) name contains any SENSITIVE_COL_TOKENS token.
+    Pure: operates on the passed frames, no I/O. This is the structural guarantee that the
+    public sandbox cannot surface a person even under arbitrary code.
+    """
+    out = {}
+    for name, df in (dataframes or {}).items():
+        cols = list(getattr(df, "columns", []))
+        drop = [c for c in cols
+                if any(tok in str(c).lower() for tok in SENSITIVE_COL_TOKENS)]
+        out[name] = df.drop(columns=drop) if drop else df
+    return out
+
+
 def schema_hint(dataframes):
     """LLM-readable list of the available DataFrames, their row counts and columns."""
     lines = []
