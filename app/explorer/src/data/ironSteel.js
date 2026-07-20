@@ -6371,7 +6371,7 @@ const INPUT_KEYWORD_HS4 = [
   { pattern: /\bscrap\b/i,                                                                      hs4: "7204", essentiality: 10, scarcity:  6 },
   { pattern: /\b(slab|billet|bloom|semi-finished)\b/i,                                          hs4: "7207", essentiality:  9, scarcity:  9 },
   { pattern: /\bzinc ingots?\b|\bzinc \(43/i,                                                   hs4: "7901", essentiality:  9, scarcity: 10 },
-  { pattern: /\baluminu?m\b.*(bath|additive|alloy bath)|(bath|alloy bath).*\baluminu?m\b/i,     hs4: "7601", essentiality:  8, scarcity: 10 },
+  { pattern: /\baluminu?m\b.*(bath|additive|additions?|alloy bath)|(bath|alloy bath).*\baluminu?m\b/i, hs4: "7601", essentiality:  8, scarcity: 10 },
   { pattern: /\btin anodes?\b/i,                                                                hs4: "8001", essentiality:  7, scarcity: 10 },
   { pattern: /\bferroalloy/i,                                                                   hs4: "7202", essentiality:  7, scarcity:  9 },
   { pattern: /\bgraphite electrodes?\b/i,                                                       hs4: "8545", essentiality: 10, scarcity: 10 },
@@ -6380,7 +6380,7 @@ const INPUT_KEYWORD_HS4 = [
   { pattern: /\bchromic acid\b|\bchromium salts?\b/i,                                          hs4: "2819", essentiality:  6, scarcity: 10 },
   { pattern: /\btitanium dioxide\b|\bpigments?\b|\bTiO2\b/i,                                   hs4: "3206", essentiality:  7, scarcity: 10 },
   { pattern: /\btopcoat\b|\bprimer coat\b|\blacquer\b/i,                                       hs4: "3208", essentiality:  8, scarcity:  7 },
-  { pattern: /\bargon gas\b|\boxygen\b|\bnitrogen.*anneal\b|\binert gas.*anneal\b/i,            hs4: "2804", essentiality:  8, scarcity:  4 },
+  { pattern: /\bargon gas\b|\boxygen\b|\bnitrogen\b|\binert gas\b|\bhydrogen\b/i,               hs4: "2804", essentiality:  8, scarcity:  4 },
   { pattern: /\bpickling acid|\bHCl\b|\bhydrochloric acid\b/i,                                 hs4: "2806", essentiality:  8, scarcity:  8 },
   { pattern: /\bsulphuric acid\b|\bsulfuric acid\b|\bH2SO4\b/i,                               hs4: "2807", essentiality:  6, scarcity:  8 },
   { pattern: /\biron ore\b|\bore pellets?\b|\biron burden\b|\bore fines\b/i,                   hs4: "2601", essentiality:  9, scarcity:  7 },
@@ -6388,7 +6388,9 @@ const INPUT_KEYWORD_HS4 = [
   { pattern: /\bcoal\b/i,                                                                       hs4: "2701", essentiality:  7, scarcity: 10 },
   { pattern: /\bnatural gas\b/i,                                                                hs4: "2711", essentiality:  8, scarcity:  9 },
   { pattern: /\bwelding.*consumable|\bweld.*wire\b|\bsubmerged arc\b/i,                        hs4: "8311", essentiality:  6, scarcity:  7 },
-  { pattern: /\bcold-?rolled\s+(coil|sheet)\b|\bCRC\b|\bbase substrate\b/i,                  hs4: "7209", essentiality: 10, scarcity:  9 },
+  { pattern: /\bcold-?rolled\s+(coil|sheet|blackplate)\b|\bCRC\b|\bbase substrate\b|\bblackplate\b/i, hs4: "7209", essentiality: 10, scarcity:  9 },
+  { pattern: /\bhot-?rolled\s+(coil|strip|plate|skelp)\b|\bpickled\s*&\s*oiled\b|\bHRC\b/i,          hs4: "7208", essentiality: 10, scarcity:  9 },
+  { pattern: /\bgalvanized.*coil\b|\bgalvalume.*coil\b|\bbase coil\b/i,                               hs4: "7210", essentiality:  9, scarcity:  9 },
 ];
 
 function matchInputTrade(text) {
