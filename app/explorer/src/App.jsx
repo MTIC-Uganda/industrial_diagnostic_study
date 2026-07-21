@@ -110,11 +110,11 @@ function TradeBlock({ trade, noDataLabel }) {
 }
 
 // Persistent right-hand detail panel — replaces the hover tooltip.
-// Stays open until the user hits ✕. Does not affect main layout (position: fixed).
+// Participates in the flex layout so the main content compresses left rather than being obscured.
 function SidePanel({ title, onClose, children }) {
   return (
     <div style={{
-      position: "fixed", zIndex: 50, top: 0, right: 0, height: "100vh", width: "320px",
+      width: "320px", flexShrink: 0,
       backgroundColor: "#0f172a", color: "#e2e8f0",
       boxShadow: "-8px 0 32px rgba(0,0,0,0.55)",
       display: "flex", flexDirection: "column",
