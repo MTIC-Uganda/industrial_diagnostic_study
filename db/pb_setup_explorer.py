@@ -327,10 +327,8 @@ def replace_all(collection, rows):
     for r in rows:
         pb('POST', f'/api/collections/{collection}/records', r)
 
-# explorer_input_keywords is developer-controlled configuration (regex pattern rules),
-# not Jerome's production data. The committed JSON file IS the source of truth here
-# (not PocketBase), so always sync it — even in schema-only mode. This is the one
-# collection where the flow is JSON → PocketBase, not the other way around.
+# explorer_input_keywords: developer-controlled config (regex rules). The committed
+# JSON IS the source of truth — always sync, even in schema-only mode.
 print('\n── Seeding explorer_input_keywords ──')
 replace_all('explorer_input_keywords', [
     {
@@ -342,11 +340,27 @@ replace_all('explorer_input_keywords', [
 ])
 print(f'  {len(input_keywords_data)} rules seeded')
 
+# explorer_trade_hs4: ITC TradeMap reference data from trade_hs4.csv. Nobody edits
+# these figures directly in PocketBase; the CSV is the authoritative source.
+# Upsert (not replace) so any hs4_code already in PocketBase is refreshed, and
+# rows absent from PocketBase but present in the CSV are added. This is what keeps
+# TRADE_HS4 in the generated ironSteel.js complete (e.g. HS 2806, 2807, 2701).
+print('\n── Upserting explorer_trade_hs4 from CSV ──')
+for i, r in enumerate(trade_hs4_csv):
+    payload = {
+        'hs4_code': r['hs4_code'], 'desc': r['desc'], 'year': int(r['year']),
+        'imports_uganda': float(r['imports_uganda']), 'imports_eac': float(r['imports_eac']),
+        'exports_uganda': float(r['exports_uganda']), 'exports_eac': float(r['exports_eac']),
+        'display_order': i,
+    }
+    upsert_record('explorer_trade_hs4', 'hs4_code', r['hs4_code'], payload)
+print(f'  {len(trade_hs4_csv)} HS codes synced')
+
 # SINGLE SOURCE (ADR-017): schema-only in CI for all other collections.
-# Re-seeding products/trade/firms from committed files would overwrite live
-# PocketBase data that Jerome and the pipeline update directly.
+# Re-seeding products/firms from committed files would overwrite live PocketBase
+# data that Jerome and the pipeline update directly.
 if os.environ.get('PB_SCHEMA_ONLY') == '1':
-    print('\nPB_SCHEMA_ONLY=1 — schema + keywords done; skipping product/trade/firm seeding.')
+    print('\nPB_SCHEMA_ONLY=1 — schema + keywords + trade done; skipping product/firm seeding.')
     sys.exit(0)
 
 # ── 1. explorer_products ────────────────────────────────────────────────────
@@ -374,20 +388,7 @@ for r in categories_data:
     upsert_record('explorer_categories', 'slug', slug, payload)
     print(f'  {r["name"]}')
 
-# ── 3. explorer_trade_hs4 ───────────────────────────────────────────────────
-
-print('\n── Seeding explorer_trade_hs4 ──')
-for i, r in enumerate(trade_hs4_csv):
-    payload = {
-        'hs4_code': r['hs4_code'], 'desc': r['desc'], 'year': int(r['year']),
-        'imports_uganda': float(r['imports_uganda']), 'imports_eac': float(r['imports_eac']),
-        'exports_uganda': float(r['exports_uganda']), 'exports_eac': float(r['exports_eac']),
-        'display_order': i,
-    }
-    upsert_record('explorer_trade_hs4', 'hs4_code', r['hs4_code'], payload)
-    print(f'  HS {r["hs4_code"]}')
-
-# ── 4. explorer_raw_material_trade ──────────────────────────────────────────
+# ── 3. explorer_raw_material_trade ──────────────────────────────────────────
 
 print('\n── Seeding explorer_raw_material_trade ──')
 for i, r in enumerate(raw_material_csv):
