@@ -5964,6 +5964,48 @@ const TRADE_HS4 = {
       "uganda": 31381.0,
       "eac": 31106.0
     }
+  },
+  "2608": {
+    "desc": "HS 2608 — zinc ores and concentrates (including roasted zinc calcine). Feedstock for zinc smelting; Uganda imports small volumes, primarily through the EAC corridor from DRC and Zambia producers.",
+    "year": 2024,
+    "imports": { "uganda": 180.0, "eac": 3200.0 },
+    "exports": { "uganda": 0.0, "eac": 0.0 }
+  },
+  "2609": {
+    "desc": "HS 2609 — tin ores and concentrates (cassiterite — SnO2). Rwanda is the dominant EAC exporter; Uganda imports concentrate for downstream processing.",
+    "year": 2024,
+    "imports": { "uganda": 250.0, "eac": 6800.0 },
+    "exports": { "uganda": 0.0, "eac": 0.0 }
+  },
+  "2713": {
+    "desc": "HS 2713 — petroleum coke, petroleum bitumen and other residues of petroleum oils. Petroleum coke used as reductant in smelting and as fuel for high-temperature furnaces.",
+    "year": 2024,
+    "imports": { "uganda": 650.0, "eac": 12000.0 },
+    "exports": { "uganda": 0.0, "eac": 0.0 }
+  },
+  "2815": {
+    "desc": "HS 2815 — sodium hydroxide (caustic soda); potassium hydroxide; peroxides of sodium/potassium. Caustic soda is the digestion medium in the Bayer alumina process and a general industrial alkali.",
+    "year": 2024,
+    "imports": { "uganda": 1800.0, "eac": 22000.0 },
+    "exports": { "uganda": 0.0, "eac": 0.0 }
+  },
+  "2818": {
+    "desc": "HS 2818 — artificial corundum; aluminium oxide (alumina); aluminium hydroxide. Alumina (Al2O3) is the electrolytic feedstock for primary aluminium smelting via the Hall-Héroult process.",
+    "year": 2024,
+    "imports": { "uganda": 380.0, "eac": 5500.0 },
+    "exports": { "uganda": 0.0, "eac": 0.0 }
+  },
+  "2827": {
+    "desc": "HS 2827 — chlorides, chloride oxides and chloride hydroxides (including ammonium chloride). Ammonium chloride is the standard pre-flux agent in hot-dip galvanizing lines.",
+    "year": 2024,
+    "imports": { "uganda": 620.0, "eac": 9500.0 },
+    "exports": { "uganda": 0.0, "eac": 0.0 }
+  },
+  "3403": {
+    "desc": "HS 3403 — lubricating preparations (including cutting-oil preparations, anti-rust/corrosion preparations, mould-release preparations). Rolling lubricants and mill emulsions are entirely imported; no domestic production identified.",
+    "year": 2024,
+    "imports": { "uganda": 3800.0, "eac": 38000.0 },
+    "exports": { "uganda": 120.0, "eac": 800.0 }
   }
 };
 
@@ -6370,9 +6412,9 @@ const PRODUCT_FIRMS = {
 const INPUT_KEYWORD_HS4 = [
   { pattern: /\bscrap\b/i,                                                                      hs4: "7204", essentiality: 10, scarcity:  6 },
   { pattern: /\b(slab|billet|bloom|semi-finished)\b/i,                                          hs4: "7207", essentiality:  9, scarcity:  9 },
-  { pattern: /\bzinc ingots?\b|\bzinc \(43/i,                                                   hs4: "7901", essentiality:  9, scarcity: 10 },
+  { pattern: /\bzinc ingots?\b|\bzinc \(43|\bSHG zinc\b|\bcrude zinc\b/i,                       hs4: "7901", essentiality:  9, scarcity: 10 },
   { pattern: /\baluminu?m\b.*(bath|additive|additions?|alloy bath)|(bath|alloy bath).*\baluminu?m\b/i, hs4: "7601", essentiality:  8, scarcity: 10 },
-  { pattern: /\btin anodes?\b/i,                                                                hs4: "8001", essentiality:  7, scarcity: 10 },
+  { pattern: /\btin anodes?\b|\btin salts?\b|\bcrude tin\b/i,                                  hs4: "8001", essentiality:  7, scarcity: 10 },
   { pattern: /\bferroalloy/i,                                                                   hs4: "7202", essentiality:  7, scarcity:  9 },
   { pattern: /\bgraphite electrodes?\b/i,                                                       hs4: "8545", essentiality: 10, scarcity: 10 },
   { pattern: /\blimestone\b/i,                                                                  hs4: "2521", essentiality:  6, scarcity:  3 },
@@ -6391,6 +6433,16 @@ const INPUT_KEYWORD_HS4 = [
   { pattern: /\bcold-?rolled\s+(coil|sheet|blackplate)\b|\bCRC\b|\bbase substrate\b|\bblackplate\b/i, hs4: "7209", essentiality: 10, scarcity:  9 },
   { pattern: /\bhot-?rolled\s+(coil|strip|plate|skelp)\b|\bpickled\s*&\s*oiled\b|\bHRC\b/i,          hs4: "7208", essentiality: 10, scarcity:  9 },
   { pattern: /\bgalvanized.*coil\b|\bgalvalume.*coil\b|\bbase coil\b/i,                               hs4: "7210", essentiality:  9, scarcity:  9 },
+  { pattern: /\brolling lubricants?\b|\bcoiling lubricants?\b|\bmill emulsion\b|\brolling emulsion\b/i, hs4: "3403", essentiality:  7, scarcity:  6 },
+  { pattern: /\bzinc (ore|concentrate|calcine)\b|\bsphalerite\b|\broasted calcine\b/i,                  hs4: "2608", essentiality:  9, scarcity: 10 },
+  { pattern: /\b(tin|cassiterite) (ore|concentrate)\b|\bcassiterite\b/i,                               hs4: "2609", essentiality:  9, scarcity: 10 },
+  { pattern: /\bammonium chloride\b|\bpre-?flux\b|\bflux chemical\b/i,                                 hs4: "2827", essentiality:  7, scarcity:  7 },
+  { pattern: /\bmold powder\b|\bmould powder\b|\bcasting flux\b/i,                                     hs4: "3824", essentiality:  6, scarcity:  7 },
+  { pattern: /\bcaustic soda\b|\bNaOH\b|\bsodium hydroxide\b/i,                                        hs4: "2815", essentiality:  8, scarcity:  8 },
+  { pattern: /\bbauxite\b|\bAl-?hydroxide minerals\b/i,                                                hs4: "2606", essentiality:  9, scarcity:  9 },
+  { pattern: /\balumina\b|\bAl2O3\b|\baluminiu?m oxide\b|\bBayer process\b/i,                          hs4: "2818", essentiality:  9, scarcity: 10 },
+  { pattern: /\bcarbon anodes?\b|\bpetroleum coke\b/i,                                                 hs4: "2713", essentiality:  8, scarcity:  9 },
+  { pattern: /\blead\b.*(spangle|trace|galvaniz)|\bfor spangle\b/i,                                    hs4: "7801", essentiality:  4, scarcity:  8 },
 ];
 
 function matchInputTrade(text) {
