@@ -300,13 +300,6 @@ for col in COLLECTIONS:
                 raise
     collection_ids[name] = cid
 
-# SINGLE SOURCE (ADR-017): schema-only in CI. Re-seeding explorer records from the
-# committed files on every deploy would overwrite live PocketBase data. PocketBase
-# is authoritative; the seeding below is BOOTSTRAP-ONLY (run without PB_SCHEMA_ONLY).
-if os.environ.get('PB_SCHEMA_ONLY') == '1':
-    print('\nPB_SCHEMA_ONLY=1 — explorer collections ensured; skipping record seeding (ADR-017).')
-    sys.exit(0)
-
 # ── Helper: upsert by an arbitrary unique field ─────────────────────────────
 
 def find_by_field(collection, field, value):
@@ -333,6 +326,28 @@ def replace_all(collection, rows):
         print(f'  Cleared {len(existing_rows)} existing records')
     for r in rows:
         pb('POST', f'/api/collections/{collection}/records', r)
+
+# explorer_input_keywords is developer-controlled configuration (regex pattern rules),
+# not Jerome's production data. The committed JSON file IS the source of truth here
+# (not PocketBase), so always sync it — even in schema-only mode. This is the one
+# collection where the flow is JSON → PocketBase, not the other way around.
+print('\n── Seeding explorer_input_keywords ──')
+replace_all('explorer_input_keywords', [
+    {
+        'target_type': r['target_type'], 'pattern_source': r['pattern_source'],
+        'pattern_flags': r['pattern_flags'], 'target_value': r['target_value'],
+        'essentiality': r.get('essentiality'), 'scarcity': r.get('scarcity'),
+        'display_order': r['display_order'],
+    } for r in input_keywords_data
+])
+print(f'  {len(input_keywords_data)} rules seeded')
+
+# SINGLE SOURCE (ADR-017): schema-only in CI for all other collections.
+# Re-seeding products/trade/firms from committed files would overwrite live
+# PocketBase data that Jerome and the pipeline update directly.
+if os.environ.get('PB_SCHEMA_ONLY') == '1':
+    print('\nPB_SCHEMA_ONLY=1 — schema + keywords done; skipping product/trade/firm seeding.')
+    sys.exit(0)
 
 # ── 1. explorer_products ────────────────────────────────────────────────────
 
@@ -407,18 +422,5 @@ for i, r in enumerate(product_firms_data):
     }
     upsert_record('explorer_product_firms', 'product_slug', r['product_slug'], payload)
     print(f'  {r["product_slug"]}')
-
-# ── 7. explorer_input_keywords (order-sensitive — full replace) ────────────
-
-print('\n── Seeding explorer_input_keywords ──')
-replace_all('explorer_input_keywords', [
-    {
-        'target_type': r['target_type'], 'pattern_source': r['pattern_source'],
-        'pattern_flags': r['pattern_flags'], 'target_value': r['target_value'],
-        'essentiality': r.get('essentiality'), 'scarcity': r.get('scarcity'),
-        'display_order': r['display_order'],
-    } for r in input_keywords_data
-])
-print(f'  {len(input_keywords_data)} rules')
 
 print('\nSetup complete. Verify at:', f'{PB_URL}/_/')
