@@ -5682,7 +5682,7 @@ const TRADE_HS4 = {
     "year": 2024,
     "imports": {
       "uganda": 165.0,
-      "eac": 165.0
+      "eac": 629.8
     },
     "exports": {
       "uganda": 12.0,
@@ -5694,7 +5694,7 @@ const TRADE_HS4 = {
     "year": 2024,
     "imports": {
       "uganda": 1994.0,
-      "eac": 1968.0
+      "eac": 5519.9
     },
     "exports": {
       "uganda": 32.0,
@@ -5706,7 +5706,7 @@ const TRADE_HS4 = {
     "year": 2024,
     "imports": {
       "uganda": 501.0,
-      "eac": 196.0
+      "eac": 7553.3
     },
     "exports": {
       "uganda": 72.0,
@@ -5718,7 +5718,7 @@ const TRADE_HS4 = {
     "year": 2024,
     "imports": {
       "uganda": 52.0,
-      "eac": 3.0
+      "eac": 488.7
     },
     "exports": {
       "uganda": 0.0,
@@ -5730,7 +5730,7 @@ const TRADE_HS4 = {
     "year": 2024,
     "imports": {
       "uganda": 17142.0,
-      "eac": 234.0
+      "eac": 73751.7
     },
     "exports": {
       "uganda": 38.0,
@@ -5742,7 +5742,7 @@ const TRADE_HS4 = {
     "year": 2024,
     "imports": {
       "uganda": 10998.0,
-      "eac": 635.0
+      "eac": 26971.8
     },
     "exports": {
       "uganda": 1835.0,
@@ -5754,7 +5754,7 @@ const TRADE_HS4 = {
     "year": 2024,
     "imports": {
       "uganda": 5911.0,
-      "eac": 0.0
+      "eac": 20644.9
     },
     "exports": {
       "uganda": 17.0,
@@ -5766,7 +5766,7 @@ const TRADE_HS4 = {
     "year": 2024,
     "imports": {
       "uganda": 72847.0,
-      "eac": 50228.0
+      "eac": 120449.4
     },
     "exports": {
       "uganda": 36.0,
@@ -5778,7 +5778,7 @@ const TRADE_HS4 = {
     "year": 2024,
     "imports": {
       "uganda": 78549.0,
-      "eac": 0.0
+      "eac": 171726.5
     },
     "exports": {
       "uganda": 2516.0,
@@ -5790,7 +5790,7 @@ const TRADE_HS4 = {
     "year": 2024,
     "imports": {
       "uganda": 219496.0,
-      "eac": 117.0
+      "eac": 962089.1
     },
     "exports": {
       "uganda": 2876.0,
@@ -5802,7 +5802,7 @@ const TRADE_HS4 = {
     "year": 2024,
     "imports": {
       "uganda": 4213.0,
-      "eac": 1923.0
+      "eac": 26192.6
     },
     "exports": {
       "uganda": 256.0,
@@ -5814,7 +5814,7 @@ const TRADE_HS4 = {
     "year": 2024,
     "imports": {
       "uganda": 101421.0,
-      "eac": 84403.0
+      "eac": 403792.2
     },
     "exports": {
       "uganda": 53511.0,
@@ -5826,7 +5826,7 @@ const TRADE_HS4 = {
     "year": 2024,
     "imports": {
       "uganda": 657.0,
-      "eac": 239.0
+      "eac": 7080.5
     },
     "exports": {
       "uganda": 1346.0,
@@ -5838,7 +5838,7 @@ const TRADE_HS4 = {
     "year": 2024,
     "imports": {
       "uganda": 34054.0,
-      "eac": 0.0
+      "eac": 100899.3
     },
     "exports": {
       "uganda": 503.0,
@@ -5850,7 +5850,7 @@ const TRADE_HS4 = {
     "year": 2024,
     "imports": {
       "uganda": 2725.0,
-      "eac": 768.0
+      "eac": 48503.9
     },
     "exports": {
       "uganda": 55849.0,
@@ -5862,7 +5862,7 @@ const TRADE_HS4 = {
     "year": 2024,
     "imports": {
       "uganda": 15301.0,
-      "eac": 1778.0
+      "eac": 59149.1
     },
     "exports": {
       "uganda": 6647.0,
@@ -5874,7 +5874,7 @@ const TRADE_HS4 = {
     "year": 2024,
     "imports": {
       "uganda": 1595.0,
-      "eac": 1.0
+      "eac": 2158.4
     },
     "exports": {
       "uganda": 214.0,
@@ -5886,7 +5886,7 @@ const TRADE_HS4 = {
     "year": 2024,
     "imports": {
       "uganda": 12342.0,
-      "eac": 1.0
+      "eac": 41994.5
     },
     "exports": {
       "uganda": 0.0,
@@ -5898,7 +5898,7 @@ const TRADE_HS4 = {
     "year": 2024,
     "imports": {
       "uganda": 41572.0,
-      "eac": 150.0
+      "eac": 71325.4
     },
     "exports": {
       "uganda": 295.0,
@@ -5910,7 +5910,7 @@ const TRADE_HS4 = {
     "year": 2024,
     "imports": {
       "uganda": 12995.0,
-      "eac": 0.0
+      "eac": 73369.6
     },
     "exports": {
       "uganda": 0.0,
@@ -5922,7 +5922,7 @@ const TRADE_HS4 = {
     "year": 2024,
     "imports": {
       "uganda": 12483.0,
-      "eac": 0.0
+      "eac": 40679.6
     },
     "exports": {
       "uganda": 0.0,
@@ -5934,7 +5934,7 @@ const TRADE_HS4 = {
     "year": 2024,
     "imports": {
       "uganda": 222.0,
-      "eac": 0.0
+      "eac": 12881.1
     },
     "exports": {
       "uganda": 2625.0,
@@ -5946,7 +5946,7 @@ const TRADE_HS4 = {
     "year": 2024,
     "imports": {
       "uganda": 177.0,
-      "eac": 0.0
+      "eac": 1542.8
     },
     "exports": {
       "uganda": 3.0,
@@ -5958,7 +5958,7 @@ const TRADE_HS4 = {
     "year": 2024,
     "imports": {
       "uganda": 23935.0,
-      "eac": 7752.0
+      "eac": 323920.1
     },
     "exports": {
       "uganda": 31381.0,
@@ -5968,43 +5968,43 @@ const TRADE_HS4 = {
   "2608": {
     "desc": "HS 2608 — zinc ores and concentrates (including roasted zinc calcine). Feedstock for zinc smelting; Uganda imports small volumes, primarily through the EAC corridor from DRC and Zambia producers.",
     "year": 2024,
-    "imports": { "uganda": 180.0, "eac": 3200.0 },
+    "imports": { "uganda": 440.3, "eac": 441.9 },
     "exports": { "uganda": 0.0, "eac": 0.0 }
   },
   "2609": {
     "desc": "HS 2609 — tin ores and concentrates (cassiterite — SnO2). Rwanda is the dominant EAC exporter; Uganda imports concentrate for downstream processing.",
     "year": 2024,
-    "imports": { "uganda": 250.0, "eac": 6800.0 },
+    "imports": { "uganda": 250.0, "eac": 0.0 },
     "exports": { "uganda": 0.0, "eac": 0.0 }
   },
   "2713": {
     "desc": "HS 2713 — petroleum coke, petroleum bitumen and other residues of petroleum oils. Petroleum coke used as reductant in smelting and as fuel for high-temperature furnaces.",
     "year": 2024,
-    "imports": { "uganda": 650.0, "eac": 12000.0 },
+    "imports": { "uganda": 9578.3, "eac": 75062.6 },
     "exports": { "uganda": 0.0, "eac": 0.0 }
   },
   "2815": {
     "desc": "HS 2815 — sodium hydroxide (caustic soda); potassium hydroxide; peroxides of sodium/potassium. Caustic soda is the digestion medium in the Bayer alumina process and a general industrial alkali.",
     "year": 2024,
-    "imports": { "uganda": 1800.0, "eac": 22000.0 },
+    "imports": { "uganda": 15136.7, "eac": 69031.8 },
     "exports": { "uganda": 0.0, "eac": 0.0 }
   },
   "2818": {
     "desc": "HS 2818 — artificial corundum; aluminium oxide (alumina); aluminium hydroxide. Alumina (Al2O3) is the electrolytic feedstock for primary aluminium smelting via the Hall-Héroult process.",
     "year": 2024,
-    "imports": { "uganda": 380.0, "eac": 5500.0 },
+    "imports": { "uganda": 85.9, "eac": 4725.2 },
     "exports": { "uganda": 0.0, "eac": 0.0 }
   },
   "2827": {
     "desc": "HS 2827 — chlorides, chloride oxides and chloride hydroxides (including ammonium chloride). Ammonium chloride is the standard pre-flux agent in hot-dip galvanizing lines.",
     "year": 2024,
-    "imports": { "uganda": 620.0, "eac": 9500.0 },
+    "imports": { "uganda": 5246.8, "eac": 12902.7 },
     "exports": { "uganda": 0.0, "eac": 0.0 }
   },
   "3403": {
     "desc": "HS 3403 — lubricating preparations (including cutting-oil preparations, anti-rust/corrosion preparations, mould-release preparations). Rolling lubricants and mill emulsions are entirely imported; no domestic production identified.",
     "year": 2024,
-    "imports": { "uganda": 3800.0, "eac": 38000.0 },
+    "imports": { "uganda": 2030.4, "eac": 11565.7 },
     "exports": { "uganda": 120.0, "eac": 800.0 }
   }
 };

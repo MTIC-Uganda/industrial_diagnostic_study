@@ -1,35 +1,35 @@
 hs4_code,desc,year,imports_uganda,imports_eac,exports_uganda,exports_eac
-2521,"HS 2521 — limestone flux. The value-chain report names Karamoja as a domestic source, consistent with this trade being almost entirely regional rather than a major standalone import.",2024,165,165,12,12
-2522,"HS 2522 — quicklime, slaked lime and hydraulic lime (distinct from limestone, HS 2521)",2024,1994,1968,32,33
-2804,"HS 2804 — hydrogen, argon and other industrial gases (oxygen, argon — not separately split at 4-digit level)",2024,501,196,72,59
-2819,HS 2819 — chromium oxides and hydroxides (closest fetchable code to chromic acid/chromium salts; not an exact match — sodium dichromate is a separate HS chapter not fetched),2024,52,3,0,0
-3206,"HS 3206 — other colouring matter and pigments, incl. titanium dioxide-based",2024,17142,234,38,37
-3208,HS 3208 — paints and varnishes based on synthetic polymers (topcoat/primer/lacquer),2024,10998,635,1835,1835
-7202,HS 7202 — ferro-alloys (deoxidation/chemistry additions). Not discussed with Uganda-specific cost or supplier detail in any of the three source documents — only a generic textbook description of alloying elements.,2024,5911,0,17,17
-7204,HS 7204 — ferrous waste and scrap (EAF charge input),2024,72847,50228,36,0
-7207,"HS 7207 — semi-finished products of iron/non-alloy steel (slab, billet, bloom)",2024,78549,0,2516,2516
-7208,"HS 7208 — flat-rolled, hot-rolled, ≥600mm (the wide segment the taxation policy review confirms has no local manufacturer)",2024,219496,117,2876,2802
-7209,"HS 7209 — flat-rolled, cold-rolled, ≥600mm",2024,4213,1923,256,255
-7210,"HS 7210 — flat-rolled, clad/plated/coated, ≥600mm (shared by Galvanized Sheet, Galvalume, Pre-painted Coil and Tinplate)",2024,101421,84403,53511,52625
-7211,"HS 7211 — flat-rolled, hot- or cold-rolled, <600mm (narrow strip — matches Tembo Steels' actual production width)",2024,657,239,1346,1346
-7213,HS 7213 — bars and rods in coils (wire rod),2024,34054,0,503,503
-7214,"HS 7214 — other bars and rods, iron/non-alloy steel (shared by Rebar and Merchant Bar)",2024,2725,768,55849,55633
-7216,"HS 7216 — angles, shapes and sections of iron/non-alloy steel",2024,15301,1778,6647,6640
-7301,HS 7301 — sheet piling and welded angles/shapes/sections of iron/steel (not sheet-piling-specific),2024,1595,1,214,214
-7302,HS 7302 — railway/tramway track construction material,2024,12342,1,0,0
-7304,"HS 7304 — seamless tubes, pipes and hollow profiles of iron/steel",2024,41572,150,295,172
-7601,HS 7601 — unwrought aluminium (Al-Zn alloy bath input). Same NPA/UDC report citation as zinc above — sourced from the UK.,2024,12995,0,0,0
-7901,"HS 7901 — unwrought zinc (zinc ingots for galvanizing baths). The NPA/UDC value-chain report (para 599) names zinc, aluminium and hydrochloric acid as Phase V coating-line inputs sourced from the UK.",2024,12483,0,0,0
-8001,HS 8001 — unwrought tin (tin anodes for electrolytic tinning),2024,222,0,2625,0
-8545,HS 8545 — carbon electrodes (EAF graphite electrodes). Not mentioned in any of the three source documents despite being a known major EAF cost item elsewhere.,2024,177,0,3,3
-7305_7306,"HS 7305+7306 — welded tubes/pipes, large- and small-diameter combined",2024,23935,7752,31381,31106
+2521,"HS 2521 — limestone flux. The value-chain report names Karamoja as a domestic source, consistent with this trade being almost entirely regional rather than a major standalone import.",2024,165,630,12,12
+2522,"HS 2522 — quicklime, slaked lime and hydraulic lime (distinct from limestone, HS 2521)",2024,1994,5520,32,33
+2804,"HS 2804 — hydrogen, argon and other industrial gases (oxygen, argon — not separately split at 4-digit level)",2024,501,7553,72,59
+2819,HS 2819 — chromium oxides and hydroxides (closest fetchable code to chromic acid/chromium salts; not an exact match — sodium dichromate is a separate HS chapter not fetched),2024,52,489,0,0
+3206,"HS 3206 — other colouring matter and pigments, incl. titanium dioxide-based",2024,17142,73752,38,37
+3208,HS 3208 — paints and varnishes based on synthetic polymers (topcoat/primer/lacquer),2024,10998,26972,1835,1835
+7202,HS 7202 — ferro-alloys (deoxidation/chemistry additions). Not discussed with Uganda-specific cost or supplier detail in any of the three source documents — only a generic textbook description of alloying elements.,2024,5911,20645,17,17
+7204,HS 7204 — ferrous waste and scrap (EAF charge input),2024,72847,120449,36,0
+7207,"HS 7207 — semi-finished products of iron/non-alloy steel (slab, billet, bloom)",2024,78549,171726,2516,2516
+7208,"HS 7208 — flat-rolled, hot-rolled, ≥600mm (the wide segment the taxation policy review confirms has no local manufacturer)",2024,219496,962089,2876,2802
+7209,"HS 7209 — flat-rolled, cold-rolled, ≥600mm",2024,4213,26193,256,255
+7210,"HS 7210 — flat-rolled, clad/plated/coated, ≥600mm (shared by Galvanized Sheet, Galvalume, Pre-painted Coil and Tinplate)",2024,101421,403792,53511,52625
+7211,"HS 7211 — flat-rolled, hot- or cold-rolled, <600mm (narrow strip — matches Tembo Steels' actual production width)",2024,657,7080,1346,1346
+7213,HS 7213 — bars and rods in coils (wire rod),2024,34054,100899,503,503
+7214,"HS 7214 — other bars and rods, iron/non-alloy steel (shared by Rebar and Merchant Bar)",2024,2725,48504,55849,55633
+7216,"HS 7216 — angles, shapes and sections of iron/non-alloy steel",2024,15301,59149,6647,6640
+7301,HS 7301 — sheet piling and welded angles/shapes/sections of iron/steel (not sheet-piling-specific),2024,1595,2158,214,214
+7302,HS 7302 — railway/tramway track construction material,2024,12342,41994,0,0
+7304,"HS 7304 — seamless tubes, pipes and hollow profiles of iron/steel",2024,41572,71325,295,172
+7601,HS 7601 — unwrought aluminium (Al-Zn alloy bath input). Same NPA/UDC report citation as zinc above — sourced from the UK.,2024,12995,73370,0,0
+7901,"HS 7901 — unwrought zinc (zinc ingots for galvanizing baths). The NPA/UDC value-chain report (para 599) names zinc, aluminium and hydrochloric acid as Phase V coating-line inputs sourced from the UK.",2024,12483,40680,0,0
+8001,HS 8001 — unwrought tin (tin anodes for electrolytic tinning),2024,222,12881,2625,0
+8545,HS 8545 — carbon electrodes (EAF graphite electrodes). Not mentioned in any of the three source documents despite being a known major EAF cost item elsewhere.,2024,177,1543,3,3
+7305_7306,"HS 7305+7306 — welded tubes/pipes, large- and small-diameter combined",2024,23935,323920,31381,31106
 1701,HS 1701 — cane or beet sugar and chemically pure sucrose.,2024,38100,3200,62000,58000
 1703,HS 1703 — molasses from extraction or refining of sugar.,2024,200,100,4800,3600
 1704,HS 1704 — sugar confectionery (not cocoa-containing).,2024,8200,1400,2600,2200
 2202,"HS 2202 — waters including mineral waters, sweetened or flavoured.",2024,4600,600,12000,10000
 2207,HS 2207 — undenatured ethyl alcohol (≥80% vol.) and denatured alcohol.,2024,6400,1200,1200,900
 2523,"HS 2523 — Portland cement, aluminous cement and similar hydraulic cements (incl. clinker).",2024,162200,42000,48000,44000
-2701,HS 2701 — coal and similar solid fuels (used as kiln fuel). Uganda imports from Tanzania.,2024,9639,8295,0,0
+2701,HS 2701 — coal and similar solid fuels (used as kiln fuel). Uganda imports from Tanzania.,2024,9639,156718,0,0
 2709,HS 2709 — crude petroleum oils. Lake Albert future feedstock.,2024,0,0,0,0
 2941,HS 2941 — antibiotics. Key API class; QCIL produces antibiotics locally using imported APIs.,2024,8200,600,400,300
 3002,"HS 3002 — human blood, vaccines, toxins (biological products). All vaccines imported.",2024,28000,2000,0,0
@@ -48,7 +48,7 @@ hs4_code,desc,year,imports_uganda,imports_eac,exports_uganda,exports_eac
 5205,HS 5205 — cotton yarn (> 85% cotton). Fine Spinners and Nytil production.,2024,3200,600,2100,1800
 6109,"HS 6109 — T-shirts, singlets and other vests, knitted.",2024,18000,1200,800,600
 6211,"HS 6211 — track suits, ski suits and swimwear (incl. workwear).",2024,4200,300,600,400
-6305,"HS 6305 — sacks and bags of textile materials (incl. woven PP sacks).",2024,8600,1200,3400,3100
+6305,HS 6305 — sacks and bags of textile materials (incl. woven PP sacks).,2024,8600,1200,3400,3100
 6810,"HS 6810 — articles of cement, concrete or artificial stone (blocks, pavers, pipes).",2024,4200,800,6800,6200
 6907,HS 6907 — ceramic flags and paving; hearth or wall tiles (unglazed).,2024,42000,4200,0,0
 7005,HS 7005 — float glass and surface-ground / polished glass.,2024,18000,2400,0,0
@@ -65,32 +65,32 @@ hs4_code,desc,year,imports_uganda,imports_eac,exports_uganda,exports_eac
 8708,HS 8708 — parts and accessories of motor vehicles,2024,31700,2400,800,700
 8711,HS 8711 — motorcycles,2024,157000,4000,3200,2800
 8716,HS 8716 — trailers and semi-trailers,2024,8400,1200,2800,2600
-9018,"HS 9018 — instruments and apparatus for medical/surgical use (incl. syringes).",2024,14000,1200,2400,2100
-1212,"HS 1212 — sugarcane and other plant material; vegetable products. Fresh cane consumed entirely at Kakira / Kinyara / SCOUL mills — near-zero import trade.",2024,0,0,0,0
+9018,HS 9018 — instruments and apparatus for medical/surgical use (incl. syringes).,2024,14000,1200,2400,2100
+1212,HS 1212 — sugarcane and other plant material; vegetable products. Fresh cane consumed entirely at Kakira / Kinyara / SCOUL mills — near-zero import trade.,2024,0,0,0,0
 1515,"HS 1515 — other fixed vegetable fats and oils, incl. castor oil (pharma excipient and industrial lubricant).",2024,800,400,200,200
 1702,"HS 1702 — other sugars (glucose syrup, fructose syrup, lactose, maltose). Glucose syrup used in confectionery; largely imported from Egypt and India.",2024,3200,400,200,150
-2102,"HS 2102 — yeasts (active or inactive); prepared baking powders. Active yeast imported for ethanol fermentation at sugar mills.",2024,1200,300,50,200
+2102,HS 2102 — yeasts (active or inactive); prepared baking powders. Active yeast imported for ethanol fermentation at sugar mills.,2024,1200,300,50,200
 2503,"HS 2503 — sulphur (all kinds except sublimed, precipitated and colloidal). Burned to generate SO2 for juice sulfitation and fertilizer processing.",2024,600,500,10,10
-2510,"HS 2510 — natural calcium phosphates; aluminium calcium phosphates (phosphate rock). Sukulu Hills deposit largely unexploited; phosphate fertilizer made from imported rock.",2024,200,200,0,0
-2520,"HS 2520 — gypsum; anhydrite; plasters of calcined gypsum. Set retarder in cement (4–6% addition); partly imported from Kenya.",2024,1800,1500,50,50
-2601,"HS 2601 — iron ores and concentrates. Uganda has no blast furnace — iron ore imports near-zero. Potential source: Muko/Butare deposits if a DRI plant is built.",2024,0,0,0,0
-2606,"HS 2606 — aluminium ores and concentrates (bauxite). Corrective material in cement; feedstock for aluminium smelting. Uganda has no bauxite mining or smelting.",2024,300,300,0,0
-2704,"HS 2704 — coke and semi-coke of coal; retort carbon. Metallurgical coke for blast furnace ironmaking; coke breeze for sintering.",2024,4500,4000,0,0
+2510,HS 2510 — natural calcium phosphates; aluminium calcium phosphates (phosphate rock). Sukulu Hills deposit largely unexploited; phosphate fertilizer made from imported rock.,2024,200,200,0,0
+2520,HS 2520 — gypsum; anhydrite; plasters of calcined gypsum. Set retarder in cement (4–6% addition); partly imported from Kenya.,2024,1800,1500,50,50
+2601,HS 2601 — iron ores and concentrates. Uganda has no blast furnace — iron ore imports near-zero. Potential source: Muko/Butare deposits if a DRI plant is built.,2024,0,61099,0,0
+2606,HS 2606 — aluminium ores and concentrates (bauxite). Corrective material in cement; feedstock for aluminium smelting. Uganda has no bauxite mining or smelting.,2024,203,560,0,0
+2704,HS 2704 — coke and semi-coke of coal; retort carbon. Metallurgical coke for blast furnace ironmaking; coke breeze for sintering.,2024,0,361,0,0
 2710,"HS 2710 — petroleum oils, refined (naphtha, diesel, fuel oil, jet fuel). Uganda's largest single import category. Kabalega refinery (Lake Albert) will displace imports.",2024,420000,280000,8000,5000
 2711,"HS 2711 — petroleum gases (LPG, propane, butane, natural gas). LPG dominates currently; Lake Albert associated gas is future industrial feedstock.",2024,18000,15000,0,0
 2803,"HS 2803 — carbon blacks and other forms of carbon. Used as UV stabiliser, black colourant and reinforcing agent in plastics and rubber.",2024,1800,1200,0,0
-2806,"HS 2806 — hydrogen chloride (HCl); chlorosulphuric acid. Pickling acid for steel descaling and copper oxide removal. No domestic HCl production.",2024,1400,800,10,5
-2807,"HS 2807 — sulphuric acid; oleum. Leach medium in zinc/tin hydrometallurgy; acidulation agent for single superphosphate (SSP) fertilizer.",2024,1306,1219,5,5
-2809,"HS 2809 — diphosphorus pentaoxide; phosphoric acid. Juice clarification in sugar mills; feedstock for SSP phosphate fertilizer.",2024,800,600,20,15
-2811,"HS 2811 — other inorganic acids and inorganic oxygen compounds of non-metals (incl. SO2, CO2, H2S). SO2 for sugar sulfitation; CO2 for carbonation.",2024,2200,1800,100,80
-2814,"HS 2814 — ammonia (anhydrous or in aqueous solution). Feedstock for urea and ammonium nitrate. All imported; future domestic production from Lake Albert gas.",2024,1500,1200,0,0
+2806,HS 2806 — hydrogen chloride (HCl); chlorosulphuric acid. Pickling acid for steel descaling and copper oxide removal. No domestic HCl production.,2024,823,2926,10,5
+2807,HS 2807 — sulphuric acid; oleum. Leach medium in zinc/tin hydrometallurgy; acidulation agent for single superphosphate (SSP) fertilizer.,2024,1306,2721,5,5
+2809,HS 2809 — diphosphorus pentaoxide; phosphoric acid. Juice clarification in sugar mills; feedstock for SSP phosphate fertilizer.,2024,800,600,20,15
+2811,"HS 2811 — other inorganic acids and inorganic oxygen compounds of non-metals (incl. SO2, CO2, H2S). SO2 for sugar sulfitation; CO2 for carbonation.",2024,2256,9528,100,80
+2814,HS 2814 — ammonia (anhydrous or in aqueous solution). Feedstock for urea and ammonium nitrate. All imported; future domestic production from Lake Albert gas.,2024,1500,1200,0,0
 2836,"HS 2836 — carbonates (calcium carbonate, magnesium carbonate, sodium carbonate). CaCO3 filler in PVC pipe and rigid plastics; domestic limestone a partial substitute.",2024,3200,2400,400,300
 2901,"HS 2901 — acyclic hydrocarbons (ethylene, propylene, butylene, acetylene). Primary petrochemical feedstocks; Uganda imports near-zero — converted to resin overseas before export.",2024,0,0,0,0
 2918,"HS 2918 — carboxylic acids with additional oxygen function (citric acid, lactic acid, tartaric acid). Citric acid from China dominates confectionery souring.",2024,2800,2000,100,80
 3204,"HS 3204 — synthetic organic colouring matter; dyes (reactive, disperse, direct, vat). Entirely imported; critical bottleneck for Uganda's textile dyeing and printing sector.",2024,1800,200,0,0
 3207,"HS 3207 — prepared pigments, opacifiers and colours; vitrifiable enamels and glazes; ceramic frits. Imported specialist materials for tile and ceramics production.",2024,600,400,0,0
 3215,"HS 3215 — printing ink (flexographic, gravure, offset, inkjet). Used in textile garment printing and flexible packaging. Largely imported from India and China.",2024,2400,1800,200,150
-3302,"HS 3302 — mixtures of odoriferous substances; flavour concentrates. Fruit-flavour concentrates for soft drinks and confectionery. All imported.",2024,4800,600,0,0
+3302,HS 3302 — mixtures of odoriferous substances; flavour concentrates. Fruit-flavour concentrates for soft drinks and confectionery. All imported.,2024,4800,600,0,0
 3506,"HS 3506 — prepared glues and adhesives (PU lamination adhesive, water-based adhesive). Used in flexible packaging lamination.",2024,1600,1200,100,80
 3802,"HS 3802 — activated carbon; activated natural mineral products. Used in sugar decolourisation, water purification and solvent recovery.",2024,800,600,0,0
 3809,"HS 3809 — finishing agents, mordants and carriers for dyeing (textile auxiliaries). Includes softeners, fixatives and optical brighteners — critical for finishing.",2024,600,400,0,0
@@ -103,32 +103,32 @@ hs4_code,desc,year,imports_uganda,imports_eac,exports_uganda,exports_eac
 4011,"HS 4011 — new pneumatic tyres of rubber. Uganda has no domestic tyre manufacturing; all tyres imported primarily from China, India and South Africa.",2024,38000,2800,1200,900
 4015,"HS 4015 — articles of vulcanised rubber (gloves, stoppers, sheeting). Rubber stoppers and closures for pharma vials; all imported.",2024,800,600,100,80
 4016,"HS 4016 — other articles of vulcanised rubber (gaskets, seals, anti-vibration mounts). Automotive seals and gaskets; all imported.",2024,1200,800,100,80
-5402,"HS 5402 — synthetic filament yarn (polyester sewing thread; nylon yarn; textured polyester). Sewing thread is a critical garment input; all imported from China and India.",2024,3800,1200,200,100
-5503,"HS 5503 — synthetic staple fibres (polyester staple fibre; acrylic staple). PSF imported for blended yarn production at Fine Spinners and Nytil.",2024,6200,400,0,0
-5504,"HS 5504 — artificial staple fibres (viscose / rayon staple; modal; lyocell). Viscose fibre imported for blended yarn; no domestic viscose production.",2024,1200,200,0,0
-5513,"HS 5513 — woven fabrics of synthetic staple fibres (< 85% by weight; mixed with cotton). Poly-cotton workwear fabric largely imported from China and Pakistan.",2024,4800,2000,400,300
-5807,"HS 5807 — labels and badges of textile materials (woven brand labels; care labels). Woven and printed labels imported for garment production.",2024,600,400,50,40
-6006,"HS 6006 — other knitted or crocheted fabrics (finished knitted fabric; dyed or printed). Imported for cut-and-sew garments; some produced by Nytil.",2024,8400,1200,400,200
-7007,"HS 7007 — safety glass (toughened tempered or laminated). Windscreens and side glass for vehicle assembly; all imported.",2024,6800,2000,0,0
-7019,"HS 7019 — glass fibres and articles thereof (fibreglass / GRP panels; chopped strand mat). Used in bodywork of buses and special-purpose vehicles.",2024,2400,1600,100,80
-7217,"HS 7217 — wire of iron or non-alloy steel (galvanised steel wire; armour wire for cables). SWA cable armouring; no domestic fine-wire drawing capacity.",2024,4200,2800,200,150
-7404,"HS 7404 — copper waste and scrap. Copper scrap for remelting in brass and wire rod production.",2024,400,100,200,150
-7607,"HS 7607 — aluminium foil (≤ 0.2 mm thick). Barrier layer in flexible packaging and moisture-barrier tape in cables. No domestic foil production in Uganda.",2024,8200,600,0,0
-7801,"HS 7801 — unwrought lead (lead ingots). Used in brass production (1–3% Pb machinability additive) and battery plates.",2024,1200,400,0,0
-8311,"HS 8311 — wire, rods and electrodes for welding or brazing. MIG wire and covered electrodes for steel fabrication and vehicle bodywork. Partly sourced domestically.",2024,3200,2400,200,150
-8407,"HS 8407 — spark-ignition reciprocating or rotary internal combustion piston engines. CKD motorcycle and small vehicle engines imported from China and India.",2024,12000,4000,400,200
-8501,"HS 8501 — electric motors and generators (incl. traction motors for EVs and general industrial drives).",2024,8400,4000,200,100
-8706,"HS 8706 — chassis fitted with engines for motor vehicles. Semi-knocked-down bus and truck chassis imported for local bodywork.",2024,4200,1200,0,0
+5402,HS 5402 — synthetic filament yarn (polyester sewing thread; nylon yarn; textured polyester). Sewing thread is a critical garment input; all imported from China and India.,2024,3800,1200,200,100
+5503,HS 5503 — synthetic staple fibres (polyester staple fibre; acrylic staple). PSF imported for blended yarn production at Fine Spinners and Nytil.,2024,6200,400,0,0
+5504,HS 5504 — artificial staple fibres (viscose / rayon staple; modal; lyocell). Viscose fibre imported for blended yarn; no domestic viscose production.,2024,1200,200,0,0
+5513,HS 5513 — woven fabrics of synthetic staple fibres (< 85% by weight; mixed with cotton). Poly-cotton workwear fabric largely imported from China and Pakistan.,2024,4800,2000,400,300
+5807,HS 5807 — labels and badges of textile materials (woven brand labels; care labels). Woven and printed labels imported for garment production.,2024,600,400,50,40
+6006,HS 6006 — other knitted or crocheted fabrics (finished knitted fabric; dyed or printed). Imported for cut-and-sew garments; some produced by Nytil.,2024,8400,1200,400,200
+7007,HS 7007 — safety glass (toughened tempered or laminated). Windscreens and side glass for vehicle assembly; all imported.,2024,6800,2000,0,0
+7019,HS 7019 — glass fibres and articles thereof (fibreglass / GRP panels; chopped strand mat). Used in bodywork of buses and special-purpose vehicles.,2024,2400,1600,100,80
+7217,HS 7217 — wire of iron or non-alloy steel (galvanised steel wire; armour wire for cables). SWA cable armouring; no domestic fine-wire drawing capacity.,2024,4200,2800,200,150
+7404,HS 7404 — copper waste and scrap. Copper scrap for remelting in brass and wire rod production.,2024,400,100,200,150
+7607,HS 7607 — aluminium foil (≤ 0.2 mm thick). Barrier layer in flexible packaging and moisture-barrier tape in cables. No domestic foil production in Uganda.,2024,8200,600,0,0
+7801,HS 7801 — unwrought lead (lead ingots). Used in brass production (1–3% Pb machinability additive) and battery plates.,2024,602,2121,0,0
+8311,"HS 8311 — wire, rods and electrodes for welding or brazing. MIG wire and covered electrodes for steel fabrication and vehicle bodywork. Partly sourced domestically.",2024,5697,21888,200,150
+8407,HS 8407 — spark-ignition reciprocating or rotary internal combustion piston engines. CKD motorcycle and small vehicle engines imported from China and India.,2024,12000,4000,400,200
+8501,HS 8501 — electric motors and generators (incl. traction motors for EVs and general industrial drives).,2024,8400,4000,200,100
+8706,HS 8706 — chassis fitted with engines for motor vehicles. Semi-knocked-down bus and truck chassis imported for local bodywork.,2024,4200,1200,0,0
 8714,"HS 8714 — parts and accessories for motorcycles and bicycles (frames, forks, handlebars, suspension components). CKD motorcycle parts from China and India.",2024,6400,2800,200,100
-2621,"HS 2621 — slag and ash; incl. seaweed ash and natural pozzolana (volcanic ash used as supplementary cementitious material / cement extender).",2024,400,300,50,40
-2529,"HS 2529 — feldspar; leucite; nepheline; fluorspar (ceramic body fluxing agent that reduces sintering temperature).",2024,200,150,0,0
+2621,HS 2621 — slag and ash; incl. seaweed ash and natural pozzolana (volcanic ash used as supplementary cementitious material / cement extender).,2024,400,300,50,40
+2529,HS 2529 — feldspar; leucite; nepheline; fluorspar (ceramic body fluxing agent that reduces sintering temperature).,2024,200,150,0,0
 3821,"HS 3821 — prepared culture media for development of micro-organisms and plant, human or animal cells. Used in biopharmaceutical production.",2024,1200,200,0,0
-3824,"HS 3824 — prepared binders for foundry moulds; chemical products and preparations NEC (incl. concrete superplasticisers, admixtures, surface treatment agents).",2024,2800,1800,200,150
-9607,"HS 9607 — slide fasteners (zip fasteners) and parts thereof. Zips for workwear and garments; almost entirely imported from China.",2024,800,400,100,80
-2608,"HS 2608 — zinc ores and concentrates (including roasted zinc calcine). Feedstock for zinc smelting; Uganda imports small volumes, primarily through the EAC corridor from DRC and Zambia producers.",2024,180,3200,0,0
-2609,"HS 2609 — tin ores and concentrates (cassiterite — SnO2). Rwanda is the dominant EAC exporter; Uganda imports concentrate for downstream processing.",2024,250,6800,0,0
-2713,"HS 2713 — petroleum coke, petroleum bitumen and other residues of petroleum oils. Petroleum coke used as reductant in smelting and as fuel for high-temperature furnaces.",2024,650,12000,0,0
-2815,"HS 2815 — sodium hydroxide (caustic soda); potassium hydroxide; peroxides of sodium/potassium. Caustic soda is the digestion medium in the Bayer alumina process and a general industrial alkali.",2024,1800,22000,0,0
-2818,"HS 2818 — artificial corundum; aluminium oxide (alumina); aluminium hydroxide. Alumina (Al2O3) is the electrolytic feedstock for primary aluminium smelting via the Hall-Héroult process.",2024,380,5500,0,0
-2827,"HS 2827 — chlorides, chloride oxides and chloride hydroxides (including ammonium chloride). Ammonium chloride is the standard pre-flux agent in hot-dip galvanizing lines.",2024,620,9500,0,0
-3403,"HS 3403 — lubricating preparations (including cutting-oil preparations, anti-rust/corrosion preparations, mould-release preparations). Rolling lubricants and mill emulsions are entirely imported; no domestic production identified.",2024,3800,38000,120,800
+3824,"HS 3824 — prepared binders for foundry moulds; chemical products and preparations NEC (incl. concrete superplasticisers, admixtures, surface treatment agents).",2024,40423,144338,200,150
+9607,HS 9607 — slide fasteners (zip fasteners) and parts thereof. Zips for workwear and garments; almost entirely imported from China.,2024,800,400,100,80
+2608,"HS 2608 — zinc ores and concentrates (including roasted zinc calcine). Feedstock for zinc smelting; Uganda imports small volumes, primarily through the EAC corridor from DRC and Zambia producers.",2024,440,442,0,0
+2609,HS 2609 — tin ores and concentrates (cassiterite — SnO2). Rwanda is the dominant EAC exporter; Uganda imports concentrate for downstream processing.,2024,0,0,0,0
+2713,"HS 2713 — petroleum coke, petroleum bitumen and other residues of petroleum oils. Petroleum coke used as reductant in smelting and as fuel for high-temperature furnaces.",2024,9578,75063,0,0
+2815,HS 2815 — sodium hydroxide (caustic soda); potassium hydroxide; peroxides of sodium/potassium. Caustic soda is the digestion medium in the Bayer alumina process and a general industrial alkali.,2024,15137,69032,0,0
+2818,HS 2818 — artificial corundum; aluminium oxide (alumina); aluminium hydroxide. Alumina (Al2O3) is the electrolytic feedstock for primary aluminium smelting via the Hall-Héroult process.,2024,86,4725,0,0
+2827,"HS 2827 — chlorides, chloride oxides and chloride hydroxides (including ammonium chloride). Ammonium chloride is the standard pre-flux agent in hot-dip galvanizing lines.",2024,5247,12903,0,0
+3403,"HS 3403 — lubricating preparations (including cutting-oil preparations, anti-rust/corrosion preparations, mould-release preparations). Rolling lubricants and mill emulsions are entirely imported; no domestic production identified.",2024,2030,11566,120,800
