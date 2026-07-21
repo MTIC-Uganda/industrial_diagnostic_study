@@ -1828,27 +1828,74 @@ function initMap(){
     });
   }
 
-  // Live product detail fetch: called when a product chip is clicked inside
-  // a factory popup. Slugifies the name, fetches explorer_products +
-  // explorer_product_firms from PocketBase, and expands a detail card inline.
-  window._openMapProduct = async function(productName, key) {
-    const el = document.getElementById(key);
-    if (!el) return;
-    if (el.dataset.active === productName) { el.innerHTML=''; el.dataset.active=''; return; }
-    el.dataset.active = productName;
-    el.innerHTML = '<div style="font-size:10px;color:#888;padding:4px 0">Loading…</div>';
-    const slug = productName.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+  // ── Explorer product lookup for factory popups ───────────────────────────
+  // Module-level cache: loaded once per page, shared across all factory popups.
+  let _pfCache = null;  // explorer_product_firms rows
+  let _pnCache = null;  // slug → product name
+
+  async function _loadExplorerPfData() {
+    if (_pfCache && _pnCache) return;
     const base = _pbUrl();
     try {
-      const enc = encodeURIComponent;
-      const [pr, fr, tr] = await Promise.all([
-        fetch(`${base}/api/collections/explorer_products/records?filter=(slug="${enc(slug)}")&perPage=1`).then(r=>r.ok?r.json():{items:[]}),
-        fetch(`${base}/api/collections/explorer_product_firms/records?filter=(product_slug="${enc(slug)}")&perPage=1`).then(r=>r.ok?r.json():{items:[]}),
-        fetch(`${base}/api/collections/explorer_trade_hs4/records?perPage=1`).then(()=>({items:[]})),
+      const [pf, pr] = await Promise.all([
+        fetch(`${base}/api/collections/explorer_product_firms/records?perPage=500`).then(r=>r.ok?r.json():{items:[]}),
+        fetch(`${base}/api/collections/explorer_products/records?perPage=500&sort=display_order`).then(r=>r.ok?r.json():{items:[]}),
+      ]);
+      _pfCache = pf.items || [];
+      _pnCache = {};
+      for (const p of (pr.items || [])) _pnCache[p.slug] = p.name;
+    } catch { _pfCache = []; _pnCache = {}; }
+  }
+
+  // Returns words from a factory name that are distinctive enough to match on
+  // (≥4 chars, not generic company-type words).
+  const _GENERIC = new Set(['steel','metal','limited','industries','manufacturing','products','africa','east','group','company','works']);
+  function _factoryKeywords(name) {
+    return name.toLowerCase()
+      .replace(/[^a-z0-9\s]/g, ' ')
+      .split(/\s+/)
+      .filter(w => w.length >= 4 && !_GENERIC.has(w));
+  }
+
+  // Find which Explorer products a factory makes by matching the factory name
+  // against the free-text firm descriptions in explorer_product_firms.firms.
+  async function _factoryExplorerProducts(factoryName) {
+    await _loadExplorerPfData();
+    const keywords = _factoryKeywords(factoryName);
+    if (!keywords.length) return [];
+    const results = [];
+    for (const row of _pfCache) {
+      if (!_pnCache[row.product_slug]) continue;
+      const firms = Array.isArray(row.firms) ? row.firms
+        : (typeof row.firms === 'string' ? JSON.parse(row.firms || '[]') : []);
+      const hit = firms.some(str => {
+        const firmLower = String(str).toLowerCase();
+        return keywords.some(kw => firmLower.includes(kw));
+      });
+      if (hit) results.push({slug: row.product_slug, name: _pnCache[row.product_slug]});
+    }
+    return results;
+  }
+
+  // Live product detail fetch: called when an Explorer product chip is clicked
+  // in a factory popup. Uses the Explorer product slug directly (no name→slug
+  // derivation) so it always matches the correct PocketBase record.
+  window._openMapProduct = async function(slug, displayName, key) {
+    const el = document.getElementById(key);
+    if (!el) return;
+    if (el.dataset.active === slug) { el.innerHTML=''; el.dataset.active=''; return; }
+    el.dataset.active = slug;
+    el.innerHTML = '<div style="font-size:10px;color:#888;padding:4px 0">Loading…</div>';
+    const base = _pbUrl();
+    const enc = encodeURIComponent;
+    try {
+      const [pr, fr] = await Promise.all([
+        fetch(`${base}/api/collections/explorer_products/records?filter=(slug=${enc('"'+slug+'"')})&perPage=1`).then(r=>r.ok?r.json():{items:[]}),
+        fetch(`${base}/api/collections/explorer_product_firms/records?filter=(product_slug=${enc('"'+slug+'"')})&perPage=1`).then(r=>r.ok?r.json():{items:[]}),
       ]);
       const prod = pr.items?.[0], firm = fr.items?.[0];
       if (!prod && !firm) {
-        el.innerHTML='<div style="font-size:10px;color:#888;padding:4px 0">No PocketBase record yet — Jerome can add it via the Explorer admin.</div>';
+        el.innerHTML='<div style="font-size:10px;color:#888;padding:4px 0">No PocketBase record yet.</div>';
         return;
       }
       let html = '<div style="border-top:1px solid #e8e8e8;margin-top:5px;padding-top:5px;font-size:10px;line-height:1.5">';
@@ -1856,7 +1903,7 @@ function initMap(){
       if (firm?.current_capacity) html += `<div><span style="color:#888">Current capacity:</span> <strong>${firm.current_capacity}</strong></div>`;
       if (firm?.target_capacity)  html += `<div><span style="color:#888">Target:</span> ${firm.target_capacity}</div>`;
       if (firm?.capacity_gap_note) html += `<div style="color:#c62828;margin-top:2px;font-style:italic">${firm.capacity_gap_note}</div>`;
-      if (prod?.hs4_code) html += `<div style="color:#888;margin-top:3px">HS ${prod.hs4_code} · <a href="#" onclick="document.getElementById('tab-btn-explorer')&&document.getElementById('tab-btn-explorer').click();return false;" style="color:#1565c0">Open in Explorer</a></div>`;
+      if (prod?.hs4_code) html += `<div style="color:#888;margin-top:3px">HS ${prod.hs4_code} · <a href="#" onclick="document.getElementById('tab-btn-explorer')&&document.getElementById('tab-btn-explorer').click();return false;" style="color:#1565c0">Open in Explorer →</a></div>`;
       html += '</div>';
       el.innerHTML = html;
     } catch(e) {
@@ -1868,10 +1915,11 @@ function initMap(){
   FACTORIES.forEach((f,fi)=>{
     const col=CHAIN_COLORS[f.chain]||'#555';
     const key='_mpd'+fi;
-    const prods=f.products?(f.products.split(',').map(p=>p.trim()).filter(Boolean)):[f.products].filter(Boolean);
-    const productHtml=prods.length
-      ? prods.map(p=>`<button onclick="window._openMapProduct('${p.replace(/'/g,"\\'")}','${key}')" style="background:#f0f4ff;border:1px solid #c3cfe2;border-radius:3px;cursor:pointer;font-size:10px;padding:1px 6px;margin:2px 2px 2px 0;font-family:inherit;color:#1a237e">${p}</button>`).join('')
-      : '<span style="color:#aaa;font-style:italic">—</span>';
+    const chipsId='_mpc'+fi;
+    const cap = [
+      f.capacity_installed && f.capacity_installed!=='—' ? `<div style="font-size:10px;color:#555;margin-top:5px"><span style="color:#888">Installed cap.</span> <strong>${f.capacity_installed}</strong></div>` : '',
+      f.capacity_utilised  && f.capacity_utilised!=='—'  ? `<div style="font-size:10px;color:#555"><span style="color:#888">Current output</span> <strong>${f.capacity_utilised}</strong></div>`  : '',
+    ].join('');
     const m=L.marker([f.lat,f.lng],{icon:mkIcon(col)})
       .bindPopup(
         `<div style="min-width:260px;max-width:320px;font-family:Segoe UI,system-ui,sans-serif">
@@ -1880,17 +1928,23 @@ function initMap(){
           <div style="font-size:11px;color:#555;margin-bottom:6px">📍 ${f.loc}</div>
           <hr style="margin:4px 0;border:none;border-top:1px solid #e8e8e8">
           <div style="font-size:10px;font-weight:700;color:#888;margin:4px 0 2px">Products — click for details</div>
-          <div>${productHtml}</div>
+          <div id="${chipsId}" style="min-height:20px"><span style="color:#aaa;font-size:10px">Loading…</span></div>
           <div id="${key}"></div>
-          <table style="font-size:11px;width:100%;border-collapse:collapse;line-height:1.5;margin-top:4px">
-            ${f.capacity_installed!=='—'?`<tr><td style="color:#888;padding:2px 8px 2px 0;white-space:nowrap;vertical-align:top;width:42%">Installed cap.</td><td style="color:#222;padding:2px 0">${f.capacity_installed}</td></tr>`:''}
-            ${f.capacity_utilised!=='—'?`<tr><td style="color:#888;padding:2px 8px 2px 0;white-space:nowrap;vertical-align:top">Current output</td><td style="color:#222;padding:2px 0">${f.capacity_utilised}</td></tr>`:''}
-            ${f.employees!=='—'?`<tr><td style="color:#888;padding:2px 8px 2px 0;white-space:nowrap;vertical-align:top">Employees</td><td style="color:#222;padding:2px 0">${f.employees}</td></tr>`:''}
-            ${f.est!=='—'?`<tr><td style="color:#888;padding:2px 8px 2px 0;white-space:nowrap;vertical-align:top">Established</td><td style="color:#222;padding:2px 0">${f.est}</td></tr>`:''}
-            ${f.ownership!=='—'?`<tr><td style="color:#888;padding:2px 8px 2px 0;white-space:nowrap;vertical-align:top">Ownership</td><td style="color:#222;padding:2px 0">${f.ownership}</td></tr>`:''}
-            ${f.exports!=='—'?`<tr><td style="color:#888;padding:2px 8px 2px 0;white-space:nowrap;vertical-align:top">Exports</td><td style="color:#222;padding:2px 0">${f.exports}</td></tr>`:''}
-          </table>
+          ${cap}
         </div>`);
+    m.on('popupopen', async () => {
+      const chipsEl = document.getElementById(chipsId);
+      if (!chipsEl || chipsEl.dataset.loaded) return;
+      chipsEl.dataset.loaded = '1';
+      const products = await _factoryExplorerProducts(f.name);
+      if (!products.length) {
+        chipsEl.innerHTML='<span style="color:#aaa;font-size:10px;font-style:italic">No Explorer products linked yet</span>';
+        return;
+      }
+      chipsEl.innerHTML = products.map(p =>
+        `<button onclick="window._openMapProduct('${p.slug}','${p.name.replace(/'/g,"\\'")}','${key}')" style="background:#f0f4ff;border:1px solid #c3cfe2;border-radius:3px;cursor:pointer;font-size:10px;padding:1px 6px;margin:2px 2px 2px 0;font-family:inherit;color:#1a237e">${p.name}</button>`
+      ).join('');
+    });
     m._fname=f.name; m._col=col;
     if(!markersByChain[f.chain])markersByChain[f.chain]=[];
     markersByChain[f.chain].push(m);
