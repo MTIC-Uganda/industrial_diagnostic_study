@@ -6472,4 +6472,13 @@ function getInputWeight(text) {
   return null;
 }
 
-export { PRODUCTS, CATEGORIES, TRADE_HS4, PRODUCT_HS4, RAW_MATERIAL_TRADE, matchInputTrade, matchInputPhase, getInputWeight, PRODUCT_FIRMS, PHASE_PRODUCERS, PHASE_SOURCE, RAW_MATERIAL_PHASE };
+function matchInputHs4(text) {
+  const hit = INPUT_KEYWORD_HS4.find((k) => k.pattern.test(text));
+  return hit ? hit.hs4 : null;
+}
+
+// Empty until fetch_strategic_data.py + pb_setup_explorer.py + generate_explorer_data.py have run.
+const TRADE_TREND    = {};
+const TRADE_PARTNERS = {};
+
+export { PRODUCTS, CATEGORIES, TRADE_HS4, PRODUCT_HS4, RAW_MATERIAL_TRADE, matchInputTrade, matchInputHs4, matchInputPhase, getInputWeight, PRODUCT_FIRMS, PHASE_PRODUCERS, PHASE_SOURCE, RAW_MATERIAL_PHASE, TRADE_TREND, TRADE_PARTNERS };
