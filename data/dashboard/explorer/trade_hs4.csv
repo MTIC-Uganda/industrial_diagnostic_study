@@ -93,7 +93,7 @@ hs4_code,desc,year,imports_uganda,imports_eac,exports_uganda,exports_eac
 3302,HS 3302 — mixtures of odoriferous substances; flavour concentrates. Fruit-flavour concentrates for soft drinks and confectionery. All imported.,2024,4800,600,0,0
 3506,"HS 3506 — prepared glues and adhesives (PU lamination adhesive, water-based adhesive). Used in flexible packaging lamination.",2024,1600,1200,100,80
 3802,"HS 3802 — activated carbon; activated natural mineral products. Used in sugar decolourisation, water purification and solvent recovery.",2024,800,600,0,0
-3809,"HS 3809 — finishing agents, mordants and carriers for dyeing (textile auxiliaries). Includes softeners, fixatives and optical brighteners — critical for finishing.",2024,600,400,0,0
+3809,"HS 3809 — finishing agents; preparations for mordanting; surface-treatment preparations for metals (incl. chromate-free conversion coatings, silane/zirconium pre-treatment chemicals) and textile auxiliaries. Uganda $5.5M corrected from Comtrade 2024.",2024,5471,19824,0,0
 3904,"HS 3904 — polymers of vinyl chloride or other halogenated olefins (PVC resin). Used for cable insulation, pipe, rigid packaging. No domestic PVC resin production.",2024,12000,800,0,0
 3907,"HS 3907 — polyacetals, other polyethers and polyesters in primary forms (PET bottle-grade resin; polyurethane resins; epoxy resins). All imported.",2024,22000,800,0,0
 3912,"HS 3912 — cellulose and its chemical derivatives (MCC; HPMC; CMC; ethylcellulose). Pharma excipients used as fillers, binders and film-coat bases. All imported from India.",2024,3200,400,0,0
@@ -118,6 +118,8 @@ hs4_code,desc,year,imports_uganda,imports_eac,exports_uganda,exports_eac
 8311,"HS 8311 — wire, rods and electrodes for welding or brazing. MIG wire and covered electrodes for steel fabrication and vehicle bodywork. Partly sourced domestically.",2024,5697,21888,200,150
 8407,HS 8407 — spark-ignition reciprocating or rotary internal combustion piston engines. CKD motorcycle and small vehicle engines imported from China and India.,2024,12000,4000,400,200
 8417,HS 8417 — industrial or laboratory furnaces and ovens (non-electric); incl. coke oven batteries and reheating furnaces for steelmaking. High Uganda imports ($4.0M) driven by cement and agro-processing kilns; steelmaking furnaces sourced predominantly from Asia.,2024,3991,27330,0,0
+8207,"HS 8207 — interchangeable tools for hand tools or machine-tools (incl. cutting dies, milling cutters, broaches, threading tools — bundling/stacking consumables in steel processing lines).",2024,4178,28311,0,0
+8208,"HS 8208 — knives and cutting blades for machines or mechanical appliances (incl. crop shear blades, flying shear blades for rolling mills — cutting consumables in steel processing).",2024,828,6238,0,0
 8455,"HS 8455 — metal-rolling mills and rolls therefor (incl. work rolls and backup rolls at HS 8455.30). Uganda $49.6M EAC $100M reflects active import of rolling equipment — consistent with downstream steel processing but no local roll manufacture.",2024,49557,99955,0,0
 8501,HS 8501 — electric motors and generators (incl. traction motors for EVs and general industrial drives).,2024,8400,4000,200,100
 8706,HS 8706 — chassis fitted with engines for motor vehicles. Semi-knocked-down bus and truck chassis imported for local bodywork.,2024,4200,1200,0,0
@@ -126,6 +128,8 @@ hs4_code,desc,year,imports_uganda,imports_eac,exports_uganda,exports_eac
 2529,HS 2529 — feldspar; leucite; nepheline; fluorspar (ceramic body fluxing agent that reduces sintering temperature).,2024,200,150,0,0
 3821,"HS 3821 — prepared culture media for development of micro-organisms and plant, human or animal cells. Used in biopharmaceutical production.",2024,1200,200,0,0
 3824,"HS 3824 — prepared binders for foundry moulds; chemical products and preparations NEC (incl. concrete superplasticisers, admixtures, surface treatment agents).",2024,40423,144338,200,150
+9027,"HS 9027 — instruments and apparatus for physical or chemical analysis (incl. spectrometers, XRF analysers, ultrasonic NDT probes, hardness testers — non-destructive testing consumables and instruments for quality control in steel/metals plants).",2024,20671,75660,0,0
+2903,HS 2903 — halogenated derivatives of hydrocarbons (incl. vinylidene fluoride / VF2 monomer — precursor for PVDF fluoropolymer resins; also HFCs and chloroethylenes for refrigerant and polymer production).,2024,815,6177,0,0
 9607,HS 9607 — slide fasteners (zip fasteners) and parts thereof. Zips for workwear and garments; almost entirely imported from China.,2024,800,400,100,80
 2608,"HS 2608 — zinc ores and concentrates (including roasted zinc calcine). Feedstock for zinc smelting; Uganda imports small volumes, primarily through the EAC corridor from DRC and Zambia producers.",2024,440,442,0,0
 2609,HS 2609 — tin ores and concentrates (cassiterite — SnO2). Rwanda is the dominant EAC exporter; Uganda imports concentrate for downstream processing.,2024,0,0,0,0
