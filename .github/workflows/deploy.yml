@@ -30,6 +30,16 @@ on:
         type: boolean
         default: false
 
+# Serialize runs per ref to cut wasted Actions minutes. Rapid merges (Solomon shipped 6 PRs
+# in one burst) plus the reseed self-dispatch chain were running many redundant deploys at
+# once; that burn helped tip the org over its Actions SPENDING LIMIT, and GitHub then refused
+# to start jobs — the real cause of the 4-second, no-failed-step "BUILD FAILED" pings (fix the
+# limit in Billing & plans; this block just reduces the burn). Queue, do NOT cancel: no deploy
+# is interrupted mid-rsync; redundant runs wait their turn instead of racing.
+concurrency:
+  group: mtic-deploy-${{ github.ref }}
+  cancel-in-progress: false
+
 env:
   HETZNER_HOST:       89.167.121.193
   HETZNER_USER:       root
