@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { PRODUCTS, CATEGORIES, TRADE_HS4, PRODUCT_HS4, RAW_MATERIAL_TRADE, matchInputTrade, matchInputPhase, getInputWeight, PRODUCT_FIRMS, PHASE_PRODUCERS, PHASE_SOURCE, RAW_MATERIAL_PHASE } from "./data/index.js";
+import { PRODUCTS, CATEGORIES, TRADE_HS4, PRODUCT_HS4, RAW_MATERIAL_TRADE, matchInputTrade, matchInputHs4, matchInputPhase, getInputWeight, PRODUCT_FIRMS, PHASE_PRODUCERS, PHASE_SOURCE, RAW_MATERIAL_PHASE, TRADE_TREND, TRADE_PARTNERS } from "./data/index.js";
 
 // Resolve PocketBase URL from the page host so the same HTML works on staging and prod.
 function pbUrl() {
@@ -11,13 +11,25 @@ function pbUrl() {
   } catch { return "http://89.167.121.193:8090"; }
 }
 
-// Module-level cache that gets populated after the first live fetch.
-// Keyed by hs4_code; values override the static TRADE_HS4 from the JS bundle.
-const _liveTradeCache = {};
+// Module-level caches — populated after live PocketBase fetches.
+// Each overrides the corresponding static import from the JS bundle.
+const _liveTradeCache    = {};  // hs4_code → trade snapshot
+const _liveTrendCache    = {};  // hs4_code → [{year, imports_uganda, unit_value_usd_t}, ...]
+const _livePartnersCache = {};  // hs4_code → [{rank, name, code, value}, ...]
 
 function resolveTrade(hs4) {
   if (!hs4) return null;
   return _liveTradeCache[hs4] || TRADE_HS4[hs4] || null;
+}
+
+function resolveTrend(hs4) {
+  if (!hs4) return null;
+  return _liveTrendCache[hs4] || TRADE_TREND[hs4] || null;
+}
+
+function resolvePartners(hs4) {
+  if (!hs4) return null;
+  return _livePartnersCache[hs4] || TRADE_PARTNERS[hs4] || null;
 }
 
 function resolveRawTrade(name) {
@@ -33,6 +45,7 @@ const _liveStructure = {
   phaseProducers: null,    // map phase key → producers entry
   productHs4: null,        // map slug → hs4 string
   matchTrade: null,        // function(text) → trade object | null
+  matchHs4: null,          // function(text) → hs4 string | null
   matchPhase: null,        // function(text) → phase entry | null
   getKeywordWeight: null,  // function(text) → { essentiality, scarcity, weight } | null
 };
@@ -49,6 +62,11 @@ function _resolveGetInputWeight(text){ return _liveStructure.getKeywordWeight ? 
 // appearing as an input), resolve its trade data via that product's HS code.
 // This makes trade data consistent whether an item appears as a finished product or as an
 // upstream input — same HS code, same ITC TradeMap figures.
+function _resolveMatchHs4(text) {
+  if (_liveStructure.matchHs4) return _liveStructure.matchHs4(text);
+  return matchInputHs4(text);
+}
+
 function _resolveMatchTrade(text) {
   const byKeyword = _liveStructure.matchTrade ? _liveStructure.matchTrade(text) : matchInputTrade(text);
   if (byKeyword) return byKeyword;
@@ -88,7 +106,107 @@ function inputStatus(text) {
   return "red";
 }
 
-function TradeBlock({ trade, noDataLabel }) {
+// ─── Mini sparkline: 6-year Uganda import trend ─────────────────────────────
+function TrendSparkline({ trend }) {
+  if (!trend || trend.length < 2) return null;
+  const vals = trend.map(d => d.imports_uganda);
+  const min = Math.min(...vals), max = Math.max(...vals), range = max - min || 1;
+  const W = 88, H = 26;
+  const x = (i) => (i / (trend.length - 1)) * W;
+  const y = (v) => H - ((v - min) / range) * (H - 4) - 2;
+  const pts = trend.map((d, i) => `${x(i).toFixed(1)},${y(d.imports_uganda).toFixed(1)}`).join(" ");
+  const first = vals[0], last = vals[vals.length - 1];
+  const cagr = Math.pow(last / (first || 1), 1 / (trend.length - 1)) - 1;
+  const cagrColor = cagr >= 0.05 ? "#f87171" : cagr >= 0 ? "#fbbf24" : "#4ade80";
+  const lastX = x(trend.length - 1), lastY = y(last);
+  return (
+    <div style={{ display: "flex", alignItems: "center", gap: "8px", marginTop: "5px" }}>
+      <svg width={W} height={H} style={{ flexShrink: 0, overflow: "visible" }}>
+        <polyline points={pts} fill="none" stroke="#3b82f6" strokeWidth="1.5" strokeLinejoin="round" />
+        {trend.map((d, i) => (
+          <circle key={i} cx={x(i)} cy={y(d.imports_uganda)} r="2" fill={i === trend.length - 1 ? "#3b82f6" : "#1e3a5f"} />
+        ))}
+        <text x={lastX + 3} y={lastY + 3} fill="#93c5fd" fontSize="7" fontWeight="600">{Math.round(last/1000)}m</text>
+      </svg>
+      <div style={{ fontSize: "9.5px" }}>
+        <div style={{ color: "#94a3b8" }}>
+          <span style={{ color: "#64748b" }}>{trend[0].year}→{trend[trend.length-1].year}</span>
+        </div>
+        <div style={{ color: cagrColor, fontWeight: 700 }}>
+          {cagr >= 0 ? "▲" : "▼"} {Math.abs(cagr * 100).toFixed(1)}% CAGR
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── Horizontal source-country bar chart ─────────────────────────────────────
+function SourceCountryBar({ partners }) {
+  if (!partners || partners.length === 0) return null;
+  const top5 = partners.slice(0, 5);
+  const total = partners.reduce((s, p) => s + p.value, 0) || 1;
+  return (
+    <div style={{ marginTop: "8px" }}>
+      <div style={{ color: "#93c5fd", fontWeight: 700, fontSize: "10px", marginBottom: "5px" }}>🌐 Top import sources (2024)</div>
+      {top5.map((p, i) => {
+        const pct = Math.round((p.value / total) * 100);
+        const barW = Math.max((p.value / top5[0].value) * 100, 2);
+        return (
+          <div key={i} style={{ display: "flex", alignItems: "center", gap: "5px", marginBottom: "3px" }}>
+            <div style={{ width: "72px", fontSize: "9px", color: "#94a3b8", textAlign: "right", flexShrink: 0,
+              overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{p.name}</div>
+            <div style={{ flex: 1, height: "5px", borderRadius: "3px", backgroundColor: "#1e293b" }}>
+              <div style={{ width: `${barW}%`, height: "100%", borderRadius: "3px",
+                backgroundColor: i === 0 ? "#3b82f6" : "#1d4ed8", opacity: 1 - i * 0.15 }} />
+            </div>
+            <div style={{ width: "26px", fontSize: "9px", color: "#64748b", textAlign: "right", flexShrink: 0 }}>{pct}%</div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+// ─── Investment opportunity callout ──────────────────────────────────────────
+function InvestmentOpportunity({ trade, trend }) {
+  if (!trade) return null;
+  const ugaImp = trade.imports.uganda;
+  const ugaExp = trade.exports.uganda;
+  const eacImp = trade.imports.eac;
+  if (ugaImp < 2000) return null;  // < $2M, not significant
+  if (ugaExp > ugaImp * 0.4) return null;  // already substantial domestic production
+  // Compute CAGR from trend if available
+  const trendArr = trend || [];
+  let cagrLabel = null;
+  if (trendArr.length >= 2) {
+    const first = trendArr[0].imports_uganda, last = trendArr[trendArr.length - 1].imports_uganda;
+    const cagr = Math.pow(last / (first || 1), 1 / (trendArr.length - 1)) - 1;
+    if (cagr > 0.03) cagrLabel = `+${(cagr * 100).toFixed(1)}% CAGR — growing urgency`;
+  }
+  const importSubstitution50 = formatUsd(ugaImp * 500);  // 50% substitution, ×1000 already in thousands
+  const eacMarket = formatUsd(eacImp);
+  return (
+    <div style={{ backgroundColor: "#0c1826", border: "1px solid #1e40af", borderRadius: "6px",
+      padding: "8px 10px", marginTop: "10px" }}>
+      <div style={{ color: "#60a5fa", fontWeight: 700, fontSize: "10px", marginBottom: "4px" }}>
+        💡 Investment opportunity
+      </div>
+      <div style={{ color: "#cbd5e1", fontSize: "9.5px", lineHeight: 1.55 }}>
+        Uganda imports <strong style={{ color: "#93c5fd" }}>{formatUsd(ugaImp)}</strong>/yr.
+        {ugaExp < ugaImp * 0.05 ? " No domestic production identified." : ""}
+        {" "}EAC total market: <strong style={{ color: "#93c5fd" }}>{eacMarket}</strong>/yr.
+        {ugaImp > 5000 && (
+          <span> Capturing 50% of Uganda's imports would recover ~<strong style={{ color: "#93c5fd" }}>{importSubstitution50}</strong>/yr.</span>
+        )}
+      </div>
+      {cagrLabel && (
+        <div style={{ color: "#f87171", fontSize: "9px", marginTop: "3px", fontWeight: 600 }}>⚠ {cagrLabel}</div>
+      )}
+    </div>
+  );
+}
+
+function TradeBlock({ trade, trend, partners, noDataLabel, showOpportunity }) {
   return (
     <>
       <div style={{ fontWeight: 700, color: "#93c5fd", marginTop: "10px" }}>📦 Trade ({trade ? trade.year : "—"}, USD)</div>
@@ -97,10 +215,13 @@ function TradeBlock({ trade, noDataLabel }) {
           <div style={{ color: "#cbd5e1" }}>
             Imports — Uganda: <strong>{formatUsd(trade.imports.uganda)}</strong> · EAC: <strong>{formatUsd(trade.imports.eac)}</strong> · Global: <strong>{formatUsd(trade.imports.global)}</strong>
           </div>
-          <div style={{ color: "#cbd5e1" }}>
+          <TrendSparkline trend={trend} />
+          <div style={{ color: "#cbd5e1", marginTop: "4px" }}>
             Exports — Uganda: <strong>{formatUsd(trade.exports.uganda)}</strong> · EAC: <strong>{formatUsd(trade.exports.eac)}</strong> · Global: <strong>{formatUsd(trade.exports.global)}</strong>
           </div>
+          <SourceCountryBar partners={partners} />
           <div style={{ color: "#64748b", fontSize: "9.5px", marginTop: "4px" }}>{trade.desc}</div>
+          {showOpportunity && <InvestmentOpportunity trade={trade} trend={trend} />}
         </>
       ) : (
         <div style={{ color: "#94a3b8" }}>{noDataLabel}</div>
@@ -199,10 +320,12 @@ function ProducerBlock({ entry }) {
 
 function ProductDetailPanel({ product, hs4, onClose }) {
   const trade = resolveTrade(hs4);
+  const trend = resolveTrend(hs4);
+  const partners = resolvePartners(hs4);
   const producers = _resolveProductFirms()[product.id];
   return (
     <SidePanel title={product.name} onClose={onClose}>
-      <TradeBlock trade={trade} noDataLabel="Trade data not yet fetched for this product's HS code." />
+      <TradeBlock trade={trade} trend={trend} partners={partners} showOpportunity={false} noDataLabel="Trade data not yet fetched for this product's HS code." />
 
       <div style={{ fontWeight: 700, color: "#93c5fd", marginTop: "10px" }}>🏭 Known producers</div>
       <ProducerBlock entry={producers} />
@@ -257,7 +380,7 @@ function RawMaterialDetailPanel({ item, onClose }) {
         <div style={{ color: "#94a3b8" }}>Not yet sourced for this raw material (mining/production data is not in the source documents at this granularity).</div>
       )}
 
-      <TradeBlock trade={trade} noDataLabel="No HS-code-specific trade data fetched yet for this raw material." />
+      <TradeBlock trade={trade} noDataLabel="No HS-code-specific trade data fetched yet for this raw material." showOpportunity={false} />
 
       <div style={{ color: "#64748b", fontSize: "9.5px", marginTop: "8px", borderTop: "1px solid #1e293b", paddingTop: "6px" }}>
         {phase ? `Sources: ITC TradeMap (Uganda bilateral trade) · ${PHASE_SOURCE}` : "Source: ITC TradeMap (Uganda bilateral trade)"}
@@ -272,6 +395,12 @@ function InputDetailPanel({ text, onClose }) {
   const wt = _resolveGetInputWeight(text);
   const status = inputStatus(text);
   const hasData = trade || phase;
+
+  // Resolve HS4 code → trend + partner data using the same keyword rules
+  const hs4ForLookup = _resolveMatchHs4(text);
+  const trend    = resolveTrend(hs4ForLookup);
+  const partners = resolvePartners(hs4ForLookup);
+
   return (
     <SidePanel title={text} onClose={onClose}>
       {/* Priority signal */}
@@ -309,7 +438,7 @@ function InputDetailPanel({ text, onClose }) {
               see the finished-product card for named plant operators.
             </div>
           )}
-          <TradeBlock trade={trade} noDataLabel="No HS-code-specific trade data available for this input." />
+          <TradeBlock trade={trade} trend={trend} partners={partners} showOpportunity={true} noDataLabel="No HS-code-specific trade data available for this input." />
           <div style={{ color: "#64748b", fontSize: "9.5px", marginTop: "8px", borderTop: "1px solid #1e293b", paddingTop: "6px" }}>
             {phase ? `Sources: ITC TradeMap (Uganda bilateral trade 2024) · ${PHASE_SOURCE}` : "Source: ITC TradeMap (Uganda bilateral trade 2024)"}
           </div>
@@ -649,6 +778,13 @@ export default function ValueChainExplorer() {
         }
         return null;
       };
+      _liveStructure.matchHs4 = function(text) {
+        for (const kw of keywords) {
+          if (kw.target_type !== 'hs4') continue;
+          try { if (new RegExp(kw.pattern_source, kw.pattern_flags || '').test(text)) return kw.target_value; } catch {}
+        }
+        return null;
+      };
       _liveStructure.matchPhase = function(text) {
         for (const kw of keywords) {
           if (kw.target_type !== 'phase') continue;
@@ -675,6 +811,40 @@ export default function ValueChainExplorer() {
       _liveStructure.productFirms  = productFirms;
       setLiveVersion(v => v + 1);
     }).catch(() => {}); // static bundle fallback stays active if PocketBase unreachable
+  }, []);
+
+  // Fetch trend + partner data live (populated after fetch_strategic_data.py + pb_setup_explorer.py).
+  useEffect(() => {
+    const base = pbUrl();
+    Promise.all([
+      fetch(`${base}/api/collections/explorer_trade_trend/records?perPage=1000&sort=hs4_code,year`).then(r => r.json()),
+      fetch(`${base}/api/collections/explorer_trade_partners/records?perPage=500&sort=hs4_code,rank`).then(r => r.json()),
+    ]).then(([trendData, partnerData]) => {
+      for (const row of trendData.items || []) {
+        if (!_liveTrendCache[row.hs4_code]) _liveTrendCache[row.hs4_code] = [];
+        _liveTrendCache[row.hs4_code].push({
+          year: parseInt(row.year, 10),
+          imports_uganda: parseFloat(row.imports_uganda),
+          unit_value_usd_t: row.unit_value_usd_t ? parseFloat(row.unit_value_usd_t) : null,
+        });
+      }
+      for (const code of Object.keys(_liveTrendCache)) {
+        _liveTrendCache[code].sort((a, b) => a.year - b.year);
+      }
+      for (const row of partnerData.items || []) {
+        if (!_livePartnersCache[row.hs4_code]) _livePartnersCache[row.hs4_code] = [];
+        _livePartnersCache[row.hs4_code].push({
+          rank: parseInt(row.rank, 10),
+          name: row.partner_name,
+          code: parseInt(row.partner_code, 10),
+          value: parseFloat(row.imports_value_usd_k),
+        });
+      }
+      for (const code of Object.keys(_livePartnersCache)) {
+        _livePartnersCache[code].sort((a, b) => a.rank - b.rank);
+      }
+      setLiveVersion(v => v + 1);
+    }).catch(() => {}); // static bundle stays active if PocketBase unreachable
   }, []);
 
   const product = _resolveProducts()[selected];

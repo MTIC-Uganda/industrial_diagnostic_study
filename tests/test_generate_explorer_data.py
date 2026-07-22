@@ -95,6 +95,46 @@ def test_build_input_keywords_splits_by_target_type():
     assert hs4[0]["value"] == "0901" and phase[0]["value"] == "Phase 1"
 
 
+def test_build_trade_trend_groups_and_sorts():
+    rows = [
+        {"hs4_code": "7208", "year": "2021", "imports_uganda": "180000", "unit_value_usd_t": "620"},
+        {"hs4_code": "7208", "year": "2019", "imports_uganda": "155000", "unit_value_usd_t": ""},
+        {"hs4_code": "7208", "year": "2024", "imports_uganda": "219496", "unit_value_usd_t": "580"},
+        {"hs4_code": "3907", "year": "2024", "imports_uganda": "153242", "unit_value_usd_t": None},
+    ]
+    out = g.build_trade_trend(rows)
+    assert set(out.keys()) == {"7208", "3907"}
+    yrs = [r["year"] for r in out["7208"]]
+    assert yrs == [2019, 2021, 2024], "must be sorted by year"
+    assert out["7208"][0]["unit_value_usd_t"] is None, "empty string → None"
+    assert out["7208"][1]["unit_value_usd_t"] == 620.0
+    assert out["3907"][0]["imports_uganda"] == 153242.0
+
+
+def test_build_trade_trend_empty():
+    assert g.build_trade_trend([]) == {}
+    assert g.build_trade_trend(None) == {}
+
+
+def test_build_trade_partners_groups_and_sorts():
+    rows = [
+        {"hs4_code": "7208", "rank": "2", "partner_name": "India", "partner_code": "356", "imports_value_usd_k": "35000"},
+        {"hs4_code": "7208", "rank": "1", "partner_name": "China", "partner_code": "156", "imports_value_usd_k": "150000"},
+        {"hs4_code": "3907", "rank": "1", "partner_name": "Germany", "partner_code": "276", "imports_value_usd_k": "80000"},
+    ]
+    out = g.build_trade_partners(rows)
+    assert set(out.keys()) == {"7208", "3907"}
+    assert out["7208"][0]["name"] == "China", "rank 1 must come first"
+    assert out["7208"][1]["name"] == "India"
+    assert out["7208"][0]["value"] == 150000.0
+    assert out["3907"][0]["code"] == 276
+
+
+def test_build_trade_partners_empty():
+    assert g.build_trade_partners([]) == {}
+    assert g.build_trade_partners(None) == {}
+
+
 # ── build_all + render_js ─────────────────────────────────────────────────────
 SAMPLE_RAW = {
     "products": [{"slug": "coffee", "name": "Coffee", "category": "Cash", "color": "#6f4e37",
@@ -107,6 +147,8 @@ SAMPLE_RAW = {
     "phase_producers": [{"phase": "P1", "count": "3", "label": "L", "examples": ["A"], "source": "S"}],
     "product_firms": [{"product_slug": "coffee", "status": "active", "firms": ["F"], "note": ""}],
     "input_keywords": [{"pattern_source": "coffee", "pattern_flags": "i", "target_value": "0901", "target_type": "hs4"}],
+    "trade_trend": [{"hs4_code": "0901", "year": "2024", "imports_uganda": "1", "unit_value_usd_t": "500"}],
+    "trade_partners": [{"hs4_code": "0901", "rank": "1", "partner_name": "Kenya", "partner_code": "404", "imports_value_usd_k": "600"}],
 }
 
 
@@ -114,9 +156,19 @@ def test_build_all_shapes():
     d = g.build_all(SAMPLE_RAW)
     assert set(d) >= {"PRODUCTS", "CATEGORIES", "TRADE_HS4", "PRODUCT_HS4",
                       "RAW_MATERIAL_TRADE", "RAW_MATERIAL_PHASE", "PHASE_PRODUCERS",
-                      "PHASE_SOURCE", "PRODUCT_FIRMS", "INPUT_KEYWORD_HS4", "INPUT_KEYWORD_PHASE"}
+                      "PHASE_SOURCE", "PRODUCT_FIRMS", "INPUT_KEYWORD_HS4", "INPUT_KEYWORD_PHASE",
+                      "TRADE_TREND", "TRADE_PARTNERS"}
     assert d["PRODUCT_HS4"] == {"coffee": "0901"}
     assert d["PHASE_SOURCE"] == "S"
+    assert d["TRADE_TREND"]["0901"][0]["imports_uganda"] == 1.0
+    assert d["TRADE_PARTNERS"]["0901"][0]["name"] == "Kenya"
+
+
+def test_build_all_handles_missing_trend_and_partners():
+    raw_no_new = {k: v for k, v in SAMPLE_RAW.items() if k not in ("trade_trend", "trade_partners")}
+    d = g.build_all(raw_no_new)
+    assert d["TRADE_TREND"] == {}
+    assert d["TRADE_PARTNERS"] == {}
 
 
 def test_render_js_is_valid_module_text():
@@ -124,6 +176,9 @@ def test_render_js_is_valid_module_text():
     assert js.startswith("// GENERATED FILE")
     assert "const PRODUCTS =" in js and "export {" in js
     assert "matchInputTrade" in js
+    assert "const TRADE_TREND =" in js
+    assert "const TRADE_PARTNERS =" in js
+    assert "matchInputHs4" in js
 
 
 def test_js_obj_and_regex_array():

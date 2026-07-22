@@ -36,6 +36,8 @@ COLLECTIONS = {
     'phase_producers': ('explorer_phase_producers', 'display_order'),
     'product_firms':   ('explorer_product_firms', 'display_order'),
     'input_keywords':  ('explorer_input_keywords', 'display_order'),
+    'trade_trend':     ('explorer_trade_trend',    'hs4_code,year'),
+    'trade_partners':  ('explorer_trade_partners', 'hs4_code,rank'),
 }
 
 
@@ -159,6 +161,42 @@ def build_input_keywords(rows):
     return hs4, phase
 
 
+def build_trade_trend(rows):
+    """Group trend rows by hs4_code → sorted list of {year, imports_uganda, unit_value_usd_t}."""
+    out = {}
+    for r in rows or []:
+        code = r['hs4_code']
+        if code not in out:
+            out[code] = []
+        uv = float(r['unit_value_usd_t']) if r.get('unit_value_usd_t') not in (None, '', 0, '0') else None
+        out[code].append({
+            'year': int(float(r['year'])),
+            'imports_uganda': float(r['imports_uganda']),
+            'unit_value_usd_t': uv,
+        })
+    for code in out:
+        out[code].sort(key=lambda x: x['year'])
+    return out
+
+
+def build_trade_partners(rows):
+    """Group partner rows by hs4_code → ranked list of {rank, name, code, value}."""
+    out = {}
+    for r in rows or []:
+        code = r['hs4_code']
+        if code not in out:
+            out[code] = []
+        out[code].append({
+            'rank': int(float(r['rank'])),
+            'name': r['partner_name'],
+            'code': int(float(r.get('partner_code', 0))),
+            'value': float(r['imports_value_usd_k']),
+        })
+    for code in out:
+        out[code].sort(key=lambda x: x['rank'])
+    return out
+
+
 def build_all(raw):
     """Turn raw PocketBase rows into every shape the JS module needs."""
     rm_trade, rm_phase = build_raw_material(raw['raw_material'])
@@ -176,6 +214,8 @@ def build_all(raw):
         'PRODUCT_FIRMS': build_product_firms(raw['product_firms']),
         'INPUT_KEYWORD_HS4': kw_hs4,
         'INPUT_KEYWORD_PHASE': kw_phase,
+        'TRADE_TREND': build_trade_trend(raw.get('trade_trend')),
+        'TRADE_PARTNERS': build_trade_partners(raw.get('trade_partners')),
     }
 
 
@@ -217,6 +257,15 @@ const PHASE_SOURCE = {json.dumps(d['PHASE_SOURCE'])};
 
 const PRODUCT_FIRMS = {js_obj(d['PRODUCT_FIRMS'])};
 
+// 6-year Uganda import trend per HS4 code (2019-2024). Keys are HS4 codes;
+// values are arrays sorted by year: {{ year, imports_uganda (USD thousands), unit_value_usd_t }}.
+// Populated by scripts/fetch_strategic_data.py + db/pb_setup_explorer.py.
+const TRADE_TREND = {js_obj(d['TRADE_TREND'])};
+
+// Top import source countries per HS4 code (UN Comtrade 2024).
+// Keys are HS4 codes; values are arrays sorted by rank: {{ rank, name, code, value (USD thousands) }}.
+const TRADE_PARTNERS = {js_obj(d['TRADE_PARTNERS'])};
+
 // Keyword -> HS-4 group, for matching free-text "Inputs" tab line items
 // to the same trade data used for raw materials and products above.
 const INPUT_KEYWORD_HS4 = {js_regex_array(d['INPUT_KEYWORD_HS4'], 'hs4')};
@@ -224,6 +273,11 @@ const INPUT_KEYWORD_HS4 = {js_regex_array(d['INPUT_KEYWORD_HS4'], 'hs4')};
 function matchInputTrade(text) {{
   const hit = INPUT_KEYWORD_HS4.find((k) => k.pattern.test(text));
   return hit ? TRADE_HS4[hit.hs4] : null;
+}}
+
+function matchInputHs4(text) {{
+  const hit = INPUT_KEYWORD_HS4.find((k) => k.pattern.test(text));
+  return hit ? hit.hs4 : null;
 }}
 
 // Keyword -> verified Phase, for the same free-text "Inputs" line items.
@@ -234,7 +288,16 @@ function matchInputPhase(text) {{
   return hit ? PHASE_PRODUCERS[hit.phase] : null;
 }}
 
-export {{ PRODUCTS, CATEGORIES, TRADE_HS4, PRODUCT_HS4, RAW_MATERIAL_TRADE, matchInputTrade, matchInputPhase, PRODUCT_FIRMS, PHASE_PRODUCERS, PHASE_SOURCE, RAW_MATERIAL_PHASE }};
+// Returns {{ essentiality, scarcity, weight }} for the first matching keyword.
+function getInputWeight(text) {{
+  const h4 = INPUT_KEYWORD_HS4.find(k => k.pattern.test(text));
+  if (h4 && h4.essentiality) return {{ essentiality: h4.essentiality, scarcity: h4.scarcity, weight: h4.essentiality * h4.scarcity }};
+  const hp = INPUT_KEYWORD_PHASE.find(k => k.pattern.test(text));
+  if (hp && hp.essentiality) return {{ essentiality: hp.essentiality, scarcity: hp.scarcity, weight: hp.essentiality * hp.scarcity }};
+  return null;
+}}
+
+export {{ PRODUCTS, CATEGORIES, TRADE_HS4, PRODUCT_HS4, RAW_MATERIAL_TRADE, matchInputTrade, matchInputHs4, matchInputPhase, getInputWeight, PRODUCT_FIRMS, PHASE_PRODUCERS, PHASE_SOURCE, RAW_MATERIAL_PHASE, TRADE_TREND, TRADE_PARTNERS }};
 '''
 
 
