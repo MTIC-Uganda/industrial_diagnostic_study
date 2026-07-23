@@ -6478,7 +6478,9 @@ function matchInputHs4(text) {
 }
 
 // Empty until fetch_strategic_data.py + pb_setup_explorer.py + generate_explorer_data.py have run.
-const TRADE_TREND    = {};
-const TRADE_PARTNERS = {};
+const TRADE_TREND        = {};
+const TRADE_PARTNERS     = {};
+// Empty until generate_explorer_data.py has run after pb_setup_explorer.py seeding.
+const OPPORTUNITY_SCORES = {};
 
-export { PRODUCTS, CATEGORIES, TRADE_HS4, PRODUCT_HS4, RAW_MATERIAL_TRADE, matchInputTrade, matchInputHs4, matchInputPhase, getInputWeight, PRODUCT_FIRMS, PHASE_PRODUCERS, PHASE_SOURCE, RAW_MATERIAL_PHASE, TRADE_TREND, TRADE_PARTNERS };
+export { PRODUCTS, CATEGORIES, TRADE_HS4, PRODUCT_HS4, RAW_MATERIAL_TRADE, matchInputTrade, matchInputHs4, matchInputPhase, getInputWeight, PRODUCT_FIRMS, PHASE_PRODUCERS, PHASE_SOURCE, RAW_MATERIAL_PHASE, TRADE_TREND, TRADE_PARTNERS, OPPORTUNITY_SCORES };

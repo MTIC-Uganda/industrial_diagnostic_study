@@ -135,6 +135,51 @@ def test_build_trade_partners_empty():
     assert g.build_trade_partners(None) == {}
 
 
+def test_build_priority_scores_basic():
+    trade = {
+        "7208": {"imports": {"uganda": 219496.0, "eac": 500000.0, "global": None},
+                 "exports": {"uganda": 1000.0, "eac": 2000.0, "global": None}, "desc": "d", "year": 2024},
+    }
+    trend = {"7208": [
+        {"year": 2019, "imports_uganda": 155000.0, "unit_value_usd_t": None},
+        {"year": 2024, "imports_uganda": 219496.0, "unit_value_usd_t": None},
+    ]}
+    partners = {"7208": [
+        {"rank": 1, "name": "China", "code": 156, "value": 180000.0},
+        {"rank": 2, "name": "India", "code": 356, "value": 35000.0},
+    ]}
+    out = g.build_priority_scores(trade, trend, partners)
+    assert "7208" in out
+    s = out["7208"]
+    assert 0 <= s["score"] <= 100
+    assert s["components"]["import"] > 0
+    assert s["components"]["gap"] > 0   # minimal exports → large gap
+    assert s["components"]["conc"] > 0  # China dominates
+    # Total should equal sum of components (within rounding)
+    assert abs(s["score"] - sum(s["components"].values())) <= 2
+
+
+def test_build_priority_scores_skips_tiny_imports():
+    trade = {"9999": {"imports": {"uganda": 100.0, "eac": 200.0, "global": None},
+                      "exports": {"uganda": 0.0, "eac": 0.0, "global": None}, "desc": "", "year": 2024}}
+    out = g.build_priority_scores(trade, {}, {})
+    assert "9999" not in out   # < $500k threshold
+
+
+def test_build_priority_scores_empty():
+    assert g.build_priority_scores({}, {}, {}) == {}
+    assert g.build_priority_scores(None, None, None) == {}
+
+
+def test_build_priority_scores_no_trend_or_partners():
+    trade = {"7208": {"imports": {"uganda": 50000.0, "eac": 100000.0, "global": None},
+                      "exports": {"uganda": 500.0, "eac": 1000.0, "global": None}, "desc": "", "year": 2024}}
+    out = g.build_priority_scores(trade, {}, {})
+    assert "7208" in out
+    assert out["7208"]["components"]["cagr"] == 0   # no trend → 0
+    assert out["7208"]["components"]["conc"] == 0   # no partners → 0
+
+
 # ── build_all + render_js ─────────────────────────────────────────────────────
 SAMPLE_RAW = {
     "products": [{"slug": "coffee", "name": "Coffee", "category": "Cash", "color": "#6f4e37",
@@ -157,11 +202,13 @@ def test_build_all_shapes():
     assert set(d) >= {"PRODUCTS", "CATEGORIES", "TRADE_HS4", "PRODUCT_HS4",
                       "RAW_MATERIAL_TRADE", "RAW_MATERIAL_PHASE", "PHASE_PRODUCERS",
                       "PHASE_SOURCE", "PRODUCT_FIRMS", "INPUT_KEYWORD_HS4", "INPUT_KEYWORD_PHASE",
-                      "TRADE_TREND", "TRADE_PARTNERS"}
+                      "TRADE_TREND", "TRADE_PARTNERS", "OPPORTUNITY_SCORES"}
     assert d["PRODUCT_HS4"] == {"coffee": "0901"}
     assert d["PHASE_SOURCE"] == "S"
     assert d["TRADE_TREND"]["0901"][0]["imports_uganda"] == 1.0
     assert d["TRADE_PARTNERS"]["0901"][0]["name"] == "Kenya"
+    # 0901 imports=1 USD thousands < 500 threshold → not scored
+    assert "0901" not in d["OPPORTUNITY_SCORES"]
 
 
 def test_build_all_handles_missing_trend_and_partners():
@@ -179,6 +226,8 @@ def test_render_js_is_valid_module_text():
     assert "const TRADE_TREND =" in js
     assert "const TRADE_PARTNERS =" in js
     assert "matchInputHs4" in js
+    assert "const OPPORTUNITY_SCORES =" in js
+    assert "OPPORTUNITY_SCORES" in js.split("export {")[1]
 
 
 def test_js_obj_and_regex_array():
