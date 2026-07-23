@@ -78,8 +78,8 @@ IS_STRENGTH = {
     "p_rails":       ("gap",      "Rails absent — no rail production in Uganda; all imported"),
     "p_plate":       ("gap",      "Hot-rolled plate absent — flat steel entirely missing in Uganda"),
     "p_galv":        ("emerging", "Galvanised sheet — Roofings Ltd and Uganda Baati active; imported coil coated locally"),
-    "p_erw":         ("gap",      "ERW pipe absent — no pipe welding from domestic HRC"),
-    "p_seamless":    ("gap",      "Seamless OCTG absent — far upstream of current capability"),
+    "p_erw":         ("gap",      "Welded pipe absent — no pipe welding from domestic HRC"),
+    "p_seamless":    ("gap",      "Seamless pipe absent — far upstream of current capability"),
     "p_crc":         ("gap",      "Cold-rolled coil absent — all imported"),
     "p_tinplate":    ("gap",      "Tinplate absent — no tin-coated flat steel in Uganda"),
     "p_prepaint":    ("emerging", "Pre-painted (PPGI) — Uganda Baati and Roofings active; imported coated coil processed"),
@@ -145,26 +145,26 @@ NODES = {
 
 # Finished products = roots (label System). id: (name, hs, hs_desc, function)
 PRODUCTS = {
-    # Finished products — 16 nodes matching the Explorer product list exactly
+    # Finished products — names match the Explorer (PocketBase explorer_products) exactly
     # Long products
-    "p_rebar":     ("Reinforcing bar (rebar)", "7214.20", "Bars and rods, iron/non-alloy steel", "Concrete reinforcement; the largest long product."),
-    "p_wirerod":   ("Wire rod & drawn wire", "7213.10", "Bars and rods in coils", "Feed for wire, mesh, fasteners and rope."),
-    "p_sections":  ("Structural sections (I, H beams)", "7216.33", "Angles, shapes and sections", "Columns and beams for steel-frame buildings."),
-    "p_rails":     ("Rails", "7302.10", "Railway track construction material", "Head-hardened track for rail networks."),
-    "p_merchant":  ("Merchant bar (rounds, squares, flats)", "7214.99", "Other bars and rods, iron/non-alloy steel, not further worked", "General-purpose hot-rolled bars for fabrication."),
-    "p_piling":    ("Sheet piling", "7301.10", "Sheet piling of iron or steel", "Interlocking sections for retaining walls and foundations."),
+    "p_rebar":     ("Rebar (Reinforcing Bar)", "7214.20", "Bars and rods, iron/non-alloy steel", "Concrete reinforcement; the largest long product."),
+    "p_wirerod":   ("Wire Rod", "7213.10", "Bars and rods in coils", "Feed for wire drawing, mesh and rope."),
+    "p_sections":  ("Structural Sections (I/H-beam, Channel, Angle)", "7216.33", "Angles, shapes and sections", "Columns and beams for steel-frame buildings."),
+    "p_rails":     ("Rail", "7302.10", "Railway track construction material", "Head-hardened track for rail networks."),
+    "p_merchant":  ("Merchant Bar", "7214.99", "Other bars and rods, iron/non-alloy steel, not further worked", "General-purpose hot-rolled bars for fabrication."),
+    "p_piling":    ("Sheet Piling", "7301.10", "Sheet piling of iron or steel", "Interlocking sections for retaining walls and foundations."),
     # Flat products
-    "p_hrc":       ("Hot rolled coil/sheet (HRC)", "7208.39", "Flat-rolled, hot-rolled, in coils", "General flat steel feedstock and finished sheet."),
-    "p_plate":     ("Hot rolled plate", "7208.51", "Flat-rolled, hot-rolled, heavy plate", "Heavy plate for ships, vessels and bridges."),
-    "p_crc":       ("Cold rolled coil/sheet (CRC)", "7209.17", "Flat-rolled, cold-rolled", "Surface-critical flat steel for auto and appliances."),
-    "p_galv":      ("Galvanised sheet (GI/GA)", "7210.49", "Flat-rolled, clad/plated/coated", "Corrosion-resistant sheet; construction & auto."),
-    "p_alzinc":    ("Aluminium-zinc coated sheet (Galvalume)", "7210.61", "Flat-rolled, plated/coated with Al-Zn alloys", "Durable coated sheet for roofing and appliances."),
-    "p_prepaint":  ("Pre-painted / colour-coated (PPGI)", "7210.70", "Flat-rolled, painted/coated", "Colour-coated sheet for roofing and cladding."),
-    "p_tinplate":  ("Tinplate (ETP)", "7210.12", "Flat-rolled, tin-coated", "Tin-coated sheet for food and beverage cans."),
-    "p_eccs":      ("Tin-free steel / ECCS", "7210.50", "Flat-rolled, coated with chromium/chromium oxides", "Chromium-coated packaging steel for lacquered cans."),
+    "p_hrc":       ("Hot-Rolled Coil / Sheet / Strip", "7208.39", "Flat-rolled, hot-rolled, in coils", "General flat steel feedstock and finished sheet."),
+    "p_plate":     ("Plate", "7208.51", "Flat-rolled, hot-rolled, heavy plate", "Heavy plate for ships, vessels and bridges."),
+    "p_crc":       ("Cold-Rolled Coil / Sheet", "7209.17", "Flat-rolled, cold-rolled", "Surface-critical flat steel for auto and appliances."),
+    "p_galv":      ("Galvanized Sheet", "7210.49", "Flat-rolled, clad/plated/coated", "Corrosion-resistant sheet; construction & auto."),
+    "p_alzinc":    ("Galvalume / Aluzinc", "7210.61", "Flat-rolled, plated/coated with Al-Zn alloys", "Durable coated sheet for roofing and appliances."),
+    "p_prepaint":  ("Pre-painted / Color-Coated Coil", "7210.70", "Flat-rolled, painted/coated", "Colour-coated sheet for roofing and cladding."),
+    "p_tinplate":  ("Tinplate / Tin-Free Steel (ECCS)", "7210.12", "Flat-rolled, tin-coated or chromium-coated", "Tin-coated and chromium-coated sheet for packaging."),
+    "p_eccs":      ("Tin-Free Steel (ECCS)", "7210.50", "Flat-rolled, coated with chromium/chromium oxides", "Chromium-coated packaging steel for lacquered cans."),
     # Tubular products
-    "p_erw":       ("Electric resistance welded (ERW) pipe", "7306.30", "Other tubes and pipes, welded", "Line pipe and structural hollow sections."),
-    "p_seamless":  ("Seamless oil country tubular goods (OCTG)", "7304.29", "Tubes, pipes, seamless", "Oil-country tubular goods for drilling."),
+    "p_erw":       ("Welded Pipe / Tube", "7306.30", "Other tubes and pipes, welded", "Pipe formed by rolling flat strip into a cylinder and welding the seam."),
+    "p_seamless":  ("Seamless Pipe", "7304.29", "Tubes, pipes, seamless", "Pipe formed without a weld seam for high-pressure applications."),
 }
 
 # Edges: downstream -> list of (upstream_input, weight)  [weight = cost share]
