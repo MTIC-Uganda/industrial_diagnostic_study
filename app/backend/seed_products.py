@@ -71,50 +71,23 @@ IS_STRENGTH = {
     "t_bof":         ("gap",      "BOF absent — all steelmaking from EAF/induction in Uganda"),
     "t_eaf":         ("emerging", "EAF/induction — scrap + DRI; ~37 plants; Phase III emerging"),
     "t_caster":      ("emerging", "Continuous casting — billet and bloom; partial domestic capacity"),
-    # Finished products (Phase V Rolling/Finishing)
-    "p_rebar":       ("strong",   "Rebar — Uganda's strongest product; net exporter USD 55.8m (2024); ~70% capacity used. CRITICAL GAP: Flat steel entirely absent — USD 219.5m imports annually (HS 7208). 2040 target: 5.5–8 Mtpa demand; domestic flat steel capacity via upstream investment."),
+    # Finished products (Phase V Rolling/Finishing) — aligned with Explorer product list
+    "p_rebar":       ("strong",   "Rebar — Uganda's strongest product; net exporter USD 55.8m (2024); ~70% capacity used."),
     "p_wirerod":     ("strong",   "Wire rod — produced and exported regionally; strong domestic rolling capacity"),
     "p_sections":    ("strong",   "Structural sections — active at Roofings Rolling Mills and Steel & Tube"),
     "p_rails":       ("gap",      "Rails absent — no rail production in Uganda; all imported"),
     "p_plate":       ("gap",      "Hot-rolled plate absent — flat steel entirely missing in Uganda"),
     "p_galv":        ("emerging", "Galvanised sheet — Roofings Ltd and Uganda Baati active; imported coil coated locally"),
-    "p_electrical":  ("gap",      "Electrical steel absent — no GOES/NOES production in Uganda"),
     "p_erw":         ("gap",      "ERW pipe absent — no pipe welding from domestic HRC"),
     "p_seamless":    ("gap",      "Seamless OCTG absent — far upstream of current capability"),
-    "p_stainless":   ("gap",      "Stainless steel absent — no production in Uganda"),
-    "p_hsla":        ("gap",      "HSLA absent — domestic flat steel entirely missing"),
     "p_crc":         ("gap",      "Cold-rolled coil absent — all imported"),
     "p_tinplate":    ("gap",      "Tinplate absent — no tin-coated flat steel in Uganda"),
     "p_prepaint":    ("emerging", "Pre-painted (PPGI) — Uganda Baati and Roofings active; imported coated coil processed"),
-    "p_mesh":        ("strong",   "Welded wire mesh — domestic production at several facilities"),
-    "p_forgings":    ("gap",      "Forged components absent — no forging industry in Uganda"),
-    "p_castings":    ("emerging", "Steel/iron castings — some foundry capacity; limited scale"),
-    "p_grinding":    ("gap",      "Grinding media absent — all imported from South Africa and China"),
-    # Extended product set
     "p_merchant":    ("strong",   "Merchant bar — domestic long-product rolling active"),
-    "p_lightsec":    ("strong",   "Light sections — domestic rolling active; structural fabrication market"),
-    "p_sbq":         ("gap",      "Cold-drawn bright bar absent — precision engineering scarce"),
     "p_piling":      ("gap",      "Sheet piling absent — all imported"),
-    "p_railfit":     ("gap",      "Railway fittings absent — all imported"),
     "p_hrc":         ("gap",      "HRC absent — CRITICAL flat-steel gap; all imported"),
     "p_alzinc":      ("gap",      "Al-Zn coated sheet absent — all imported"),
-    "p_alusteel":    ("gap",      "Aluminised sheet absent — all imported"),
-    "p_egalv":       ("gap",      "Electro-galvanised sheet absent — all imported"),
     "p_eccs":        ("gap",      "ECCS/tin-free steel absent — all imported"),
-    "p_saw":         ("gap",      "SAW pipe absent — all imported"),
-    "p_hss":         ("gap",      "HSS hollow sections absent — all imported"),
-    "p_precision":   ("gap",      "Precision tube absent — all imported"),
-    "p_ss_long":     ("gap",      "Stainless long products absent — all imported"),
-    "p_ss_tube":     ("gap",      "Stainless tube absent — all imported"),
-    "p_tool":        ("gap",      "Tool steel absent — all imported"),
-    "p_spring":      ("gap",      "Spring steel absent — all imported"),
-    "p_bearing":     ("gap",      "Bearing steel absent — all imported"),
-    "p_wire":        ("strong",   "Steel wire — drawn and galvanised domestically; strong output"),
-    "p_nails":       ("strong",   "Nails — domestic production from drawn wire; active"),
-    "p_fasteners":   ("emerging", "Fasteners — limited domestic production; mostly imported"),
-    "p_rope":        ("emerging", "Wire rope — some domestic production; mostly imported"),
-    "p_fencing":     ("strong",   "Fencing — galvanised fencing produced domestically"),
-    "p_diron":       ("gap",      "Ductile/grey iron pipe absent — blast furnace required; all imported"),
 }
 
 
@@ -172,119 +145,55 @@ NODES = {
 
 # Finished products = roots (label System). id: (name, hs, hs_desc, function)
 PRODUCTS = {
+    # Finished products — 16 nodes matching the Explorer product list exactly
+    # Long products
     "p_rebar":     ("Reinforcing bar (rebar)", "7214.20", "Bars and rods, iron/non-alloy steel", "Concrete reinforcement; the largest long product."),
     "p_wirerod":   ("Wire rod & drawn wire", "7213.10", "Bars and rods in coils", "Feed for wire, mesh, fasteners and rope."),
     "p_sections":  ("Structural sections (I, H beams)", "7216.33", "Angles, shapes and sections", "Columns and beams for steel-frame buildings."),
     "p_rails":     ("Rails", "7302.10", "Railway track construction material", "Head-hardened track for rail networks."),
-    "p_plate":     ("Hot rolled plate", "7208.51", "Flat-rolled, hot-rolled, heavy plate", "Heavy plate for ships, vessels and bridges."),
-    "p_galv":      ("Galvanised sheet (GI/GA)", "7210.49", "Flat-rolled, clad/plated/coated", "Corrosion-resistant sheet; construction & auto."),
-    "p_electrical":("Electrical steel (GOES/NOES)", "7225.11", "Flat-rolled silicon-electrical steel", "Transformer cores and motor laminations."),
-    "p_erw":       ("Electric resistance welded (ERW) pipe", "7306.30", "Other tubes and pipes, welded", "Line pipe and structural hollow sections."),
-    "p_seamless":  ("Seamless oil country tubular goods (OCTG)", "7304.29", "Tubes, pipes, seamless", "Oil-country tubular goods for drilling."),
-    "p_stainless": ("Stainless steel (304 / 316)", "7219.12", "Flat-rolled stainless steel", "Corrosion-resistant; food, chemical, medical."),
-    "p_hsla":      ("High-strength low-alloy (HSLA)", "7225.50", "Flat-rolled other alloy steel", "Lightweight structural steel; auto & bridges."),
-    "p_crc":       ("Cold rolled coil/sheet (CRC)", "7209.17", "Flat-rolled, cold-rolled", "Surface-critical flat steel for auto and appliances."),
-    "p_tinplate":  ("Tinplate (ETP)", "7210.12", "Flat-rolled, tin-coated", "Tin-coated sheet for food and beverage cans."),
-    "p_prepaint":  ("Pre-painted / colour-coated (PPGI)", "7210.70", "Flat-rolled, painted/coated", "Colour-coated sheet for roofing and cladding."),
-    "p_mesh":      ("Welded wire mesh / fabric", "7314.20", "Grill, netting and fencing, welded", "Reinforcing mesh and fencing from drawn wire."),
-    "p_forgings":  ("Forged steel components", "7326.19", "Articles of iron/steel, forged", "Shafts, flanges and fittings shaped by forging."),
-    "p_castings":  ("Steel / iron castings", "7325.99", "Cast articles of iron/steel", "Cast parts for machinery, valves and fittings."),
-    "p_grinding":  ("Grinding media (balls)", "7325.91", "Grinding balls, cast/forged", "Wear-resistant media for mining and cement mills."),
-
-    # ── Full HS 72-73 taxonomy: additional finished products ──────────────────
-    # Long products
     "p_merchant":  ("Merchant bar (rounds, squares, flats)", "7214.99", "Other bars and rods, iron/non-alloy steel, not further worked", "General-purpose hot-rolled bars for fabrication."),
-    "p_lightsec":  ("Light sections (angles & channels)", "7216.10", "U, I or H sections, height < 80 mm", "Small structural shapes for light fabrication."),
-    "p_sbq":       ("Cold-drawn / bright bar (SBQ)", "7215.50", "Other bars and rods, cold-formed/cold-finished", "Precision engineering steel bar for machining."),
     "p_piling":    ("Sheet piling", "7301.10", "Sheet piling of iron or steel", "Interlocking sections for retaining walls and foundations."),
-    "p_railfit":   ("Railway track fittings (fishplates, sole plates)", "7302.40", "Fish-plates and sole plates", "Jointing and fastening components for rail track."),
     # Flat products
     "p_hrc":       ("Hot rolled coil/sheet (HRC)", "7208.39", "Flat-rolled, hot-rolled, in coils", "General flat steel feedstock and finished sheet."),
+    "p_plate":     ("Hot rolled plate", "7208.51", "Flat-rolled, hot-rolled, heavy plate", "Heavy plate for ships, vessels and bridges."),
+    "p_crc":       ("Cold rolled coil/sheet (CRC)", "7209.17", "Flat-rolled, cold-rolled", "Surface-critical flat steel for auto and appliances."),
+    "p_galv":      ("Galvanised sheet (GI/GA)", "7210.49", "Flat-rolled, clad/plated/coated", "Corrosion-resistant sheet; construction & auto."),
     "p_alzinc":    ("Aluminium-zinc coated sheet (Galvalume)", "7210.61", "Flat-rolled, plated/coated with Al-Zn alloys", "Durable coated sheet for roofing and appliances."),
-    "p_alusteel":  ("Aluminised steel sheet", "7210.69", "Flat-rolled, otherwise plated/coated with aluminium", "Heat-resistant coated sheet for exhausts and ovens."),
-    "p_egalv":     ("Electro-galvanised sheet", "7210.30", "Flat-rolled, electrolytically zinc-coated", "Thin even zinc coating for automotive body panels."),
+    "p_prepaint":  ("Pre-painted / colour-coated (PPGI)", "7210.70", "Flat-rolled, painted/coated", "Colour-coated sheet for roofing and cladding."),
+    "p_tinplate":  ("Tinplate (ETP)", "7210.12", "Flat-rolled, tin-coated", "Tin-coated sheet for food and beverage cans."),
     "p_eccs":      ("Tin-free steel / ECCS", "7210.50", "Flat-rolled, coated with chromium/chromium oxides", "Chromium-coated packaging steel for lacquered cans."),
     # Tubular products
-    "p_saw":       ("SAW line pipe (LSAW/HSAW)", "7305.11", "Line pipe, longitudinally submerged-arc welded", "Large-diameter oil & gas transmission pipe."),
-    "p_hss":       ("Hollow structural sections (HSS)", "7306.61", "Welded tubes, square/rectangular section", "Structural hollow sections for steel frames."),
-    "p_precision": ("Cold-drawn seamless precision tube", "7304.31", "Tubes, seamless, cold-drawn/cold-rolled", "Tight-tolerance tube for hydraulics and machinery."),
-    # Stainless & special steels
-    "p_ss_long":   ("Stainless steel bar & wire rod", "7222.11", "Bars and rods of stainless steel, hot-rolled", "Corrosion-resistant long products for shafts and fasteners."),
-    "p_ss_tube":   ("Stainless steel tube/pipe", "7306.40", "Welded tubes of stainless steel", "Hygienic, corrosion-resistant piping."),
-    "p_tool":      ("Tool steel", "7228.30", "Other bars/rods of alloy steel, hot-rolled", "High-hardness steel for dies, cutters and moulds."),
-    "p_spring":    ("Spring steel", "7226.91", "Flat-rolled other alloy steel, hot-rolled", "High-fatigue steel for springs and blades."),
-    "p_bearing":   ("Bearing steel", "7228.50", "Other bars/rods of alloy steel, cold-finished", "Clean high-carbon-chromium steel for bearings."),
-    # Wire & fabricated products
-    "p_wire":      ("Steel wire (drawn & galvanised)", "7217.20", "Wire of iron/non-alloy steel, zinc-coated", "Drawn wire for ropes, mesh, springs and fencing."),
-    "p_nails":     ("Nails, tacks & staples", "7317.00", "Nails, tacks, staples of iron or steel", "Fastening hardware drawn and headed from wire."),
-    "p_fasteners": ("Bolts, nuts & fasteners", "7318.15", "Threaded screws and bolts", "Threaded fasteners cold-forged from wire/bar."),
-    "p_rope":      ("Wire rope & cable", "7312.10", "Stranded wire, ropes and cables", "Load-bearing rope for cranes, lifts and rigging."),
-    "p_fencing":   ("Fencing & chain-link", "7314.31", "Grill, netting and fencing, zinc-coated", "Galvanised fencing and chain-link mesh."),
-    # Cast iron branch
-    "p_diron":     ("Ductile / grey iron pipe & fittings", "7303.00", "Tubes, pipes and hollow profiles of cast iron", "Cast-iron pressure pipe for water and sewerage."),
+    "p_erw":       ("Electric resistance welded (ERW) pipe", "7306.30", "Other tubes and pipes, welded", "Line pipe and structural hollow sections."),
+    "p_seamless":  ("Seamless oil country tubular goods (OCTG)", "7304.29", "Tubes, pipes, seamless", "Oil-country tubular goods for drilling."),
 }
 
 # Edges: downstream -> list of (upstream_input, weight)  [weight = cost share]
 EDGES = {
-    # Finished products
+    # Long products
     "p_rebar":     [("c_billet", .72), ("e_heat", .12), ("k_mill", .08), ("l_labour", .08)],
     "p_wirerod":   [("c_billet", .70), ("k_mill", .12), ("e_heat", .10), ("l_labour", .08)],
     "p_sections":  [("c_bloom", .72), ("k_mill", .10), ("e_heat", .10), ("l_labour", .08)],
     "p_rails":     [("c_bloom", .74), ("e_heat", .12), ("l_labour", .08), ("k_mill", .06)],
-    "p_plate":     [("c_slab", .76), ("e_heat", .12), ("l_labour", .06), ("k_mill", .06)],
-    "p_galv":      [("c_crc", .68), ("m_zinc", .16), ("e_heat", .08), ("l_labour", .08)],
-    "p_electrical":[("c_crc", .68), ("m_ferroalloys", .12), ("e_heat", .12), ("l_labour", .08)],
-    "p_erw":       [("c_hrc", .76), ("e_electricity", .10), ("k_mill", .08), ("l_labour", .06)],
-    "p_seamless":  [("c_billet", .72), ("e_heat", .12), ("k_mill", .10), ("l_labour", .06)],
-    "p_stainless": [("c_crude", .50), ("m_nickel", .14), ("m_chromium", .14), ("m_scrap_hms", .10), ("e_electricity", .07), ("l_labour", .05)],
-    "p_hsla":      [("c_slab", .76), ("m_nbvti", .08), ("e_heat", .10), ("l_labour", .06)],
-    "p_crc":       [("c_crc", .86), ("e_electricity", .06), ("k_mill", .04), ("l_labour", .04)],
-    "p_tinplate":  [("c_crc", .70), ("m_tin", .16), ("e_electricity", .06), ("k_mill", .04), ("l_labour", .04)],
-    "p_prepaint":  [("c_crc", .64), ("m_zinc", .14), ("m_paint", .12), ("e_heat", .05), ("l_labour", .05)],
-    "p_mesh":      [("c_wire", .60), ("m_zinc", .16), ("k_mill", .12), ("e_heat", .06), ("l_labour", .06)],
-    "p_forgings":  [("c_bloom", .68), ("e_heat", .14), ("k_press", .10), ("l_labour", .08)],
-    "p_castings":  [("c_crude", .60), ("k_furnace", .14), ("e_electricity", .12), ("m_ferroalloys", .06), ("l_labour", .08)],
-    "p_grinding":  [("c_billet", .70), ("e_heat", .14), ("k_mill", .08), ("l_labour", .08)],
-
-    # Full HS 72-73 taxonomy — long products
     "p_merchant":  [("c_billet", .74), ("e_heat", .12), ("k_mill", .08), ("l_labour", .06)],
-    "p_lightsec":  [("c_billet", .72), ("e_heat", .12), ("k_mill", .09), ("l_labour", .07)],
-    "p_sbq":       [("c_billet", .70), ("k_mill", .14), ("e_heat", .08), ("l_labour", .08)],
     "p_piling":    [("c_bloom", .74), ("e_heat", .12), ("k_mill", .08), ("l_labour", .06)],
-    "p_railfit":   [("c_bloom", .70), ("e_heat", .12), ("k_mill", .10), ("l_labour", .08)],
     # Flat products
     "p_hrc":       [("c_hrc", .86), ("e_heat", .06), ("k_mill", .04), ("l_labour", .04)],
+    "p_plate":     [("c_slab", .76), ("e_heat", .12), ("l_labour", .06), ("k_mill", .06)],
+    "p_crc":       [("c_crc", .86), ("e_electricity", .06), ("k_mill", .04), ("l_labour", .04)],
+    "p_galv":      [("c_crc", .68), ("m_zinc", .16), ("e_heat", .08), ("l_labour", .08)],
     "p_alzinc":    [("c_crc", .62), ("m_aluminium", .10), ("m_zinc", .14), ("e_heat", .08), ("l_labour", .06)],
-    "p_alusteel":  [("c_crc", .66), ("m_aluminium", .16), ("e_heat", .10), ("l_labour", .08)],
-    "p_egalv":     [("c_crc", .66), ("m_zinc", .14), ("e_electricity", .12), ("l_labour", .08)],
+    "p_prepaint":  [("c_crc", .64), ("m_zinc", .14), ("m_paint", .12), ("e_heat", .05), ("l_labour", .05)],
+    "p_tinplate":  [("c_crc", .70), ("m_tin", .16), ("e_electricity", .06), ("k_mill", .04), ("l_labour", .04)],
     "p_eccs":      [("c_crc", .66), ("m_chromium", .12), ("e_electricity", .14), ("l_labour", .08)],
     # Tubular products
-    "p_saw":       [("c_hrc", .74), ("e_electricity", .12), ("k_mill", .08), ("l_labour", .06)],
-    "p_hss":       [("c_hrc", .76), ("e_heat", .08), ("k_mill", .10), ("l_labour", .06)],
-    "p_precision": [("c_billet", .70), ("k_mill", .14), ("e_heat", .08), ("l_labour", .08)],
-    # Stainless & special steels
-    "p_ss_long":   [("c_crude", .52), ("m_chromium", .16), ("m_nickel", .12), ("e_heat", .10), ("l_labour", .10)],
-    "p_ss_tube":   [("c_crude", .48), ("m_chromium", .16), ("m_nickel", .12), ("k_mill", .12), ("e_electricity", .06), ("l_labour", .06)],
-    "p_tool":      [("c_crude", .58), ("m_ferroalloys", .18), ("e_heat", .12), ("l_labour", .12)],
-    "p_spring":    [("c_hrc", .70), ("m_ferroalloys", .12), ("e_heat", .10), ("l_labour", .08)],
-    "p_bearing":   [("c_crude", .56), ("m_ferroalloys", .14), ("m_chromium", .12), ("e_heat", .10), ("l_labour", .08)],
-    # Wire & fabricated products (drawn from the shared wire intermediate)
-    "p_wire":      [("c_wire", .74), ("m_zinc", .14), ("k_mill", .06), ("l_labour", .06)],
-    "p_nails":     [("c_wire", .74), ("k_mill", .14), ("l_labour", .12)],
-    "p_fasteners": [("c_wire", .70), ("k_mill", .16), ("l_labour", .14)],
-    "p_rope":      [("c_wire", .72), ("m_zinc", .14), ("k_mill", .08), ("l_labour", .06)],
-    "p_fencing":   [("c_wire", .70), ("m_zinc", .16), ("k_mill", .08), ("l_labour", .06)],
-    # Cast iron branch (made directly from blast-furnace pig iron in a foundry)
-    "p_diron":     [("c_pig", .58), ("k_furnace", .14), ("m_ferroalloys", .08), ("e_heat", .12), ("l_labour", .08)],
+    "p_erw":       [("c_hrc", .76), ("e_electricity", .10), ("k_mill", .08), ("l_labour", .06)],
+    "p_seamless":  [("c_billet", .72), ("e_heat", .12), ("k_mill", .10), ("l_labour", .06)],
 
     # Rolled flat intermediates
     "c_hrc":   [("c_slab", .74), ("e_heat", .14), ("k_mill", .07), ("l_labour", .05)],
     "c_crc":   [("c_hrc", .78), ("e_heat", .08), ("e_electricity", .08), ("l_labour", .06)],
 
-    # Drawn wire intermediate (wire rod -> cold-drawn wire) feeding fabricated products
-    "c_wire":  [("c_billet", .78), ("k_mill", .10), ("e_heat", .06), ("l_labour", .06)],
-
-    # Semi-finished shapes are produced by the continuous-casting technology
+    # Semi-finished shapes produced by continuous casting
     "c_slab":   [("t_caster", 1.0)],
     "c_bloom":  [("t_caster", 1.0)],
     "c_billet": [("t_caster", 1.0)],
