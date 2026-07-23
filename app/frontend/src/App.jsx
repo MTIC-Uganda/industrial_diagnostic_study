@@ -37,10 +37,22 @@ export default function App() {
   useEffect(() => {
     getRoots().then((rs) => {
       setRoots(rs);
-      if (rs.length) {
-        setValueChain(rs[0].source_db);
-        setPath([{ id: rs[0].element_id, name: rs[0].name }]);
-      }
+      if (!rs.length) return;
+
+      const savedChain = localStorage.getItem("mtic_sankey_chain");
+      const savedProduct = localStorage.getItem("mtic_sankey_product");
+
+      const chainToUse =
+        savedChain && rs.some((r) => r.source_db === savedChain)
+          ? savedChain
+          : rs[0].source_db;
+
+      const productToUse =
+        (savedProduct && rs.find((r) => r.element_id === savedProduct && r.source_db === chainToUse)) ||
+        rs.find((r) => r.source_db === chainToUse);
+
+      setValueChain(chainToUse);
+      setPath([{ id: productToUse.element_id, name: productToUse.name }]);
     });
   }, []);
 
@@ -67,13 +79,16 @@ export default function App() {
   }, [graph]);
 
   const onValueChain = (vc) => {
+    localStorage.setItem("mtic_sankey_chain", vc);
     setValueChain(vc);
     const first = roots.find((r) => r.source_db === vc);
+    if (first) localStorage.setItem("mtic_sankey_product", first.element_id);
     setPath(first ? [{ id: first.element_id, name: first.name }] : []);
     setSelected(null);
   };
 
   const onProduct = (id) => {
+    localStorage.setItem("mtic_sankey_product", id);
     const r = products.find((x) => x.element_id === id);
     setPath([{ id, name: r ? r.name : id }]);
     setSelected(null);
