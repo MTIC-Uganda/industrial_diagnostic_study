@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { PRODUCTS, CATEGORIES, TRADE_HS4, PRODUCT_HS4, RAW_MATERIAL_TRADE, matchInputTrade, matchInputHs4, matchInputPhase, getInputWeight, PRODUCT_FIRMS, PHASE_PRODUCERS, PHASE_SOURCE, RAW_MATERIAL_PHASE, TRADE_TREND, TRADE_PARTNERS } from "./data/index.js";
+import { PRODUCTS, CATEGORIES, TRADE_HS4, PRODUCT_HS4, RAW_MATERIAL_TRADE, matchInputTrade, matchInputHs4, matchInputPhase, getInputWeight, PRODUCT_FIRMS, PHASE_PRODUCERS, PHASE_SOURCE, RAW_MATERIAL_PHASE, TRADE_TREND, TRADE_PARTNERS, OPPORTUNITY_SCORES } from "./data/index.js";
 
 // Resolve PocketBase URL from the page host so the same HTML works on staging and prod.
 function pbUrl() {
@@ -16,6 +16,7 @@ function pbUrl() {
 const _liveTradeCache    = {};  // hs4_code → trade snapshot
 const _liveTrendCache    = {};  // hs4_code → [{year, imports_uganda, unit_value_usd_t}, ...]
 const _livePartnersCache = {};  // hs4_code → [{rank, name, code, value}, ...]
+let   _liveScores        = null; // hs4_code → {score, components} — set after PB fetch
 
 function resolveTrade(hs4) {
   if (!hs4) return null;
@@ -30,6 +31,12 @@ function resolveTrend(hs4) {
 function resolvePartners(hs4) {
   if (!hs4) return null;
   return _livePartnersCache[hs4] || TRADE_PARTNERS[hs4] || null;
+}
+
+function resolveScore(hs4) {
+  if (!hs4) return null;
+  const src = _liveScores || OPPORTUNITY_SCORES;
+  return src[hs4] || null;
 }
 
 function resolveRawTrade(name) {
@@ -145,19 +152,30 @@ function SourceCountryBar({ partners }) {
   if (!partners || partners.length === 0) return null;
   const top5 = partners.slice(0, 5);
   const total = partners.reduce((s, p) => s + p.value, 0) || 1;
+  const topShare = top5[0].value / total;
+  const isConcentrated = topShare > 0.6;
   return (
     <div style={{ marginTop: "8px" }}>
-      <div style={{ color: "#93c5fd", fontWeight: 700, fontSize: "10px", marginBottom: "5px" }}>🌐 Top import sources (2024)</div>
+      <div style={{ display: "flex", alignItems: "center", gap: "6px", marginBottom: "5px" }}>
+        <div style={{ color: "#93c5fd", fontWeight: 700, fontSize: "10px" }}>🌐 Top import sources (2024)</div>
+        {isConcentrated && (
+          <div style={{ backgroundColor: "#7c1d1d", color: "#fca5a5", fontSize: "8.5px",
+            fontWeight: 700, borderRadius: "4px", padding: "1px 5px", letterSpacing: "0.02em" }}>
+            ⚠ {Math.round(topShare * 100)}% from {top5[0].name}
+          </div>
+        )}
+      </div>
       {top5.map((p, i) => {
         const pct = Math.round((p.value / total) * 100);
         const barW = Math.max((p.value / top5[0].value) * 100, 2);
+        const barColor = isConcentrated && i === 0 ? "#dc2626" : i === 0 ? "#3b82f6" : "#1d4ed8";
         return (
           <div key={i} style={{ display: "flex", alignItems: "center", gap: "5px", marginBottom: "3px" }}>
             <div style={{ width: "72px", fontSize: "9px", color: "#94a3b8", textAlign: "right", flexShrink: 0,
               overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{p.name}</div>
             <div style={{ flex: 1, height: "5px", borderRadius: "3px", backgroundColor: "#1e293b" }}>
               <div style={{ width: `${barW}%`, height: "100%", borderRadius: "3px",
-                backgroundColor: i === 0 ? "#3b82f6" : "#1d4ed8", opacity: 1 - i * 0.15 }} />
+                backgroundColor: barColor, opacity: 1 - i * 0.15 }} />
             </div>
             <div style={{ width: "26px", fontSize: "9px", color: "#64748b", textAlign: "right", flexShrink: 0 }}>{pct}%</div>
           </div>
@@ -204,6 +222,88 @@ function InvestmentOpportunity({ trade, trend }) {
       )}
     </div>
   );
+}
+
+// ─── Investor one-pager brief (print-ready new window) ───────────────────────
+function generateBrief({ title, trade, trend, partners, phase, score, hs4 }) {
+  const fmt = (k) => { if (k == null) return "—"; const u = k * 1000; return u >= 1e6 ? `$${(u/1e6).toFixed(1)}m` : u >= 1000 ? `$${(u/1000).toFixed(0)}k` : `$${u}`; };
+  const cagrText = (() => {
+    if (!trend || trend.length < 2) return null;
+    const cagr = Math.pow(trend[trend.length-1].imports_uganda / (trend[0].imports_uganda || 1), 1 / (trend.length - 1)) - 1;
+    return `${cagr >= 0 ? "+" : ""}${(cagr * 100).toFixed(1)}% CAGR (${trend[0].year}–${trend[trend.length-1].year})`;
+  })();
+  const topSuppliers = (partners || []).slice(0, 5);
+  const totalSupply  = topSuppliers.reduce((s, p) => s + p.value, 0) || 1;
+  const suppliersHtml = topSuppliers.map(p =>
+    `<div class="bar-row"><span class="bar-label">${p.name}</span>
+     <div class="bar-track"><div class="bar-fill" style="width:${Math.round(p.value/topSuppliers[0].value*100)}%"></div></div>
+     <span class="bar-pct">${Math.round(p.value/totalSupply*100)}%</span></div>`
+  ).join("");
+  const scoreHtml = score ? `
+    <div class="section"><div class="section-title">Opportunity Score</div>
+    <div class="score-pill">${score.score}<span class="score-sub">/100</span></div>
+    <div class="score-components">
+      <span>Market size: ${score.components.import}/40</span>
+      <span>Growth (CAGR): ${score.components.cagr}/25</span>
+      <span>Production gap: ${score.components.gap}/25</span>
+      <span>Supply risk: ${score.components.conc}/10</span>
+    </div></div>` : "";
+  const win = window.open("", "_blank");
+  win.document.write(`<!DOCTYPE html><html><head><meta charset="utf-8">
+  <title>Investment Brief — ${title}</title>
+  <style>
+    body { font-family: Arial, sans-serif; font-size: 12px; color: #1e293b; margin: 0; padding: 32px 40px; max-width: 720px; }
+    h1 { font-size: 20px; color: #1e3a8a; margin: 0 0 4px; }
+    .sub { color: #64748b; font-size: 11px; margin-bottom: 24px; }
+    .section { margin-bottom: 20px; }
+    .section-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: #94a3b8; margin-bottom: 8px; }
+    .kv { display: flex; gap: 32px; flex-wrap: wrap; }
+    .kv-item { }
+    .kv-label { font-size: 10px; color: #94a3b8; }
+    .kv-value { font-size: 15px; font-weight: 700; color: #1e3a8a; }
+    .bar-row { display: flex; align-items: center; gap: 8px; margin-bottom: 5px; }
+    .bar-label { width: 120px; font-size: 11px; text-align: right; flex-shrink: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+    .bar-track { flex: 1; height: 6px; background: #e2e8f0; border-radius: 3px; }
+    .bar-fill { height: 100%; background: #3b82f6; border-radius: 3px; }
+    .bar-pct { width: 32px; font-size: 10px; color: #64748b; text-align: right; flex-shrink: 0; }
+    .score-pill { font-size: 36px; font-weight: 900; color: #1e3a8a; line-height: 1; margin: 4px 0; }
+    .score-sub { font-size: 14px; color: #94a3b8; }
+    .score-components { display: flex; gap: 16px; font-size: 10px; color: #64748b; margin-top: 6px; flex-wrap: wrap; }
+    .opportunity { background: #eff6ff; border-left: 4px solid #3b82f6; padding: 10px 14px; border-radius: 4px; font-size: 11px; line-height: 1.6; }
+    .footer { margin-top: 32px; padding-top: 12px; border-top: 1px solid #e2e8f0; font-size: 9px; color: #94a3b8; }
+    @media print { body { padding: 16px 20px; } }
+  </style>
+  </head><body>
+  <h1>${title}</h1>
+  <div class="sub">Uganda Import Substitution Brief · Generated ${new Date().toLocaleDateString("en-GB", {day:"numeric",month:"long",year:"numeric"})} · Source: ITC TradeMap / UN Comtrade</div>
+  <div class="section"><div class="section-title">Trade Overview (USD, latest year)</div>
+    <div class="kv">
+      <div class="kv-item"><div class="kv-label">Uganda imports</div><div class="kv-value">${trade ? fmt(trade.imports.uganda) : "—"}</div></div>
+      <div class="kv-item"><div class="kv-label">EAC imports</div><div class="kv-value">${trade ? fmt(trade.imports.eac) : "—"}</div></div>
+      <div class="kv-item"><div class="kv-label">Uganda exports</div><div class="kv-value">${trade ? fmt(trade.exports.uganda) : "—"}</div></div>
+      ${cagrText ? `<div class="kv-item"><div class="kv-label">Import trend</div><div class="kv-value" style="color:#1d4ed8;font-size:13px">${cagrText}</div></div>` : ""}
+      ${hs4 ? `<div class="kv-item"><div class="kv-label">HS code</div><div class="kv-value" style="font-size:12px">${hs4.replace(/_/g," + ")}</div></div>` : ""}
+    </div>
+  </div>
+  ${topSuppliers.length ? `<div class="section"><div class="section-title">Top Import Sources (2024)</div>${suppliersHtml}</div>` : ""}
+  ${scoreHtml}
+  ${(trade && trade.imports.uganda >= 2000 && trade.exports.uganda < trade.imports.uganda * 0.4) ? `
+  <div class="section"><div class="section-title">Investment Signal</div>
+    <div class="opportunity">
+      Uganda imports <strong>${fmt(trade.imports.uganda)}/yr</strong> with limited domestic production.
+      EAC total market: <strong>${fmt(trade.imports.eac)}/yr</strong>.
+      ${trade.imports.uganda > 5000 ? `Capturing 50% of Uganda imports = <strong>${fmt(trade.imports.uganda * 500)}/yr</strong> revenue opportunity.` : ""}
+      ${cagrText ? `Import growth: <strong>${cagrText}</strong>.` : ""}
+    </div>
+  </div>` : ""}
+  ${phase ? `<div class="section"><div class="section-title">Existing Producers (Uganda)</div><div>${phase.count} plants — ${phase.label}</div></div>` : ""}
+  <div class="footer">
+    MTIC Industrial Diagnostic Study · Uganda-UNIDO Programme for Country Partnership (PCP) ·
+    Data: ITC TradeMap bilateral trade; UN Comtrade public preview API. Values in USD.
+  </div>
+  <script>window.onload = () => window.print();<\/script>
+  </body></html>`);
+  win.document.close();
 }
 
 function TradeBlock({ trade, trend, partners, noDataLabel, showOpportunity }) {
@@ -396,34 +496,64 @@ function InputDetailPanel({ text, onClose }) {
   const status = inputStatus(text);
   const hasData = trade || phase;
 
-  // Resolve HS4 code → trend + partner data using the same keyword rules
+  // Resolve HS4 code → trend + partner + opportunity score
   const hs4ForLookup = _resolveMatchHs4(text);
   const trend    = resolveTrend(hs4ForLookup);
   const partners = resolvePartners(hs4ForLookup);
+  const score    = resolveScore(hs4ForLookup);
 
   return (
     <SidePanel title={text} onClose={onClose}>
-      {/* Priority signal */}
-      <div style={{ display: "flex", alignItems: "center", gap: "8px", marginTop: "6px", marginBottom: "4px" }}>
-        <span style={{ width: "10px", height: "10px", borderRadius: "50%", backgroundColor: STATUS_COLOR[status], flexShrink: 0 }} />
-        <span style={{ fontSize: "10px", color: STATUS_COLOR[status], fontWeight: 700 }}>
-          {status === "green" ? "Domestic production confirmed" :
-           status === "orange" ? "Traded — no domestic producer identified" :
-           status === "red" ? "Capacity gap — must build domestically" :
-           "Process utility (not HS-traded)"}
-        </span>
+      {/* Status + Generate Brief row */}
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: "6px", marginBottom: "4px" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+          <span style={{ width: "10px", height: "10px", borderRadius: "50%", backgroundColor: STATUS_COLOR[status], flexShrink: 0 }} />
+          <span style={{ fontSize: "10px", color: STATUS_COLOR[status], fontWeight: 700 }}>
+            {status === "green" ? "Domestic production confirmed" :
+             status === "orange" ? "Traded — no domestic producer identified" :
+             status === "red" ? "Capacity gap — must build domestically" :
+             "Process utility (not HS-traded)"}
+          </span>
+        </div>
+        {(trade || score) && (
+          <button
+            onClick={() => generateBrief({ title: text, trade, trend, partners, phase, score, hs4: hs4ForLookup })}
+            style={{ fontSize: "9px", fontWeight: 700, color: "#93c5fd", background: "#1e293b",
+              border: "1px solid #334155", borderRadius: "4px", padding: "3px 7px", cursor: "pointer",
+              flexShrink: 0, letterSpacing: "0.02em" }}>
+            📄 Brief
+          </button>
+        )}
       </div>
+      {/* Data-derived opportunity score (trade statistics) */}
+      {score && (
+        <div style={{ backgroundColor: "#0f1f3d", border: "1px solid #1e3a8a", borderRadius: "6px",
+          padding: "8px 10px", marginBottom: "6px", fontSize: "10.5px" }}>
+          <div style={{ display: "flex", alignItems: "baseline", gap: "6px", marginBottom: "4px" }}>
+            <span style={{ color: "#60a5fa", fontWeight: 700 }}>📊 Opportunity score</span>
+            <span style={{ fontSize: "18px", fontWeight: 900, color: "#fff", lineHeight: 1 }}>{score.score}</span>
+            <span style={{ color: "#64748b", fontSize: "9px" }}>/100</span>
+          </div>
+          <div style={{ display: "flex", gap: "10px", flexWrap: "wrap", color: "#64748b", fontSize: "9px" }}>
+            <span>Market size <strong style={{ color: "#93c5fd" }}>{score.components.import}/40</strong></span>
+            <span>Growth <strong style={{ color: "#93c5fd" }}>{score.components.cagr}/25</strong></span>
+            <span>Prod. gap <strong style={{ color: "#93c5fd" }}>{score.components.gap}/25</strong></span>
+            <span>Supply risk <strong style={{ color: "#93c5fd" }}>{score.components.conc}/10</strong></span>
+          </div>
+        </div>
+      )}
+      {/* Expert-set priority weight (essentiality × scarcity) */}
       {wt && (
         <div style={{ backgroundColor: "#1e293b", borderRadius: "6px", padding: "8px 10px", marginBottom: "6px", fontSize: "10.5px" }}>
           <div style={{ color: "#93c5fd", fontWeight: 700, marginBottom: "4px" }}>
-            ⚖️ Priority score: <strong style={{ color: "#fff" }}>{wt.weight}/100</strong>
+            ⚖️ Analyst weight: <strong style={{ color: "#fff" }}>{wt.weight}/100</strong>
           </div>
           <div style={{ display: "flex", gap: "16px", color: "#94a3b8" }}>
             <span>Essentiality: <strong style={{ color: "#e2e8f0" }}>{wt.essentiality}/10</strong></span>
             <span>Domestic scarcity: <strong style={{ color: "#e2e8f0" }}>{wt.scarcity}/10</strong></span>
           </div>
           <div style={{ color: "#475569", fontSize: "9.5px", marginTop: "4px" }}>
-            score = essentiality × scarcity — higher = address first
+            expert score = essentiality × scarcity — set in PocketBase
           </div>
         </div>
       )}

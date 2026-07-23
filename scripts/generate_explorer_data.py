@@ -197,15 +197,76 @@ def build_trade_partners(rows):
     return out
 
 
+def build_priority_scores(trade_hs4, trend, partners):
+    """
+    Compute a 0–100 opportunity score per HS4 code for import-substitution ranking.
+
+    Components (sum = 100 max):
+      import_score (0-40): log-scaled Uganda import value — large market = big opportunity
+      cagr_score   (0-25): CAGR from trend — rising imports = growing urgency
+      gap_score    (0-25): (imports − exports) / imports — no domestic output = clear gap
+      conc_score   (0-10): top-supplier share — single source = strategic risk / urgency
+
+    Only codes with Uganda imports ≥ 500 USD thousands ($500k) are scored.
+    """
+    import math
+    MAX_LOG = math.log10(500_000)  # ~$500M — log scale ceiling
+    scores = {}
+    for hs4, trade in (trade_hs4 or {}).items():
+        imp = trade['imports']['uganda']
+        exp = trade['exports']['uganda']
+        if imp < 500:
+            continue
+
+        # 1. Import scale (0-40)
+        import_score = min(40.0, (math.log10(max(imp, 1)) / MAX_LOG) * 40)
+
+        # 2. CAGR (0-25): 20%+ CAGR → full 25 pts
+        cagr_score = 0.0
+        trend_rows = (trend or {}).get(hs4, [])
+        if len(trend_rows) >= 2:
+            oldest = trend_rows[0]['imports_uganda']
+            newest = trend_rows[-1]['imports_uganda']
+            years = trend_rows[-1]['year'] - trend_rows[0]['year']
+            if oldest > 0 and years > 0:
+                cagr = (newest / oldest) ** (1 / years) - 1
+                cagr_score = min(25.0, max(0.0, cagr * 125))
+
+        # 3. Production gap (0-25)
+        gap_score = max(0.0, (imp - exp) / imp) * 25 if imp > 0 else 0.0
+
+        # 4. Supply concentration risk (0-10)
+        conc_score = 0.0
+        partner_rows = (partners or {}).get(hs4, [])
+        if partner_rows:
+            total_val = sum(p['value'] for p in partner_rows) or 1
+            conc_score = (partner_rows[0]['value'] / total_val) * 10
+
+        total = round(import_score + cagr_score + gap_score + conc_score)
+        scores[hs4] = {
+            'score': min(100, total),
+            'components': {
+                'import': round(import_score),
+                'cagr':   round(cagr_score),
+                'gap':    round(gap_score),
+                'conc':   round(conc_score),
+            },
+        }
+    return scores
+
+
 def build_all(raw):
     """Turn raw PocketBase rows into every shape the JS module needs."""
     rm_trade, rm_phase = build_raw_material(raw['raw_material'])
     phase_producers, phase_source = build_phase_producers(raw['phase_producers'])
     kw_hs4, kw_phase = build_input_keywords(raw['input_keywords'])
+    trade_hs4 = build_trade_hs4(raw['trade_hs4'])
+    trend     = build_trade_trend(raw.get('trade_trend'))
+    partners  = build_trade_partners(raw.get('trade_partners'))
     return {
         'PRODUCTS': build_products(raw['products']),
         'CATEGORIES': build_categories(raw['categories']),
-        'TRADE_HS4': build_trade_hs4(raw['trade_hs4']),
+        'TRADE_HS4': trade_hs4,
         'PRODUCT_HS4': build_product_hs4(raw['products']),
         'RAW_MATERIAL_TRADE': rm_trade,
         'RAW_MATERIAL_PHASE': rm_phase,
@@ -214,8 +275,9 @@ def build_all(raw):
         'PRODUCT_FIRMS': build_product_firms(raw['product_firms']),
         'INPUT_KEYWORD_HS4': kw_hs4,
         'INPUT_KEYWORD_PHASE': kw_phase,
-        'TRADE_TREND': build_trade_trend(raw.get('trade_trend')),
-        'TRADE_PARTNERS': build_trade_partners(raw.get('trade_partners')),
+        'TRADE_TREND': trend,
+        'TRADE_PARTNERS': partners,
+        'OPPORTUNITY_SCORES': build_priority_scores(trade_hs4, trend, partners),
     }
 
 
@@ -266,6 +328,11 @@ const TRADE_TREND = {js_obj(d['TRADE_TREND'])};
 // Keys are HS4 codes; values are arrays sorted by rank: {{ rank, name, code, value (USD thousands) }}.
 const TRADE_PARTNERS = {js_obj(d['TRADE_PARTNERS'])};
 
+// 0–100 import-substitution opportunity score per HS4 code.
+// score    = import_scale(0-40) + cagr(0-25) + production_gap(0-25) + supply_concentration(0-10)
+// components: {{ import, cagr, gap, conc }} — each sub-score for transparency in the UI.
+const OPPORTUNITY_SCORES = {js_obj(d['OPPORTUNITY_SCORES'])};
+
 // Keyword -> HS-4 group, for matching free-text "Inputs" tab line items
 // to the same trade data used for raw materials and products above.
 const INPUT_KEYWORD_HS4 = {js_regex_array(d['INPUT_KEYWORD_HS4'], 'hs4')};
@@ -297,7 +364,7 @@ function getInputWeight(text) {{
   return null;
 }}
 
-export {{ PRODUCTS, CATEGORIES, TRADE_HS4, PRODUCT_HS4, RAW_MATERIAL_TRADE, matchInputTrade, matchInputHs4, matchInputPhase, getInputWeight, PRODUCT_FIRMS, PHASE_PRODUCERS, PHASE_SOURCE, RAW_MATERIAL_PHASE, TRADE_TREND, TRADE_PARTNERS }};
+export {{ PRODUCTS, CATEGORIES, TRADE_HS4, PRODUCT_HS4, RAW_MATERIAL_TRADE, matchInputTrade, matchInputHs4, matchInputPhase, getInputWeight, PRODUCT_FIRMS, PHASE_PRODUCERS, PHASE_SOURCE, RAW_MATERIAL_PHASE, TRADE_TREND, TRADE_PARTNERS, OPPORTUNITY_SCORES }};
 '''
 
 
