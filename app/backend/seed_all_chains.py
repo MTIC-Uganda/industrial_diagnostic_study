@@ -377,7 +377,7 @@ CHAINS.append({
     "cu_m_lead":    ("Material","material","Lead","7801.00","Unwrought lead","Battery plate and solder metal."),
     "cu_m_alu":     ("Material","material","Aluminium ingot","7601.00","Unwrought aluminium","Light conductor and structural metal."),
     "cu_m_pvc":     ("Material","material","PVC / XLPE insulation","3904.10","Polymers of vinyl chloride","Insulation and sheathing for cables."),
-    "cu_e_elec":    ("Energy","energy","Electricity","3500.00","Electrical energy","Electrowinning, refining and melting power."),
+    "cu_e_elec":    ("Energy","energy","Electricity",None,None,"Electrowinning, refining and melting power."),
     "cu_e_heat":    ("Energy","energy","Process heat / fuel",None,None,"Smelting and reheating energy."),
     "cu_l_labour":  ("LaborCost","labor","Labour",None,None,"Skilled smelting and fabrication labour."),
     "cu_k_smelt":   ("MachineryCost","machinery","Smelter & converter","8454.10","Converters and ladles","Flash smelting and converting furnaces."),
