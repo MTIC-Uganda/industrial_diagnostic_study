@@ -78,7 +78,7 @@ IS_STRENGTH = {
     "p_rails":       ("gap",      "Rails absent — no rail production in Uganda; all imported"),
     "p_plate":       ("gap",      "Hot-rolled plate absent — flat steel entirely missing in Uganda"),
     "p_galv":        ("emerging", "Galvanised sheet — Roofings Ltd and Uganda Baati active; imported coil coated locally"),
-    "p_erw":         ("gap",      "Welded pipe absent — no pipe welding from domestic HRC"),
+    "p_erw":         ("emerging", "ERW/welded pipe produced at Steel & Tube Uganda from imported HRC/strip; no domestic flat-steel input"),
     "p_seamless":    ("gap",      "Seamless pipe absent — far upstream of current capability"),
     "p_crc":         ("gap",      "Cold-rolled coil absent — all imported"),
     "p_tinplate":    ("gap",      "Tinplate absent — no tin-coated flat steel in Uganda"),
