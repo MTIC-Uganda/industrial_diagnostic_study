@@ -4,7 +4,7 @@ One always-current page so any agent (Solomon's, the server brain, Hillary's) re
 latest state from one place instead of diffing the whole repo. Keep this updated whenever
 something material changes. Decisions live in the ADRs; this is the live snapshot.
 
-Last updated: 2026-07-23 (live counts auto-refreshed)
+Last updated: 2026-07-24 (live counts auto-refreshed)
 
 ## Environments (all on Hetzner 89.167.121.193, behind midd-ug.com via Cloudflare, SSL Full)
 
