@@ -30,7 +30,7 @@ SRC = ["valuechains.ai-style structured dataset; standard primary-steel process"
 # Flat steel (slab/HRC/CRC) is absent → gap.  Long products competitive → strong.
 IS_STRENGTH = {
     # Raw materials
-    "m_ore_fines":   ("gap",      "Iron ore mining minimal — 1 commercial miner (SINO Minerals, ~300k tpa); Phase I gap"),
+    "m_ore_fines":   ("emerging", "Iron ore mining limited — 1 commercial miner (SINO Minerals, ~300k tpa); fines exported as-is, no sintering or pelletising capacity"),
     "m_ore_pellets": ("gap",      "Ore pelletising absent — fines not commercially pelletised in Uganda"),
     "m_coke":        ("gap",      "Metallurgical coke absent — no coking coal in Uganda; all imported"),
     "m_limestone":   ("strong",   "Limestone abundant — same deposits supplying the cement sector"),
