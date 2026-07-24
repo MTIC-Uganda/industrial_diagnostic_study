@@ -121,7 +121,7 @@ NODES = {
     "k_press":      ("MachineryCost","machinery","Forging press / hammer", "8462", "Forging/stamping machine tools", "Shapes heated billets/blooms by compressive force."),
 
     # Iron-making intermediates
-    "c_sinter":     ("Component","component", "Sinter", None, None, "Agglomerated ore burden for the blast furnace."),
+    "c_sinter":     ("Component","component", "Sinter", "2601.12", "Iron ores, agglomerated (sinter)", "Agglomerated ore burden for the blast furnace."),
     "c_pig":        ("Component","component", "Pig iron (hot metal)", "7201.10", "Pig iron and spiegeleisen", "Liquid blast-furnace iron; main BOF input."),
     "c_dri":        ("Component","component", "Direct reduced iron (DRI/HBI)", "7203.10", "Ferrous products, direct reduction", "Gas-reduced sponge iron; EAF feed."),
 
